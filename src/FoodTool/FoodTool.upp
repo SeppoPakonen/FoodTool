@@ -1,0 +1,18 @@
+uses
+	CtrlLib,
+	plugin/jpg;
+
+file
+	main.cpp,
+	FoodTool.h,
+	FoodTool.cpp,
+	FoodTool.lay,
+	Images.iml,
+	Food.h,
+	Food.cpp,
+	Profile.h,
+	Profile.cpp;
+
+mainconfig
+	"" = "GUI";
+
