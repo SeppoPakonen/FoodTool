@@ -60,21 +60,23 @@ inline int GetWeekSeconds() {return 7 * 24 * 60 * 60;}
 inline int GetMonthSeconds() {return 2629743;}
 
 struct Profile {
-	int keto_cals = 0, keto_fats = 0, keto_carbs = 0, keto_prots = 0;
-	int wl_start = 0, wl_loss = 0, wl_months = 0, wl_cals = 0;
-	Time begin_time, end_time;
-	
 	Vector<IntakeExceptions> exceptions;
 	Vector<Note> notes;
 	Vector<ProgramUsageStat> usage;
 	Vector<WeightLossStat> weight;
-	
+	Vector<DailyPlan> planned_daily;
 	FoodStorage storage;
-	
+	Time begin_time, end_time;
+	double calory_deficit;
+	double tgt_walking_dist, tgt_jogging_dist, walking_dist;
+	int height, begin_weight, age, bodyfat, activity;
+	int tgt_weight, months;
+	bool is_male;
 	bool is_initialised = false;
 	
 	
 	Time tmp_usage_start;
+	
 	
 	Profile();
 	~Profile() {
@@ -89,26 +91,41 @@ struct Profile {
 	Time GetCurrentWeekBegin();
 	Time GetCurrentMonthBegin();
 	Time GetCurrentQuarterBegin();
+	double GetBMR(double weight);
+	double GetTDEE();
+	double GetCaloriesMaintainWeight(double weight);
+	double GetCaloriesWalking(double weight_kg, double speed, double hours);
+	double GetCaloriesWalkingDist(double weight_kg, double distance_km, double hours);
+	double GetCaloriesWalkingDistSpeed(double weight_kg, double distance_km, double speed);
+	double GetCaloriesJogging(double weight_kg, double speed, double hours);
+	double GetCaloriesJoggingDistSpeed(double weight_kg, double distance_km, double speed);
+	bool UpdatePlan(int min_days);
 	
 	void LoadThis();
 	void StoreThis();
 	void Serialize(Stream& s) {
 		s
-			% keto_cals
-			% keto_fats
-			% keto_carbs
-			% keto_prots
-			% wl_start
-			% wl_loss
-			% wl_months
-			% wl_cals
-			% begin_time
-			% end_time
 			% exceptions
 			% notes
 			% usage
 			% weight
+			% planned_daily
 			% storage
+			% begin_time
+			% end_time
+			% calory_deficit
+			% tgt_walking_dist
+			% tgt_jogging_dist
+			% walking_dist
+			% height
+			% begin_weight
+			% age
+			% bodyfat
+			% activity
+			% tgt_weight
+			% months
+			% is_male
+			
 			% is_initialised
 			;
 	}
@@ -119,15 +136,14 @@ inline Profile& GetProfile() {return Single<Profile>();}
 
 
 class ProfileCreator : public WithProfileCreatorLayout<TopWindow> {
-	
+	VectorMap<int, double> height_bmis;
 	
 public:
 	typedef ProfileCreator CLASSNAME;
 	ProfileCreator();
 	
-	void OpenCalculator1() {LaunchWebBrowser("https://www.ruled.me/keto-calculator");}
-	void OpenCalculator2() {LaunchWebBrowser("https://www.calculators.org/health/weight-loss.php");}
-	void Begin();
+	void Next();
+	void UpdateTargetWeight();
 };
 
 #endif

@@ -3,6 +3,7 @@ uses
 	plugin/jpg;
 
 file
+	Readme.txt,
 	main.cpp,
 	FoodTool.h,
 	FoodTool.cpp,
@@ -11,7 +12,8 @@ file
 	Food.h,
 	Food.cpp,
 	Profile.h,
-	Profile.cpp;
+	Profile.cpp,
+	Optimizer.h;
 
 mainconfig
 	"" = "GUI";

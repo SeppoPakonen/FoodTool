@@ -1,6 +1,7 @@
 #ifndef _FoodTool_FoodTool_h
 #define _FoodTool_FoodTool_h
 
+#include <random>
 #include <CtrlLib/CtrlLib.h>
 
 using namespace Upp;
@@ -13,11 +14,12 @@ using namespace Upp;
 #include <Draw/iml_header.h>
 
 
+#include "Optimizer.h"
 #include "Food.h"
 #include "Profile.h"
 
 struct StatusCtrl : public WithStatusLayout<ParentCtrl> {
-	
+	Date cur_date;
 	
 	typedef StatusCtrl CLASSNAME;
 	StatusCtrl();
