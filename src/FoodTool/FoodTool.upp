@@ -1,6 +1,14 @@
 uses
 	CtrlLib,
-	plugin/jpg;
+	plugin/jpg,
+	plugin/bz2,
+	RichEdit;
+
+library(WIN32 & DEBUG) opencv_world412d;
+
+library(WIN32 & !DEBUG) opencv_world412;
+
+library(LINUX) "opencv_core opencv_video opencv_videoio opencv_imgcodecs";
 
 file
 	Readme.txt,
@@ -8,12 +16,17 @@ file
 	FoodTool.h,
 	FoodTool.cpp,
 	FoodTool.lay,
+	Data.brc,
 	Images.iml,
 	Food.h,
 	Food.cpp,
 	Profile.h,
 	Profile.cpp,
-	Optimizer.h;
+	ProfileCreator.h,
+	ProfileCreator.cpp,
+	Optimizer.h,
+	VideoCapture.h,
+	VideoCapture.cpp;
 
 mainconfig
 	"" = "GUI";

@@ -1,8 +1,18 @@
 #ifndef _FoodTool_FoodTool_h
 #define _FoodTool_FoodTool_h
 
+#define int64 int64_fuck_opencv
+#define uint64 uint64_fuck_opencv
+#undef CPU_SSE2
+#include <opencv2/opencv.hpp>
+#include <opencv2/videoio.hpp>
+#undef int64
+#undef uint64
+
 #include <random>
 #include <CtrlLib/CtrlLib.h>
+#include <RichEdit/RichEdit.h>
+#include <plugin/jpg/jpg.h>
 
 using namespace Upp;
 
@@ -17,6 +27,26 @@ using namespace Upp;
 #include "Optimizer.h"
 #include "Food.h"
 #include "Profile.h"
+#include "ProfileCreator.h"
+#include "VideoCapture.h"
+
+#ifdef flagWIN32
+inline void PlayCameraShutter() {PlaySoundA(ConfigFile("camera-shutter.wav"), NULL, SND_ASYNC|SND_FILENAME);}
+#else
+inline void PlayCameraShutter() {}
+#endif
+
+struct MotivationCtrl : public Ctrl {
+	int motivation_i = -1, quote_i = -1;
+	Image img;
+	Vector<String> quotes;
+	
+	typedef MotivationCtrl CLASSNAME;
+	MotivationCtrl();
+	
+	void Data() {Refresh();}
+	void Paint(Draw& d);
+};
 
 struct StatusCtrl : public WithStatusLayout<ParentCtrl> {
 	Date cur_date;
@@ -27,55 +57,135 @@ struct StatusCtrl : public WithStatusLayout<ParentCtrl> {
 	void Data();
 };
 
-struct ConfigurationCtrl : public WithConfigurationLayout<ParentCtrl> {
-	
+struct ConfigurationCtrl : public ParentCtrl {
+	Splitter split;
+	ArrayCtrl list;
+	WithConfigurationLayout<ParentCtrl> conf;
+	FatPercentageReferenceWindow iw;
 	
 	typedef ConfigurationCtrl CLASSNAME;
 	ConfigurationCtrl();
 	
+	void Data();
+	void SelectConf();
+	void AddConf();
+	void UpdateTargetWeight();
+	void ShowWeightReference();
 };
 
 struct ExceptionsCtrl : public ParentCtrl {
-	
+	Splitter split;
+	ArrayCtrl list;
+	WithExceptionLayout<ParentCtrl> exc;
 	
 	typedef ExceptionsCtrl CLASSNAME;
 	ExceptionsCtrl();
 	
+	void Data(bool force=false);
+	void AddException();
+	
 };
 
 struct NoteCtrl : public ParentCtrl {
+	Splitter split;
+	ArrayCtrl list;
+	WithNoteLayout<ParentCtrl> note;
 	
 	
 	typedef NoteCtrl CLASSNAME;
 	NoteCtrl();
 	
+	void Data();
+	void AddNote();
+	void SelectNote();
 };
 
 struct UsageCtrl : public ParentCtrl {
-	
+	ArrayCtrl list;
+	Label total;
 	
 	typedef UsageCtrl CLASSNAME;
 	UsageCtrl();
 	
+	void Data();
 };
 
+void SetScaledImageCtrl(ImageCtrl& ic, Image i);
+
 struct WeightCtrl : public ParentCtrl {
+	Splitter split;
+	ArrayCtrl list;
+	WithWeightLayout<ParentCtrl> edit;
 	
+	Image front, right, back;
+	VideoCapture cap;
+	Image last_cap;
+	Mutex cap_lock, live_lock;
+	TimeStop ts;
+	int capture_mode = 0, countdown_seconds = 0;
+	bool running = false, stopped = true;
+	
+	// Persistent
+	int last_camera_i = 0, last_camera_count = 0;
+	
+	enum {
+		COUNTDOWN_FRONT, FRONT,
+		COUNTDOWN_RIGHT, RIGHT,
+		COUNTDOWN_BACK, BACK,
+		MODE_COUNT
+	};
 	
 	typedef WeightCtrl CLASSNAME;
 	WeightCtrl();
+	~WeightCtrl() {Stop();}
+	
+	void Data();
+	void SelectWeightStat();
+	void Reset();
+	void UpdateBMI();
+	
+	
+	void Serialize(Stream& s) {s % last_camera_i % last_camera_count;}
+	void StoreThis() {StoreToFile(*this, ConfigFile("selected_camera.bin"));}
+	void LoadThis() {LoadFromFile(*this, ConfigFile("selected_camera.bin"));}
+	
+	void UpdateCountdown() {PostCallback(THISBACK1(SetInstruction, IntStr(countdown_seconds)));}
+	void SetCountdown(int seconds);
+	void SetInstruction(String s) {edit.instruction.SetLabel(s);}
+	void Stop() {running = false; Wait();}
+	void Wait() {while (!stopped) Sleep(100);}
+	void AddWeightStat();
+	void PreviewCamera();
+	void CaptureImages();
+	void SetCamImage();
+	void OpenCamera(int i);
+	void CloseCamera();
+	void ProcessCapture(bool preview, int cam);
+	void SetFrontImage() {SetScaledImageCtrl(edit.front, front);}
+	void SetRightImage() {SetScaledImageCtrl(edit.right, right);}
+	void SetBackImage() {SetScaledImageCtrl(edit.back, back);}
+	void LoadImages(String f, String r, String b);
+};
+
+struct GraphCtrl : public ParentCtrl {
+	
+	
+	typedef GraphCtrl CLASSNAME;
+	GraphCtrl();
 	
 };
 
 class FoodTool : public WithFoodToolLayout<TopWindow> {
 	TabCtrl tabs;
 	
+	MotivationCtrl motivation;
 	StatusCtrl status;
 	ConfigurationCtrl conf;
 	ExceptionsCtrl exc;
 	NoteCtrl notes;
 	UsageCtrl usage;
 	WeightCtrl weight;
+	GraphCtrl graphs;
 	
 	TimeCallback tc;
 public:

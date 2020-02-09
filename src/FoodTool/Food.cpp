@@ -85,7 +85,7 @@ MealType& FoodStorage::AddMealType(String code, String name, String food_str, in
 	return t;
 }
 
-void FoodStorage::Init(Time begin) {
+void FoodStorage::Init(Date begin) {
 	ASSERT(days.IsEmpty());
 	FoodDay& first_day = days.Add();
 	first_day.date = begin;
@@ -100,6 +100,9 @@ void FoodStorage::Update(const Vector<DailyPlan>& planned_daily) {
 }
 
 void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
+	Profile& prof = GetProfile();
+	int shop_interval = prof.confs.Top().shop_interval;
+	
 	FoodDay& shopping_day = days.Top();
 	ASSERT(shopping_day.is_shopping);
 	
@@ -177,7 +180,7 @@ void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
 	
 	if (buy_amount.GetCount()) {
 		FoodQuantitySorter sorter(this);
-		SortByValue(buy_amount, sorter);
+		SortByKey(buy_amount, sorter);
 		DUMPM(buy_amount),
 		
 		shopping_day.shopping_list.Clear();
@@ -216,7 +219,7 @@ void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
 void FoodStorage::MakeMenu(FoodDay& d) {
 	d.meals.SetCount(4);
 	
-	float calory_sum = 0.0;
+	float calorie_sum = 0.0;
 	for(int i = 0; i < 4; i++) {
 		int bit = 1 << i;
 		Meal& m = d.meals[i];
@@ -228,14 +231,14 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 			case 2: m.target_sum.kcals = 500; break;
 			case 3: m.target_sum.kcals = 200; break;
 		}
-		calory_sum += m.target_sum.kcals;
+		calorie_sum += m.target_sum.kcals;
 	}
 	
 	int food_item_count = 0;
 	for(int i = 0; i < 4; i++) {
 		int bit = 1 << i;
 		Meal& m = d.meals[i];
-		float perc = m.target_sum.kcals / calory_sum;
+		float perc = m.target_sum.kcals / calorie_sum;
 		m.target_sum = d.target_sum;
 		m.target_sum *= perc;
 		
@@ -369,7 +372,15 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 			ASSERT(grams >= 0.0);
 			if (grams > 0.01) {
 				d.food_usage.GetAdd(key, 0) += grams;
-				d.menu << food_types.Get(key).name << ": " << Format("%1n", grams) << "g\n";
+				
+				const FoodType& t = food_types.Get(key);
+				if (t.serving_grams > 0) {
+					int servings = (int)((grams / (float)t.serving_grams) + 0.5);
+					d.menu << t.name << ": " << servings << " pieces\n";
+				}
+				else {
+					d.menu << t.name << ": " << Format("%1n", grams) << "g\n";
+				}
 			}
 		}
 		
@@ -402,16 +413,35 @@ void FoodDay::SetMealGrams(const Vector<double>& grams, const VectorMap<String, 
 }
 
 double FoodDay::GetOptimizerEnergy() {
-	double abs_diff_sum =
-		fabs(total_sum.grams - target_sum.grams) * 10 +
-		fabs(total_sum.kcals - target_sum.kcals) * 10 +
-		fabs(target_sum.salt - total_sum.salt) * 10 +
-		fabs(total_sum.carbs - target_sum.carbs) +
-		fabs(target_sum.fat - total_sum.fat) +
-		fabs(target_sum.protein - total_sum.protein);
-	
-	ASSERT(IsFin(abs_diff_sum));
-	return -abs_diff_sum;
+	// If weight loss mode
+	if (1) {
+		/*double abs_diff_sum =
+			fabs(total_sum.grams - target_sum.grams) * 10 +
+			fabs(total_sum.kcals - target_sum.kcals) * 10 +
+			fabs(target_sum.salt - total_sum.salt) * 10 +
+			fabs(total_sum.carbs - target_sum.carbs) +
+			fabs(target_sum.fat - total_sum.fat) +
+			fabs(target_sum.protein - total_sum.protein);*/
+		
+		double abs_diff_sum =
+			fabs(total_sum.kcals - target_sum.kcals) + // ~100
+			fabs(target_sum.salt - total_sum.salt) * 100 + // ~0.25
+			fabs(total_sum.grams - target_sum.grams) * 0.1; // ~1000
+		
+		double carbs_loss = -(total_sum.carbs - target_sum.carbs) * 2; // ~7.8
+		double fat_loss = -(total_sum.fat - target_sum.fat) * 2; // ~7.5
+		double protein_loss = -(total_sum.protein - target_sum.protein) * 2; // ~40
+		
+		if (carbs_loss > 0)
+			abs_diff_sum += carbs_loss;
+		if (fat_loss > 0)
+			abs_diff_sum += fat_loss;
+		if (protein_loss > 0)
+			abs_diff_sum += protein_loss;
+			
+		ASSERT(IsFin(abs_diff_sum));
+		return -abs_diff_sum;
+	}
 }
 
 void FoodStorage::AddFoodQuantity(const FoodQuantityInt& src, FoodQuantity& dst) {
@@ -448,15 +478,14 @@ bool FoodStorage::HasEnoughPreplanned() {
 	return false;
 }
 
-Time FoodStorage::GetLastShopping() {
+Date FoodStorage::GetLastShopping() {
 	Date today = GetSysTime();
 	
 	for(int i = days.GetCount()-1; i >= 0; i--) {
 		if (days[i].date == today) {
 			for(int j = i; j >= 0; j--) {
 				if (days[j].is_shopping) {
-					Date d(days[j].date);
-					return Time(d.year, d.month, d.day, 21, 0, 0);
+					return days[j].date;
 				}
 			}
 		}
@@ -465,15 +494,14 @@ Time FoodStorage::GetLastShopping() {
 	return Time();
 }
 
-Time FoodStorage::GetNextShopping() {
+Date FoodStorage::GetNextShopping() {
 	Date today = GetSysTime();
 	
 	for(int i = days.GetCount()-1; i >= 0; i--) {
 		if (days[i].date == today) {
 			for(int j = i+1; j < days.GetCount(); j++) {
 				if (days[j].is_shopping) {
-					Date d(days[j].date);
-					return Time(d.year, d.month, d.day, 21, 0, 0);
+					return days[j].date;
 				}
 			}
 		}

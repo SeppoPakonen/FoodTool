@@ -2,28 +2,35 @@
 #define _FoodTool_Profile_h_
 
 
+inline void RealizeImageFolder() {RealizeDirectory(ConfigFile("images"));}
+inline String GetImageFile(String file) {return AppendFileName(ConfigFile("images"), file);}
+inline int GetMonthDays() {return 30;}
+inline int GetQuarterDays() {return 91;}
+
+
 struct IntakeExceptions : Moveable<IntakeExceptions> {
 	String reason;
 	Date begin, end;
-	int cals;
+	int calorie_deficit;
 	
 	void Serialize(Stream& s) {
 		s
 			%  reason
 			%  begin
 			%  end
-			%  cals
+			%  calorie_deficit
 			;
 	}
 };
 
 struct Note : Moveable<Note> {
-	String msg;
+	String title, content;
 	Time added;
 	
 	void Serialize(Stream& s) {
 		s
-			%  msg
+			%  title
+			%  content
 			%  added
 			;
 	}
@@ -41,36 +48,82 @@ struct ProgramUsageStat : Moveable<ProgramUsageStat> {
 };
 
 struct WeightLossStat : Moveable<WeightLossStat> {
-	Date time;
-	int weight;
-	String jpg_file;
+	Time added;
+	float weight, fat, liquid, muscle, bmi;
+	bool is_dexa;
 	
 	void Serialize(Stream& s) {
 		s
-			%  time
-			%  weight
-			%  jpg_file
+			%  added
+			%  weight % fat % liquid % muscle % bmi
+			%  is_dexa
 			;
 	}
+	String GetGenericJpg() const {return Format("%d_%d_%d_%d_%d_%d.jpg", (int)added.year, (int)added.month, (int)added.day, (int)added.hour, (int)added.minute, (int)added.second);}
+	String GetFrontFile() const {return GetImageFile("front_" + GetGenericJpg());}
+	String GetRightFile() const {return GetImageFile("right_" + GetGenericJpg());}
+	String GetBackFile() const {return GetImageFile("back_" + GetGenericJpg());}
 };
 
-inline void RealizeImageFolder() {RealizeDirectory(ConfigFile("images"));}
-inline String GetImageFile(String file) {return AppendFileName(ConfigFile("images"), file);}
-inline int GetWeekSeconds() {return 7 * 24 * 60 * 60;}
-inline int GetMonthSeconds() {return 2629743;}
+struct Configuration : Moveable<Configuration> {
+	Time added;
+	Date end_date;
+	double tgt_walking_dist, tgt_jogging_dist, walking_dist;
+	double hours_between_meals;
+	int easy_day_interval;
+	int waking_hour, waking_minute;
+	int sleeping_hour, sleeping_minute;
+	int height, age, bodyfat, activity;
+	int tgt_weight;
+	int shop_interval;
+	
+	void Serialize(Stream& s) {
+		s
+			% added
+			% end_date
+			% tgt_walking_dist
+			% tgt_jogging_dist
+			% walking_dist
+			% hours_between_meals
+			% easy_day_interval
+			% waking_hour
+			% waking_minute
+			% sleeping_hour
+			% sleeping_minute
+			% height
+			% age
+			% bodyfat
+			% activity
+			% tgt_weight
+			% shop_interval
+			;
+	}
+	
+	double GetBMR(double weight);
+	double GetTDEE();
+	double GetCaloriesMaintainWeight(double weight);
+	double GetCaloriesWalking(double weight_kg, double speed, double hours);
+	double GetCaloriesWalkingDist(double weight_kg, double distance_km, double hours);
+	double GetCaloriesWalkingDistSpeed(double weight_kg, double distance_km, double speed);
+	double GetCaloriesJogging(double weight_kg, double speed, double hours);
+	double GetCaloriesJoggingDistSpeed(double weight_kg, double distance_km, double speed);
+
+};
+
+int GetTargetWeight(double height_m, int bmi);
+int GetBMI(double height_m, double weight_kg);
 
 struct Profile {
 	Vector<IntakeExceptions> exceptions;
 	Vector<Note> notes;
 	Vector<ProgramUsageStat> usage;
-	Vector<WeightLossStat> weight;
+	Vector<WeightLossStat> weights;
 	Vector<DailyPlan> planned_daily;
+	Vector<Configuration> confs;
+	
 	FoodStorage storage;
-	Time begin_time, end_time;
-	double calory_deficit;
-	double tgt_walking_dist, tgt_jogging_dist, walking_dist;
-	int height, begin_weight, age, bodyfat, activity;
-	int tgt_weight, months;
+	Date begin_date;
+	double av_calorie_deficit;
 	bool is_male;
 	bool is_initialised = false;
 	
@@ -85,65 +138,35 @@ struct Profile {
 		u.end = GetSysTime();
 		StoreThis();
 	}
-	void AddWeightStat(int kgs, String jpg_file_path);
-	Time GetCurrentTotalBegin();
-	Time GetCurrentTotalEnd();
-	Time GetCurrentWeekBegin();
-	Time GetCurrentMonthBegin();
-	Time GetCurrentQuarterBegin();
-	double GetBMR(double weight);
-	double GetTDEE();
-	double GetCaloriesMaintainWeight(double weight);
-	double GetCaloriesWalking(double weight_kg, double speed, double hours);
-	double GetCaloriesWalkingDist(double weight_kg, double distance_km, double hours);
-	double GetCaloriesWalkingDistSpeed(double weight_kg, double distance_km, double speed);
-	double GetCaloriesJogging(double weight_kg, double speed, double hours);
-	double GetCaloriesJoggingDistSpeed(double weight_kg, double distance_km, double speed);
-	bool UpdatePlan(int min_days);
-	
-	void LoadThis();
-	void StoreThis();
 	void Serialize(Stream& s) {
 		s
 			% exceptions
 			% notes
 			% usage
-			% weight
+			% weights
 			% planned_daily
+			% confs
 			% storage
-			% begin_time
-			% end_time
-			% calory_deficit
-			% tgt_walking_dist
-			% tgt_jogging_dist
-			% walking_dist
-			% height
-			% begin_weight
-			% age
-			% bodyfat
-			% activity
-			% tgt_weight
-			% months
+			% begin_date
+			% av_calorie_deficit
 			% is_male
-			
 			% is_initialised
 			;
 	}
+	void AddWeightStat(int kgs);
+	Date GetCurrentTotalBegin();
+	Date GetCurrentTotalEnd();
+	Date GetCurrentWeekBegin();
+	Date GetCurrentMonthBegin();
+	Date GetCurrentQuarterBegin();
+	bool UpdatePlan();
+	
+	void LoadThis();
+	void StoreThis();
 };
 
 inline Profile& GetProfile() {return Single<Profile>();}
 
 
-
-class ProfileCreator : public WithProfileCreatorLayout<TopWindow> {
-	VectorMap<int, double> height_bmis;
-	
-public:
-	typedef ProfileCreator CLASSNAME;
-	ProfileCreator();
-	
-	void Next();
-	void UpdateTargetWeight();
-};
 
 #endif

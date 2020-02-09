@@ -82,6 +82,7 @@ typedef FoodDetailedT<float> FoodDetailed;
 typedef FoodDetailedT<double> FoodDetailedDouble;
 
 struct DailyPlan : Moveable<DailyPlan> {
+	Date date;
 	FoodDetailed food;
 	double weight, prog;
 	double fat_perc, fat_kgs, lean_body_kgs;
@@ -90,7 +91,8 @@ struct DailyPlan : Moveable<DailyPlan> {
 	double burned_kgs;
 	
 	void Serialize(Stream& s) {
-		s	% food
+		s	% date
+			% food
 			% weight % prog
 			% fat_perc % fat_kgs % lean_body_kgs
 			% maintain_calories % allowed_calories % maintain_burned_calories
@@ -169,8 +171,6 @@ struct FoodDay : Moveable<FoodDay> {
 
 struct FoodStorage {
 	Array<FoodDay> days;
-	Time last_shopping, next_shopping;
-	int shop_interval = 0;
 	
 	// Temporary
 	VectorMap<String, FoodType> food_types;
@@ -179,15 +179,15 @@ struct FoodStorage {
 	
 	FoodStorage();
 	
-	void Serialize(Stream& s) {s % days % last_shopping % next_shopping % shop_interval;}
+	void Serialize(Stream& s) {s % days;}
 	
 	FoodType& AddFoodType(String code, int shop_order, int pkg_size, String name, float kcals, float fat, float carbs, float protein, float salt, int cat, int healthiness=1);
 	MealType& AddMealType(String code, String name, String food_str, int time_of_day, float frequency=1);
 	
-	void Init(Time begin);
+	void Init(Date begin);
 	void Update(const Vector<DailyPlan>& planned_daily);
-	Time GetLastShopping();
-	Time GetNextShopping();
+	Date GetLastShopping();
+	Date GetNextShopping();
 	String GetTodaysMenu();
 	String GetNextShoppingList();
 	bool HasEnoughPreplanned();
@@ -203,7 +203,7 @@ struct FoodStorage {
 struct FoodQuantitySorter {
 	const FoodStorage& storage;
 	const FoodQuantitySorter(FoodStorage* s) : storage(*s) {}
-	bool operator()(int a, int b) const {return storage.food_types[a].shop_order < storage.food_types[b].shop_order;}
+	bool operator()(String a, String b) const {return storage.food_types.Get(a).shop_order < storage.food_types.Get(b).shop_order;}
 };
 
 struct MealQuantitySorter {
