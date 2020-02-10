@@ -155,7 +155,7 @@ struct FoodDay : Moveable<FoodDay> {
 	FoodDetailed target_sum, total_sum;
 	FoodDetailedDouble total_consumed;
 	bool is_shopping = false;
-	String menu, shopping_list;
+	String menu, preparation, shopping_list;
 	
 	void SetMealGrams(const Vector<double>& grams, const VectorMap<String, FoodType>& food_types, bool check=false);
 	double GetOptimizerEnergy();
@@ -172,6 +172,7 @@ struct FoodDay : Moveable<FoodDay> {
 			% total_consumed
 			% is_shopping
 			% menu
+			% preparation
 			% shopping_list;
 	}
 };

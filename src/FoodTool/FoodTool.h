@@ -16,19 +16,20 @@
 
 using namespace Upp;
 
-#define LAYOUTFILE <FoodTool/FoodTool.lay>
-#include <CtrlCore/lay.h>
-
 #define IMAGECLASS Images
 #define IMAGEFILE <FoodTool/Images.iml>
 #include <Draw/iml_header.h>
 
-
 #include "Optimizer.h"
 #include "Food.h"
 #include "Profile.h"
-#include "ProfileCreator.h"
 #include "VideoCapture.h"
+#include "ScheduleCtrl.h"
+
+#define LAYOUTFILE <FoodTool/FoodTool.lay>
+#include <CtrlCore/lay.h>
+
+#include "ProfileCreator.h"
 
 #ifdef flagWIN32
 inline void PlayCameraShutter() {PlaySoundA(ConfigFile("camera-shutter.wav"), NULL, SND_ASYNC|SND_FILENAME);}

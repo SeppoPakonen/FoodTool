@@ -1223,6 +1223,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			if (l == 0) {
 				const DailyPlan* p = prof.planned_daily.Begin();
 				const DailyPlan* end = prof.planned_daily.End();
+				
 				for(int i = 0; i < prof.weights.GetCount(); i++) {
 					const WeightLossStat& w = prof.weights[i];
 					while (p->date != Date(w.added) && p != end) p++;
@@ -1231,8 +1232,27 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				}
 			}
 			else if (l == 1) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].fat;
+				// Normalize non-dexa measurements (usually inaccurate cheap scale)
+				double begin_fat_perc = prof.planned_daily[0].fat_perc * 100;
+				v[0] = begin_fat_perc;
+				double prev = begin_fat_perc;
+				double prev_meas = prof.weights[1].fat;
+				for(int i = 1; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& w = prof.weights[i];
+					if (w.is_dexa) {
+						double cur = w.fat;
+						v[i] = cur;
+						prev = cur;
+					}
+					else {
+						double cur_meas = w.fat;
+						double mul = cur_meas / prev_meas;
+						double cur = prev * mul;
+						v[i] = cur;
+						prev = cur;
+						prev_meas = cur_meas;
+					}
+				}
 			}
 			if (v.GetCount() >= 2) v[0] = v[1];
 		}

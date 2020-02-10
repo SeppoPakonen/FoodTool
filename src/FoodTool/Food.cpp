@@ -360,6 +360,7 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 	
 	d.menu.Clear();
 	d.food_usage.Clear();
+	d.preparation = "<not implemented yet>";
 	for(int i = 0; i < d.meals.GetCount(); i++) {
 		const Meal& m = d.meals[i];
 		

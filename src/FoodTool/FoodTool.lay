@@ -53,8 +53,8 @@ LAYOUT(StatusLayout, 752, 580)
 	ITEM(Label, dv___10, SetLabel(t_("Q4 progress:")).SetAlign(ALIGN_RIGHT).LeftPosZ(4, 104).BottomPosZ(25, 19))
 	ITEM(Label, dv___11, SetLabel(t_("Total progress:")).SetAlign(ALIGN_RIGHT).LeftPosZ(4, 104).BottomPosZ(5, 19))
 	ITEM(Calendar, next_shopping, SetEditable(false).LeftPosZ(112, 236).BottomPosZ(88, 156))
-	ITEM(Label, dv___13, SetLabel(t_("Today's food:")).SetAlign(ALIGN_RIGHT).LeftPosZ(4, 104).TopPosZ(28, 19))
-	ITEM(DocEdit, today, HSizePosZ(112, 4).VSizePosZ(28, 248))
+	ITEM(Label, dv___13, SetLabel(t_("Schedule:")).SetAlign(ALIGN_RIGHT).LeftPosZ(4, 104).TopPosZ(28, 19))
+	ITEM(ScheduleCtrl, today, HSizePosZ(112, 4).VSizePosZ(28, 248))
 END_LAYOUT
 
 LAYOUT(ExceptionLayout, 400, 112)

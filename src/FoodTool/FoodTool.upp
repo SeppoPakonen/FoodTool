@@ -18,6 +18,8 @@ file
 	FoodTool.lay,
 	Data.brc,
 	Images.iml,
+	ScheduleCtrl.h,
+	ScheduleCtrl.cpp,
 	Food.h,
 	Food.cpp,
 	Profile.h,
