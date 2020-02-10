@@ -376,3 +376,5 @@ double Configuration::GetCaloriesJoggingDistSpeed(double weight_kg, double dista
 	return GetCaloriesJogging(weight_kg, speed, hours);
 }
 
+
+

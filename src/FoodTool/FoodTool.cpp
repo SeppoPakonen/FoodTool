@@ -44,7 +44,7 @@ Image GetSmiley(String s) {
 }
 
 Image GetSmiley(double progress) {
-	progress = max(0, min(1, progress));
+	progress = max(0.0, min(1.0, progress));
 	int div = progress * 9;
 	switch (div) {
 		case 0: return GetSmiley("worst.png");
@@ -83,6 +83,7 @@ FoodTool::FoodTool()
 	tabs.Add(status.SizePos(), "Status");
 	tabs.Add(graphs.SizePos(), "Graphs");
 	tabs.Add(weight.SizePos(), "Weight");
+	tabs.Add(def.SizePos(), "Nutrient Deficits");
 	tabs.Add(exc.SizePos(), "Exceptions");
 	tabs.Add(notes.SizePos(), "Notes");
 	tabs.Add(usage.SizePos(), "Usage");
@@ -123,12 +124,14 @@ void FoodTool::Data() {
 		else if (tab == 4)
 			weight.Data();
 		else if (tab == 5)
-			exc.Data();
+			def.Data();
 		else if (tab == 6)
-			notes.Data();
+			exc.Data();
 		else if (tab == 7)
-			usage.Data();
+			notes.Data();
 		else if (tab == 8)
+			usage.Data();
+		else if (tab == 9)
 			conf.Data();
 	}
 	was_updating = is_updating;
@@ -1584,3 +1587,68 @@ void TodayScheduleCtrl::Paint(Draw& d) {
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NutrientDeficitCtrl::NutrientDeficitCtrl() {
+	Add(split.SizePos());
+	split.Horz() << list << right;
+	split.SetPos(2500);
+	
+	right.Add(edit.HSizePos().VSizePos(0,30));
+	right.Add(add.BottomPos(0,30).RightPos(0, 200));
+	
+	add.SetLabel("Add");
+	add <<= THISBACK(AddItem);
+	
+	list.AddColumn("Added");
+	list.WhenAction << THISBACK(SelectItem);
+	list.WhenLeftClick << THISBACK(SelectItem);
+}
+
+void NutrientDeficitCtrl::Data() {
+	Profile& prof = GetProfile();
+	
+	if (prof.defs.GetCount() != list.GetCount()) {
+		for(int i = 0; i < prof.defs.GetCount(); i++) {
+			int row = prof.defs.GetCount() - 1 - i;
+			const NutrientDeficitProfile& n = prof.defs[i];
+			list.Set(row, 0, n.added);
+		}
+		list.SetCursor(0);
+		SelectItem();
+	}
+}
+
+void NutrientDeficitCtrl::SelectItem() {
+	if (!list.IsCursor())
+		return;
+	int cursor = list.GetCursor();
+	int note_i = list.GetCount() - 1 - cursor;
+	
+	Profile& prof = GetProfile();
+	const NutrientDeficitProfile& n = prof.defs[note_i];
+	edit.prof = n;
+	edit.Refresh();
+}
+
+void NutrientDeficitCtrl::AddItem() {
+	Profile& prof = GetProfile();
+	NutrientDeficitProfile& n = prof.defs.Add();
+	n = edit.prof;
+	n.added = GetSysTime();
+	
+	Data();
+}
+

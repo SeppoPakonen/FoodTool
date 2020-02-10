@@ -140,6 +140,7 @@ struct ScheduleToday {
 int GetTargetWeight(double height_m, int bmi);
 int GetBMI(double height_m, double weight_kg);
 
+
 struct Profile {
 	Vector<IntakeExceptions> exceptions;
 	Vector<Note> notes;
@@ -147,6 +148,7 @@ struct Profile {
 	Vector<WeightLossStat> weights;
 	Vector<DailyPlan> planned_daily;
 	Vector<Configuration> confs;
+	Vector<NutrientDeficitProfile> defs;
 	
 	FoodStorage storage;
 	Date begin_date;
@@ -177,6 +179,7 @@ struct Profile {
 			% weights
 			% planned_daily
 			% confs
+			% defs
 			% storage
 			% begin_date
 			% av_calorie_deficit

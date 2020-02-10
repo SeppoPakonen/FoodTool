@@ -112,12 +112,15 @@ void ProfileCreator::Next() {
 		if (prof.weights.IsEmpty())
 			prof.AddWeightStat(tab1.weight.GetData());
 		
-		prof.storage.Init(prof.begin_date);
+		if (prof.storage.days.IsEmpty())
+			prof.storage.Init(prof.begin_date);
 		
-		prof.is_initialised = true;
 	}
 	else if (tab == 2) {
-		GetProfile().Start(true);
+		Profile& prof = GetProfile();
+		prof.defs.Add(tab2.edit.prof);
+		prof.is_initialised = true;
+		prof.Start(true);
 		Close();
 		return;
 	}

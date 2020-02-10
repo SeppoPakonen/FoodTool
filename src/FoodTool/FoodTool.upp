@@ -30,7 +30,8 @@ file
 	Optimizer.h,
 	VideoCapture.h,
 	VideoCapture.cpp,
-	Util.h;
+	Util.h,
+	Util.cpp;
 
 mainconfig
 	"" = "GUI";

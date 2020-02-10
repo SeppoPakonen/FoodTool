@@ -237,6 +237,21 @@ struct TodayScheduleCtrl : public Ctrl {
 	Callback WhenAlert;
 };
 
+struct NutrientDeficitCtrl : public ParentCtrl {
+	Splitter split;
+	ArrayCtrl list;
+	ParentCtrl right;
+	Button add;
+	NutrientDeficitEdit edit;
+	
+	
+	typedef NutrientDeficitCtrl CLASSNAME;
+	NutrientDeficitCtrl();
+	void Data();
+	void SelectItem();
+	void AddItem();
+};
+
 class FoodTool : public WithFoodToolLayout<TopWindow> {
 	TabCtrl tabs;
 	bool was_updating = true;
@@ -251,6 +266,7 @@ class FoodTool : public WithFoodToolLayout<TopWindow> {
 	WeightCtrl weight;
 	GraphCtrl graphs;
 	TodayScheduleCtrl today;
+	NutrientDeficitCtrl def;
 	
 	TimeCallback tc;
 public:
