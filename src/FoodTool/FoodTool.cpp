@@ -6,6 +6,29 @@
 #define IMAGEFILE <FoodTool/Images.iml>
 #include <Draw/iml_source.h>
 
+Color Rainbow(float progress) {
+    float div = (fabs(progress - (int)progress) * 6);
+    int ascending = (int) ((div - (int)div) * 255);
+    int descending = 255 - ascending;
+
+    switch ((int) div)
+    {
+        case 0:
+            return Color(255, ascending, 0);
+        case 1:
+            return Color(descending, 255, 0);
+        case 2:
+            return Color(0, 255, ascending);
+        case 3:
+            return Color(0, descending, 255);
+        case 4:
+            return Color(ascending, 0, 255);
+        default: // case 5:
+            return Color(255, 0, descending);
+    }
+}
+
+
 
 FoodTool::FoodTool()
 {
@@ -36,6 +59,8 @@ void FoodTool::Data() {
 		motivation.Data();
 	else if (tab == 1)
 		status.Data();
+	else if (tab == 2)
+		graphs.Data();
 	else if (tab == 3)
 		weight.Data();
 	else if (tab == 4)
@@ -846,5 +871,505 @@ void WeightCtrl::SetCountdown(int seconds) {
 
 
 GraphCtrl::GraphCtrl() {
+	Add(split.SizePos());
+	split.Horz() << list << graph;
+	split.SetPos(2500);
 	
+	list.AddColumn("Type");
+	
+	list.Add("Planned weight");
+	graph.Add()
+		.Add("Lean body weight", 1, Color(28, 212, 150))
+		.Add("Weight", 2, Color(28, 127, 150));
+	
+	list.Add("Planned calories");
+	graph.Add()
+		.Add("Maintain calories", 1, Color(113, 42, 255))
+		.Add("Burned calories", 1, Color(198, 42, 0))
+		.Add("Allowed calories", 2, Color(28, 170, 0));
+	
+	list.Add("Planned burned weight");
+	graph.Add()
+		.Add("Burned mass", 2, Color(0, 120, 93));
+	
+	list.Add("Planned macronutrients");
+	graph.Add()
+		.Add("Fat mass", 2, Color(148, 146, 0))
+		.Add("Carbohydrate mass", 2, Color(0, 116, 66))
+		.Add("Protein mass", 2, Color(94, 0, 0));
+	
+	list.Add("Menu calories");
+	graph.Add()
+		.Add("Allowed calories", 1, Color(28, 85, 255))
+		.Add("Eaten calories", 2, Color(0, 136, 94));
+	
+	list.Add("Menu food mass");
+	graph.Add()
+		.Add("Planned mass", 1, Color(85, 42, 0))
+		.Add("Eaten mass", 2, Color(85, 85, 150));
+		
+	list.Add("Menu macronutrients");
+	graph.Add()
+		.Add("Planned fat mass", 1, Color(148, 146, 0))
+		.Add("Planned carbohydrate mass", 1, Color(0, 116, 66))
+		.Add("Planned protein mass", 1, Color(94, 0, 0))
+		.Add("Eaten fat mass", 2, Color(168, 166, 20))
+		.Add("Eaten carbohydrate mass", 2, Color(20, 136, 86))
+		.Add("Eaten protein mass", 2, Color(114, 20, 20));
+	
+	list.Add("Menu salt");
+	graph.Add()
+		.Add("Planned salt", 1, GrayColor())
+		.Add("Eaten salt", 2, GrayColor(128+32));
+		
+	int vitamin_count = 13;
+	list.Add("Menu vitamins (\% of recommended)");
+	graph.Add().Vert(100)
+		.Add("A", 1, Rainbow(0.0 / vitamin_count))
+		.Add("B1", 1, Rainbow(1.0 / vitamin_count))
+		.Add("B2", 1, Rainbow(2.0 / vitamin_count))
+		.Add("B3", 1, Rainbow(3.0 / vitamin_count))
+		.Add("B5", 1, Rainbow(4.0 / vitamin_count))
+		.Add("B6", 1, Rainbow(5.0 / vitamin_count))
+		.Add("B7", 1, Rainbow(6.0 / vitamin_count))
+		.Add("B9", 1, Rainbow(7.0 / vitamin_count))
+		.Add("B12", 1, Rainbow(8.0 / vitamin_count))
+		.Add("C", 1, Rainbow(9.0 / vitamin_count))
+		.Add("D", 1, Rainbow(10.0 / vitamin_count))
+		.Add("E", 1, Rainbow(11.0 / vitamin_count))
+		.Add("K", 1, Rainbow(12.0 / vitamin_count));
+	
+	
+	int aminoacid_count = 15;
+	list.Add("Menu essential amino acids (\% of recommended)");
+	graph.Add().Vert(100)
+		.Add("Histidine", 1, Rainbow(0.0 / aminoacid_count))
+		.Add("Isoleucine", 1, Rainbow(1.0 / aminoacid_count))
+		.Add("Leucine", 1, Rainbow(2.0 / aminoacid_count))
+		.Add("Lysine", 1, Rainbow(3.0 / aminoacid_count))
+		.Add("Methionine", 1, Rainbow(4.0 / aminoacid_count))
+		.Add("Phenylalanine", 1, Rainbow(5.0 / aminoacid_count))
+		.Add("Threonine", 1, Rainbow(6.0 / aminoacid_count))
+		.Add("Tryptophan", 1, Rainbow(7.0 / aminoacid_count))
+		.Add("Valine", 1, Rainbow(8.0 / aminoacid_count))
+		.Add("Arginine", 1, Rainbow(9.0 / aminoacid_count))
+		.Add("Cysteine", 1, Rainbow(10.0 / aminoacid_count))
+		.Add("Glutamine", 1, Rainbow(11.0 / aminoacid_count))
+		.Add("Glycine", 1, Rainbow(12.0 / aminoacid_count))
+		.Add("Proline", 1, Rainbow(13.0 / aminoacid_count))
+		.Add("Tyrosine", 1, Rainbow(14.0 / aminoacid_count));
+		
+	int mineral_count = 35;
+	list.Add("Menu essential minerals (\% of recommended)");
+	graph.Add().Vert(100)
+		.Add("Potassium", 1, Rainbow(0.0 / mineral_count))
+		.Add("Chloride", 1, Rainbow(1.0 / mineral_count))
+		.Add("Sodium", 1, Rainbow(2.0 / mineral_count))
+		.Add("Calcium", 1, Rainbow(3.0 / mineral_count))
+		.Add("Phosphorus", 1, Rainbow(4.0 / mineral_count))
+		.Add("Magnesium", 1, Rainbow(5.0 / mineral_count))
+		.Add("Iron", 1, Rainbow(6.0 / mineral_count))
+		.Add("Zinc", 1, Rainbow(7.0 / mineral_count))
+		.Add("Manganese", 1, Rainbow(8.0 / mineral_count))
+		.Add("Copper", 1, Rainbow(9.0 / mineral_count))
+		.Add("Iodine", 1, Rainbow(10.0 / mineral_count))
+		.Add("Chromium", 1, Rainbow(11.0 / mineral_count))
+		.Add("Molybdenum", 1, Rainbow(12.0 / mineral_count))
+		.Add("Selenium", 1, Rainbow(13.0 / mineral_count))
+		.Add("Cobalt", 1, Rainbow(14.0 / mineral_count))
+		.Add("Boron", 1, Rainbow(15.0 / mineral_count))
+		.Add("Silicon", 1, Rainbow(16.0 / mineral_count))
+		.Add("Bromine", 1, Rainbow(17.0 / mineral_count))
+		.Add("Arsenic", 1, Rainbow(18.0 / mineral_count))
+		.Add("Nickel", 1, Rainbow(19.0 / mineral_count))
+		.Add("Fluorine", 1, Rainbow(20.0 / mineral_count))
+		.Add("Boron", 1, Rainbow(21.0 / mineral_count))
+		.Add("Lithium", 1, Rainbow(22.0 / mineral_count))
+		.Add("Strontium", 1, Rainbow(23.0 / mineral_count))
+		.Add("Vanadium", 1, Rainbow(24.0 / mineral_count))
+		.Add("Tungsten", 1, Rainbow(25.0 / mineral_count))
+		.Add("Lanthanides", 1, Rainbow(26.0 / mineral_count))
+		.Add("Cadmium", 1, Rainbow(27.0 / mineral_count))
+		.Add("Aluminium", 1, Rainbow(28.0 / mineral_count))
+		.Add("Germanium", 1, Rainbow(29.0 / mineral_count))
+		.Add("Lead", 1, Rainbow(30.0 / mineral_count))
+		.Add("Rubidium", 1, Rainbow(31.0 / mineral_count))
+		.Add("Tin", 1, Rainbow(32.0 / mineral_count))
+		.Add("Phosphate", 1, Rainbow(33.0 / mineral_count))
+		.Add("Bicarbonate", 1, Rainbow(34.0 / mineral_count));
+	
+	int i = 0;
+	int fattyacid_count = 5;
+	list.Add("Menu essential fatty acids (\% of recommended)");
+	graph.Add().Vert(100)
+		.Add("Omega-3", 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add("Omega-6", 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add("Arachidonic", 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add("Linolenic", 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add("Calendic", 1, Rainbow((double)(i++) / fattyacid_count));
+	
+	i = 0;
+	int other_count = 4;
+	list.Add("Menu essential other (\% of recommended)");
+	graph.Add().Vert(100)
+		.Add("Choline", 1, Rainbow((double)(i++) / other_count))
+		.Add("Inositol", 1, Rainbow((double)(i++) / other_count))
+		.Add("Taurine", 1, Rainbow((double)(i++) / other_count))
+		.Add("Nucleotides", 1, Rainbow((double)(i++) / other_count));
+		
+	
+	i = 0;
+	int electrolyte_count = 4;
+	list.Add("Menu electrolytes (\% of recommended)");
+	graph.Add().Vert(100)
+		.Add("Bicarbonate", 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add("Calcium", 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add("Chloride", 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add("Magnesium", 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add("Phosphate", 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add("Potassium", 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add("Sodium", 1, Rainbow((double)(i++) / electrolyte_count));
+	
+	list.Add("Measured weight");
+	graph.Add()
+		.Add("Planned weight", 1, GrayColor())
+		.Add("Weight", 2, Color(109, 0, 117));
+	
+	list.Add("Measured fat");
+	graph.Add()
+		.Add("Planned Fat", 1, GrayColor())
+		.Add("Fat", 2, Color(81, 48, 0));
+		
+	list.Add("Measured liquid");
+	graph.Add()
+		.Add("Liquid", 2, Color(0, 176, 137));
+		
+	list.Add("Measured muscle");
+	graph.Add()
+		.Add("Muscle", 2, Color(120, 0, 0));
+	
+	list.Add("Measured BMI");
+	graph.Add()
+		.Add("BMI", 2, GrayColor());
+	
+	list <<= THISBACK(SelectSource);
+	
+	list.SetCursor(0);
+	SelectSource();
+}
+
+String MultipurposeGraph::GetLineTitle(int s, int l) {return src[s].lines[l].title;}
+int MultipurposeGraph::GetLineCount(int s) {return src[s].lines.GetCount();}
+Color MultipurposeGraph::GetLineColor(int s, int l) {return src[s].lines[l].color;}
+int MultipurposeGraph::GetLineWidth(int s, int l) {return src[s].lines[l].width;}
+
+int MultipurposeGraph::GetCount(int s) {
+	if (s < 4)
+		return GetProfile().planned_daily.GetCount();
+	else if (s < 14)
+		return GetProfile().storage.days.GetCount();
+	else if (s < 19)
+		return GetProfile().weights.GetCount();
+	Panic("Invalid source");
+	return -1;
+}
+
+const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
+	if (tmp.GetCount() <= l)
+		tmp.SetCount(l+1);
+	
+	const Profile& prof = GetProfile();
+	
+	Vector<double>& v = tmp[l];
+	if (v.IsEmpty()) {
+		v.SetCount(GetCount(src));
+		
+		if (src == 0) {
+			if (l == 0) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].lean_body_kgs;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].weight;
+			}
+		}
+		else if (src == 1) {
+			if (l == 0) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].maintain_calories;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].burned_calories;
+			}
+			else if (l == 2) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].allowed_calories;
+			}
+		}
+		else if (src == 2) {
+			if (l == 0) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].burned_kgs;
+			}
+		}
+		else if (src == 3) {
+			if (l == 0) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].food.fat;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].food.carbs;
+			}
+			else if (l == 2) {
+				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+					v[i] = prof.planned_daily[i].food.protein;
+			}
+		}
+		
+		else if (src == 4) {
+			if (l == 0) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].target_sum.kcals;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].total_sum.kcals;
+			}
+		}
+		else if (src == 5) {
+			if (l == 0) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].target_sum.grams;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].total_sum.grams;
+			}
+		}
+		else if (src == 6) {
+			if (l == 0) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].target_sum.fat;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].target_sum.carbs;
+			}
+			else if (l == 2) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].target_sum.protein;
+			}
+			else if (l == 3) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].total_sum.fat;
+			}
+			else if (l == 4) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].total_sum.carbs;
+			}
+			else if (l == 5) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].total_sum.protein;
+			}
+		}
+		else if (src == 7) {
+			if (l == 0) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].target_sum.salt;
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.storage.days.GetCount(); i++)
+					v[i] = prof.storage.days[i].total_sum.salt;
+			}
+		}
+		else if (src == 8) {
+			Panic("TODO");
+		}
+		else if (src == 9) {
+			Panic("TODO");
+		}
+		else if (src == 10) {
+			Panic("TODO");
+		}
+		else if (src == 11) {
+			Panic("TODO");
+		}
+		else if (src == 12) {
+			Panic("TODO");
+		}
+		else if (src == 13) {
+			Panic("TODO");
+		}
+		else if (src == 14) {
+			if (l == 0) {
+				const DailyPlan* p = prof.planned_daily.Begin();
+				const DailyPlan* end = prof.planned_daily.End();
+				for(int i = 0; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& w = prof.weights[i];
+					while (p->date != Date(w.added) && p != end) p++;
+					if (p == end) break;
+					v[i] = p->weight;
+				}
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.weights.GetCount(); i++)
+					v[i] = prof.weights[i].weight;
+			}
+		}
+		else if (src == 15) {
+			if (l == 0) {
+				const DailyPlan* p = prof.planned_daily.Begin();
+				const DailyPlan* end = prof.planned_daily.End();
+				for(int i = 0; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& w = prof.weights[i];
+					while (p->date != Date(w.added) && p != end) p++;
+					if (p == end) break;
+					v[i] = p->fat_perc * 100;
+				}
+			}
+			else if (l == 1) {
+				for(int i = 0; i < prof.weights.GetCount(); i++)
+					v[i] = prof.weights[i].fat;
+			}
+			if (v.GetCount() >= 2) v[0] = v[1];
+		}
+		else if (src == 16) {
+			if (l == 0) {
+				for(int i = 0; i < prof.weights.GetCount(); i++)
+					v[i] = prof.weights[i].liquid;
+			}
+			if (v.GetCount() >= 2) v[0] = v[1];
+		}
+		else if (src == 17) {
+			if (l == 0) {
+				for(int i = 0; i < prof.weights.GetCount(); i++)
+					v[i] = prof.weights[i].muscle;
+			}
+			if (v.GetCount() >= 2) v[0] = v[1];
+		}
+		else if (src == 18) {
+			if (l == 0) {
+				for(int i = 0; i < prof.weights.GetCount(); i++)
+					v[i] = prof.weights[i].bmi;
+			}
+			if (v.GetCount() >= 2) v[0] = v[1];
+		}
+	}
+	return v;
+}
+
+int MultipurposeGraph::GetVertLine(int s) {
+	Src& ss = src[s];
+	return ss.vert_line;
+}
+
+int MultipurposeGraph::GetHorzLine(int s) {
+	const Profile& prof = GetProfile();
+	if (s < 4) {
+		Date today = GetSysTime();
+		for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+			if (prof.planned_daily[i].date == today)
+				return i;
+	}
+	else if (s < 14) {
+		Date today = GetSysTime();
+		for(int i = 0; i < prof.storage.days.GetCount(); i++)
+			if (prof.storage.days[i].date == today)
+				return i;
+	}
+	else if (s < 19)
+		return 0;
+	Panic("Invalid source");
+	return -1;
+}
+
+void GraphCtrl::SelectSource() {
+	if (!list.IsCursor()) return;
+	graph.new_src = list.GetCursor();
+	graph.Refresh();
+}
+
+void MultipurposeGraph::Paint(Draw& d) {
+	int src = new_src;
+	for(auto& a : tmp)
+		a.SetCount(0);
+	
+	Size sz(GetSize());
+	d.DrawRect(sz, White());
+	
+	int vert = GetVertLine(src);
+	
+	double min = vert ? +DBL_MAX : 0;
+	double max = -DBL_MAX;
+	double last = 0.0;
+	
+	
+	int count = GetCount(src);
+	int line_count = GetLineCount(src);
+	for(int l = 0; l < line_count; l++) {
+		const auto& values = GetValue(src, l);
+		for(int j = 0; j < count; j++) {
+			double d = values[j];
+			if (d > max)
+				max = d;
+			if (vert && d < min)
+				min = d;
+		}
+	}
+	
+	Font fnt = Monospace(10);
+	
+	if (count > 1 && max >= min) {
+		double diff = max - min;
+		double xstep = (double)sz.cx / (count - 1);
+		
+		int xoff = 0; // 16
+		int text_y = 0;
+		
+		for(int l = 0; l < line_count; l++) {
+			double line_max = -DBL_MAX;
+			double line_min = +DBL_MAX;
+			const auto& values = GetValue(src, l);
+			
+			polyline.SetCount(0);
+			for(int j = 0; j < count; j++) {
+				double v = values[j];
+				last = v;
+				int x = (int)(j * xstep);
+				int y = (int)(sz.cy - (v - min) / diff * sz.cy);
+				polyline.Add(Point(x, y));
+				if (v > line_max) line_max = v;
+				if (v < line_min) line_min = v;
+			}
+			if (polyline.GetCount() >= 2) {
+				Color clr = GetLineColor(src, l);
+				d.DrawPolyline(polyline, GetLineWidth(src, l), clr);
+				
+				String txt = GetLineTitle(src, l) + " - min " + Format("%2n", line_min) + " - max " + Format("%2n", line_max);
+				Size str_sz = GetTextSize(txt, fnt);
+				d.DrawRect(xoff, text_y, str_sz.cx, str_sz.cy, White());
+				d.DrawText(xoff, text_y, txt, fnt.Bold(), Blend(clr, Black()));
+				text_y += 10;
+			}
+		}
+		
+		if (vert) {
+			int y = (int)(sz.cy - (vert - min) / diff * sz.cy);
+			d.DrawLine(0, y, sz.cx, y, 1, Black());
+		}
+		
+		int horz = GetHorzLine(src);
+		if (horz) {
+			int x = (int)(horz * xstep);
+			d.DrawLine(x, 0, x, sz.cy, 1, Black());
+		}
+	}
+	else {
+		String txt = "Waiting for data";
+		Size txt_sz = GetTextSize(txt, fnt);
+		d.DrawText((sz.cx - txt_sz.cx) / 2, (sz.cy - txt_sz.cy) / 2, txt, fnt);
+	}
 }

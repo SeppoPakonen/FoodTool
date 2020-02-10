@@ -130,6 +130,7 @@ void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
 		target_diff.salt = 0;
 		day.target_sum = planned_daily[day_i].food;
 		day.target_sum -= target_diff;
+		day.target_sum.Limit(10, 1, 0);
 		FoodDetailed orig_target_sum = day.target_sum;
 		
 		MakeMenu(day);
@@ -217,6 +218,9 @@ void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
 }
 
 void FoodStorage::MakeMenu(FoodDay& d) {
+	ASSERT(d.target_sum.fat >= 0 && d.target_sum.fat < 2000);
+	ASSERT(d.target_sum.carbs >= 0 && d.target_sum.carbs < 2000);
+	ASSERT(d.target_sum.protein >= 0 && d.target_sum.protein < 2000);
 	d.meals.SetCount(4);
 	
 	float calorie_sum = 0.0;
@@ -350,7 +354,7 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 	}
 	
 	const Vector<double>& best = opt.GetBestSolution();
-	d.SetMealGrams(best, food_types);
+	d.SetMealGrams(best, food_types, true);
 	double energy = d.GetOptimizerEnergy();
 	LOG("Final optimization result: " << energy);
 	
@@ -388,7 +392,7 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 	}
 }
 
-void FoodDay::SetMealGrams(const Vector<double>& grams, const VectorMap<String, FoodType>& food_types) {
+void FoodDay::SetMealGrams(const Vector<double>& grams, const VectorMap<String, FoodType>& food_types, bool check) {
 	int it = 0;
 	total_sum.Reset();
 	for(int i = 0; i < meals.GetCount(); i++) {
@@ -406,6 +410,11 @@ void FoodDay::SetMealGrams(const Vector<double>& grams, const VectorMap<String, 
 			FoodDetailed& d = m.food[j];
 			d.ChangeGrams(g);
 			m.food_sum += d;
+			if (check) {
+				ASSERT(m.food_sum.fat >= 0 && m.food_sum.fat < 2000);
+				ASSERT(m.food_sum.carbs >= 0 && m.food_sum.carbs < 2000);
+				ASSERT(m.food_sum.protein >= 0 && m.food_sum.protein < 2000);
+			}
 		}
 		total_sum += m.food_sum;
 	}

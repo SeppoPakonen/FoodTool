@@ -78,7 +78,8 @@ void ProfileCreator::Next() {
 	prof.begin_date = GetSysTime();
 	prof.begin_date--;
 	
-	prof.AddWeightStat(weight.GetData());
+	if (prof.weights.IsEmpty())
+		prof.AddWeightStat(weight.GetData());
 	
 	prof.UpdatePlan();
 	

@@ -23,11 +23,18 @@ enum {
 
 template <class T>
 struct FoodDetailedT : Moveable<FoodDetailedT<T>> {
-	T grams, kcals, fat, carbs, protein, salt;
+	T grams = 0, kcals = 0, fat = 0, carbs = 0, protein = 0, salt = 0;
 	
-	FoodDetailedT() {Reset();}
 	void Reset() {grams = 0, kcals = 0, fat = 0, carbs = 0, protein = 0, salt = 0;}
 	void Serialize(Stream& s) {s % grams % kcals % fat % carbs % protein % salt;}
+	void Limit(T kcals, T macro, T salt) {
+		this->kcals = max(this->kcals, kcals);
+		this->fat = max(this->fat, macro);
+		this->carbs = max(this->carbs, macro);
+		this->protein = max(this->protein, macro);
+		this->grams = max(this->grams, fat+carbs+protein);
+		this->salt = max(this->salt, salt);
+	}
 	template <class K>
 	void operator +=(const K& d) {
 		grams += d.grams;
@@ -150,7 +157,7 @@ struct FoodDay : Moveable<FoodDay> {
 	bool is_shopping = false;
 	String menu, shopping_list;
 	
-	void SetMealGrams(const Vector<double>& grams, const VectorMap<String, FoodType>& food_types);
+	void SetMealGrams(const Vector<double>& grams, const VectorMap<String, FoodType>& food_types, bool check=false);
 	double GetOptimizerEnergy();
 	void Serialize(Stream& s) {
 		s	% date

@@ -36,6 +36,8 @@ inline void PlayCameraShutter() {PlaySoundA(ConfigFile("camera-shutter.wav"), NU
 inline void PlayCameraShutter() {}
 #endif
 
+Color Rainbow(float progress);
+
 struct MotivationCtrl : public Ctrl {
 	int motivation_i = -1, quote_i = -1;
 	Image img;
@@ -167,12 +169,51 @@ struct WeightCtrl : public ParentCtrl {
 	void LoadImages(String f, String r, String b);
 };
 
+struct MultipurposeGraph : public Ctrl {
+	struct Line : Moveable<Line> {
+		String title;
+		Color color;
+		int width;
+	};
+	struct Src : Moveable<Src> {
+		Vector<Line> lines;
+		int vert_line = 0;
+		
+		Src& Add(String t, int w, Color c) {Line& l = lines.Add(); l.title = t; l.width = w; l.color = c; return *this;}
+		Src& Vert(int y) {vert_line = y; return *this;}
+	};
+	
+private:
+	Vector<Vector<double>> tmp;
+	Vector<Point> polyline;
+	Vector<Src> src;
+	
+public:
+	int new_src = 0;
+	
+	Src& Add() {return src.Add();}
+	int GetLineCount(int src);
+	Color GetLineColor(int src, int l);
+	int GetLineWidth(int src, int l);
+	String GetLineTitle(int src, int l);
+	int GetCount(int src);
+	int GetVertLine(int src);
+	int GetHorzLine(int src);
+	const Vector<double>& GetValue(int src, int l);
+	void Paint(Draw& d);
+};
+
 struct GraphCtrl : public ParentCtrl {
+	Splitter split;
+	ArrayCtrl list;
+	MultipurposeGraph graph;
 	
 	
 	typedef GraphCtrl CLASSNAME;
 	GraphCtrl();
 	
+	void Data() {graph.Refresh();}
+	void SelectSource();
 };
 
 class FoodTool : public WithFoodToolLayout<TopWindow> {
