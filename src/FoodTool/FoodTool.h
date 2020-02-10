@@ -20,6 +20,7 @@ using namespace Upp;
 #define IMAGEFILE <FoodTool/Images.iml>
 #include <Draw/iml_header.h>
 
+#include "Util.h"
 #include "Optimizer.h"
 #include "Food.h"
 #include "Profile.h"
@@ -31,13 +32,6 @@ using namespace Upp;
 
 #include "ProfileCreator.h"
 
-#ifdef flagWIN32
-inline void PlayCameraShutter() {PlaySoundA(ConfigFile("camera-shutter.wav"), NULL, SND_ASYNC|SND_FILENAME);}
-#else
-inline void PlayCameraShutter() {}
-#endif
-
-Color Rainbow(float progress);
 
 struct MotivationCtrl : public Ctrl {
 	int motivation_i = -1, quote_i = -1;
@@ -146,7 +140,8 @@ struct WeightCtrl : public ParentCtrl {
 	void SelectWeightStat();
 	void Reset();
 	void UpdateBMI();
-	
+	void UpdateCameraCount();
+	void UpdateCameraList();
 	
 	void Serialize(Stream& s) {s % last_camera_i % last_camera_count;}
 	void StoreThis() {StoreToFile(*this, ConfigFile("selected_camera.bin"));}
@@ -217,8 +212,31 @@ struct GraphCtrl : public ParentCtrl {
 	void SelectSource();
 };
 
+struct TodayScheduleCtrl : public Ctrl {
+	ScheduleToday sched;
+	int prof_version;
+	Color waking_top, waking_btm;
+	Color eating_top, eating_btm;
+	Color walking_top, walking_btm;
+	Color running_top, running_btm;
+	Color sleeping_top, sleeping_btm;
+	TimeCallback tc;
+	
+	
+	typedef TodayScheduleCtrl CLASSNAME;
+	TodayScheduleCtrl();
+	void Paint(Draw& d);
+	void Data() {Refresh();}
+	void CheckAlerts();
+	void Alert(String alert_str);
+	
+	Callback WhenAlert;
+};
+
 class FoodTool : public WithFoodToolLayout<TopWindow> {
 	TabCtrl tabs;
+	bool was_updating = true;
+	Label updating_lbl;
 	
 	MotivationCtrl motivation;
 	StatusCtrl status;
@@ -228,6 +246,7 @@ class FoodTool : public WithFoodToolLayout<TopWindow> {
 	UsageCtrl usage;
 	WeightCtrl weight;
 	GraphCtrl graphs;
+	TodayScheduleCtrl today;
 	
 	TimeCallback tc;
 public:
@@ -235,6 +254,7 @@ public:
 	FoodTool();
 	
 	void Data();
+	void SetTodayTab();
 };
 
 #endif

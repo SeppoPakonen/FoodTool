@@ -9,8 +9,36 @@ Profile::Profile() {
 	if (is_initialised) {
 		if (storage.days.IsEmpty())
 			storage.Init(begin_date);
-		storage.Update(planned_daily);
+		Start(false);
 	}
+}
+
+void Profile::ProcessUpdate(bool replan) {
+	TimeStop ts;
+	
+	int prev_days = 0;
+	if (planned_daily.GetCount())
+		prev_days = planned_daily.Top().date.Get() - begin_date.Get();
+	
+	if (replan)
+		UpdatePlan();
+	
+	storage.Update(planned_daily);
+	version++;
+	
+	StoreThis();
+	
+	int days = planned_daily.Top().date.Get() - begin_date.Get();
+	int days_diff = days - prev_days;
+	
+	LOG("Calory-deficit: " << (av_calorie_deficit * 100) << "\%");
+	LOG("Started " << Format("%", begin_date));
+	LOG("Stopping " << Format("%", planned_daily.Top().date));
+	//LOG("Days total " << days << (days_diff ? "(Diff " + (days_diff < 0 ? "-" : "+") + IntStr(days_diff) + ")" : "");
+	LOG(Format("Days total %d (Diff %+d)", days, days_diff));
+	
+	flag.SetNotRunning();
+	flag.IncreaseStopped();
 }
 
 void Profile::AddWeightStat(int kgs) {
@@ -171,15 +199,76 @@ void Profile::LoadThis() {
 }
 
 void Profile::StoreThis() {
-	String tstr = Format("%", GetSysTime());
-	tstr.Replace("/", "_");
-	tstr.Replace(":", "_");
-	tstr.Replace(" ", "_");
-	String file = ConfigFile(tstr + ".bin");
-	StoreToFile(*this, file);
+	String backup_dir = ConfigFile("backups");
+	RealizeDirectory(backup_dir);
 	
-	file = ConfigFile("latest.bin");
-	StoreToFile(*this, file);
+	Date d = GetSysTime();
+	String file = Format("backup_%d_%d_%d.bin", (int)d.year, (int)d.month, (int)d.day);
+	String path = AppendFileName(backup_dir, file);
+	StoreToFile(*this, path);
+	
+	path = ConfigFile("latest.bin");
+	StoreToFile(*this, path);
+}
+
+void Profile::MakeTodaySchedule(ScheduleToday& s) {
+	const Configuration& conf = confs.Top();
+	Time now = GetSysTime();
+	s.day = now;
+	s.items.SetCount(0);
+	
+	int day_i = -1;
+	for(int i = 0; i < storage.days.GetCount(); i++)
+		if (storage.days[i].date == s.day)
+			{day_i = i; break;}
+	if (day_i < 0)
+		return;
+	const FoodDay& day = storage.days[day_i];
+	int days_left_tomorrow = planned_daily.GetCount() - day_i - 1;
+	
+	auto& wake = s.items.Add();
+	wake.time = Time(s.day.year, s.day.month, s.day.day, conf.waking_hour, conf.waking_minute, 0);
+	wake.type = ScheduleToday::WAKING;
+	wake.msg = Format("Good morning. Have %d calories today!", (int)day.total_sum.kcals);
+	
+	auto& sleep = s.items.Add();
+	sleep.time = Time(s.day.year, s.day.month, s.day.day, conf.sleeping_hour, conf.sleeping_minute, 0);
+	sleep.type = ScheduleToday::SLEEPING;
+	sleep.msg = Format("Good night. Only %d days left tomorrow!", days_left_tomorrow);
+	if (sleep.time < wake.time)
+		sleep.time += 24*60*60;
+	
+	Time t = wake.time;
+	for(int i = 0; i < day.meals.GetCount(); i++) {
+		const Meal& m = day.meals[i];
+		auto& meal = s.items.Add();
+		meal.time = t;
+		meal.type = ScheduleToday::EATING;
+		meal.msg = storage.meal_types.Get(m.key).name;
+		t += conf.hours_between_meals * 60 * 60;
+	}
+	
+	int day_len = sleep.time.Get() - wake.time.Get();
+	Time exercise_time = wake.time + day_len * 3 / 4;
+	
+	if (conf.tgt_walking_dist > 0) {
+		auto& walk = s.items.Add();
+		walk.time = exercise_time;
+		walk.type = ScheduleToday::WALKING;
+		walk.msg = "Go walk " + Format("%2n", conf.tgt_walking_dist) + "km!";
+	}
+	
+	if (conf.tgt_jogging_dist > 0) {
+		auto& jogging = s.items.Add();
+		jogging.time = exercise_time;
+		jogging.type = ScheduleToday::RUNNING;
+		jogging.msg = "Go jogging " + Format("%2n", conf.tgt_jogging_dist) + "km!";
+	}
+	
+	for(auto& it : s.items)
+		it.done = now > it.time;
+	
+	Sort(s.items, ScheduleToday());
 }
 
 
@@ -286,3 +375,4 @@ double Configuration::GetCaloriesJoggingDistSpeed(double weight_kg, double dista
 	ASSERT(hours >= 0.0);
 	return GetCaloriesJogging(weight_kg, speed, hours);
 }
+

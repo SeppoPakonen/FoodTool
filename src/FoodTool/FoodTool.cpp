@@ -37,9 +37,19 @@ FoodTool::FoodTool()
 	Sizeable().MaximizeBox().MinimizeBox();
 	Maximize();
 	
+	Add(updating_lbl.HCenterPos(300).VCenterPos(30));
 	Add(tabs.SizePos());
 	
+	updating_lbl.Show();
+	updating_lbl.SetLabel("Updating plan and meals...");
+	updating_lbl.SetFont(SansSerif(30*0.8));
+	updating_lbl.SetInk(Color(85, 42, 0));
+	
+	today.WhenAlert = THISBACK(SetTodayTab);
+	
+	tabs.Hide();
 	tabs.Add(motivation.SizePos(), "Motivation");
+	tabs.Add(today.SizePos(), "Today");
 	tabs.Add(status.SizePos(), "Status");
 	tabs.Add(graphs.SizePos(), "Graphs");
 	tabs.Add(weight.SizePos(), "Weight");
@@ -52,26 +62,46 @@ FoodTool::FoodTool()
 	tc.Set(-500, THISBACK(Data));
 }
 
+void FoodTool::SetTodayTab() {
+	tabs.Set(1);
+	Data();
+}
+
 void FoodTool::Data() {
-	int tab = tabs.Get();
-	
-	if (tab == 0)
-		motivation.Data();
-	else if (tab == 1)
-		status.Data();
-	else if (tab == 2)
-		graphs.Data();
-	else if (tab == 3)
-		weight.Data();
-	else if (tab == 4)
-		exc.Data();
-	else if (tab == 5)
-		notes.Data();
-	else if (tab == 6)
-		usage.Data();
-	else if (tab == 7)
-		conf.Data();
-	
+	bool is_updating = GetProfile().IsRunning();
+	if (is_updating) {
+		if (!was_updating) {
+			tabs.Hide();
+			updating_lbl.Show();
+		}
+	}
+	else {
+		if (was_updating) {
+			tabs.Show();
+			updating_lbl.Hide();
+		}
+		int tab = tabs.Get();
+		
+		if (tab == 0)
+			motivation.Data();
+		else if (tab == 1)
+			today.Data();
+		else if (tab == 2)
+			status.Data();
+		else if (tab == 3)
+			graphs.Data();
+		else if (tab == 4)
+			weight.Data();
+		else if (tab == 5)
+			exc.Data();
+		else if (tab == 6)
+			notes.Data();
+		else if (tab == 7)
+			usage.Data();
+		else if (tab == 8)
+			conf.Data();
+	}
+	was_updating = is_updating;
 }
 
 
@@ -441,7 +471,7 @@ void ConfigurationCtrl::AddConf() {
 	c.sleeping_hour = conf.sleeping.GetHour();
 	c.sleeping_minute = conf.sleeping.GetMinute();
 	
-	prof.UpdatePlan();
+	prof.Start(true);
 	
 	Data();
 }
@@ -502,7 +532,7 @@ void ExceptionsCtrl::AddException() {
 	exc.cal_deficit.Clear();
 	exc.days.Clear();
 	
-	prof.UpdatePlan();
+	prof.Start(true);
 	
 	Data(true);
 }
@@ -618,22 +648,29 @@ WeightCtrl::WeightCtrl() {
 	CtrlLayout(edit);
 	edit.weight <<= THISBACK(UpdateBMI);
 	
-	int count = cap.GetCount();
-	if (last_camera_count != count) {
-		last_camera_i = 0;
-		last_camera_count = count;
-	}
-	
-	for(int i = 0; i < count; i++)
-		edit.cameras.Add("Source #" + IntStr(i));
-	
-	if (edit.cameras.GetCount())
-		edit.cameras.SetIndex(last_camera_i);
+	Thread::Start(THISBACK(UpdateCameraCount));
 	
 	edit.capture_images <<= THISBACK(CaptureImages);
 	edit.preview_cam <<= THISBACK(PreviewCamera);
 	edit.add <<= THISBACK(AddWeightStat);
 	edit.reset <<= THISBACK(Reset);
+}
+
+void WeightCtrl::UpdateCameraCount() {
+	int count = cap.GetCount();
+	if (last_camera_count != count) {
+		last_camera_i = 0;
+		last_camera_count = count;
+	}
+	PostCallback(THISBACK(UpdateCameraList));
+}
+
+void WeightCtrl::UpdateCameraList() {
+	for(int i = 0; i < last_camera_count; i++)
+		edit.cameras.Add("Source #" + IntStr(i));
+	
+	if (edit.cameras.GetCount())
+		edit.cameras.SetIndex(last_camera_i);
 }
 
 void WeightCtrl::Reset() {
@@ -1235,26 +1272,27 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				// Normalize non-dexa measurements (usually inaccurate cheap scale)
 				double begin_fat_perc = prof.planned_daily[0].fat_perc * 100;
 				v[0] = begin_fat_perc;
-				double prev = begin_fat_perc;
-				double prev_meas = prof.weights[1].fat;
-				for(int i = 1; i < prof.weights.GetCount(); i++) {
-					const WeightLossStat& w = prof.weights[i];
-					if (w.is_dexa) {
-						double cur = w.fat;
-						v[i] = cur;
-						prev = cur;
-					}
-					else {
-						double cur_meas = w.fat;
-						double mul = cur_meas / prev_meas;
-						double cur = prev * mul;
-						v[i] = cur;
-						prev = cur;
-						prev_meas = cur_meas;
+				if (v.GetCount() > 1) {
+					double prev = begin_fat_perc;
+					double prev_meas = prof.weights[1].fat;
+					for(int i = 1; i < prof.weights.GetCount(); i++) {
+						const WeightLossStat& w = prof.weights[i];
+						if (w.is_dexa) {
+							double cur = w.fat;
+							v[i] = cur;
+							prev = cur;
+						}
+						else {
+							double cur_meas = w.fat;
+							double mul = cur_meas / prev_meas;
+							double cur = prev * mul;
+							v[i] = cur;
+							prev = cur;
+							prev_meas = cur_meas;
+						}
 					}
 				}
 			}
-			if (v.GetCount() >= 2) v[0] = v[1];
 		}
 		else if (src == 16) {
 			if (l == 0) {
@@ -1392,4 +1430,116 @@ void MultipurposeGraph::Paint(Draw& d) {
 		Size txt_sz = GetTextSize(txt, fnt);
 		d.DrawText((sz.cx - txt_sz.cx) / 2, (sz.cy - txt_sz.cy) / 2, txt, fnt);
 	}
+}
+
+
+
+
+
+
+
+
+
+
+
+TodayScheduleCtrl::TodayScheduleCtrl() {
+	Profile& prof = GetProfile();
+	prof.MakeTodaySchedule(sched);
+	prof_version = prof.version;
+	
+	waking_top = Color(255, 254, 0);
+	waking_btm = Color(255, 255, 200);
+	eating_top = Color(255, 165, 133);
+	eating_btm = Color(255, 195, 163);
+	walking_top = Color(187, 255, 184);
+	walking_btm = Color(241, 255, 160);
+	sleeping_top = Color(156, 158, 193);
+	sleeping_btm = Color(180, 196, 229);
+	
+	tc.Set(-1000, THISBACK(CheckAlerts));
+}
+
+void TodayScheduleCtrl::CheckAlerts() {
+	String alert_str;
+	
+	Time now = GetSysTime();
+	for(auto& it : sched.items) {
+		if (it.time <= now && !it.done) {
+			if (alert_str.IsEmpty()) {
+				alert_str = it.msg;
+			}
+			it.done = true;
+		}
+	}
+	
+	if (alert_str.GetCount())
+		Alert(alert_str);
+}
+
+void TodayScheduleCtrl::Alert(String alert_str) {
+	GetTopWindow()->Restore();
+	GetTopWindow()->Maximize();
+	PlayAlert();
+	PromptOK(alert_str);
+	WhenAlert();
+}
+
+void TodayScheduleCtrl::Paint(Draw& d) {
+	Profile& prof = GetProfile();
+	Date today = GetSysTime();
+	if (prof.version > prof_version || sched.items.IsEmpty() || sched.day != today) {
+		prof.MakeTodaySchedule(sched);
+		prof_version = prof.version;
+	}
+	
+	Size sz(GetSize());
+	d.DrawRect(sz, White());
+	
+	if (sched.items.IsEmpty())
+		return;
+	
+	double ystep = min(60.0, (double)sz.cy / sched.items.GetCount());
+	Font fnt = SansSerif(ystep * 0.8);
+	
+	for(int i = 0; i < sched.items.GetCount(); i++) {
+		const auto& it = sched.items[i];
+		int y = i * ystep;
+		int h = (i + 1) * ystep - y;
+		
+		Color top, btm;
+		String typestr;
+		if (it.type == ScheduleToday::WAKING) {
+			typestr = "Waking";
+			top = waking_top;
+			btm = waking_btm;
+		}
+		else if (it.type == ScheduleToday::EATING) {
+			typestr = "Eating";
+			top = eating_top;
+			btm = eating_btm;
+		}
+		else if (it.type == ScheduleToday::WALKING) {
+			typestr = "Walking";
+			top = walking_top;
+			btm = walking_btm;
+		}
+		else if (it.type == ScheduleToday::RUNNING) {
+			typestr = "Running";
+			top = running_top;
+			btm = running_btm;
+		}
+		else if (it.type == ScheduleToday::SLEEPING) {
+			typestr = "Sleeping";
+			top = sleeping_top;
+			btm = sleeping_btm;
+		}
+		String txt;
+		txt << Format("%d:%02d ", (int)it.time.hour, (int)it.time.minute)
+			<< typestr << ": " << it.msg;
+			
+		DrawGradientVert(d, RectC(0, y, sz.cx, h), top, btm);
+		d.DrawText(5+2, y+2, txt, fnt, White());
+		d.DrawText(5, y, txt, fnt, Black());
+	}
+	
 }

@@ -12,6 +12,7 @@ library(LINUX) "opencv_core opencv_video opencv_videoio opencv_imgcodecs";
 
 file
 	Readme.txt,
+	Welcome.qtf,
 	main.cpp,
 	FoodTool.h,
 	FoodTool.cpp,
@@ -28,7 +29,8 @@ file
 	ProfileCreator.cpp,
 	Optimizer.h,
 	VideoCapture.h,
-	VideoCapture.cpp;
+	VideoCapture.cpp,
+	Util.h;
 
 mainconfig
 	"" = "GUI";

@@ -10,7 +10,12 @@ struct FatPercentageReferenceWindow : public TopWindow {
 	void Close0() {Close();Close();}
 };
 
-class ProfileCreator : public WithConfigurationLayout<TopWindow> {
+class ProfileCreator : public TopWindow {
+	WithWelcomeLayout<ParentCtrl> tab0;
+	WithConfigurationLayout<ParentCtrl> tab1;
+	WithNutrientDeficitLayout<ParentCtrl> tab2;
+	int tab = 0;
+	
 	VectorMap<int, double> height_bmis;
 	FatPercentageReferenceWindow iw;
 	
@@ -18,6 +23,7 @@ public:
 	typedef ProfileCreator CLASSNAME;
 	ProfileCreator();
 	
+	void Previous();
 	void Next();
 	void UpdateTargetWeight();
 	void ShowWeightReference();

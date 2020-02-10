@@ -4,34 +4,52 @@
 
 
 ProfileCreator::ProfileCreator() {
-	CtrlLayout(*this, "Profile Creator");
+	Title("FoodTool first start wizard");
 	Icon(Images::icon);
 	
-	gender.SetData(1);
-	height.SetData(176);
-	weight.SetData(100);
-	age.SetData(30);
-	bodyfat.SetData(40);
-	activity.SetData(0);
-	walking_dist.SetData(0);
-	tgt_weight.SetData(65);
-	tgt_walking_dist.SetData(0);
-	tgt_jogging_dist.SetData(0);
-	shop_interval.SetData(5);
-	hours_between_meals.SetData(1);
-	easy_day_interval.SetData(2);
-	waking.SetTime(5,0,0);
-	sleeping.SetTime(20,0,0);
+	CtrlLayout(tab0);
+	CtrlLayout(tab1);
+	CtrlLayout(tab2);
+	SetRect(tab0.GetSize());
+	
+	Add(tab0.SizePos());
+	Add(tab1.SizePos());
+	Add(tab2.SizePos());
+	tab1.Hide();
+	tab2.Hide();
+	
+	tab0.next <<= THISBACK(Next);
+	tab1.next <<= THISBACK(Next);
+	tab2.next <<= THISBACK(Next);
+	tab2.prev <<= THISBACK(Previous);
+	tab1.prev <<= THISBACK(Previous);
+	
+	tab0.welcome.SetQTF(BZ2Decompress(welcome_qtf, welcome_qtf_length));
+	
+	tab1.gender.SetData(1);
+	tab1.height.SetData(176);
+	tab1.weight.SetData(100);
+	tab1.age.SetData(30);
+	tab1.bodyfat.SetData(40);
+	tab1.activity.SetData(0);
+	tab1.walking_dist.SetData(0);
+	tab1.tgt_weight.SetData(65);
+	tab1.tgt_walking_dist.SetData(6.6);
+	tab1.tgt_jogging_dist.SetData(0);
+	tab1.shop_interval.SetData(5);
+	tab1.hours_between_meals.SetData(1);
+	tab1.easy_day_interval.SetData(2);
+	tab1.waking.SetTime(5,0,0);
+	tab1.sleeping.SetTime(20,0,0);
 	
 	UpdateTargetWeight();
 	
-	height <<= THISBACK(UpdateTargetWeight);
-	next <<= THISBACK(Next);
-	fatref <<= THISBACK(ShowWeightReference);
+	tab1.height <<= THISBACK(UpdateTargetWeight);
+	tab1.fatref <<= THISBACK(ShowWeightReference);
 }
 
 void ProfileCreator::UpdateTargetWeight() {
-	tgt_weight.SetData(GetTargetWeight((double)this->height.GetData() * 0.01, 19));
+	tab1.tgt_weight.SetData(GetTargetWeight((double)tab1.height.GetData() * 0.01, 19));
 }
 
 FatPercentageReferenceWindow::FatPercentageReferenceWindow() {
@@ -51,53 +69,65 @@ void ProfileCreator::ShowWeightReference() {
 		iw.Open(this);
 }
 
+void ProfileCreator::Previous() {
+	tab0.Hide();
+	tab1.Hide();
+	tab2.Hide();
+	
+	tab--;
+	if (tab == 0) tab0.Show();
+	if (tab == 1) tab1.Show();
+}
 void ProfileCreator::Next() {
-	Profile& prof = GetProfile();
+	if (tab == 0) {
+		
+	}
+	else if (tab == 1) {
+		Profile& prof = GetProfile();
+		
+		Configuration& conf = prof.confs.GetCount() ? prof.confs.Top() : prof.confs.Add();
+		
+		prof.is_male = tab1.gender.GetData();
+		
+		conf.added = GetSysTime();
+		conf.height = tab1.height.GetData();
+		conf.age = tab1.age.GetData();
+		conf.bodyfat = tab1.bodyfat.GetData();
+		conf.activity = tab1.activity.GetData();
+		conf.walking_dist = tab1.walking_dist.GetData();
+		conf.tgt_weight = tab1.tgt_weight.GetData();
+		conf.tgt_walking_dist = tab1.tgt_walking_dist.GetData();
+		conf.tgt_jogging_dist = tab1.tgt_jogging_dist.GetData();
+		conf.shop_interval = tab1.shop_interval.GetData();
+		conf.hours_between_meals = tab1.hours_between_meals.GetData();
+		conf.easy_day_interval = tab1.easy_day_interval.GetData();
+		conf.waking_hour = tab1.waking.GetHour();
+		conf.waking_minute = tab1.waking.GetMinute();
+		conf.sleeping_hour = tab1.sleeping.GetHour();
+		conf.sleeping_minute = tab1.sleeping.GetMinute();
+		
+		prof.begin_date = GetSysTime();
+		prof.begin_date--;
+		
+		if (prof.weights.IsEmpty())
+			prof.AddWeightStat(tab1.weight.GetData());
+		
+		prof.storage.Init(prof.begin_date);
+		
+		prof.is_initialised = true;
+	}
+	else if (tab == 2) {
+		GetProfile().Start(true);
+		Close();
+		return;
+	}
 	
-	Configuration& conf = prof.confs.Add();
+	tab0.Hide();
+	tab1.Hide();
+	tab2.Hide();
 	
-	prof.is_male = gender.GetData();
-	
-	conf.added = GetSysTime();
-	conf.height = height.GetData();
-	conf.age = age.GetData();
-	conf.bodyfat = bodyfat.GetData();
-	conf.activity = activity.GetData();
-	conf.walking_dist = walking_dist.GetData();
-	conf.tgt_weight = tgt_weight.GetData();
-	conf.tgt_walking_dist = tgt_walking_dist.GetData();
-	conf.tgt_jogging_dist = tgt_jogging_dist.GetData();
-	conf.shop_interval = shop_interval.GetData();
-	conf.hours_between_meals = hours_between_meals.GetData();
-	conf.easy_day_interval = easy_day_interval.GetData();
-	conf.waking_hour = waking.GetHour();
-	conf.waking_minute = waking.GetMinute();
-	conf.sleeping_hour = sleeping.GetHour();
-	conf.sleeping_minute = sleeping.GetMinute();
-	
-	prof.begin_date = GetSysTime();
-	prof.begin_date--;
-	
-	if (prof.weights.IsEmpty())
-		prof.AddWeightStat(weight.GetData());
-	
-	prof.UpdatePlan();
-	
-	int days = prof.planned_daily.Top().date.Get() - prof.begin_date.Get();
-	
-	LOG("Calory-deficit: " << (prof.av_calorie_deficit * 100) << "\%");
-	LOG("Started " << Format("%", prof.begin_date));
-	LOG("Stopping " << Format("%", conf.end_date));
-	LOG("Days total " << days);
-	
-	
-	prof.is_initialised = true;
-	
-	prof.storage.Init(prof.begin_date);
-	prof.storage.Update(prof.planned_daily);
-	
-	prof.StoreThis();
-	
-	Close();
+	tab++;
+	if (tab == 1) tab1.Show();
+	if (tab == 2) tab2.Show();
 }
 

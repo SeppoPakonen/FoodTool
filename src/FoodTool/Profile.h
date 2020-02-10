@@ -110,6 +110,33 @@ struct Configuration : Moveable<Configuration> {
 
 };
 
+struct ScheduleToday {
+	enum {
+		WAKING,
+		EATING,
+		WALKING,
+		RUNNING,
+		SLEEPING,
+	};
+	
+	struct Item : Moveable<Item> {
+		Time time;
+		int type;
+		String msg;
+		bool done = false;
+	};
+	
+	Array<Item> items;
+	Date day;
+	
+	bool operator()(const Item& a, const Item& b) const {
+		if (a.time == b.time)
+			return a.type < b.type;
+		else
+			return a.time < b.time;
+	}
+};
+
 int GetTargetWeight(double height_m, int bmi);
 int GetBMI(double height_m, double weight_kg);
 
@@ -124,15 +151,19 @@ struct Profile {
 	FoodStorage storage;
 	Date begin_date;
 	double av_calorie_deficit;
+	int version = 0;
 	bool is_male;
 	bool is_initialised = false;
 	
 	
 	Time tmp_usage_start;
+	RunningFlag flag;
 	
 	
+	typedef Profile CLASSNAME;
 	Profile();
 	~Profile() {
+		Stop();
 		ProgramUsageStat& u = usage.Add();
 		u.begin = tmp_usage_start;
 		u.end = GetSysTime();
@@ -149,10 +180,12 @@ struct Profile {
 			% storage
 			% begin_date
 			% av_calorie_deficit
+			% version
 			% is_male
 			% is_initialised
 			;
 	}
+	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);
 	Date GetCurrentTotalBegin();
 	Date GetCurrentTotalEnd();
@@ -160,6 +193,10 @@ struct Profile {
 	Date GetCurrentMonthBegin();
 	Date GetCurrentQuarterBegin();
 	bool UpdatePlan();
+	void Start(bool replan) {flag.Start(1); Thread::Start(THISBACK1(ProcessUpdate, replan));}
+	void Stop() {flag.Stop();}
+	void ProcessUpdate(bool replan);
+	bool IsRunning() {return flag.running || flag.workers_running > 0;}
 	
 	void LoadThis();
 	void StoreThis();
