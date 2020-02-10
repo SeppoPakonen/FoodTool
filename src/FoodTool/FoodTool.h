@@ -32,6 +32,8 @@ using namespace Upp;
 
 #include "ProfileCreator.h"
 
+Image GetSmiley(String s);
+Image GetSmiley(double progress);
 
 struct MotivationCtrl : public Ctrl {
 	int motivation_i = -1, quote_i = -1;
@@ -142,6 +144,8 @@ struct WeightCtrl : public ParentCtrl {
 	void UpdateBMI();
 	void UpdateCameraCount();
 	void UpdateCameraList();
+	void UpdateSmiley();
+	void WeightChanged() {UpdateBMI(); UpdateSmiley();}
 	
 	void Serialize(Stream& s) {s % last_camera_i % last_camera_count;}
 	void StoreThis() {StoreToFile(*this, ConfigFile("selected_camera.bin"));}

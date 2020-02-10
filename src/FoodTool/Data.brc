@@ -1,4 +1,5 @@
 BINARY_MASK(motivation_mask, "Motivational/*.jpg" BZ2)
+BINARY_MASK(smileys, "Smileys/*.png" BZ2)
 BINARY(bodyfat, "bodyfat.jpg" BZ2)
 BINARY(camera_shutter, "camera-shutter.wav" BZ2)
 BINARY(alert, "alert.wav" BZ2)

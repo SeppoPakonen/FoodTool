@@ -49,13 +49,13 @@ struct ProgramUsageStat : Moveable<ProgramUsageStat> {
 
 struct WeightLossStat : Moveable<WeightLossStat> {
 	Time added;
-	float weight, fat, liquid, muscle, bmi;
+	float weight, fat, liquid, muscle, bmi, prog;
 	bool is_dexa;
 	
 	void Serialize(Stream& s) {
 		s
 			%  added
-			%  weight % fat % liquid % muscle % bmi
+			%  weight % fat % liquid % muscle % bmi % prog
 			%  is_dexa
 			;
 	}
