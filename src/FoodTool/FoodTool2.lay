@@ -1,0 +1,6 @@
+
+LAYOUT(DatabaseEditLayout, 736, 484)
+	ITEM(Button, next, SetLabel(t_("Next")).SetFont(StdFont().Bold()).HCenterPosZ(232, 248).VCenterPosZ(31, 222))
+	ITEM(Button, prev, SetLabel(t_("Previous")).SetFont(StdFont().Bold()).HCenterPosZ(232, -248).VCenterPosZ(31, 222))
+	ITEM(DatabaseCtrl, edit, HCenterPosZ(728, 0).VCenterPosZ(440, -18))
+END_LAYOUT

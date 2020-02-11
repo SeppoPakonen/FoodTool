@@ -85,4 +85,6 @@ struct NutrientDeficitEdit : public Ctrl {
 	virtual void LeftDown(Point p, dword keyflags);
 };
 
+double KiloJoulesToKiloCalories(double kj);
+
 #endif

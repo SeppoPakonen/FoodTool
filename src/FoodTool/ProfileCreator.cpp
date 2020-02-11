@@ -10,17 +10,27 @@ ProfileCreator::ProfileCreator() {
 	CtrlLayout(tab0);
 	CtrlLayout(tab1);
 	CtrlLayout(tab2);
+	CtrlLayout(tab3);
+	CtrlLayout(tab4);
 	SetRect(tab0.GetSize());
 	
 	Add(tab0.SizePos());
 	Add(tab1.SizePos());
 	Add(tab2.SizePos());
+	Add(tab3.SizePos());
+	Add(tab4.SizePos());
 	tab1.Hide();
 	tab2.Hide();
+	tab3.Hide();
+	tab4.Hide();
 	
 	tab0.next <<= THISBACK(Next);
 	tab1.next <<= THISBACK(Next);
 	tab2.next <<= THISBACK(Next);
+	tab3.next <<= THISBACK(Next);
+	tab4.next <<= THISBACK(Next);
+	tab4.prev <<= THISBACK(Previous);
+	tab3.prev <<= THISBACK(Previous);
 	tab2.prev <<= THISBACK(Previous);
 	tab1.prev <<= THISBACK(Previous);
 	
@@ -41,11 +51,12 @@ ProfileCreator::ProfileCreator() {
 	tab1.easy_day_interval.SetData(2);
 	tab1.waking.SetTime(5,0,0);
 	tab1.sleeping.SetTime(20,0,0);
-	
 	UpdateTargetWeight();
-	
 	tab1.height <<= THISBACK(UpdateTargetWeight);
 	tab1.fatref <<= THISBACK(ShowWeightReference);
+	
+	tab3.preset.SetData(0);
+	
 }
 
 void ProfileCreator::UpdateTargetWeight() {
@@ -73,10 +84,15 @@ void ProfileCreator::Previous() {
 	tab0.Hide();
 	tab1.Hide();
 	tab2.Hide();
+	tab3.Hide();
+	tab4.Hide();
+	
 	
 	tab--;
 	if (tab == 0) tab0.Show();
 	if (tab == 1) tab1.Show();
+	if (tab == 2) tab2.Show();
+	if (tab == 3) tab3.Show();
 }
 void ProfileCreator::Next() {
 	if (tab == 0) {
@@ -118,7 +134,30 @@ void ProfileCreator::Next() {
 	}
 	else if (tab == 2) {
 		Profile& prof = GetProfile();
-		prof.defs.Add(tab2.edit.prof);
+		if (prof.defs.IsEmpty())
+			prof.defs.Add(tab2.edit.prof);
+		else
+			prof.defs.Top() = tab2.edit.prof;
+	}
+	else if (tab == 3) {
+		Database& db = DB();
+		int preset = tab3.preset.GetData();
+		
+		if (db.used_foods.IsEmpty()) {
+			if (preset == 0) {
+				db.VLCD_Preset();
+			}
+			tab3.preset.Disable();
+		}
+		
+		tab4.edit.Data();
+	}
+	else if (tab == 4) {
+		DB().StartStoreThis();
+		
+		Profile& prof = GetProfile();
+		
+		
 		prof.is_initialised = true;
 		prof.Start(true);
 		Close();
@@ -128,9 +167,13 @@ void ProfileCreator::Next() {
 	tab0.Hide();
 	tab1.Hide();
 	tab2.Hide();
+	tab3.Hide();
+	tab4.Hide();
 	
 	tab++;
 	if (tab == 1) tab1.Show();
 	if (tab == 2) tab2.Show();
+	if (tab == 3) tab3.Show();
+	if (tab == 4) tab4.Show();
 }
 

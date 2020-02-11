@@ -1,6 +1,5 @@
 #include "FoodTool.h"
 
-
 String GetNutrientDeficitElement(int i) {
 	switch (i) {
 		case DEF_CALCIUM: return "Calcium";
@@ -201,3 +200,16 @@ void NutrientDeficitEdit::Paint(Draw& d) {
 		}
 	}
 }
+
+double KiloJoulesToKiloCalories(double kj) {
+	return kj * 0.239005736;
+}
+
+
+
+
+
+
+#define TFILE <FoodTool/Translation.t>
+#include <Core/t.h>
+

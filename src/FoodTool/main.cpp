@@ -5,6 +5,15 @@
 
 GUI_APP_MAIN
 {
+	SetLanguage(GetSystemLNG());
+	
+	Database& db = GetDatabase();
+	if (!db.is_init && !db.Init()) {
+		PromptOK("ERROR: Expected \"USDA National Nutrient Database for Standard Reference, Release 28\" in the db folder");
+		SetExitCode(1);
+		return;
+	}
+	
 	String camera_shutter_file = ConfigFile("camera-shutter.wav");
 	if (!FileExists(camera_shutter_file)) {
 		String camera_shutter_wav = BZ2Decompress(camera_shutter, camera_shutter_length);

@@ -22,12 +22,19 @@ using namespace Upp;
 
 #include "Util.h"
 #include "Optimizer.h"
+#include "Ingredient.h"
+#include "Database.h"
 #include "Food.h"
 #include "Profile.h"
 #include "VideoCapture.h"
 #include "ScheduleCtrl.h"
 
-#define LAYOUTFILE <FoodTool/FoodTool.lay>
+#define LAYOUTFILE <FoodTool/FoodTool1.lay>
+#include <CtrlCore/lay.h>
+
+#include "DatabaseCtrl.h"
+
+#define LAYOUTFILE <FoodTool/FoodTool2.lay>
 #include <CtrlCore/lay.h>
 
 #include "ProfileCreator.h"
@@ -252,7 +259,7 @@ struct NutrientDeficitCtrl : public ParentCtrl {
 	void AddItem();
 };
 
-class FoodTool : public WithFoodToolLayout<TopWindow> {
+class FoodTool : public TopWindow {
 	TabCtrl tabs;
 	bool was_updating = true;
 	Label updating_lbl;

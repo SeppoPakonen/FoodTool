@@ -332,7 +332,7 @@ void MotivationCtrl::Paint(Draw& d) {
 		Date now = GetSysTime();
 		int days_remaining = prof.planned_daily.Top().date.Get() - now.Get() + 1;
 		if (days_remaining >= 0) {
-			String remaining = IntStr(days_remaining) + " days remaining";
+			String remaining = IntStr(days_remaining) + t_(" days remaining");
 			if (days_remaining < 30) {
 				fnt = SansSerif(40);
 				remaining << "!!!";
@@ -419,14 +419,14 @@ ConfigurationCtrl::ConfigurationCtrl() {
 	split.SetPos(2500);
 	
 	CtrlLayout(conf);
-	conf.next.SetLabel("Add new");
+	conf.next.SetLabel(t_("Add new"));
 	conf.weight.Disable();
 	conf.gender.SetEditable(false);
 	conf.next <<= THISBACK(AddConf);
 	conf.height <<= THISBACK(UpdateTargetWeight);
 	conf.fatref <<= THISBACK(ShowWeightReference);
 	list.AddColumn("#");
-	list.AddColumn("Added");
+	list.AddColumn(t_("Added"));
 	list.ColumnWidths("1 5");
 	list.WhenAction = THISBACK(SelectConf);
 	list.WhenLeftClick = THISBACK(SelectConf);
@@ -519,10 +519,10 @@ ExceptionsCtrl::ExceptionsCtrl() {
 	split.SetPos(3333);
 	
 	list.AddColumn("#");
-	list.AddColumn("Begin");
-	list.AddColumn("Days");
-	list.AddColumn("Deficit");
-	list.AddColumn("Reason");
+	list.AddColumn(t_("Begin"));
+	list.AddColumn(t_("Days"));
+	list.AddColumn(t_("Deficit"));
+	list.AddColumn(t_("Reason"));
 	list.ColumnWidths("1 4 2 2 6");
 	
 	exc.cal_deficit.SetData(20);
@@ -579,8 +579,8 @@ NoteCtrl::NoteCtrl() {
 	split.Horz() << list << note;
 	split.SetPos(2500);
 	
-	list.AddColumn("Added");
-	list.AddColumn("Title");
+	list.AddColumn(t_("Added"));
+	list.AddColumn(t_("Title"));
 	list.ColumnWidths("1 2");
 	list.WhenAction << THISBACK(SelectNote);
 	list.WhenLeftClick << THISBACK(SelectNote);
@@ -637,9 +637,9 @@ UsageCtrl::UsageCtrl() {
 	total.SetInk(Color(17, 29, 118));
 	//total.SetAlign(ALIGN_CENTER);
 	
-	list.AddColumn("Begin");
-	list.AddColumn("End");
-	list.AddColumn("Minutes");
+	list.AddColumn(t_("Begin"));
+	list.AddColumn(t_("End"));
+	list.AddColumn(t_("Minutes"));
 }
 
 void UsageCtrl::Data() {
@@ -657,7 +657,7 @@ void UsageCtrl::Data() {
 			total_seconds += seconds;
 		}
 		int total_mins = total_seconds / 60;
-		total.SetLabel("You have used this program for " + IntStr(total_mins) + " minutes.");
+		total.SetLabel(Format(t_("You have used this program for %d minutes."), total_mins));
 	}
 }
 
@@ -672,8 +672,8 @@ WeightCtrl::WeightCtrl() {
 	split.Horz() << list << edit;
 	split.SetPos(2500);
 	
-	list.AddColumn("Date");
-	list.AddColumn("Weight (kg)");
+	list.AddColumn(t_("Date"));
+	list.AddColumn(t_("Weight (kg)"));
 	list.ColumnWidths("2 1");
 	list <<= THISBACK(SelectWeightStat);
 	list.WhenLeftClick << THISBACK(SelectWeightStat);
@@ -700,7 +700,7 @@ void WeightCtrl::UpdateCameraCount() {
 
 void WeightCtrl::UpdateCameraList() {
 	for(int i = 0; i < last_camera_count; i++)
-		edit.cameras.Add("Source #" + IntStr(i));
+		edit.cameras.Add(t_("Source #") + IntStr(i));
 	
 	if (edit.cameras.GetCount())
 		edit.cameras.SetIndex(last_camera_i);
@@ -956,55 +956,55 @@ GraphCtrl::GraphCtrl() {
 	split.Horz() << list << graph;
 	split.SetPos(2500);
 	
-	list.AddColumn("Type");
+	list.AddColumn(t_("Type"));
 	
-	list.Add("Planned weight");
+	list.Add(t_("Planned weight"));
 	graph.Add()
-		.Add("Lean body weight", 1, Color(28, 212, 150))
-		.Add("Weight", 2, Color(28, 127, 150));
+		.Add(t_("Lean body weight"), 1, Color(28, 212, 150))
+		.Add(t_("Weight"), 2, Color(28, 127, 150));
 	
-	list.Add("Planned calories");
+	list.Add(t_("Planned calories"));
 	graph.Add()
-		.Add("Maintain calories", 1, Color(113, 42, 255))
-		.Add("Burned calories", 1, Color(198, 42, 0))
-		.Add("Allowed calories", 2, Color(28, 170, 0));
+		.Add(t_("Maintain calories"), 1, Color(113, 42, 255))
+		.Add(t_("Burned calories"), 1, Color(198, 42, 0))
+		.Add(t_("Allowed calories"), 2, Color(28, 170, 0));
 	
-	list.Add("Planned burned weight");
+	list.Add(t_("Planned burned weight"));
 	graph.Add()
-		.Add("Burned mass", 2, Color(0, 120, 93));
+		.Add(t_("Burned mass"), 2, Color(0, 120, 93));
 	
-	list.Add("Planned macronutrients");
+	list.Add(t_("Planned macronutrients"));
 	graph.Add()
-		.Add("Fat mass", 2, Color(148, 146, 0))
-		.Add("Carbohydrate mass", 2, Color(0, 116, 66))
-		.Add("Protein mass", 2, Color(94, 0, 0));
+		.Add(t_("Fat mass"), 2, Color(148, 146, 0))
+		.Add(t_("Carbohydrate mass"), 2, Color(0, 116, 66))
+		.Add(t_("Protein mass"), 2, Color(94, 0, 0));
 	
-	list.Add("Menu calories");
+	list.Add(t_("Menu calories"));
 	graph.Add()
-		.Add("Allowed calories", 1, Color(28, 85, 255))
-		.Add("Eaten calories", 2, Color(0, 136, 94));
+		.Add(t_("Allowed calories"), 1, Color(28, 85, 255))
+		.Add(t_("Eaten calories"), 2, Color(0, 136, 94));
 	
-	list.Add("Menu food mass");
+	list.Add(t_("Menu food mass"));
 	graph.Add()
-		.Add("Planned mass", 1, Color(85, 42, 0))
-		.Add("Eaten mass", 2, Color(85, 85, 150));
+		.Add(t_("Planned mass"), 1, Color(85, 42, 0))
+		.Add(t_("Eaten mass"), 2, Color(85, 85, 150));
 		
-	list.Add("Menu macronutrients");
+	list.Add(t_("Menu macronutrients"));
 	graph.Add()
-		.Add("Planned fat mass", 1, Color(148, 146, 0))
-		.Add("Planned carbohydrate mass", 1, Color(0, 116, 66))
-		.Add("Planned protein mass", 1, Color(94, 0, 0))
-		.Add("Eaten fat mass", 2, Color(168, 166, 20))
-		.Add("Eaten carbohydrate mass", 2, Color(20, 136, 86))
-		.Add("Eaten protein mass", 2, Color(114, 20, 20));
+		.Add(t_("Planned fat mass"), 1, Color(148, 146, 0))
+		.Add(t_("Planned carbohydrate mass"), 1, Color(0, 116, 66))
+		.Add(t_("Planned protein mass"), 1, Color(94, 0, 0))
+		.Add(t_("Eaten fat mass"), 2, Color(168, 166, 20))
+		.Add(t_("Eaten carbohydrate mass"), 2, Color(20, 136, 86))
+		.Add(t_("Eaten protein mass"), 2, Color(114, 20, 20));
 	
-	list.Add("Menu salt");
+	list.Add(t_("Menu salt"));
 	graph.Add()
-		.Add("Planned salt", 1, GrayColor())
-		.Add("Eaten salt", 2, GrayColor(128+32));
+		.Add(t_("Planned salt"), 1, GrayColor())
+		.Add(t_("Eaten salt"), 2, GrayColor(128+32));
 		
-	int vitamin_count = 13;
-	list.Add("Menu vitamins (\% of recommended)");
+	int vitamin_count = 14;
+	list.Add(t_("Menu vitamins (\% of recommended)"));
 	graph.Add().Vert(100)
 		.Add("A", 1, Rainbow(0.0 / vitamin_count))
 		.Add("B1", 1, Rainbow(1.0 / vitamin_count))
@@ -1018,120 +1018,120 @@ GraphCtrl::GraphCtrl() {
 		.Add("C", 1, Rainbow(9.0 / vitamin_count))
 		.Add("D", 1, Rainbow(10.0 / vitamin_count))
 		.Add("E", 1, Rainbow(11.0 / vitamin_count))
-		.Add("K", 1, Rainbow(12.0 / vitamin_count));
+		.Add("K", 1, Rainbow(12.0 / vitamin_count))
+		.Add("Carotenoids", 1, Rainbow(13.0 / vitamin_count));
 	
 	
 	int aminoacid_count = 15;
-	list.Add("Menu essential amino acids (\% of recommended)");
+	list.Add(t_("Menu essential amino acids (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add("Histidine", 1, Rainbow(0.0 / aminoacid_count))
-		.Add("Isoleucine", 1, Rainbow(1.0 / aminoacid_count))
-		.Add("Leucine", 1, Rainbow(2.0 / aminoacid_count))
-		.Add("Lysine", 1, Rainbow(3.0 / aminoacid_count))
-		.Add("Methionine", 1, Rainbow(4.0 / aminoacid_count))
-		.Add("Phenylalanine", 1, Rainbow(5.0 / aminoacid_count))
-		.Add("Threonine", 1, Rainbow(6.0 / aminoacid_count))
-		.Add("Tryptophan", 1, Rainbow(7.0 / aminoacid_count))
-		.Add("Valine", 1, Rainbow(8.0 / aminoacid_count))
-		.Add("Arginine", 1, Rainbow(9.0 / aminoacid_count))
-		.Add("Cysteine", 1, Rainbow(10.0 / aminoacid_count))
-		.Add("Glutamine", 1, Rainbow(11.0 / aminoacid_count))
-		.Add("Glycine", 1, Rainbow(12.0 / aminoacid_count))
-		.Add("Proline", 1, Rainbow(13.0 / aminoacid_count))
-		.Add("Tyrosine", 1, Rainbow(14.0 / aminoacid_count));
+		.Add(t_("Histidine"), 1, Rainbow(0.0 / aminoacid_count))
+		.Add(t_("Isoleucine"), 1, Rainbow(1.0 / aminoacid_count))
+		.Add(t_("Leucine"), 1, Rainbow(2.0 / aminoacid_count))
+		.Add(t_("Lysine"), 1, Rainbow(3.0 / aminoacid_count))
+		.Add(t_("Methionine"), 1, Rainbow(4.0 / aminoacid_count))
+		.Add(t_("Phenylalanine"), 1, Rainbow(5.0 / aminoacid_count))
+		.Add(t_("Threonine"), 1, Rainbow(6.0 / aminoacid_count))
+		.Add(t_("Tryptophan"), 1, Rainbow(7.0 / aminoacid_count))
+		.Add(t_("Valine"), 1, Rainbow(8.0 / aminoacid_count))
+		.Add(t_("Arginine"), 1, Rainbow(9.0 / aminoacid_count))
+		.Add(t_("Cysteine"), 1, Rainbow(10.0 / aminoacid_count))
+		.Add(t_("Glutamine"), 1, Rainbow(11.0 / aminoacid_count))
+		.Add(t_("Glycine"), 1, Rainbow(12.0 / aminoacid_count))
+		.Add(t_("Proline"), 1, Rainbow(13.0 / aminoacid_count))
+		.Add(t_("Tyrosine"), 1, Rainbow(14.0 / aminoacid_count));
 		
-	int mineral_count = 35;
-	list.Add("Menu essential minerals (\% of recommended)");
+	int mineral_count = 34;
+	list.Add(t_("Menu essential minerals (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add("Potassium", 1, Rainbow(0.0 / mineral_count))
-		.Add("Chloride", 1, Rainbow(1.0 / mineral_count))
-		.Add("Sodium", 1, Rainbow(2.0 / mineral_count))
-		.Add("Calcium", 1, Rainbow(3.0 / mineral_count))
-		.Add("Phosphorus", 1, Rainbow(4.0 / mineral_count))
-		.Add("Magnesium", 1, Rainbow(5.0 / mineral_count))
-		.Add("Iron", 1, Rainbow(6.0 / mineral_count))
-		.Add("Zinc", 1, Rainbow(7.0 / mineral_count))
-		.Add("Manganese", 1, Rainbow(8.0 / mineral_count))
-		.Add("Copper", 1, Rainbow(9.0 / mineral_count))
-		.Add("Iodine", 1, Rainbow(10.0 / mineral_count))
-		.Add("Chromium", 1, Rainbow(11.0 / mineral_count))
-		.Add("Molybdenum", 1, Rainbow(12.0 / mineral_count))
-		.Add("Selenium", 1, Rainbow(13.0 / mineral_count))
-		.Add("Cobalt", 1, Rainbow(14.0 / mineral_count))
-		.Add("Boron", 1, Rainbow(15.0 / mineral_count))
-		.Add("Silicon", 1, Rainbow(16.0 / mineral_count))
-		.Add("Bromine", 1, Rainbow(17.0 / mineral_count))
-		.Add("Arsenic", 1, Rainbow(18.0 / mineral_count))
-		.Add("Nickel", 1, Rainbow(19.0 / mineral_count))
-		.Add("Fluorine", 1, Rainbow(20.0 / mineral_count))
-		.Add("Boron", 1, Rainbow(21.0 / mineral_count))
-		.Add("Lithium", 1, Rainbow(22.0 / mineral_count))
-		.Add("Strontium", 1, Rainbow(23.0 / mineral_count))
-		.Add("Vanadium", 1, Rainbow(24.0 / mineral_count))
-		.Add("Tungsten", 1, Rainbow(25.0 / mineral_count))
-		.Add("Lanthanides", 1, Rainbow(26.0 / mineral_count))
-		.Add("Cadmium", 1, Rainbow(27.0 / mineral_count))
-		.Add("Aluminium", 1, Rainbow(28.0 / mineral_count))
-		.Add("Germanium", 1, Rainbow(29.0 / mineral_count))
-		.Add("Lead", 1, Rainbow(30.0 / mineral_count))
-		.Add("Rubidium", 1, Rainbow(31.0 / mineral_count))
-		.Add("Tin", 1, Rainbow(32.0 / mineral_count))
-		.Add("Phosphate", 1, Rainbow(33.0 / mineral_count))
-		.Add("Bicarbonate", 1, Rainbow(34.0 / mineral_count));
+		.Add(t_("Potassium"), 1, Rainbow(0.0 / mineral_count))
+		.Add(t_("Chloride"), 1, Rainbow(1.0 / mineral_count))
+		.Add(t_("Sodium"), 1, Rainbow(2.0 / mineral_count))
+		.Add(t_("Calcium"), 1, Rainbow(3.0 / mineral_count))
+		.Add(t_("Phosphorus"), 1, Rainbow(4.0 / mineral_count))
+		.Add(t_("Magnesium"), 1, Rainbow(5.0 / mineral_count))
+		.Add(t_("Iron"), 1, Rainbow(6.0 / mineral_count))
+		.Add(t_("Zinc"), 1, Rainbow(7.0 / mineral_count))
+		.Add(t_("Manganese"), 1, Rainbow(8.0 / mineral_count))
+		.Add(t_("Copper"), 1, Rainbow(9.0 / mineral_count))
+		.Add(t_("Iodine"), 1, Rainbow(10.0 / mineral_count))
+		.Add(t_("Chromium"), 1, Rainbow(11.0 / mineral_count))
+		.Add(t_("Molybdenum"), 1, Rainbow(12.0 / mineral_count))
+		.Add(t_("Selenium"), 1, Rainbow(13.0 / mineral_count))
+		.Add(t_("Cobalt"), 1, Rainbow(14.0 / mineral_count))
+		.Add(t_("Boron"), 1, Rainbow(15.0 / mineral_count))
+		.Add(t_("Silicon"), 1, Rainbow(16.0 / mineral_count))
+		.Add(t_("Bromine"), 1, Rainbow(17.0 / mineral_count))
+		.Add(t_("Arsenic"), 1, Rainbow(18.0 / mineral_count))
+		.Add(t_("Nickel"), 1, Rainbow(19.0 / mineral_count))
+		.Add(t_("Fluorine"), 1, Rainbow(20.0 / mineral_count))
+		.Add(t_("Lithium"), 1, Rainbow(21.0 / mineral_count))
+		.Add(t_("Strontium"), 1, Rainbow(22.0 / mineral_count))
+		.Add(t_("Vanadium"), 1, Rainbow(23.0 / mineral_count))
+		.Add(t_("Tungsten"), 1, Rainbow(24.0 / mineral_count))
+		.Add(t_("Lanthanides"), 1, Rainbow(25.0 / mineral_count))
+		.Add(t_("Cadmium"), 1, Rainbow(26.0 / mineral_count))
+		.Add(t_("Aluminium"), 1, Rainbow(27.0 / mineral_count))
+		.Add(t_("Germanium"), 1, Rainbow(28.0 / mineral_count))
+		.Add(t_("Lead"), 1, Rainbow(29.0 / mineral_count))
+		.Add(t_("Rubidium"), 1, Rainbow(30.0 / mineral_count))
+		.Add(t_("Tin"), 1, Rainbow(31.0 / mineral_count))
+		.Add(t_("Phosphate"), 1, Rainbow(32.0 / mineral_count))
+		.Add(t_("Bicarbonate"), 1, Rainbow(33.0 / mineral_count));
 	
 	int i = 0;
 	int fattyacid_count = 5;
-	list.Add("Menu essential fatty acids (\% of recommended)");
+	list.Add(t_("Menu essential fatty acids (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add("Omega-3", 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add("Omega-6", 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add("Arachidonic", 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add("Linolenic", 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add("Calendic", 1, Rainbow((double)(i++) / fattyacid_count));
+		.Add(t_("Omega-3"), 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add(t_("Omega-6"), 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add(t_("Arachidonic"), 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add(t_("Linolenic"), 1, Rainbow((double)(i++) / fattyacid_count))
+		.Add(t_("Calendic"), 1, Rainbow((double)(i++) / fattyacid_count));
 	
 	i = 0;
 	int other_count = 4;
-	list.Add("Menu essential other (\% of recommended)");
+	list.Add(t_("Menu essential other (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add("Choline", 1, Rainbow((double)(i++) / other_count))
-		.Add("Inositol", 1, Rainbow((double)(i++) / other_count))
-		.Add("Taurine", 1, Rainbow((double)(i++) / other_count))
-		.Add("Nucleotides", 1, Rainbow((double)(i++) / other_count));
+		.Add(t_("Choline"), 1, Rainbow((double)(i++) / other_count))
+		.Add(t_("Inositol"), 1, Rainbow((double)(i++) / other_count))
+		.Add(t_("Taurine"), 1, Rainbow((double)(i++) / other_count))
+		.Add(t_("Nucleotides"), 1, Rainbow((double)(i++) / other_count));
 		
 	
 	i = 0;
 	int electrolyte_count = 4;
-	list.Add("Menu electrolytes (\% of recommended)");
+	list.Add(t_("Menu electrolytes (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add("Bicarbonate", 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add("Calcium", 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add("Chloride", 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add("Magnesium", 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add("Phosphate", 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add("Potassium", 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add("Sodium", 1, Rainbow((double)(i++) / electrolyte_count));
+		.Add(t_("Bicarbonate"), 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add(t_("Calcium"), 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add(t_("Chloride"), 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add(t_("Magnesium"), 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add(t_("Phosphate"), 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add(t_("Potassium"), 1, Rainbow((double)(i++) / electrolyte_count))
+		.Add(t_("Sodium"), 1, Rainbow((double)(i++) / electrolyte_count));
 	
-	list.Add("Measured weight");
+	list.Add(t_("Measured weight"));
 	graph.Add()
-		.Add("Planned weight", 1, GrayColor())
-		.Add("Weight", 2, Color(109, 0, 117));
+		.Add(t_("Planned weight"), 1, GrayColor())
+		.Add(t_("Weight"), 2, Color(109, 0, 117));
 	
-	list.Add("Measured fat");
+	list.Add(t_("Measured fat"));
 	graph.Add()
-		.Add("Planned Fat", 1, GrayColor())
-		.Add("Fat", 2, Color(81, 48, 0));
+		.Add(t_("Planned Fat"), 1, GrayColor())
+		.Add(t_("Fat"), 2, Color(81, 48, 0));
 		
-	list.Add("Measured liquid");
+	list.Add(t_("Measured liquid"));
 	graph.Add()
-		.Add("Liquid", 2, Color(0, 176, 137));
+		.Add(t_("Liquid"), 2, Color(0, 176, 137));
 		
-	list.Add("Measured muscle");
+	list.Add(t_("Measured muscle"));
 	graph.Add()
-		.Add("Muscle", 2, Color(120, 0, 0));
+		.Add(t_("Muscle"), 2, Color(120, 0, 0));
 	
-	list.Add("Measured BMI");
+	list.Add(t_("Measured BMI"));
 	graph.Add()
-		.Add("BMI", 2, GrayColor());
+		.Add(t_("BMI"), 2, GrayColor());
 	
 	list <<= THISBACK(SelectSource);
 	
@@ -1553,27 +1553,27 @@ void TodayScheduleCtrl::Paint(Draw& d) {
 		Color top, btm;
 		String typestr;
 		if (it.type == ScheduleToday::WAKING) {
-			typestr = "Waking";
+			typestr = t_("Waking");
 			top = waking_top;
 			btm = waking_btm;
 		}
 		else if (it.type == ScheduleToday::EATING) {
-			typestr = "Eating";
+			typestr = t_("Eating");
 			top = eating_top;
 			btm = eating_btm;
 		}
 		else if (it.type == ScheduleToday::WALKING) {
-			typestr = "Walking";
+			typestr = t_("Walking");
 			top = walking_top;
 			btm = walking_btm;
 		}
 		else if (it.type == ScheduleToday::RUNNING) {
-			typestr = "Running";
+			typestr = t_("Running");
 			top = running_top;
 			btm = running_btm;
 		}
 		else if (it.type == ScheduleToday::SLEEPING) {
-			typestr = "Sleeping";
+			typestr = t_("Sleeping");
 			top = sleeping_top;
 			btm = sleeping_btm;
 		}

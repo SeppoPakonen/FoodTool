@@ -21,76 +21,9 @@ enum {
 	NOT_MORNING = 0xE
 };
 
-template <class T>
-struct FoodDetailedT : Moveable<FoodDetailedT<T>> {
-	T grams = 0, kcals = 0, fat = 0, carbs = 0, protein = 0, salt = 0;
-	
-	void Reset() {grams = 0, kcals = 0, fat = 0, carbs = 0, protein = 0, salt = 0;}
-	void Serialize(Stream& s) {s % grams % kcals % fat % carbs % protein % salt;}
-	void Limit(T kcals, T macro, T salt) {
-		this->kcals = max(this->kcals, kcals);
-		this->fat = max(this->fat, macro);
-		this->carbs = max(this->carbs, macro);
-		this->protein = max(this->protein, macro);
-		this->grams = max(this->grams, fat+carbs+protein);
-		this->salt = max(this->salt, salt);
-	}
-	template <class K>
-	void operator +=(const K& d) {
-		grams += d.grams;
-		kcals += d.kcals;
-		fat += d.fat;
-		carbs += d.carbs;
-		protein += d.protein;
-		salt += d.salt;
-	}
-	template <class K>
-	void operator -=(const K& d) {
-		grams -= d.grams;
-		kcals -= d.kcals;
-		fat -= d.fat;
-		carbs -= d.carbs;
-		protein -= d.protein;
-		salt -= d.salt;
-	}
-	void operator*=(double mul) {
-		grams *= mul;
-		kcals *= mul;
-		fat *= mul;
-		carbs *= mul;
-		protein *= mul;
-		salt *= mul;
-	}
-	void ChangeGrams(double new_grams) {
-		double mul = new_grams / grams;
-		kcals *= mul;
-		fat *= mul;
-		carbs *= mul;
-		protein *= mul;
-		salt *= mul;
-		ASSERT(IsFin(grams) && IsFin(kcals) && IsFin(fat) && IsFin(carbs) && IsFin(protein) && IsFin(salt));
-		grams = new_grams;
-	}
-};
-
-template <class T>
-inline FoodDetailedT<T> operator-(const FoodDetailedT<T>& a, const FoodDetailedT<T>& b) {
-	FoodDetailedT<T> out;
-	out.grams = a.grams - b.grams;
-	out.kcals = a.kcals - b.kcals;
-	out.fat = a.fat - b.fat;
-	out.carbs = a.carbs - b.carbs;
-	out.protein = a.protein - b.protein;
-	out.salt = a.salt - b.salt;
-	return out;
-}
-
-typedef FoodDetailedT<float> FoodDetailed;
-typedef FoodDetailedT<double> FoodDetailedDouble;
-
 struct DailyPlan : Moveable<DailyPlan> {
 	Date date;
-	FoodDetailed food;
+	Ingredient food;
 	double weight, prog;
 	double fat_perc, fat_kgs, lean_body_kgs;
 	double maintain_calories, allowed_calories, maintain_burned_calories;
@@ -111,7 +44,7 @@ struct DailyPlan : Moveable<DailyPlan> {
 
 struct FoodType : Moveable<FoodType> {
 	String name;
-	FoodDetailed details;
+	Ingredient details;
 	int shop_order;
 	int cat;
 	int healthiness;
@@ -132,15 +65,15 @@ struct MealType : Moveable<MealType> {
 	void Serialize(Stream& s) {s % name % food_str % time_of_day % frequency % foods % opt_foods;}
 };
 
-typedef VectorMap<String, FoodDetailed> DetailedFoodQuantity;
+typedef VectorMap<String, Ingredient> DetailedFoodQuantity;
 typedef VectorMap<String, float> FoodQuantity;
 typedef VectorMap<String, int> FoodQuantityInt;
 
 struct Meal : Moveable<Meal> {
 	String key;
 	DetailedFoodQuantity food;
-	FoodDetailed food_sum;
-	FoodDetailed target_sum;
+	Ingredient food_sum;
+	Ingredient target_sum;
 	
 	void Serialize(Stream& s) {s % key % food % food_sum % target_sum;}
 };
@@ -152,8 +85,8 @@ struct FoodDay : Moveable<FoodDay> {
 	FoodQuantityInt buy_amount;
 	FoodQuantity used_food_amount;
 	FoodQuantityInt used_meal_amount;
-	FoodDetailed target_sum, total_sum;
-	FoodDetailedDouble total_consumed;
+	Ingredient target_sum, total_sum;
+	IngredientDouble total_consumed;
 	bool is_shopping = false;
 	String menu, preparation, shopping_list;
 	

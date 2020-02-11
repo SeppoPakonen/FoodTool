@@ -4,7 +4,7 @@ FoodStorage::FoodStorage() {
 	int coco = 0.92 * 425;
 	int oliv = 0.92 * 1000;
 	
-	AddFoodType("SALT",	9,1000,	"Salt",				0,		0,		0,		0,		100,	MINERAL);
+	/*AddFoodType("SALT",	9,1000,	"Salt",				0,		0,		0,		0,		100,	MINERAL);
 	
 	AddFoodType("COCO",	9,coco,	"Coconut oil",		900,	100,	0,		0,		0,		OIL,	5);
 	AddFoodType("OLIV",	9,oliv,	"Olive oil",		900,	100,	0,		0,		0,		OIL,	1);
@@ -18,7 +18,7 @@ FoodStorage::FoodStorage() {
 	AddFoodType("COTT", 11,400,	"Cottage cheese",	84,		2,		1.6,	15,		0.75,	PROCESSED_MILK);
 	AddFoodType("CREM", 8,150,	"Creme fraiche",	190,	18,		3.5,	2.5,	0.1,	PROCESSED_MILK);
 	AddFoodType("SOUR", 8,200,	"Sour cream",		139,	12,		4,		2.8,	0.1,	PROCESSED_MILK);
-	AddFoodType("CHEE", 11,500,	"Grated cheese",	299,	23,		0,		23,		2.0,	PROCESSED_MILK);
+	AddFoodType("CH1EE", 11,500,	"Grated cheese",	299,	23,		0,		23,		2.0,	PROCESSED_MILK);
 	
 	AddFoodType("CABB", 3,300,	"Cabbage",			21,		0.2,	3.4,	1.2,	0.05,	VEGETABLE);
 	AddFoodType("BROC", 1,450,	"Broccoli",			34,		0.5,	3.5,	2.4,	0.03,	VEGETABLE);
@@ -50,7 +50,7 @@ FoodStorage::FoodStorage() {
 		"OLIV,"
 		"?SMET,?CREM,?SOUR,"
 		"?CABB,?BROC,?CAUL,?PINA,"
-		"?TOFU,?COW17,?MIX17,?PIG15,?CHICK,?POLL,?SHRI,?TURK", LUNCH);
+		"?TOFU,?COW17,?MIX17,?PIG15,?CHICK,?POLL,?SHRI,?TURK", LUNCH);*/
 }
 
 FoodType& FoodStorage::AddFoodType(String code, int shop_order, int pkg_size, String name, float kcals, float fat, float carbs, float protein, float salt, int cat, int healthiness) {
@@ -112,7 +112,7 @@ void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
 	FoodQuantity total_usage;
 	int zero_day_i = 0;
 	
-	FoodDetailed target_diff = prev->total_sum - prev->target_sum;
+	Ingredient target_diff = prev->total_sum - prev->target_sum;
 	
 	for(int i = 0; i < shop_interval; i++) {
 		int day_i = days.GetCount();
@@ -131,7 +131,7 @@ void FoodStorage::PlanWeek(const Vector<DailyPlan>& planned_daily) {
 		day.target_sum = planned_daily[day_i].food;
 		day.target_sum -= target_diff;
 		day.target_sum.Limit(10, 1, 0);
-		FoodDetailed orig_target_sum = day.target_sum;
+		Ingredient orig_target_sum = day.target_sum;
 		
 		MakeMenu(day);
 		
@@ -290,7 +290,7 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 		for(int j = 0; j < t.foods.GetCount(); j++) {
 			String key = t.foods[j];
 			const FoodType& ft = food_types.Get(key);
-			FoodDetailed& details = m.food.Add(key);
+			Ingredient& details = m.food.Add(key);
 			details = ft.details;
 			details.grams = 100;
 		}
@@ -312,7 +312,7 @@ void FoodStorage::MakeMenu(FoodDay& d) {
 				if (food_usage > max_usage)
 					continue;
 				const FoodType& ft = food_types.Get(key);
-				FoodDetailed& details = m.food.Add(key);
+				Ingredient& details = m.food.Add(key);
 				details = ft.details;
 				details.grams = 100;
 			}
@@ -408,7 +408,7 @@ void FoodDay::SetMealGrams(const Vector<double>& grams, const VectorMap<String, 
 				g = count * t.serving_grams;
 			}
 			g = max(0.01, g);
-			FoodDetailed& d = m.food[j];
+			Ingredient& d = m.food[j];
 			d.ChangeGrams(g);
 			m.food_sum += d;
 			if (check) {

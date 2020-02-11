@@ -14,6 +14,8 @@ class ProfileCreator : public TopWindow {
 	WithWelcomeLayout<ParentCtrl> tab0;
 	WithConfigurationLayout<ParentCtrl> tab1;
 	WithNutrientDeficitLayout<ParentCtrl> tab2;
+	WithDatabasePresetLayout<ParentCtrl> tab3;
+	WithDatabaseEditLayout<ParentCtrl> tab4;
 	int tab = 0;
 	
 	VectorMap<int, double> height_bmis;
