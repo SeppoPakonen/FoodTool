@@ -102,6 +102,8 @@ void ScheduleCtrl::Paint(Draw& d) {
 				y += shop_h;
 			}
 			
+			const Database& db = DB();
+			
 			DrawGradientVert(d, RectC(x, y, gw, nutr_h), nutr_clr_top, nutr_clr_btm);
 			double min = -1;
 			double max = +1;
@@ -118,19 +120,19 @@ void ScheduleCtrl::Paint(Draw& d) {
 					case 0:
 						w = main_w;
 						c = Color(198, 127, 0);
-						value = day.total_sum.fat / plan.food.fat - 1;
+						value = day.total_sum.nutr[FAT] / plan.food.nutr[FAT] - 1;
 						break;
 					
 					case 1:
 						w = main_w;
 						c = Color(28, 170, 150);
-						value = day.total_sum.carbs / plan.food.carbs - 1;
+						value = day.total_sum.nutr[CARB] / plan.food.nutr[CARB] - 1;
 						break;
 					
 					case 2:
 						w = main_w;
 						c = Color(170, 42, 0);
-						value = day.total_sum.protein / plan.food.protein - 1;
+						value = day.total_sum.nutr[PROT] / plan.food.nutr[PROT] - 1;
 						break;
 					
 				}

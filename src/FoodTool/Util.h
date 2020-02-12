@@ -87,4 +87,50 @@ struct NutrientDeficitEdit : public Ctrl {
 
 double KiloJoulesToKiloCalories(double kj);
 
+template <class T>
+inline void CopyHeapless(const T& from, T& to) {
+	to.SetCount(from.GetCount());
+	for(int i = 0; i < to.GetCount(); i++)
+		to[i] = from[i];
+}
+
+
+struct OnlineAverage1 : Moveable<OnlineAverage1> {
+	double mean;
+	int64 count;
+	SpinLock lock;
+	OnlineAverage1() : mean(0), count(0) {}
+	
+	void Clear() {
+		mean = 0.0;
+		count = 0;
+	}
+	
+	void Resize(int64 i) {count = i;}
+	
+	void Add(double a) {
+		lock.Enter();
+		if (count == 0) {
+			mean = a;
+		}
+		else {
+			double delta = a - mean;
+			mean += delta / count;
+		}
+		count++;
+		lock.Leave();
+	}
+	
+	double GetMean() const {
+		return mean;
+	}
+	
+	void Serialize(Stream& s) {
+		s % mean % count;
+	}
+	
+	bool operator()(const OnlineAverage1& a, const OnlineAverage1& b) const {return a.mean < b.mean;}
+};
+
+
 #endif

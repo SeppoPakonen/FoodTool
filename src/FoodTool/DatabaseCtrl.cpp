@@ -14,6 +14,7 @@ DatabaseCtrl::DatabaseCtrl() {
 	Database& db = DB();
 	for(int i = 0; i < db.food_groups.GetCount(); i++)
 		food_group.Add(db.food_groups[i].name);
+	food_group.SetIndex(0);
 	
 	for(int i = 0; i < db.nutr_types.GetCount(); i++)
 		nutr_type.Add(db.nutr_types[i].nutr_desc);
@@ -113,8 +114,8 @@ void DatabaseCtrl::SelectFood() {
 	
 	Database& db = DB();
 	const FoodDescription& d = db.food_descriptions[selected_food];
-	int fg_i = db.food_groups.Find(d.food_group_key);
-	food_group.SetData(fg_i);
+	int fg_i = max(0, db.food_groups.Find(d.food_group_key));
+	food_group.SetIndex(fg_i);
 	
 	long_desc.SetData(d.long_desc);
 	short_desc.SetData(d.short_desc);
@@ -128,6 +129,7 @@ void DatabaseCtrl::SelectFood() {
 	prot_factor.SetData(d.pro_factor);
 	fat_factor.SetData(d.fat_factor);
 	carb_factor.SetData(d.cho_factor);
+	soak.Set(d.require_soaking);
 	
 	NutrientData();
 }
@@ -140,7 +142,7 @@ void DatabaseCtrl::NutrientData() {
 		const NutritionInfo& n = d.nutr[i];
 		const NutritionType& t = db.nutr_types[n.nutr_no];
 		nutr_list.Set(i, 0, t.nutr_desc);
-		nutr_list.Set(i, 1, Format("%2n", n.nutr_value));
+		nutr_list.Set(i, 1, Format("%2n", n.nutr_value) + t.units);
 	}
 	nutr_list.SetCount(d.nutr.GetCount());
 	
@@ -202,7 +204,7 @@ void DatabaseCtrl::UpdateFood() {
 	
 	Database& db = DB();
 	FoodDescription& d = db.food_descriptions[selected_food];
-	d.food_group_key = db.food_groups.GetKey(food_group.GetData());
+	d.food_group_key = db.food_groups.GetKey(food_group.GetIndex());
 	
 	d.long_desc = long_desc.GetData();
 	d.short_desc = short_desc.GetData();
@@ -216,6 +218,7 @@ void DatabaseCtrl::UpdateFood() {
 	d.pro_factor = (double)prot_factor.GetData();
 	d.fat_factor = (double)fat_factor.GetData();
 	d.cho_factor = (double)carb_factor.GetData();
+	d.require_soaking = soak.Get();
 	
 	if (selected_nutr >= 0) {
 		NutritionInfo& n = d.nutr[selected_nutr];
@@ -249,6 +252,7 @@ String DatabaseCtrl::GetModificationCppCode() {
 		if (f.is_user_added) {
 			String s;
 			s	<< "AddFood("
+				<< "\"" << f.food_group_key << "\", "
 				<< "\"" << f.long_desc << "\", "
 				<< "\"" << f.short_desc << "\", "
 				<< "\"" << f.company_name << "\", "
@@ -264,7 +268,7 @@ String DatabaseCtrl::GetModificationCppCode() {
 			
 			for(int j = 0; j < f.nutr.GetCount(); j++) {
 				const NutritionInfo& n = f.nutr[j];
-				s << "\n\tAddNutrition(" << (int)n.nutr_no << ", " << n.nutr_value << ", " << n.std_error << ")";
+				s << "\n\t.AddNutrition(" << (int)n.nutr_no << ", " << n.nutr_value << ", " << n.std_error << ")";
 			}
 			
 			out << s << ";\n";
@@ -277,14 +281,17 @@ String DatabaseCtrl::GetModificationCppCode() {
 					has_user_nutr = true;
 			}
 			
-			if (has_user_nutr) {
+			if (has_user_nutr || f.require_soaking) {
 				String s;
 				s	<< "food_descriptions[" << i << "]";
+				
+				if (f.require_soaking)
+					s << "\n\t.RequireSoaking()";
 				
 				for(int j = 0; j < f.nutr.GetCount(); j++) {
 					const NutritionInfo& n = f.nutr[j];
 					if (n.is_user_added)
-						s << "\n\tAddNutrition(" << (int)n.nutr_no << ", " << n.nutr_value << ", " << n.std_error << ")";
+						s << "\n\t.AddNutrition(" << (int)n.nutr_no << ", " << n.nutr_value << ", " << n.std_error << ")";
 				}
 				
 				out << s << ";\n";

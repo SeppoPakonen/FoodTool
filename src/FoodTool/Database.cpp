@@ -1,5 +1,9 @@
 #include "FoodTool.h"
 
+int KCAL, PROT, FAT, CARB, SODIUM;
+
+
+
 Database::Database() {
 	LoadThis();
 }
@@ -86,6 +90,8 @@ bool Database::Init() {
 			FoodGroup& g = food_groups.Add(items[0]);
 			g.name = items[1];
 		}
+		FoodGroup& other = food_groups.Add("OTHER");
+		other.name = "Other";
 	}
 	
 	Vector<int> nutr_no_trans;
@@ -143,6 +149,59 @@ bool Database::Init() {
 			ASSERT(n.nutr_no < nutr_types.GetCount());
 		}
 	}
+	
+	AddRecommendation("PROCNT", 0.8, true);
+	AddRecommendation("FAT", 60.5 / 65.0, true);
+	AddRecommendation("CA", 1000 / 65.0, true);
+	AddRecommendation("FE", 19.8 / 65.0, true);
+	AddRecommendation("MG", 420 / 65.0, true);
+	AddRecommendation("P", 700 / 65.0, true);
+	AddRecommendation("K", 4100 / 65.0, true);
+	AddRecommendation("NA", 1900 / 65.0, true);
+	AddRecommendation("ZN", 11 / 65.0, true);
+	AddRecommendation("CU", 1 / 65.0, true);
+	AddRecommendation("FLD", 50, true);
+	AddRecommendation("MN", 2.3, true);
+	AddRecommendation("SE", 100 / 65.0, true);
+	AddRecommendation("VITA_IU", 3000, true);
+	AddRecommendation("RETOL", 900 / 65.0, true);
+	AddRecommendation("VITA_RAE", 900 / 65.0, true);
+	AddRecommendation("CARTB", 15000 / 65.0, true);
+	AddRecommendation("CARTA", 600 / 65.0, true);
+	AddRecommendation("TOCPHA", 15 / 65.0, true);
+	AddRecommendation("VITD", 800 / 65.0, true);
+	AddRecommendation("VITDMCR", 100 / 65.0, true);
+	AddRecommendation("LYCPN", 21000 / 65.0, true);
+	AddRecommendation("VITC", 90 / 65.0, true);
+	AddRecommendation("THIA", 1.2 / 65.0, true);
+	AddRecommendation("RIBF", 3 / 65.0, true);
+	AddRecommendation("NIA", 16 / 65.0, true);
+	AddRecommendation("PANTAC", 5 / 65.0, true);
+	AddRecommendation("VITB6A", 1.3 / 65.0, true);
+	AddRecommendation("FOL", 400 / 65.0, true);
+	AddRecommendation("VITB12", 1.8 / 65.0, true);
+	AddRecommendation("CHOLN", 500 / 65.0, true);
+	AddRecommendation("MK4", 92.5 / 65.0, true);
+	AddRecommendation("VITK1D", 120 / 65.0, true);
+	AddRecommendation("FOLAC", 400 / 65.0, true);
+	AddRecommendation("BETN", 550 / 65.0, true);
+	AddRecommendation("TRP_G", 0.006, true);
+	AddRecommendation("THR_G", 0.015, true);
+	AddRecommendation("ILE_G", 1.4 / 65.0, true);
+	AddRecommendation("LEU_G", 2.7 / 65.0, true);
+	AddRecommendation("LYS_G", 1 / 65.0, true);
+	AddRecommendation("MET_G", 0.019, true);
+	AddRecommendation("PHE_G", 0.026, true);
+	AddRecommendation("TYR_G", 6 / 65.0, true);
+	AddRecommendation("VAL_G", 1.8 / 65.0, true);
+	AddRecommendation("ARG_G", 6 / 65.0, true);
+	AddRecommendation("HISTN_G", 1 / 65.0, true);
+	AddRecommendation("ALA_G", 3.5 / 65.0, true);
+	AddRecommendation("ASP_G", 3 / 65.0, true);
+	AddRecommendation("GLU_G", 15 / 65.0, true);
+	//AddRecommendation("GLY_G", 5 / 65.0, true);
+	AddRecommendation("GLY_G", 5 / 65.0, true);
+	
 	
 	
 	#if 0
@@ -270,104 +329,217 @@ int Database::AddNutrition(String name, String unit, String desc) {
 	return i;
 }
 
+FoodDescription& Database::AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, float nf, float pf, float ff, float cf) {
+	String key;
+	for(int i = 0; i < 8; i++)
+		key.Cat('A' + Random('Z' - 'A' + 1));
+	
+	FoodDescription& d = food_descriptions.Add(key);
+	d.food_group_key = fg;
+	d.long_desc = l;
+	d.short_desc = s;
+	d.company_name = c;
+	d.manufacturer_name = m;
+	d.survey = su;
+	d.ref_desc = r;
+	d.refuse = re;
+	d.sci_name = sci;
+	d.n_factor = nf;
+	d.pro_factor = pf;
+	d.fat_factor = ff;
+	d.cho_factor = cf;
+	d.is_user_added = true;
+	return d;
+}
+
+FoodDescription& FoodDescription::AddNutrition(int nutr_no, double value, double error) {
+	NutritionInfo& i = nutr.Add();
+	i.nutr_no = nutr_no;
+	i.nutr_value = value;
+	i.std_error = error;
+	return *this;
+}
+
 void Database::VLCD_Preset() {
+	AddFood("OTHER", "Salt, iodized", "", "Meira", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(25, 38758, 0);
+	AddFood("0100", "Magnex sitraatti + B6- vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(29, 12254, 0)
+		.AddNutrition(56, 98, 0);
+	AddFood("0100", "Reformi 55g B-vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(52, 6363, 0)
+		.AddNutrition(53, 6363, 0)
+		.AddNutrition(54, 6363, 0)
+		.AddNutrition(55, 6363, 0)
+		.AddNutrition(56, 4545, 0)
+		.AddNutrition(58, 1818, 0)
+		.AddNutrition(63, 109090, 0);
+	AddFood("0100", "Calcia 800 Plus kalkki-monivitamiini-monimineraalitabletti", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(56, 2.20000004768372, 0)
+		.AddNutrition(51, 60, 0)
+		.AddNutrition(40, 10, 0)
+		.AddNutrition(62, 70, 0)
+		.AddNutrition(20, 800, 0)
+		.AddNutrition(63, 300, 0)
+		.AddNutrition(22, 350, 0)
+		.AddNutrition(29, 2.5, 0)
+		.AddNutrition(51, 60, 0)
+		.AddNutrition(26, 15, 0);
+	AddFood("0100", "Rainbow Vahva C-vitamiini 500 mg 90 tablettia", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(51, 64935, 0);
+	AddFood("0100", "Rainbow 72g monivitamiini-hivenainetabletti", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(53, 1.60000002384186, 0)
+		.AddNutrition(52, 1.39999997615814, 0)
+		.AddNutrition(58, 2.5, 0)
+		.AddNutrition(56, 2.20000004768372, 0)
+		.AddNutrition(51, 80, 0)
+		.AddNutrition(40, 10, 0)
+		.AddNutrition(44, 0.0120000001043081, 0)
+		.AddNutrition(22, 120, 0)
+		.AddNutrition(29, 2, 0)
+		.AddNutrition(54, 16, 0)
+		.AddNutrition(55, 6, 0)
+		.AddNutrition(30, 55, 0)
+		.AddNutrition(51, 80, 0)
+		.AddNutrition(40, 10, 0)
+		.AddNutrition(36, 12, 0)
+		.AddNutrition(26, 10, 0);
+	AddFood("0100", "Makrobios B-12 vitamiini+folaatti ", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(58, 285000, 0)
+		.AddNutrition(63, 57142, 0);
+	AddFood("0100", "Reformi Multivitamin 100tabl ", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(40, 510, 0)
+		.AddNutrition(36, 1020, 0)
+		.AddNutrition(51, 6122, 0)
+		.AddNutrition(52, 142, 0)
+		.AddNutrition(53, 163, 0)
+		.AddNutrition(54, 1836, 0)
+		.AddNutrition(56, 224, 0)
+		.AddNutrition(63, 30612, 0)
+		.AddNutrition(58, 306, 0)
+		.AddNutrition(55, 408, 0)
+		.AddNutrition(20, 20408, 0)
+		.AddNutrition(22, 9183, 0)
+		.AddNutrition(26, 1530, 0)
+		.AddNutrition(30, 5102, 0);
+	used_foods.Add(291);
+	used_foods.Add(657);
+	used_foods.Add(658);
+	used_foods.Add(659);
+	used_foods.Add(661);
+	used_foods.Add(662);
+	used_foods.Add(685);
+	used_foods.Add(716);
+	used_foods.Add(725);
+	used_foods.Add(2122);
+	used_foods.Add(2150);
+	used_foods.Add(2155);
+	used_foods.Add(2158);
+	used_foods.Add(2165);
+	used_foods.Add(2190);
+	used_foods.Add(2194);
+	used_foods.Add(2222);
+	used_foods.Add(2240);
+	used_foods.Add(2252);
+	used_foods.Add(2254);
+	used_foods.Add(2270);
+	used_foods.Add(2275);
+	used_foods.Add(2280);
+	used_foods.Add(2283);
+	used_foods.Add(2299);
+	used_foods.Add(2304);
+	used_foods.Add(2307);
+	used_foods.Add(2310);
+	used_foods.Add(2325);
+	used_foods.Add(2339);
+	used_foods.Add(2352);
+	used_foods.Add(2358);
+	used_foods.Add(2373);
+	used_foods.Add(2376);
+	used_foods.Add(2384);
+	used_foods.Add(2392);
+	used_foods.Add(2423);
+	used_foods.Add(2823);
 	used_foods.Add(2862);
 	used_foods.Add(2870);
 	used_foods.Add(2878);
 	used_foods.Add(2887);
+	used_foods.Add(2900);
+	used_foods.Add(2907);
+	used_foods.Add(2957);
+	used_foods.Add(2961);
+	used_foods.Add(2967);
+	used_foods.Add(2968);
 	used_foods.Add(2982);
 	used_foods.Add(3001);
 	used_foods.Add(3002);
-	used_foods.Add(3578);
-	used_foods.Add(3051);
-	used_foods.Add(3166);
-	used_foods.Add(3238);
-	used_foods.Add(2155);
-	used_foods.Add(3437);
-	used_foods.Add(2957);
-	used_foods.Add(2961);
-	used_foods.Add(2280);
-	used_foods.Add(3222);
-	used_foods.Add(2907);
-	used_foods.Add(4794);
-	used_foods.Add(4806);
-	used_foods.Add(4875);
-	used_foods.Add(2823);
-	used_foods.Add(2967);
+	used_foods.Add(3008);
 	used_foods.Add(3029);
-	used_foods.Add(2900);
-	used_foods.Add(2968);
+	used_foods.Add(3051);
 	used_foods.Add(3094);
 	used_foods.Add(3150);
-	used_foods.Add(291);
-	used_foods.Add(3490);
-	used_foods.Add(4753);
-	used_foods.Add(4755);
-	used_foods.Add(4809);
-	used_foods.Add(4993);
-	used_foods.Add(4966);
-	used_foods.Add(4979);
-	used_foods.Add(4973);
+	used_foods.Add(3166);
 	used_foods.Add(3187);
-	used_foods.Add(2122);
-	used_foods.Add(2325);
-	used_foods.Add(2150);
-	used_foods.Add(2423);
-	used_foods.Add(2270);
-	used_foods.Add(2310);
-	used_foods.Add(2352);
-	used_foods.Add(2299);
-	used_foods.Add(2222);
-	used_foods.Add(2254);
-	used_foods.Add(2283);
-	used_foods.Add(2194);
-	used_foods.Add(2165);
-	used_foods.Add(2190);
-	used_foods.Add(2240);
-	used_foods.Add(2252);
-	used_foods.Add(2373);
-	used_foods.Add(2384);
-	used_foods.Add(2392);
-	used_foods.Add(2275);
-	used_foods.Add(2158);
-	used_foods.Add(2304);
-	used_foods.Add(2307);
-	used_foods.Add(2339);
-	used_foods.Add(2358);
-	used_foods.Add(2376);
-	used_foods.Add(3008);
-	used_foods.Add(3634);
-	used_foods.Add(3644);
-	used_foods.Add(3665);
-	used_foods.Add(4824);
+	used_foods.Add(3222);
+	used_foods.Add(3238);
+	used_foods.Add(3435);
+	used_foods.Add(3437);
+	used_foods.Add(3490);
+	used_foods.Add(3578);
+	used_foods.Add(3609);
 	used_foods.Add(3619);
 	used_foods.Add(3625);
-	used_foods.Add(3609);
-	used_foods.Add(3715);
-	used_foods.Add(8604);
-	used_foods.Add(3689);
-	used_foods.Add(657);
-	used_foods.Add(4858);
-	used_foods.Add(658);
+	used_foods.Add(3634);
+	used_foods.Add(3644);
 	used_foods.Add(3663);
-	used_foods.Add(725);
+	used_foods.Add(3665);
+	used_foods.Add(3689);
+	used_foods.Add(3715);
+	used_foods.Add(4753);
+	used_foods.Add(4755);
+	used_foods.Add(4794);
+	used_foods.Add(4806);
+	used_foods.Add(4809);
+	used_foods.Add(4824);
 	used_foods.Add(4853);
-	used_foods.Add(6452);
+	used_foods.Add(4858);
+	used_foods.Add(4875);
+	used_foods.Add(4966);
+	used_foods.Add(4973);
+	used_foods.Add(4979);
+	used_foods.Add(4993);
 	used_foods.Add(6194);
-	used_foods.Add(3435);
-	used_foods.Add(659);
-	used_foods.Add(662);
-	used_foods.Add(661);
-	used_foods.Add(685);
-	used_foods.Add(716);
+	used_foods.Add(6452);
+	used_foods.Add(8604);
+	used_foods.Add(8789);
+	used_foods.Add(8790);
+	used_foods.Add(8792);
+	used_foods.Add(8793);
+	used_foods.Add(8794);
+	used_foods.Add(8795);
+	used_foods.Add(8796);
+	used_foods.Add(8791);
+
 
 	
 	SortIndex(used_foods, StdLess<int>());
 }
 
+int Database::FindNutrition(String key) const {
+	for(int i = 0; i < nutr_types.GetCount(); i++)
+		if (nutr_types[i].tagname == key)
+			return i;
+	return -1;
+}
 
-
-
+void Database::SetCommonNutrs() {
+	PROT = FindNutrition("PROCNT");
+	FAT = FindNutrition("FAT");
+	CARB = FindNutrition("CHOCDF");
+	KCAL = FindNutrition("ENERC_KCAL");
+	SODIUM = FindNutrition("NA");
+	ASSERT(PROT >= 0 && FAT >= 0 && CARB >= 0 && KCAL >= 0 && SODIUM >= 0);
+}
 
 
 

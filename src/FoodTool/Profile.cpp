@@ -101,6 +101,7 @@ Date Profile::GetCurrentQuarterBegin() {
 }
 
 bool Profile::UpdatePlan() {
+	const Database& db = DB();
 	Configuration* conf = &confs[0];
 	WeightLossStat* wl = &weights[0];
 	
@@ -118,12 +119,22 @@ bool Profile::UpdatePlan() {
 	double calorie_deficit_sum = 0.0;
 	double max_calorie_deficit = 0.0;
 	
+	if (planned_nutrients.IsEmpty()) {
+		planned_nutrients.FindAdd(KCAL);
+		planned_nutrients.FindAdd(PROT);
+		planned_nutrients.FindAdd(FAT);
+		for(int i = 0; i < db.nutr_recom.GetCount(); i++)
+			planned_nutrients.FindAdd(db.nutr_recom[i].nutr_no);
+	}
+	
+	
 	Date date = begin_date;
 	planned_daily.SetCount(0);
 	planned_daily.Reserve(2*365);
 	while (weight > conf->tgt_weight) {
 		DailyPlan& d = planned_daily.Add();
 		
+		d.mode = MODE_WEIGHTLOSS;
 		d.date = date++;
 		d.weight = weight;
 		d.prog = 1.0 - (weight - conf->tgt_weight) / (begin_weight - conf->tgt_weight);
@@ -138,8 +149,8 @@ bool Profile::UpdatePlan() {
 		double min_protein = d.lean_body_kgs * 0.8;
 		double min_fat = 30.0 / 2000.0 * d.maintain_calories;
 		double prot_cals, fat_cals, carb_cals;
-		// If weight loss mode
-		if (1) {
+		
+		if (d.mode == MODE_WEIGHTLOSS) {
 			prot_cals = min_protein * 4.4;
 			fat_cals = min_fat * 9.0;
 			carb_cals = (prot_cals + fat_cals) / 0.95 * 0.05;
@@ -173,11 +184,17 @@ bool Profile::UpdatePlan() {
 		d.burned_kgs = d.burned_calories / cals_in_kg_fat;
 		
 		d.food.grams = weight / 100.0 * 1000.0;
-		d.food.kcals = d.allowed_calories;
-		d.food.protein = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
-		d.food.fat = max(min_fat, fat_cals / 9.0); // based on coconut oil nutrients
-		d.food.carbs = carb_cals / 10.0;
-		d.food.salt = 1.5;
+		d.food.nutr[KCAL] = d.allowed_calories;
+		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
+		d.food.nutr[FAT] = max(min_fat, fat_cals / 9.0); // based on coconut oil nutrients
+		d.food.nutr[CARB] = carb_cals / 10.0;
+		ASSERT(db.nutr_recom.GetCount());
+		for(const NutritionRecommendation& r : db.nutr_recom) {
+			if (r.per_kg)
+				d.food.nutr[r.nutr_no] = weight * r.value;
+			else
+				d.food.nutr[r.nutr_no] = r.value;
+		}
 		
 		weight -= d.burned_kgs;
 	}
@@ -217,6 +234,9 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	s.day = now;
 	s.items.SetCount(0);
 	
+	if (storage.meal_types.IsEmpty())
+		return;
+	
 	int day_i = -1;
 	for(int i = 0; i < storage.days.GetCount(); i++)
 		if (storage.days[i].date == s.day)
@@ -229,7 +249,7 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	auto& wake = s.items.Add();
 	wake.time = Time(s.day.year, s.day.month, s.day.day, conf.waking_hour, conf.waking_minute, 0);
 	wake.type = ScheduleToday::WAKING;
-	wake.msg = Format("Good morning. Have %d calories today!", (int)day.total_sum.kcals);
+	wake.msg = Format("Good morning. Have %d calories today!", (int)day.total_sum.nutr[KCAL]);
 	
 	auto& sleep = s.items.Add();
 	sleep.time = Time(s.day.year, s.day.month, s.day.day, conf.sleeping_hour, conf.sleeping_minute, 0);

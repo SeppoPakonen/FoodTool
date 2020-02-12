@@ -149,6 +149,8 @@ struct Profile {
 	Vector<DailyPlan> planned_daily;
 	Vector<Configuration> confs;
 	Vector<NutrientDeficitProfile> defs;
+	Vector<MealPreset> generated_foods;
+	Index<int> planned_nutrients;
 	
 	FoodStorage storage;
 	Date begin_date;
@@ -180,6 +182,8 @@ struct Profile {
 			% planned_daily
 			% confs
 			% defs
+			% generated_foods
+			% planned_nutrients
 			% storage
 			% begin_date
 			% av_calorie_deficit

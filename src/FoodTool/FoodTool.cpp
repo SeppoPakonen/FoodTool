@@ -143,55 +143,55 @@ void FoodTool::Data() {
 
 
 MotivationCtrl::MotivationCtrl() {
-	quotes.Add("“If you have discipline, drive, and determination… nothing is impossible.”– Dana Linn Bailey");
-	quotes.Add("“Make time for it. Just get it done. Nobody ever got strong or got in shape by thinking about it. They did it.”– Jim Wendler");
-	quotes.Add("“The groundwork of all happiness is health.”– Leigh Hunt");
-	quotes.Add("“The scale is merely a measure of my relationship with gravity.”– Lauren Harris-Pincus");
-	quotes.Add("“Don’t work out because you hate your body — work out because you love it.”– Author Unknown");
-	quotes.Add("“Obstacles don’t have to stop you. If you run into a wall, don’t turn around and give up. Figure out how to climb it, go through it, or work around it.”– Michael Jordan");
-	quotes.Add("“Strength does not come from what you can do. It comes from overcoming the things you once thought you couldn’t.”– Nikki Rogers");
-	quotes.Add("“Wisdom is doing now what you are going to be happy with later on.”– Joyce Meyer");
-	quotes.Add("“Decide. Commit. Succeed.”– Justin Seedman");
-	quotes.Add("“Eliminate the mindset of can’t — because you can do anything.”– Toni Horton");
-	quotes.Add("“Exercise should be regarded as a tribute to the heart.”– Gene Tunney");
-	quotes.Add("“Unless you puke, faint, or die, keep going!”– Jillian Michaels");
-	quotes.Add("“To give anything less than your best is to sacrifice the gift.”– Steve Prefontaine");
-	quotes.Add("“When you feel like quitting, think about why you started.”– Author Unknown");
-	quotes.Add("“My weight does not determine my worth.”– Kristin Oja");
-	quotes.Add("“Some people want it to happen. Some wish it would happen. Others make it happen.”– Michael Jordan");
-	quotes.Add("“If you wait, all that happens is you get older.”– Larry McMurtry");
-	quotes.Add("“You miss 100 percent of the shots you never take.”– Wayne Gretzky");
-	quotes.Add("“If you don’t do what’s best for your body, you’re the one who comes up on the short end.”– Julius Erving");
-	quotes.Add("“If you keep good food in your fridge, you will eat good food.”– Errick McAdams");
-	quotes.Add("“Instead of indulging in ‘comfort food,’ indulge in comfort meditation, comfort journaling, comfort walking, comfort talking, comfort manicures, comfort reading, comfort yoga, comfort hugging.”– Karen Salmansohn");
-	quotes.Add("“My body is less judgmental of my diet than my mind is.”– Mackenzie Banta");
-	quotes.Add("“You can have your cake and lose weight, too!”– Anonymous");
-	quotes.Add("“Let food be thy medicine, and medicine be thy food.”– Hippocrates");
-	quotes.Add("“To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.”– William Londen");
-	quotes.Add("“New meal; fresh start.”– Michelle Hyman");
-	quotes.Add("“I am a better person when I have less on my plate.”– Elizabeth Gilbert");
-	quotes.Add("“Food can be both enjoyable and nourishing.”– Alyssa Ardolino");
-	quotes.Add("“If I don’t eat junk, I don’t gain weight.”– Paula Christensen");
-	quotes.Add("“The cardiologist’s diet: If it tastes good spit it out.”– Anonymous");
-	quotes.Add("“When I buy cookies I just eat four and throw the rest away. But first I spray them with Raid so I won’t dig them out of the garbage later. Be careful, though, because that Raid really doesn’t taste that bad.”– Janette Barber");
-	quotes.Add("“I’m allergic to food. Every time I eat it breaks out into fat.”– Jennifer Greene Duncan");
-	quotes.Add("“The only way to lose weight is to check it in as airline baggage.”– Peggy Ryan");
-	quotes.Add("“It would be far easier to lose weight permanently if replacement parts weren’t so handy in the refrigerator.”– Hugh Allen");
-	quotes.Add("“When we lose twenty pounds, we may be losing the twenty best pounds we have! We may be losing the pounds that contain our genius, our humanity, our love and honesty.”– Woody Allen");
-	quotes.Add("“A diet is when you watch what you eat and wish you could eat what you watch.”– Hermione Gingold");
-	quotes.Add("“Keep an open mind and a closed refrigerator.”– Anonymous");
-	quotes.Add("“Never eat more than you can lift.”– Miss Piggy");
-	quotes.Add("“My favorite exercise is a cross between a lunge and a crunch. I call it lunch.”– Anonymous");
-	quotes.Add("“Only I can change my life. No one can do it for me.”– Anonymous");
-	quotes.Add("“Weight loss doesn’t begin in the gym with a dumbbell; it starts in your head with a decision.”– Toni Sorenson");
-	quotes.Add("“Just believe in yourself. Even if you don’t, pretend that you do, and at some point, you will.”– Venus Williams");
-	quotes.Add("“I always believed if you take care of your body it will take care of you.”– Ted Lindsay");
-	quotes.Add("“Don’t wait until you’ve reached your goal to be proud of yourself. Be proud of every step you take toward reaching that goal.”– Author Unknown");
-	quotes.Add("“I choose self-care.”– Alyssa Ardolino");
-	quotes.Add("“Success is the sum of small efforts — repeated day-in and day-out.”– Robert Collier");
-	quotes.Add("“Triumph by putting a little soul into it!”– Nancy Mure");
-	quotes.Add("“The mind is everything. What you think you become.”– Buddha");
-	quotes.Add("“It is better to take small steps in the right direction than to make a great leap forward only to stumble backward.”– Proverb");
+	quotes.Add("\"If you have discipline, drive, and determination… nothing is impossible.\"– Dana Linn Bailey");
+	quotes.Add("\"Make time for it. Just get it done. Nobody ever got strong or got in shape by thinking about it. They did it.\"– Jim Wendler");
+	quotes.Add("\"The groundwork of all happiness is health.\"– Leigh Hunt");
+	quotes.Add("\"The scale is merely a measure of my relationship with gravity.\"– Lauren Harris-Pincus");
+	quotes.Add("\"Don’t work out because you hate your body — work out because you love it.\"– Author Unknown");
+	quotes.Add("\"Obstacles don’t have to stop you. If you run into a wall, don’t turn around and give up. Figure out how to climb it, go through it, or work around it.\"– Michael Jordan");
+	quotes.Add("\"Strength does not come from what you can do. It comes from overcoming the things you once thought you couldn’t.\"– Nikki Rogers");
+	quotes.Add("\"Wisdom is doing now what you are going to be happy with later on.\"– Joyce Meyer");
+	quotes.Add("\"Decide. Commit. Succeed.\"– Justin Seedman");
+	quotes.Add("\"Eliminate the mindset of can’t — because you can do anything.\"– Toni Horton");
+	quotes.Add("\"Exercise should be regarded as a tribute to the heart.\"– Gene Tunney");
+	quotes.Add("\"Unless you puke, faint, or die, keep going!\"– Jillian Michaels");
+	quotes.Add("\"To give anything less than your best is to sacrifice the gift.\"– Steve Prefontaine");
+	quotes.Add("\"When you feel like quitting, think about why you started.\"– Author Unknown");
+	quotes.Add("\"My weight does not determine my worth.\"– Kristin Oja");
+	quotes.Add("\"Some people want it to happen. Some wish it would happen. Others make it happen.\"– Michael Jordan");
+	quotes.Add("\"If you wait, all that happens is you get older.\"– Larry McMurtry");
+	quotes.Add("\"You miss 100 percent of the shots you never take.\"– Wayne Gretzky");
+	quotes.Add("\"If you don’t do what’s best for your body, you’re the one who comes up on the short end.\"– Julius Erving");
+	quotes.Add("\"If you keep good food in your fridge, you will eat good food.\"– Errick McAdams");
+	quotes.Add("\"Instead of indulging in ‘comfort food,’ indulge in comfort meditation, comfort journaling, comfort walking, comfort talking, comfort manicures, comfort reading, comfort yoga, comfort hugging.\"– Karen Salmansohn");
+	quotes.Add("\"My body is less judgmental of my diet than my mind is.\"– Mackenzie Banta");
+	quotes.Add("\"You can have your cake and lose weight, too!\"– Anonymous");
+	quotes.Add("\"Let food be thy medicine, and medicine be thy food.\"– Hippocrates");
+	quotes.Add("\"To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.\"– William Londen");
+	quotes.Add("\"New meal; fresh start.\"– Michelle Hyman");
+	quotes.Add("\"I am a better person when I have less on my plate.\"– Elizabeth Gilbert");
+	quotes.Add("\"Food can be both enjoyable and nourishing.\"– Alyssa Ardolino");
+	quotes.Add("\"If I don’t eat junk, I don’t gain weight.\"– Paula Christensen");
+	quotes.Add("\"The cardiologist’s diet: If it tastes good spit it out.\"– Anonymous");
+	quotes.Add("\"When I buy cookies I just eat four and throw the rest away. But first I spray them with Raid so I won’t dig them out of the garbage later. Be careful, though, because that Raid really doesn’t taste that bad.\"– Janette Barber");
+	quotes.Add("\"I’m allergic to food. Every time I eat it breaks out into fat.\"– Jennifer Greene Duncan");
+	quotes.Add("\"The only way to lose weight is to check it in as airline baggage.\"– Peggy Ryan");
+	quotes.Add("\"It would be far easier to lose weight permanently if replacement parts weren’t so handy in the refrigerator.\"– Hugh Allen");
+	quotes.Add("\"When we lose twenty pounds, we may be losing the twenty best pounds we have! We may be losing the pounds that contain our genius, our humanity, our love and honesty.\"– Woody Allen");
+	quotes.Add("\"A diet is when you watch what you eat and wish you could eat what you watch.\"– Hermione Gingold");
+	quotes.Add("\"Keep an open mind and a closed refrigerator.\"– Anonymous");
+	quotes.Add("\"Never eat more than you can lift.\"– Miss Piggy");
+	quotes.Add("\"My favorite exercise is a cross between a lunge and a crunch. I call it lunch.\"– Anonymous");
+	quotes.Add("\"Only I can change my life. No one can do it for me.\"– Anonymous");
+	quotes.Add("\"Weight loss doesn’t begin in the gym with a dumbbell; it starts in your head with a decision.\"– Toni Sorenson");
+	quotes.Add("\"Just believe in yourself. Even if you don’t, pretend that you do, and at some point, you will.\"– Venus Williams");
+	quotes.Add("\"I always believed if you take care of your body it will take care of you.\"– Ted Lindsay");
+	quotes.Add("\"Don’t wait until you’ve reached your goal to be proud of yourself. Be proud of every step you take toward reaching that goal.\"– Author Unknown");
+	quotes.Add("\"I choose self-care.\"– Alyssa Ardolino");
+	quotes.Add("\"Success is the sum of small efforts — repeated day-in and day-out.\"– Robert Collier");
+	quotes.Add("\"Triumph by putting a little soul into it!\"– Nancy Mure");
+	quotes.Add("\"The mind is everything. What you think you become.\"– Buddha");
+	quotes.Add("\"It is better to take small steps in the right direction than to make a great leap forward only to stumble backward.\"– Proverb");
 	quotes.Add("Only I Can Change My Life, No One Can Do It For Me");
 	quotes.Add("Slow And Steady Wins The Race");
 	quotes.Add("The Struggle You Are In Today Is Developing The Strength You Need for Tomorrow");
@@ -232,70 +232,70 @@ MotivationCtrl::MotivationCtrl() {
 	quotes.Add("Unless you puke, faint, or die, keep going!");
 	quotes.Add("Obstacles don't have to stop you. If you run into a wall, don't turn around and give up. Figure out how to climb it, go through it, or work around it.");
 	quotes.Add("If you don't do what's best for your body, you're the one who comes up on the short end.");
-	quotes.Add(" “If it was about knowledge, we would all be skinny and rich. It’s not about what you know but what you do!”");
-	quotes.Add("“The distance between who am I am and who I want to be is only separated by what I do!”");
-	quotes.Add("“The only bad workout is the one that didn’t happen.”");
-	quotes.Add("“To change your body you must first change your mind.”");
-	quotes.Add("“Someone busier than you is running right now.”");
-	quotes.Add("“Working out is never convenient. But neither is illness, diabetes and obesity!”");
-	quotes.Add("“I don’t stop when I’m tired, I stop when I’m DONE!”");
-	quotes.Add("“I don’t work hard because I hate my body. I workout because I love it!”");
-	quotes.Add("“Get comfortable with being uncomfortable!”");
-	quotes.Add("“When it burns, is when you’re just getting started. That’s when you get stronger!”");
-	quotes.Add("“If you have 30 minutes for Facebook, you have 1 hour for the gym!”");
-	quotes.Add("“The best way to predict your health is to create it.”");
-	quotes.Add("“You can’t run from all your problems, but it will help you lose weight.”");
-	quotes.Add("“Get started as if you are motivated. Pretend. And the motivation will come!”");
-	quotes.Add("“Excuses don’t burn calories.”");
-	quotes.Add("“Your body hears everything your mind says. Keep going. You can!”");
-	quotes.Add("“Don’t stop until you’re proud.”");
-	quotes.Add("“You don’t have to go fast, you just have to go.”");
-	quotes.Add("“If you’re tired of starting over; stop giving up!”");
-	quotes.Add("“On the other side of your workout is the body and health you want!”");
-	quotes.Add("“The question isn’t can you, it’s will you!”");
-	quotes.Add("“Workouts are like life. The harder it is, the STRONGER YOU BECOME!”");
-	quotes.Add("“If no one thinks you can, then you have to!”");
-	quotes.Add("“If you still look good at the end of your work out…you didn’t work hard enough!”");
-	quotes.Add("“I’m not running a marathon or a 5 K. I have no upcoming competitions and I don’t plan on going to the beach. I am working out like my life depends on it. Because it does!”");
-	quotes.Add("“The reason fat men are good natured is they can neither fight nor run.”  – Theodore Roosevelt");
-	quotes.Add("“Fitness is like marriage, you can’t cheat on it and expect it to work.” – Bonnie Pfiester");
+	quotes.Add(" \"If it was about knowledge, we would all be skinny and rich. It’s not about what you know but what you do!\"");
+	quotes.Add("\"The distance between who am I am and who I want to be is only separated by what I do!\"");
+	quotes.Add("\"The only bad workout is the one that didn’t happen.\"");
+	quotes.Add("\"To change your body you must first change your mind.\"");
+	quotes.Add("\"Someone busier than you is running right now.\"");
+	quotes.Add("\"Working out is never convenient. But neither is illness, diabetes and obesity!\"");
+	quotes.Add("\"I don’t stop when I’m tired, I stop when I’m DONE!\"");
+	quotes.Add("\"I don’t work hard because I hate my body. I workout because I love it!\"");
+	quotes.Add("\"Get comfortable with being uncomfortable!\"");
+	quotes.Add("\"When it burns, is when you’re just getting started. That’s when you get stronger!\"");
+	quotes.Add("\"If you have 30 minutes for Facebook, you have 1 hour for the gym!\"");
+	quotes.Add("\"The best way to predict your health is to create it.\"");
+	quotes.Add("\"You can’t run from all your problems, but it will help you lose weight.\"");
+	quotes.Add("\"Get started as if you are motivated. Pretend. And the motivation will come!\"");
+	quotes.Add("\"Excuses don’t burn calories.\"");
+	quotes.Add("\"Your body hears everything your mind says. Keep going. You can!\"");
+	quotes.Add("\"Don’t stop until you’re proud.\"");
+	quotes.Add("\"You don’t have to go fast, you just have to go.\"");
+	quotes.Add("\"If you’re tired of starting over; stop giving up!\"");
+	quotes.Add("\"On the other side of your workout is the body and health you want!\"");
+	quotes.Add("\"The question isn’t can you, it’s will you!\"");
+	quotes.Add("\"Workouts are like life. The harder it is, the STRONGER YOU BECOME!\"");
+	quotes.Add("\"If no one thinks you can, then you have to!\"");
+	quotes.Add("\"If you still look good at the end of your work out…you didn’t work hard enough!\"");
+	quotes.Add("\"I’m not running a marathon or a 5 K. I have no upcoming competitions and I don’t plan on going to the beach. I am working out like my life depends on it. Because it does!\"");
+	quotes.Add("\"The reason fat men are good natured is they can neither fight nor run.\"  – Theodore Roosevelt");
+	quotes.Add("\"Fitness is like marriage, you can’t cheat on it and expect it to work.\" – Bonnie Pfiester");
 	quotes.Add("To enjoy the glow of good health, you must exercise. – Gene Tunney");
-	quotes.Add("“Make time for it. Just get it done. Nobody ever got strong or got in shape by thinking about it. They did it.” – Jim Wendler");
-	quotes.Add("“Weight loss is not impossible. Weight loss is hard, but hard is not the same as impossible.” – Author Unknown");
-	quotes.Add("“Even if you are on the right track, you’ll get run over if you just sit there.” – Will Rogers");
-	quotes.Add("“Marathon runners don’t worry about the conditions, they just run anyway!” – Author Unknown");
-	quotes.Add("“Nothing tastes as good as being thin feels.” ― Elizabeth Berg");
+	quotes.Add("\"Make time for it. Just get it done. Nobody ever got strong or got in shape by thinking about it. They did it.\" – Jim Wendler");
+	quotes.Add("\"Weight loss is not impossible. Weight loss is hard, but hard is not the same as impossible.\" – Author Unknown");
+	quotes.Add("\"Even if you are on the right track, you’ll get run over if you just sit there.\" – Will Rogers");
+	quotes.Add("\"Marathon runners don’t worry about the conditions, they just run anyway!\" – Author Unknown");
+	quotes.Add("\"Nothing tastes as good as being thin feels.\" ― Elizabeth Berg");
 	quotes.Add("Champions keep playing until they get it right – Billie Jean King");
-	quotes.Add("“Walking: the most ancient exercise and still the best modern exercise.” ~Carrie Latet");
+	quotes.Add("\"Walking: the most ancient exercise and still the best modern exercise.\" ~Carrie Latet");
 	quotes.Add("If you aren’t going all the way, why go at all? – Joe Namath");
-	quotes.Add("“Success is the sum of small efforts, repeated day-in and day-out.” –Robert Collier");
-	quotes.Add("“Every day, in every way, I am getting better and better.” ~Emilie Coue");
-	quotes.Add("“Those who think they have not time for bodily exercise will sooner or later have to find time for illness.” ~Edward Stanley");
-	quotes.Add("“Just believe in yourself. Even if you don’t, pretend that you do and, at some point, you will.” – Venus Williams");
-	quotes.Add("“Don’t reward yourself with food. You are not a dog. – Unknown");
-	quotes.Add("“Every weight loss program, no matter how positively it’s packaged, whispers to you that you’re not right. You’re not good enough. You’re unacceptable and you need to be fixed.” ― Kim Brittingham");
-	quotes.Add("“The only successful way to reach and maintain a healthy weight is to find what works for you.” – Author Unknown");
-	quotes.Add("“Getting my lifelong weight struggle under control has come from a process of treating myself as well as I treat others in every way.” – Oprah Winfrey");
+	quotes.Add("\"Success is the sum of small efforts, repeated day-in and day-out.\" –Robert Collier");
+	quotes.Add("\"Every day, in every way, I am getting better and better.\" ~Emilie Coue");
+	quotes.Add("\"Those who think they have not time for bodily exercise will sooner or later have to find time for illness.\" ~Edward Stanley");
+	quotes.Add("\"Just believe in yourself. Even if you don’t, pretend that you do and, at some point, you will.\" – Venus Williams");
+	quotes.Add("\"Don’t reward yourself with food. You are not a dog. – Unknown");
+	quotes.Add("\"Every weight loss program, no matter how positively it’s packaged, whispers to you that you’re not right. You’re not good enough. You’re unacceptable and you need to be fixed.\" ― Kim Brittingham");
+	quotes.Add("\"The only successful way to reach and maintain a healthy weight is to find what works for you.\" – Author Unknown");
+	quotes.Add("\"Getting my lifelong weight struggle under control has come from a process of treating myself as well as I treat others in every way.\" – Oprah Winfrey");
 	quotes.Add("Don’t compare yourself to others. Compare yourself to the person from yesterday. – Author Unknown");
-	quotes.Add("“A huge part of losing weight is believing you can do it and realizing it’s not going to happen overnight.” – Author Unknown");
-	quotes.Add("“The hardest step to fitness is the first. Take it now!” — Heather Montgomery");
-	quotes.Add("“Your body can do anything. It’s your mind that needs convincing” – Unknown");
+	quotes.Add("\"A huge part of losing weight is believing you can do it and realizing it’s not going to happen overnight.\" – Author Unknown");
+	quotes.Add("\"The hardest step to fitness is the first. Take it now!\" — Heather Montgomery");
+	quotes.Add("\"Your body can do anything. It’s your mind that needs convincing\" – Unknown");
 	quotes.Add("Your goals are as good as your actions. No action taken, no goals achieved – Derric Yuh Ndim");
-	quotes.Add("“If you have discipline, drive, and determination… nothing is impossible.”– Dana Linn Bailey");
-	quotes.Add("“Eliminate the mindset of can’t — because you can do anything.”– Toni Horton");
-	quotes.Add("“Some people want it to happen. Some wish it would happen. Others make it happen.”– Michael Jordan");
-	quotes.Add("“Exercise should be regarded as a tribute to the heart.”– Gene Tunney");
-	quotes.Add("“If you don’t do what’s best for your body, you’re the one who comes up on the short end.”– Julius Erving");
-	quotes.Add("“When you feel like quitting, think about why you started.”– Author Unknown");
-	quotes.Add("“If you keep good food in your fridge, you will eat good food.”– Errick McAdams");
-	quotes.Add("“If you wait, all that happens is you get older.”– Larry McMurtry");
-	quotes.Add("“To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.”– William Londen");
-	quotes.Add("“Only I can change my life. No one can do it for me.”– Anonymous");
-	quotes.Add("“I always believed if you take care of your body it will take care of you.”– Ted Lindsay");
-	quotes.Add("“It is better to take small steps in the right direction than to make a great leap forward only to stumble backward.”– Proverb");
-	quotes.Add("“The past cannot be changed. The future is yet in your power.”― Mary Pickford");
-	quotes.Add("“Weight loss doesn’t begin in the gym with a dumbbell; it starts in your head with a decision.”– Toni Sorenson");
-	quotes.Add("“Triumph by putting a little soul into it!”– Nancy Mure");
+	quotes.Add("\"If you have discipline, drive, and determination… nothing is impossible.\"– Dana Linn Bailey");
+	quotes.Add("\"Eliminate the mindset of can’t — because you can do anything.\"– Toni Horton");
+	quotes.Add("\"Some people want it to happen. Some wish it would happen. Others make it happen.\"– Michael Jordan");
+	quotes.Add("\"Exercise should be regarded as a tribute to the heart.\"– Gene Tunney");
+	quotes.Add("\"If you don’t do what’s best for your body, you’re the one who comes up on the short end.\"– Julius Erving");
+	quotes.Add("\"When you feel like quitting, think about why you started.\"– Author Unknown");
+	quotes.Add("\"If you keep good food in your fridge, you will eat good food.\"– Errick McAdams");
+	quotes.Add("\"If you wait, all that happens is you get older.\"– Larry McMurtry");
+	quotes.Add("\"To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.\"– William Londen");
+	quotes.Add("\"Only I can change my life. No one can do it for me.\"– Anonymous");
+	quotes.Add("\"I always believed if you take care of your body it will take care of you.\"– Ted Lindsay");
+	quotes.Add("\"It is better to take small steps in the right direction than to make a great leap forward only to stumble backward.\"– Proverb");
+	quotes.Add("\"The past cannot be changed. The future is yet in your power.\"― Mary Pickford");
+	quotes.Add("\"Weight loss doesn’t begin in the gym with a dumbbell; it starts in your head with a decision.\"– Toni Sorenson");
+	quotes.Add("\"Triumph by putting a little soul into it!\"– Nancy Mure");
 	
 }
 
@@ -998,10 +998,10 @@ GraphCtrl::GraphCtrl() {
 		.Add(t_("Eaten carbohydrate mass"), 2, Color(20, 136, 86))
 		.Add(t_("Eaten protein mass"), 2, Color(114, 20, 20));
 	
-	list.Add(t_("Menu salt"));
+	list.Add(t_("Menu sodium (salt)"));
 	graph.Add()
-		.Add(t_("Planned salt"), 1, GrayColor())
-		.Add(t_("Eaten salt"), 2, GrayColor(128+32));
+		.Add(t_("Planned sodium"), 1, GrayColor())
+		.Add(t_("Eaten sodium"), 2, GrayColor(128+32));
 		
 	int vitamin_count = 14;
 	list.Add(t_("Menu vitamins (\% of recommended)"));
@@ -1196,28 +1196,29 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			}
 		}
 		else if (src == 3) {
+			int n;
 			if (l == 0) {
-				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
-					v[i] = prof.planned_daily[i].food.fat;
+				n = FAT;
 			}
 			else if (l == 1) {
-				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
-					v[i] = prof.planned_daily[i].food.carbs;
+				n = CARB;
 			}
 			else if (l == 2) {
-				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
-					v[i] = prof.planned_daily[i].food.protein;
+				n = PROT;
 			}
+			for(int i = 0; i < prof.planned_daily.GetCount(); i++)
+				v[i] = prof.planned_daily[i].food.nutr[n];
 		}
 		
 		else if (src == 4) {
+			int n = KCAL;
 			if (l == 0) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].target_sum.kcals;
+					v[i] = prof.storage.days[i].target_sum.nutr[n];
 			}
 			else if (l == 1) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].total_sum.kcals;
+					v[i] = prof.storage.days[i].total_sum.nutr[n];
 			}
 		}
 		else if (src == 5) {
@@ -1231,39 +1232,34 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			}
 		}
 		else if (src == 6) {
-			if (l == 0) {
-				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].target_sum.fat;
+			int n = -1;
+			if (l == 0 || l == 3) {
+				n = FAT;
 			}
-			else if (l == 1) {
-				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].target_sum.carbs;
+			else if (l == 1 || l == 4) {
+				n = CARB;
 			}
-			else if (l == 2) {
-				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].target_sum.protein;
+			else if (l == 2 || l == 5) {
+				n = PROT;
 			}
-			else if (l == 3) {
+			if (l < 3) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].total_sum.fat;
+					v[i] = prof.storage.days[i].target_sum.nutr[n];
 			}
-			else if (l == 4) {
+			else {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].total_sum.carbs;
-			}
-			else if (l == 5) {
-				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].total_sum.protein;
+					v[i] = prof.storage.days[i].total_sum.nutr[n];
 			}
 		}
 		else if (src == 7) {
+			int n = SODIUM;
 			if (l == 0) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].target_sum.salt;
+					v[i] = prof.storage.days[i].target_sum.nutr[n];
 			}
 			else if (l == 1) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
-					v[i] = prof.storage.days[i].total_sum.salt;
+					v[i] = prof.storage.days[i].total_sum.nutr[n];
 			}
 		}
 		else if (src == 8) {

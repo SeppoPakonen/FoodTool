@@ -13,6 +13,8 @@ GUI_APP_MAIN
 		SetExitCode(1);
 		return;
 	}
+	db.SetCommonNutrs();
+	
 	
 	String camera_shutter_file = ConfigFile("camera-shutter.wav");
 	if (!FileExists(camera_shutter_file)) {

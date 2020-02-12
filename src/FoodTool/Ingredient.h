@@ -5,67 +5,74 @@
 
 template <class T>
 struct IngredientT : Moveable<IngredientT<T>> {
-	T grams = 0, kcals = 0, fat = 0, carbs = 0, protein = 0, salt = 0;
+	T grams = 0;
+	Vector<T> nutr;
 	
-	
+	IngredientT() {Reset();}
+	IngredientT(const IngredientT& src) {*this = src;}
+	IngredientT(T grams, const FoodDescription& d) {Set(grams, d);}
+	void operator=(const IngredientT& src) {
+		grams = src.grams;
+		CopyHeapless(src.nutr, nutr);
+	}
+	void Set(T grams, const FoodDescription& d) {
+		Reset();
+		for(const auto& n : d.nutr)
+			nutr[n.nutr_no] = n.nutr_value * 0.01 * grams;
+	}
+	void Add(T grams, const FoodDescription& d) {
+		this->grams += grams;
+		for(const auto& n : d.nutr)
+			nutr[n.nutr_no] += n.nutr_value * 0.01 * grams;
+	}
+	void Add(T grams, const IngredientT<T>& d) {
+		double mul = grams / d.grams;
+		ASSERT(IsFin(mul));
+		this->grams += grams;
+		ASSERT(nutr.GetCount() && d.nutr.GetCount() == nutr.GetCount());
+		for(int i = 0; i < nutr.GetCount(); i++)
+			nutr[i] += d.nutr[i] * mul;
+	}
 	void Reset() {
-		grams = 0, kcals = 0, fat = 0, carbs = 0, protein = 0, salt = 0;
+		grams = 0;
+		nutr.SetCount(DB().nutr_types.GetCount());
+		for(auto& a : nutr) a = 0;
+		ASSERT(nutr.GetCount());
 	}
-	String Export() {
-		String s;
-		for(int i = 0; i < NUTR_COUNT; i++) {
-			String line;
-			line << GetNurientString(i) << ": ";
-			if (line.GetCount() < 32)
-				line.Cat(' ', 32 - line.GetCount());
-			line << EncodeValue(values[i]) << "\n";
-			s << line;
-		}
-		return s;
-	}
-	void Serialize(Stream& s) {s % grams % kcals % fat % carbs % protein % salt;}
-	void Limit(T kcals, T macro, T salt) {
-		this->kcals = max(this->kcals, kcals);
-		this->fat = max(this->fat, macro);
-		this->carbs = max(this->carbs, macro);
-		this->protein = max(this->protein, macro);
-		this->grams = max(this->grams, fat+carbs+protein);
-		this->salt = max(this->salt, salt);
+	void Serialize(Stream& s) {s % grams % nutr;}
+	void Limit() {
+		grams = max(grams, (T)0);
+		for(auto& f : nutr)
+			f = max(f, (T)0.0);
 	}
 	template <class K>
 	void operator +=(const K& d) {
 		grams += d.grams;
-		kcals += d.kcals;
-		fat += d.fat;
-		carbs += d.carbs;
-		protein += d.protein;
-		salt += d.salt;
+		ASSERT(d.nutr.GetCount() == nutr.GetCount());
+		for(int i = 0; i < nutr.GetCount(); i++)
+			nutr[i] += d.nutr[i];
 	}
 	template <class K>
 	void operator -=(const K& d) {
 		grams -= d.grams;
-		kcals -= d.kcals;
-		fat -= d.fat;
-		carbs -= d.carbs;
-		protein -= d.protein;
-		salt -= d.salt;
+		ASSERT(d.nutr.GetCount() == nutr.GetCount());
+		for(int i = 0; i < nutr.GetCount(); i++)
+			nutr[i] -= d.nutr[i];
 	}
 	void operator*=(double mul) {
 		grams *= mul;
-		kcals *= mul;
-		fat *= mul;
-		carbs *= mul;
-		protein *= mul;
-		salt *= mul;
+		ASSERT(d.nutr.GetCount());
+		for(int i = 0; i < nutr.GetCount(); i++)
+			nutr[i] *= mul;
 	}
 	void ChangeGrams(double new_grams) {
+		ASSERT(grams > 0.0 && IsFin(new_grams));
 		double mul = new_grams / grams;
-		kcals *= mul;
-		fat *= mul;
-		carbs *= mul;
-		protein *= mul;
-		salt *= mul;
-		ASSERT(IsFin(grams) && IsFin(kcals) && IsFin(fat) && IsFin(carbs) && IsFin(protein) && IsFin(salt));
+		ASSERT(d.nutr.GetCount());
+		for(auto& f : nutr) {
+			f *= mul;
+			ASSERT(IsFin(f));
+		}
 		grams = new_grams;
 	}
 	
@@ -76,11 +83,11 @@ template <class T>
 inline IngredientT<T> operator-(const IngredientT<T>& a, const IngredientT<T>& b) {
 	IngredientT<T> out;
 	out.grams = a.grams - b.grams;
-	out.kcals = a.kcals - b.kcals;
-	out.fat = a.fat - b.fat;
-	out.carbs = a.carbs - b.carbs;
-	out.protein = a.protein - b.protein;
-	out.salt = a.salt - b.salt;
+	ASSERT(out.nutr.GetCount());
+	ASSERT(out.nutr.GetCount() == a.nutr.GetCount());
+	ASSERT(out.nutr.GetCount() == b.nutr.GetCount());
+	for(int i = 0; i < out.nutr.GetCount(); i++)
+		out.nutr[i] = a.nutr[i] - b.nutr[i];
 	return out;
 }
 

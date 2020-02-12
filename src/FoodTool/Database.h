@@ -48,6 +48,7 @@ struct FoodDescription : Moveable<FoodDescription> {
 	int refuse = 0;
 	String sci_name;
 	float n_factor = 0, pro_factor = 0, fat_factor = 0, cho_factor = 0;
+	bool require_soaking = false;
 	bool is_user_added = false;
 	
 	void Serialize(Stream& s) {
@@ -57,15 +58,48 @@ struct FoodDescription : Moveable<FoodDescription> {
 			% refuse
 			% sci_name
 			% n_factor % pro_factor % fat_factor % cho_factor
+			% require_soaking
 			% is_user_added
 			;
 	}
+	FoodDescription& AddNutrition(int nutr_no, double value, double error);
+	FoodDescription& RequireSoaking() {require_soaking = true; return *this;}
 };
+
+struct NutritionRecommendation : Moveable<NutritionRecommendation> {
+	int nutr_no;
+	double value;
+	bool per_kg;
+	
+	void Serialize(Stream& s) {
+		s	% nutr_no
+			% value
+			% per_kg;
+	}
+};
+
+struct LocalProduct : Moveable<LocalProduct> {
+	int food_no = 0;
+	int grams = 0;
+	int serving_grams = 0;
+	String title;
+	
+	void Serialize(Stream& s) {
+		s	% food_no
+			% grams
+			% serving_grams
+			% title;
+	}
+};
+
+extern int KCAL, PROT, FAT, CARB, SODIUM;
 
 struct Database {
 	VectorMap<String, FoodGroup> food_groups;
 	VectorMap<String, FoodDescription> food_descriptions;
+	VectorMap<int, LocalProduct> local_products;
 	Vector<NutritionType> nutr_types;
+	Vector<NutritionRecommendation> nutr_recom;
 	Index<int> used_foods;
 	bool is_init = false;
 	
@@ -77,15 +111,21 @@ struct Database {
 	void Serialize(Stream& s) {
 		s	% food_groups
 			% food_descriptions
+			% local_products
 			% nutr_types
+			% nutr_recom
 			% used_foods
 			% is_init;
 	}
 	void LoadThis() {LoadFromFile(*this, ConfigFile("latest.db"));}
 	void StoreThis() {StoreToFile(*this, ConfigFile("latest.db"));}
 	bool Init();
+	FoodDescription& AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, float nf, float pf, float ff, float cf);
 	int AddNutrition(String name, String unit, String desc);
 	void StartStoreThis() {Thread::Start(THISBACK(StoreThis));}
+	int FindNutrition(String key) const;
+	void AddRecommendation(String nutr, double value, bool per_kg) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg;}
+	void SetCommonNutrs();
 	
 	void VLCD_Preset();
 };

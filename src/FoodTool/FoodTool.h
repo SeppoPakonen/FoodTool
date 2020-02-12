@@ -21,9 +21,9 @@ using namespace Upp;
 #include <Draw/iml_header.h>
 
 #include "Util.h"
+#include "Database.h"
 #include "Optimizer.h"
 #include "Ingredient.h"
-#include "Database.h"
 #include "Food.h"
 #include "Profile.h"
 #include "VideoCapture.h"
