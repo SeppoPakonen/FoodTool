@@ -12,6 +12,7 @@ struct ScheduleCtrl : public Ctrl {
 	Color shop_clr_top, shop_clr_btm;
 	Color nutr_clr_top, nutr_clr_btm;
 	int shift = 0;
+	Index<int> showed_nutr;
 	
 	typedef ScheduleCtrl CLASSNAME;
 	ScheduleCtrl();

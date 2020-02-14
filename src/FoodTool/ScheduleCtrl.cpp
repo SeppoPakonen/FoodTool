@@ -22,7 +22,7 @@ ScheduleCtrl::ScheduleCtrl() {
 
 void ScheduleCtrl::Paint(Draw& d) {
 	Size sz(GetSize());
-	int gw = 300;
+	int gw = 500;
 	int per_screen = sz.cx / gw + (sz.cx % gw ? 1 : 0);
 	
 	const Profile& prof = GetProfile();
@@ -35,6 +35,16 @@ void ScheduleCtrl::Paint(Draw& d) {
 		}
 	}
 	if (today_i < 0) return;
+	
+	if (showed_nutr.IsEmpty()) {
+		const Database& db = DB();
+		showed_nutr.FindAdd(KCAL);
+		showed_nutr.FindAdd(FAT);
+		showed_nutr.FindAdd(CARB);
+		showed_nutr.FindAdd(PROT);
+		for(int i = 0; i < db.nutr_recom.GetCount(); i++)
+			showed_nutr.FindAdd(db.nutr_recom[i].nutr_no);
+	}
 	
 	int min_shift = -today_i;
 	int max_shift = prof.storage.days.GetCount() - today_i - per_screen;
@@ -110,33 +120,29 @@ void ScheduleCtrl::Paint(Draw& d) {
 			double range = max - min;
 			int zero_y = (0 - min) * nutr_h / range;
 			int main_w = 20;
+			int other_w = (gw - 4 * main_w) / (showed_nutr.GetCount()-4);
 			int nx = 0;
-			for(int j = 0; j < 3; j++) {
+			for(int j = 0; j < showed_nutr.GetCount(); j++) {
+				int nutr_i = showed_nutr[j];
 				int w = 0;
 				Color c;
 				double value = 0;
 				
-				switch (j) {
-					case 0:
-						w = main_w;
-						c = Color(198, 127, 0);
-						value = day.total_sum.nutr[FAT] / plan.food.nutr[FAT] - 1;
-						break;
-					
-					case 1:
-						w = main_w;
-						c = Color(28, 170, 150);
-						value = day.total_sum.nutr[CARB] / plan.food.nutr[CARB] - 1;
-						break;
-					
-					case 2:
-						w = main_w;
-						c = Color(170, 42, 0);
-						value = day.total_sum.nutr[PROT] / plan.food.nutr[PROT] - 1;
-						break;
-					
+				if (j < 4) {
+					w = main_w;
+					switch (j) {
+						case 0: c = GrayColor(); break;
+						case 1: c = Color(198, 127, 0); break;
+						case 2: c = Color(28, 170, 150); break;
+						case 3: c = Color(170, 42, 0); break;
+					}
+				}
+				else {
+					w = other_w;
+					c = Rainbow((j - 4) * 1.333 / (showed_nutr.GetCount()-4));
 				}
 				
+				value = day.total_sum.nutr[nutr_i] / day.target_sum.nutr[nutr_i] - 1;
 				if (value < min) value = min;
 				if (value > max) value = max;
 				

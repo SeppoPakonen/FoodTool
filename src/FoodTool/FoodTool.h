@@ -23,6 +23,7 @@ using namespace Upp;
 #include "Util.h"
 #include "Database.h"
 #include "Optimizer.h"
+#include "StepOptimizer.h"
 #include "Ingredient.h"
 #include "Food.h"
 #include "Profile.h"
@@ -33,6 +34,7 @@ using namespace Upp;
 #include <CtrlCore/lay.h>
 
 #include "DatabaseCtrl.h"
+#include "MealPresetCtrl.h"
 
 #define LAYOUTFILE <FoodTool/FoodTool2.lay>
 #include <CtrlCore/lay.h>

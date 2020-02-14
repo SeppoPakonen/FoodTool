@@ -133,4 +133,38 @@ struct OnlineAverage1 : Moveable<OnlineAverage1> {
 };
 
 
+template <int I>
+struct TopValueSorter {
+	static const int size = I;
+	
+	double value[size];
+	int key[size];
+	
+	
+	TopValueSorter() {Reset();}
+	void Reset() {
+		for(int i = 0; i < size; i++) {
+			value[i] = -DBL_MAX;
+			key[i] = -1;
+		}
+	}
+	void Add(int key, double value) {
+		for(int i = 0; i < size; i++) {
+			if (value > this->value[i]) {
+				for(int j = size-1; j > i; j--) {
+					this->value[j] = this->value[j-1];
+					this->key[j]   = this->key[j-1];
+				}
+				this->value[i] = value;
+				this->key[i] = key;
+				break;
+			}
+		}
+	}
+	void Serialize(Stream& s) {
+		for(int i = 0; i < size; i++)
+			s % value[i] % key[i];
+	}
+};
+
 #endif

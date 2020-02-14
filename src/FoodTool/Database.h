@@ -123,6 +123,7 @@ struct Database {
 	FoodDescription& AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, float nf, float pf, float ff, float cf);
 	int AddNutrition(String name, String unit, String desc);
 	void StartStoreThis() {Thread::Start(THISBACK(StoreThis));}
+	int FindFood(String long_desc) const;
 	int FindNutrition(String key) const;
 	void AddRecommendation(String nutr, double value, bool per_kg) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg;}
 	void SetCommonNutrs();

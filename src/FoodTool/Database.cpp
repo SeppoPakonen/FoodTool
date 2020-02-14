@@ -151,56 +151,56 @@ bool Database::Init() {
 	}
 	
 	AddRecommendation("PROCNT", 0.8, true);
-	AddRecommendation("FAT", 60.5 / 65.0, true);
-	AddRecommendation("CA", 1000 / 65.0, true);
-	AddRecommendation("FE", 19.8 / 65.0, true);
-	AddRecommendation("MG", 420 / 65.0, true);
-	AddRecommendation("P", 700 / 65.0, true);
-	AddRecommendation("K", 4100 / 65.0, true);
-	AddRecommendation("NA", 1900 / 65.0, true);
-	AddRecommendation("ZN", 11 / 65.0, true);
-	AddRecommendation("CU", 1 / 65.0, true);
-	AddRecommendation("FLD", 50, true);
+	AddRecommendation("FAT", 60.5 / 70.0, true);
+	AddRecommendation("CA", 1000 / 70.0, true);
+	AddRecommendation("FE", 19.8 / 70.0, true);
+	AddRecommendation("MG", 420 / 70.0, true);
+	AddRecommendation("P", 700 / 70.0, true);
+	AddRecommendation("K", 4100 / 70.0, true);
+	AddRecommendation("NA", 1500 / 70.0, true);
+	AddRecommendation("ZN", 11 / 70.0, true);
+	AddRecommendation("CU", 1 / 70.0, true);
+	//AddRecommendation("FLD", 50, true);
 	AddRecommendation("MN", 2.3, true);
-	AddRecommendation("SE", 100 / 65.0, true);
+	AddRecommendation("SE", 100 / 70.0, true);
 	AddRecommendation("VITA_IU", 3000, true);
-	AddRecommendation("RETOL", 900 / 65.0, true);
-	AddRecommendation("VITA_RAE", 900 / 65.0, true);
-	AddRecommendation("CARTB", 15000 / 65.0, true);
-	AddRecommendation("CARTA", 600 / 65.0, true);
-	AddRecommendation("TOCPHA", 15 / 65.0, true);
-	AddRecommendation("VITD", 800 / 65.0, true);
-	AddRecommendation("VITDMCR", 100 / 65.0, true);
-	AddRecommendation("LYCPN", 21000 / 65.0, true);
-	AddRecommendation("VITC", 90 / 65.0, true);
-	AddRecommendation("THIA", 1.2 / 65.0, true);
-	AddRecommendation("RIBF", 3 / 65.0, true);
-	AddRecommendation("NIA", 16 / 65.0, true);
-	AddRecommendation("PANTAC", 5 / 65.0, true);
-	AddRecommendation("VITB6A", 1.3 / 65.0, true);
-	AddRecommendation("FOL", 400 / 65.0, true);
-	AddRecommendation("VITB12", 1.8 / 65.0, true);
-	AddRecommendation("CHOLN", 500 / 65.0, true);
-	AddRecommendation("MK4", 92.5 / 65.0, true);
-	AddRecommendation("VITK1D", 120 / 65.0, true);
-	AddRecommendation("FOLAC", 400 / 65.0, true);
-	AddRecommendation("BETN", 550 / 65.0, true);
+	AddRecommendation("RETOL", 900 / 70.0, true);
+	AddRecommendation("VITA_RAE", 900 / 70.0, true);
+	AddRecommendation("CARTB", 15000 / 70.0, true);
+	AddRecommendation("CARTA", 600 / 70.0, true);
+	AddRecommendation("TOCPHA", 15 / 70.0, true);
+	//AddRecommendation("VITD", 800 / 70.0, true); // use D2+D3 instead
+	AddRecommendation("VITDMCR", 100 / 70.0, true);
+	AddRecommendation("LYCPN", 21000 / 70.0, true);
+	AddRecommendation("VITC", 90 / 70.0, true);
+	AddRecommendation("THIA", 1.2 / 70.0, true);
+	AddRecommendation("RIBF", 3 / 70.0, true);
+	AddRecommendation("NIA", 16 / 70.0, true);
+	AddRecommendation("PANTAC", 5 / 70.0, true);
+	AddRecommendation("VITB6A", 1.3 / 70.0, true);
+	AddRecommendation("FOL", 400 / 70.0, true);
+	AddRecommendation("VITB12", 1.8 / 70.0, true);
+	AddRecommendation("CHOLN", 500 / 70.0, true);
+	//AddRecommendation("MK4", 92.5 / 70.0, true); // bad for you
+	//AddRecommendation("VITK1D", 0 / 70.0, true); // bad for you
+	AddRecommendation("FOLAC", 400 / 70.0, true);
+	AddRecommendation("BETN", 550 / 70.0, true);
 	AddRecommendation("TRP_G", 0.006, true);
 	AddRecommendation("THR_G", 0.015, true);
-	AddRecommendation("ILE_G", 1.4 / 65.0, true);
-	AddRecommendation("LEU_G", 2.7 / 65.0, true);
-	AddRecommendation("LYS_G", 1 / 65.0, true);
+	AddRecommendation("ILE_G", 1.4 / 70.0, true);
+	AddRecommendation("LEU_G", 2.7 / 70.0, true);
+	AddRecommendation("LYS_G", 1 / 70.0, true);
 	AddRecommendation("MET_G", 0.019, true);
 	AddRecommendation("PHE_G", 0.026, true);
-	AddRecommendation("TYR_G", 6 / 65.0, true);
-	AddRecommendation("VAL_G", 1.8 / 65.0, true);
-	AddRecommendation("ARG_G", 6 / 65.0, true);
-	AddRecommendation("HISTN_G", 1 / 65.0, true);
-	AddRecommendation("ALA_G", 3.5 / 65.0, true);
-	AddRecommendation("ASP_G", 3 / 65.0, true);
-	AddRecommendation("GLU_G", 15 / 65.0, true);
-	//AddRecommendation("GLY_G", 5 / 65.0, true);
-	AddRecommendation("GLY_G", 5 / 65.0, true);
+	AddRecommendation("TYR_G", 6 / 70.0, true);
+	AddRecommendation("VAL_G", 1.8 / 70.0, true);
+	AddRecommendation("ARG_G", 6 / 70.0, true);
+	AddRecommendation("HISTN_G", 1 / 70.0, true);
+	AddRecommendation("ALA_G", 3.5 / 70.0, true);
+	AddRecommendation("ASP_G", 3 / 70.0, true);
+	AddRecommendation("GLU_G", 15 / 70.0, true);
+	//AddRecommendation("GLY_G", 5 / 70.0, true);
+	AddRecommendation("GLY_G", 5 / 70.0, true);
 	
 	
 	
@@ -361,6 +361,7 @@ FoodDescription& FoodDescription::AddNutrition(int nutr_no, double value, double
 }
 
 void Database::VLCD_Preset() {
+	
 	AddFood("OTHER", "Salt, iodized", "", "Meira", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(25, 38758, 0);
 	AddFood("0100", "Magnex sitraatti + B6- vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
@@ -375,35 +376,35 @@ void Database::VLCD_Preset() {
 		.AddNutrition(58, 1818, 0)
 		.AddNutrition(63, 109090, 0);
 	AddFood("0100", "Calcia 800 Plus kalkki-monivitamiini-monimineraalitabletti", "", "", "", "", "", 0, "", 0, 0, 0, 0)
-		.AddNutrition(56, 2.20000004768372, 0)
-		.AddNutrition(51, 60, 0)
-		.AddNutrition(40, 10, 0)
-		.AddNutrition(62, 70, 0)
-		.AddNutrition(20, 800, 0)
-		.AddNutrition(63, 300, 0)
-		.AddNutrition(22, 350, 0)
-		.AddNutrition(29, 2.5, 0)
-		.AddNutrition(51, 60, 0)
-		.AddNutrition(26, 15, 0);
+		.AddNutrition(56, 350.428588867187, 0)
+		.AddNutrition(51, 9557.142578125, 0)
+		.AddNutrition(40, 1592.85717773438, 0)
+		.AddNutrition(62, 11150, 0)
+		.AddNutrition(20, 127428.5703125, 0)
+		.AddNutrition(63, 47785.71484375, 0)
+		.AddNutrition(22, 55750, 0)
+		.AddNutrition(29, 398.214294433594, 0)
+		.AddNutrition(51, 9557.142578125, 0)
+		.AddNutrition(26, 2389.28564453125, 0);
 	AddFood("0100", "Rainbow Vahva C-vitamiini 500 mg 90 tablettia", "", "", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(51, 64935, 0);
 	AddFood("0100", "Rainbow 72g monivitamiini-hivenainetabletti", "", "", "", "", "", 0, "", 0, 0, 0, 0)
-		.AddNutrition(53, 1.60000002384186, 0)
-		.AddNutrition(52, 1.39999997615814, 0)
-		.AddNutrition(58, 2.5, 0)
-		.AddNutrition(56, 2.20000004768372, 0)
-		.AddNutrition(51, 80, 0)
-		.AddNutrition(40, 10, 0)
-		.AddNutrition(44, 0.0120000001043081, 0)
-		.AddNutrition(22, 120, 0)
-		.AddNutrition(29, 2, 0)
-		.AddNutrition(54, 16, 0)
-		.AddNutrition(55, 6, 0)
-		.AddNutrition(30, 55, 0)
-		.AddNutrition(51, 80, 0)
-		.AddNutrition(40, 10, 0)
-		.AddNutrition(36, 12, 0)
-		.AddNutrition(26, 10, 0);
+		.AddNutrition(53, 115.200004577637, 0)
+		.AddNutrition(52, 100.799995422363, 0)
+		.AddNutrition(58, 180, 0)
+		.AddNutrition(56, 158.400009155273, 0)
+		.AddNutrition(51, 5760, 0)
+		.AddNutrition(40, 720, 0)
+		.AddNutrition(44, 0.864000022411346, 0)
+		.AddNutrition(22, 8640, 0)
+		.AddNutrition(29, 144, 0)
+		.AddNutrition(54, 1152, 0)
+		.AddNutrition(55, 432, 0)
+		.AddNutrition(30, 3960, 0)
+		.AddNutrition(51, 5760, 0)
+		.AddNutrition(40, 720, 0)
+		.AddNutrition(36, 864, 0)
+		.AddNutrition(26, 720, 0);
 	AddFood("0100", "Makrobios B-12 vitamiini+folaatti ", "", "", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(58, 285000, 0)
 		.AddNutrition(63, 57142, 0);
@@ -422,6 +423,29 @@ void Database::VLCD_Preset() {
 		.AddNutrition(22, 9183, 0)
 		.AddNutrition(26, 1530, 0)
 		.AddNutrition(30, 5102, 0);
+	AddFood("0100", "Nutrilet", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(4, 363, 0)
+		.AddNutrition(1, 7.5, 0)
+		.AddNutrition(2, 31, 0)
+		.AddNutrition(0, 40, 0)
+		.AddNutrition(25, 1840, 0)
+		.AddNutrition(33, 965, 0)
+		.AddNutrition(40, 3.40000009536743, 0)
+		.AddNutrition(36, 6.09999990463257, 0)
+		.AddNutrition(62, 57, 0)
+		.AddNutrition(51, 51, 0)
+		.AddNutrition(52, 1, 0)
+		.AddNutrition(53, 1.20000004768372, 0)
+		.AddNutrition(54, 13, 0)
+		.AddNutrition(56, 1.39999997615814, 0)
+		.AddNutrition(63, 170, 0)
+		.AddNutrition(58, 2.20000004768372, 0)
+		.AddNutrition(55, 3.90000009536743, 0)
+		.AddNutrition(20, 643, 0)
+		.AddNutrition(24, 1390, 0)
+		.AddNutrition(22, 263, 0)
+		.AddNutrition(30, 34, 0);
+	used_foods.Add(15);
 	used_foods.Add(291);
 	used_foods.Add(657);
 	used_foods.Add(658);
@@ -482,6 +506,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(3187);
 	used_foods.Add(3222);
 	used_foods.Add(3238);
+	used_foods.Add(3305);
 	used_foods.Add(3435);
 	used_foods.Add(3437);
 	used_foods.Add(3490);
@@ -495,6 +520,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(3665);
 	used_foods.Add(3689);
 	used_foods.Add(3715);
+	used_foods.Add(4262);
 	used_foods.Add(4753);
 	used_foods.Add(4755);
 	used_foods.Add(4794);
@@ -510,19 +536,30 @@ void Database::VLCD_Preset() {
 	used_foods.Add(4993);
 	used_foods.Add(6194);
 	used_foods.Add(6452);
+	used_foods.Add(7611);
 	used_foods.Add(8604);
 	used_foods.Add(8789);
 	used_foods.Add(8790);
+	used_foods.Add(8791);
 	used_foods.Add(8792);
 	used_foods.Add(8793);
 	used_foods.Add(8794);
 	used_foods.Add(8795);
 	used_foods.Add(8796);
-	used_foods.Add(8791);
+	used_foods.Add(8797);
+	
+
 
 
 	
 	SortIndex(used_foods, StdLess<int>());
+}
+
+int Database::FindFood(String long_desc) const {
+	for(int i = 0; i < food_descriptions.GetCount(); i++)
+		if (food_descriptions[i].long_desc == long_desc)
+			return i;
+	return -1;
 }
 
 int Database::FindNutrition(String key) const {

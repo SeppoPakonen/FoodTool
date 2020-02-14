@@ -19,16 +19,20 @@ ProfileCreator::ProfileCreator() {
 	Add(tab2.SizePos());
 	Add(tab3.SizePos());
 	Add(tab4.SizePos());
+	Add(tab5.SizePos());
 	tab1.Hide();
 	tab2.Hide();
 	tab3.Hide();
 	tab4.Hide();
+	tab5.Hide();
 	
 	tab0.next <<= THISBACK(Next);
 	tab1.next <<= THISBACK(Next);
 	tab2.next <<= THISBACK(Next);
 	tab3.next <<= THISBACK(Next);
 	tab4.next <<= THISBACK(Next);
+	tab5.next <<= THISBACK(Next);
+	tab5.prev <<= THISBACK(Previous);
 	tab4.prev <<= THISBACK(Previous);
 	tab3.prev <<= THISBACK(Previous);
 	tab2.prev <<= THISBACK(Previous);
@@ -48,7 +52,7 @@ ProfileCreator::ProfileCreator() {
 	tab1.tgt_jogging_dist.SetData(0);
 	tab1.shop_interval.SetData(5);
 	tab1.hours_between_meals.SetData(1);
-	tab1.easy_day_interval.SetData(2);
+	tab1.easy_day_interval.SetData(7);
 	tab1.waking.SetTime(5,0,0);
 	tab1.sleeping.SetTime(20,0,0);
 	UpdateTargetWeight();
@@ -86,6 +90,7 @@ void ProfileCreator::Previous() {
 	tab2.Hide();
 	tab3.Hide();
 	tab4.Hide();
+	tab5.Hide();
 	
 	
 	tab--;
@@ -93,6 +98,7 @@ void ProfileCreator::Previous() {
 	if (tab == 1) tab1.Show();
 	if (tab == 2) tab2.Show();
 	if (tab == 3) tab3.Show();
+	if (tab == 4) tab4.Show();
 }
 void ProfileCreator::Next() {
 	if (tab == 0) {
@@ -152,12 +158,19 @@ void ProfileCreator::Next() {
 		
 		tab4.edit.Data();
 	}
+	/*else if (tab == 4) {
+		DB().StartStoreThis();
+		
+		Profile& prof = GetProfile();
+		if (prof.storage.meal_types.IsEmpty()) {
+			prof.VLCD_Preset();
+		}
+	}
+	else if (tab == 5) {*/
 	else if (tab == 4) {
 		DB().StartStoreThis();
 		
 		Profile& prof = GetProfile();
-		
-		
 		prof.is_initialised = true;
 		prof.Start(true);
 		Close();
@@ -169,11 +182,13 @@ void ProfileCreator::Next() {
 	tab2.Hide();
 	tab3.Hide();
 	tab4.Hide();
+	tab5.Hide();
 	
 	tab++;
 	if (tab == 1) tab1.Show();
 	if (tab == 2) tab2.Show();
 	if (tab == 3) tab3.Show();
 	if (tab == 4) tab4.Show();
+	if (tab == 5) tab5.Show();
 }
 

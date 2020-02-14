@@ -2,6 +2,7 @@
 #define _FoodTool_Food_h_
 
 #define DEFAULT_STEP_GRAMS 10
+#define MINIMUM_DAILY_KCAL 600.0
 
 enum {
 	MODE_WEIGHTLOSS,
@@ -18,6 +19,7 @@ struct DailyPlan : Moveable<DailyPlan> {
 	double walking_burned_calories, jogging_burned_calories, burned_calories;
 	double burned_kgs;
 	byte mode;
+	bool is_easy_day;
 	
 	void Serialize(Stream& s) {
 		s	% date
@@ -27,7 +29,9 @@ struct DailyPlan : Moveable<DailyPlan> {
 			% maintain_calories % allowed_calories % maintain_burned_calories
 			% walking_burned_calories % jogging_burned_calories % burned_calories
 			% burned_kgs
-			% mode;
+			% mode
+			% is_easy_day
+			;
 	}
 };
 
@@ -70,7 +74,7 @@ struct MealPreset : Moveable<MealPreset> {
 	int type = 0;
 	
 	void Serialize(Stream& s) {s % pre_day_instructions % ingredients % instructions % name % serving_grams % score % type;}
-	double GetOptimizerEnergy(const FoodDay& d, MealDebugger& dbg);
+	double GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg);
 	void GetNutritions(Ingredient& ing) const;
 };
 
@@ -143,7 +147,7 @@ struct FoodStorage {
 	String GetNextShoppingList();
 	bool HasEnoughPreplanned();
 	void PlanWeek(const Vector<DailyPlan>& planned_daily);
-	void MakeMenu(FoodDay& d);
+	void MakeMenu(const DailyPlan& p, FoodDay& d);
 	void AddFoodQuantity(const FoodQuantityInt& src, FoodQuantity& dst);
 	
 	bool NeedShopping();

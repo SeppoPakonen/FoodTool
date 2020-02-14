@@ -61,7 +61,7 @@ struct IngredientT : Moveable<IngredientT<T>> {
 	}
 	void operator*=(double mul) {
 		grams *= mul;
-		ASSERT(d.nutr.GetCount());
+		ASSERT(nutr.GetCount());
 		for(int i = 0; i < nutr.GetCount(); i++)
 			nutr[i] *= mul;
 	}

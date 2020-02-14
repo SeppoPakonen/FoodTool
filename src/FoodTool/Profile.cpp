@@ -127,7 +127,7 @@ bool Profile::UpdatePlan() {
 			planned_nutrients.FindAdd(db.nutr_recom[i].nutr_no);
 	}
 	
-	
+	int easy_day_counter = 0;
 	Date date = begin_date;
 	planned_daily.SetCount(0);
 	planned_daily.Reserve(2*365);
@@ -157,11 +157,24 @@ bool Profile::UpdatePlan() {
 			
 			d.allowed_calories = carb_cals + prot_cals + fat_cals;
 		}
+		else Panic("TODO");
+			
+		// We aren't going under minimum daily calories
+		if (d.allowed_calories < MINIMUM_DAILY_KCAL) {
+			double mul = MINIMUM_DAILY_KCAL / d.allowed_calories;
+			d.allowed_calories = MINIMUM_DAILY_KCAL;
+			fat_cals *= mul;
+			carb_cals *= mul;
+			prot_cals *= mul;
+		}
 		
-		// We aren't going under 600kcals
-		if (d.allowed_calories < 600) {
-			double mul = 600 / d.allowed_calories;
-			d.allowed_calories = 600;
+		easy_day_counter++;
+		d.is_easy_day = false;
+		if (easy_day_counter == conf->easy_day_interval) {
+			easy_day_counter = 0;
+			d.is_easy_day = true;
+			double mul = 1500.0 / d.allowed_calories;
+			d.allowed_calories = max(1500.0, d.allowed_calories);
 			fat_cals *= mul;
 			carb_cals *= mul;
 			prot_cals *= mul;
@@ -183,7 +196,7 @@ bool Profile::UpdatePlan() {
 		d.burned_calories = d.maintain_burned_calories + d.walking_burned_calories + d.jogging_burned_calories;
 		d.burned_kgs = d.burned_calories / cals_in_kg_fat;
 		
-		d.food.grams = weight / 100.0 * 1000.0;
+		d.food.grams = weight / 100.0 * 2300.0;
 		d.food.nutr[KCAL] = d.allowed_calories;
 		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
 		d.food.nutr[FAT] = max(min_fat, fat_cals / 9.0); // based on coconut oil nutrients
@@ -234,9 +247,6 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	s.day = now;
 	s.items.SetCount(0);
 	
-	if (storage.meal_types.IsEmpty())
-		return;
-	
 	int day_i = -1;
 	for(int i = 0; i < storage.days.GetCount(); i++)
 		if (storage.days[i].date == s.day)
@@ -258,14 +268,16 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	if (sleep.time < wake.time)
 		sleep.time += 24*60*60;
 	
-	Time t = wake.time;
 	for(int i = 0; i < day.meals.GetCount(); i++) {
 		const Meal& m = day.meals[i];
 		auto& meal = s.items.Add();
-		meal.time = t;
+		meal.time = m.time;
 		meal.type = ScheduleToday::EATING;
-		meal.msg = storage.meal_types.Get(m.key).name;
-		t += conf.hours_between_meals * 60 * 60;
+		int j = storage.meal_types.Find(m.key);
+		if (j >= 0)
+			meal.msg = storage.meal_types.Get(m.key).name;
+		else
+			meal.msg = Format("%d grams", m.grams);
 	}
 	
 	int day_len = sleep.time.Get() - wake.time.Get();

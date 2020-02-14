@@ -12,6 +12,7 @@ library(LINUX) "opencv_core opencv_video opencv_videoio opencv_imgcodecs";
 
 file
 	Readme.txt,
+	Recipes.txt,
 	Welcome.qtf,
 	Translation.t,
 	main.cpp,
@@ -31,6 +32,7 @@ file
 	Profile.cpp,
 	ProfileCreator.h,
 	ProfileCreator.cpp,
+	StepOptimizer.h,
 	Optimizer.h,
 	VideoCapture.h,
 	VideoCapture.cpp,
@@ -38,6 +40,10 @@ file
 	Database.cpp,
 	DatabaseCtrl.h,
 	DatabaseCtrl.cpp,
+	MealPresetCtrl.h,
+	MealPresetCtrl.cpp,
+	Shop.h,
+	Shop.cpp,
 	Util.h,
 	Util.cpp;
 
