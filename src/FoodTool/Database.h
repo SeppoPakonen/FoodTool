@@ -10,11 +10,14 @@ struct NutritionType : Moveable<NutritionType> {
 	String nutr_desc;
 	
 	void Serialize(Stream& s) {
-		s	% is_valid
-			% is_user_added
-			% units
-			% tagname
-			% nutr_desc;
+		VER(0);
+		FOR_VER(0) {
+			s	% is_valid
+				% is_user_added
+				% units
+				% tagname
+				% nutr_desc;
+		}
 	}
 };
 
@@ -26,10 +29,13 @@ struct NutritionInfo : Moveable<NutritionInfo> {
 	bool is_user_added = false;
 	
 	void Serialize(Stream& s) {
-		s	% nutr_no
-			% nutr_value
-			% std_error
-			% is_user_added;
+		VER(0);
+		FOR_VER(0) {
+			s	% nutr_no
+				% nutr_value
+				% std_error
+				% is_user_added;
+		}
 	}
 };
 
@@ -37,7 +43,10 @@ struct FoodGroup : Moveable<FoodGroup> {
 	String name;
 	
 	void Serialize(Stream& s) {
-		s	% name;
+		VER(0);
+		FOR_VER(0) {
+			s	% name;
+		}
 	}
 };
 
@@ -52,15 +61,18 @@ struct FoodDescription : Moveable<FoodDescription> {
 	bool is_user_added = false;
 	
 	void Serialize(Stream& s) {
-		s	% nutr
-			% food_group_key % long_desc % short_desc % company_name
-			% manufacturer_name % survey % ref_desc
-			% refuse
-			% sci_name
-			% n_factor % pro_factor % fat_factor % cho_factor
-			% require_soaking
-			% is_user_added
-			;
+		VER(0);
+		FOR_VER(0) {
+			s	% nutr
+				% food_group_key % long_desc % short_desc % company_name
+				% manufacturer_name % survey % ref_desc
+				% refuse
+				% sci_name
+				% n_factor % pro_factor % fat_factor % cho_factor
+				% require_soaking
+				% is_user_added
+				;
+		}
 	}
 	FoodDescription& AddNutrition(int nutr_no, double value, double error);
 	FoodDescription& RequireSoaking() {require_soaking = true; return *this;}
@@ -72,9 +84,12 @@ struct NutritionRecommendation : Moveable<NutritionRecommendation> {
 	bool per_kg;
 	
 	void Serialize(Stream& s) {
-		s	% nutr_no
-			% value
-			% per_kg;
+		VER(0);
+		FOR_VER(0) {
+			s	% nutr_no
+				% value
+				% per_kg;
+		}
 	}
 };
 
@@ -85,10 +100,13 @@ struct LocalProduct : Moveable<LocalProduct> {
 	String title;
 	
 	void Serialize(Stream& s) {
-		s	% food_no
-			% grams
-			% serving_grams
-			% title;
+		VER(0);
+		FOR_VER(0) {
+			s	% food_no
+				% grams
+				% serving_grams
+				% title;
+		}
 	}
 };
 
@@ -109,13 +127,16 @@ struct Database {
 	
 	
 	void Serialize(Stream& s) {
-		s	% food_groups
-			% food_descriptions
-			% local_products
-			% nutr_types
-			% nutr_recom
-			% used_foods
-			% is_init;
+		VER(0);
+		FOR_VER(0) {
+			s	% food_groups
+				% food_descriptions
+				% local_products
+				% nutr_types
+				% nutr_recom
+				% used_foods
+				% is_init;
+		}
 	}
 	void LoadThis() {LoadFromFile(*this, ConfigFile("latest.db"));}
 	void StoreThis() {StoreToFile(*this, ConfigFile("latest.db"));}

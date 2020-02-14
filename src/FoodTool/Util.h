@@ -16,6 +16,28 @@ struct RunningFlag {
 };
 
 
+struct Version {
+	byte write_v = 0, read_v = 0;
+	Stream& s;
+	
+	Version(byte write_v, Stream& s) : write_v(write_v), s(s) {
+		if (s.IsStoring())
+			s.Put(&write_v, sizeof(write_v));
+		else
+			s.Put(&read_v, sizeof(read_v));
+	}
+	
+	bool Is(byte cmp_v) {
+		if (s.IsStoring())
+			return cmp_v <= write_v;
+		else
+			return cmp_v <= read_v;
+	}
+};
+
+#define VER(x) Version v(x, s)
+#define FOR_VER(x) if (v.Is(x))
+	
 
 #ifdef flagWIN32
 inline void PlayCameraShutter() {PlaySoundA(ConfigFile("camera-shutter.wav"), NULL, SND_ASYNC|SND_FILENAME);}
@@ -67,9 +89,12 @@ struct NutrientDeficitProfile : Moveable<NutrientDeficitProfile> {
 			elements[i] = 50;
 	}
 	void Serialize(Stream& s) {
-		for(int i = 0; i < DEF_COUNT; i++)
-			s % elements[i];
-		s % added;
+		VER(0);
+		FOR_VER(0) {
+			for(int i = 0; i < DEF_COUNT; i++)
+				s % elements[i];
+			s % added;
+		}
 	}
 };
 
@@ -126,7 +151,8 @@ struct OnlineAverage1 : Moveable<OnlineAverage1> {
 	}
 	
 	void Serialize(Stream& s) {
-		s % mean % count;
+		VER(0);
+		FOR_VER(0) {s % mean % count;}
 	}
 	
 	bool operator()(const OnlineAverage1& a, const OnlineAverage1& b) const {return a.mean < b.mean;}
@@ -162,9 +188,15 @@ struct TopValueSorter {
 		}
 	}
 	void Serialize(Stream& s) {
-		for(int i = 0; i < size; i++)
-			s % value[i] % key[i];
+		VER(0);
+		FOR_VER(0) {
+			for(int i = 0; i < size; i++)
+				s % value[i] % key[i];
+		}
 	}
 };
+
+
+
 
 #endif

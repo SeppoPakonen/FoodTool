@@ -22,16 +22,19 @@ struct DailyPlan : Moveable<DailyPlan> {
 	bool is_easy_day;
 	
 	void Serialize(Stream& s) {
-		s	% date
-			% food
-			% weight % prog
-			% fat_perc % fat_kgs % lean_body_kgs
-			% maintain_calories % allowed_calories % maintain_burned_calories
-			% walking_burned_calories % jogging_burned_calories % burned_calories
-			% burned_kgs
-			% mode
-			% is_easy_day
-			;
+		VER(0);
+		FOR_VER(0) {
+			s	% date
+				% food
+				% weight % prog
+				% fat_perc % fat_kgs % lean_body_kgs
+				% maintain_calories % allowed_calories % maintain_burned_calories
+				% walking_burned_calories % jogging_burned_calories % burned_calories
+				% burned_kgs
+				% mode
+				% is_easy_day
+				;
+		}
 	}
 };
 
@@ -51,7 +54,10 @@ struct MealIngredient : Moveable<MealIngredient> {
 	double grams;
 	int db_food_no = -1;
 	
-	void Serialize(Stream& s) {s % pre_day_instructions % instructions % grams % db_food_no;}
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % pre_day_instructions % instructions % grams % db_food_no;}
+	}
 };
 
 struct MealDebugger {
@@ -73,7 +79,10 @@ struct MealPreset : Moveable<MealPreset> {
 	double score = 0;
 	int type = 0;
 	
-	void Serialize(Stream& s) {s % pre_day_instructions % ingredients % instructions % name % serving_grams % score % type;}
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % pre_day_instructions % ingredients % instructions % name % serving_grams % score % type;}
+	}
 	double GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg);
 	void GetNutritions(Ingredient& ing) const;
 };
@@ -85,7 +94,10 @@ struct Meal : Moveable<Meal> {
 	float grams = 0;
 	int gen_i = -1;
 	
-	void Serialize(Stream& s) {s % key % time % food % grams % gen_i;}
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % key % time % food % grams % gen_i;}
+	}
 };
 
 struct FoodDay : Moveable<FoodDay> {
@@ -106,23 +118,26 @@ struct FoodDay : Moveable<FoodDay> {
 	void SetMealGrams(const Vector<double>& grams, bool check=false);
 	double GetOptimizerEnergy();
 	void Serialize(Stream& s) {
-		s	% date
-			% wake_time % sleep_time
-			% meals
-			% food_grams
-			% food_usage
-			% buy_amount
-			% used_food_amount
-			% used_meal_amount
-			% generated_meals
-			% target_sum
-			% total_sum
-			% total_consumed
-			% is_shopping
-			% menu
-			% preparation
-			% shopping_list
-			% mode;
+		VER(0);
+		FOR_VER(0) {
+			s	% date
+				% wake_time % sleep_time
+				% meals
+				% food_grams
+				% food_usage
+				% buy_amount
+				% used_food_amount
+				% used_meal_amount
+				% generated_meals
+				% target_sum
+				% total_sum
+				% total_consumed
+				% is_shopping
+				% menu
+				% preparation
+				% shopping_list
+				% mode;
+		}
 	}
 };
 
@@ -135,7 +150,10 @@ struct FoodStorage {
 	
 	FoodStorage();
 	
-	void Serialize(Stream& s) {s % days;}
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % days;}
+	}
 	
 	MealPreset& AddMealPreset(String code);
 	

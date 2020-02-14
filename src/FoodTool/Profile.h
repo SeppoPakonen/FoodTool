@@ -14,12 +14,15 @@ struct IntakeExceptions : Moveable<IntakeExceptions> {
 	int calorie_deficit;
 	
 	void Serialize(Stream& s) {
-		s
-			%  reason
-			%  begin
-			%  end
-			%  calorie_deficit
-			;
+		VER(0);
+		FOR_VER(0) {
+			s
+				%  reason
+				%  begin
+				%  end
+				%  calorie_deficit
+				;
+		}
 	}
 };
 
@@ -28,11 +31,14 @@ struct Note : Moveable<Note> {
 	Time added;
 	
 	void Serialize(Stream& s) {
-		s
-			%  title
-			%  content
-			%  added
-			;
+		VER(0);
+		FOR_VER(0) {
+			s
+				%  title
+				%  content
+				%  added
+				;
+		}
 	}
 };
 
@@ -40,10 +46,13 @@ struct ProgramUsageStat : Moveable<ProgramUsageStat> {
 	Time begin, end;
 	
 	void Serialize(Stream& s) {
-		s
-			%  begin
-			%  end
-			;
+		VER(0);
+		FOR_VER(0) {
+			s
+				%  begin
+				%  end
+				;
+		}
 	}
 };
 
@@ -53,11 +62,14 @@ struct WeightLossStat : Moveable<WeightLossStat> {
 	bool is_dexa;
 	
 	void Serialize(Stream& s) {
-		s
-			%  added
-			%  weight % fat % liquid % muscle % bmi % prog
-			%  is_dexa
-			;
+		VER(0);
+		FOR_VER(0) {
+			s
+				%  added
+				%  weight % fat % liquid % muscle % bmi % prog
+				%  is_dexa
+				;
+		}
 	}
 	String GetGenericJpg() const {return Format("%d_%d_%d_%d_%d_%d.jpg", (int)added.year, (int)added.month, (int)added.day, (int)added.hour, (int)added.minute, (int)added.second);}
 	String GetFrontFile() const {return GetImageFile("front_" + GetGenericJpg());}
@@ -78,25 +90,28 @@ struct Configuration : Moveable<Configuration> {
 	int shop_interval;
 	
 	void Serialize(Stream& s) {
-		s
-			% added
-			% end_date
-			% tgt_walking_dist
-			% tgt_jogging_dist
-			% walking_dist
-			% hours_between_meals
-			% easy_day_interval
-			% waking_hour
-			% waking_minute
-			% sleeping_hour
-			% sleeping_minute
-			% height
-			% age
-			% bodyfat
-			% activity
-			% tgt_weight
-			% shop_interval
-			;
+		VER(0);
+		FOR_VER(0) {
+			s
+				% added
+				% end_date
+				% tgt_walking_dist
+				% tgt_jogging_dist
+				% walking_dist
+				% hours_between_meals
+				% easy_day_interval
+				% waking_hour
+				% waking_minute
+				% sleeping_hour
+				% sleeping_minute
+				% height
+				% age
+				% bodyfat
+				% activity
+				% tgt_weight
+				% shop_interval
+				;
+		}
 	}
 	
 	double GetBMR(double weight);
@@ -174,23 +189,26 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		s
-			% exceptions
-			% notes
-			% usage
-			% weights
-			% planned_daily
-			% confs
-			% defs
-			% generated_foods
-			% planned_nutrients
-			% storage
-			% begin_date
-			% av_calorie_deficit
-			% version
-			% is_male
-			% is_initialised
-			;
+		VER(0);
+		FOR_VER(0) {
+			s
+				% exceptions
+				% notes
+				% usage
+				% weights
+				% planned_daily
+				% confs
+				% defs
+				% generated_foods
+				% planned_nutrients
+				% storage
+				% begin_date
+				% av_calorie_deficit
+				% version
+				% is_male
+				% is_initialised
+				;
+		}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);

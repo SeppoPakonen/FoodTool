@@ -57,31 +57,34 @@ public:
 	Optimizer() {}
 	
 	void Serialize(Stream& s) {
-		s % min_values % max_values
-		  % trial_solution
-		  % best_solution
-		  % pop_energy
-		  % population
-		  % population_count
-		  % round
-		  % random_type
-		  % dimension
-		  % max_rounds
-		  % use_limits
-		  % generation
-		  % max_gens
-		  % candidate
-		  % strategy
-		  % scale
-		  % probability
-		  % trial_energy
-		  % best_energy
-		  % idum
-		  % idum2
-		  % iy
-		  % iv
-		  % max_value
-		  % min_value;
+		VER(0);
+		FOR_VER(0) {
+			s % min_values % max_values
+			  % trial_solution
+			  % best_solution
+			  % pop_energy
+			  % population
+			  % population_count
+			  % round
+			  % random_type
+			  % dimension
+			  % max_rounds
+			  % use_limits
+			  % generation
+			  % max_gens
+			  % candidate
+			  % strategy
+			  % scale
+			  % probability
+			  % trial_energy
+			  % best_energy
+			  % idum
+			  % idum2
+			  % iy
+			  % iv
+			  % max_value
+			  % min_value;
+		}
 	}
 	
 	enum {RAND_UNIFORM, RAND_NORMDIST, RAND_MANUAL};

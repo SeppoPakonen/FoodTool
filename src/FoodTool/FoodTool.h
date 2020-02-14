@@ -156,7 +156,10 @@ struct WeightCtrl : public ParentCtrl {
 	void UpdateSmiley();
 	void WeightChanged() {UpdateBMI(); UpdateSmiley();}
 	
-	void Serialize(Stream& s) {s % last_camera_i % last_camera_count;}
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % last_camera_i % last_camera_count;}
+	}
 	void StoreThis() {StoreToFile(*this, ConfigFile("selected_camera.bin"));}
 	void LoadThis() {LoadFromFile(*this, ConfigFile("selected_camera.bin"));}
 	

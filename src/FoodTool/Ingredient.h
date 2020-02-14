@@ -39,7 +39,10 @@ struct IngredientT : Moveable<IngredientT<T>> {
 		for(auto& a : nutr) a = 0;
 		ASSERT(nutr.GetCount());
 	}
-	void Serialize(Stream& s) {s % grams % nutr;}
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % grams % nutr;}
+	}
 	void Limit() {
 		grams = max(grams, (T)0);
 		for(auto& f : nutr)

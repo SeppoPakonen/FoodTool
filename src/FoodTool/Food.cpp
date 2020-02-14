@@ -603,7 +603,7 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 			d.menu << Format("Eat new food after %d:%02d", (int)first_gen_meal.hour, (int)first_gen_meal.minute) << "\n";
 			
 			double mul = (double)(gen_count - skip_meal) / d.meals.GetCount();
-			d.preparation << "Blend following items:\n";
+			d.preparation << "Eat:\n";
 			grams_sum = 0;
 			for(int i = 0; i < new_food.ingredients.GetCount(); i++) {
 				const MealIngredient& ing = new_food.ingredients[i];
@@ -940,8 +940,18 @@ double MealPreset::GetOptimizerEnergy(const Ingredient& target_sum, const Index<
 	}
 	
 	
-	if (1) {
+	if (0) {
 		fabs_sum += 10 * fabs((double)total_sum.grams / target_sum.grams - 1);
+		count += 10;
+	}
+	
+	// Penalty for too much for one ingredient
+	if (1) {
+		int penalties = 0;
+		for(int i = 0; i < ingredients.GetCount(); i++)
+			if (ingredients[i].grams > 250.0)
+				penalties++;
+		fabs_sum += 10 * penalties;
 		count += 10;
 	}
 	
