@@ -1,0 +1,11 @@
+uses
+	TimelineCtrl;
+
+file
+	main.cpp,
+	FoodTimeline.h,
+	FoodTimeline.cpp;
+
+mainconfig
+	"" = "GUI";
+

@@ -683,6 +683,24 @@ WeightCtrl::WeightCtrl() {
 	
 	Thread::Start(THISBACK(UpdateCameraCount));
 	
+	edit.sentiment.Add("Worst");
+	edit.sentiment.Add("Bad");
+	edit.sentiment.Add("Normal");
+	edit.sentiment.Add("Good");
+	edit.sentiment.Add("Best");
+	
+	edit.health.Add("Worst");
+	edit.health.Add("Bad");
+	edit.health.Add("Normal");
+	edit.health.Add("Good");
+	edit.health.Add("Best");
+	
+	edit.workload.Add("Lowest");
+	edit.workload.Add("Low");
+	edit.workload.Add("Normal");
+	edit.workload.Add("High");
+	edit.workload.Add("Highest");
+	
 	edit.capture_images <<= THISBACK(CaptureImages);
 	edit.preview_cam <<= THISBACK(PreviewCamera);
 	edit.add <<= THISBACK(AddWeightStat);
@@ -712,6 +730,11 @@ void WeightCtrl::Reset() {
 	edit.liquid.Clear();
 	edit.muscle.Clear();
 	edit.bmi.Clear();
+	edit.sentiment.SetIndex(2);
+	edit.health.SetIndex(2);
+	edit.workload.SetIndex(2);
+	edit.walking.Clear();
+	edit.excess.Clear();
 	front.Clear();
 	right.Clear();
 	back.Clear();
@@ -764,6 +787,11 @@ void WeightCtrl::SelectWeightStat() {
 	edit.muscle.SetData(w.muscle);
 	edit.bmi.SetData(w.bmi);
 	edit.dexa.Set(w.is_dexa);
+	edit.sentiment.SetIndex(w.sentiment);
+	edit.health.SetIndex(w.health);
+	edit.workload.SetIndex(w.workload);
+	edit.walking.SetData(w.walking);
+	edit.excess.SetData(w.excess);
 	edit.smiley.SetImage(GetSmiley(w.prog));
 	
 	Thread::Start(THISBACK3(LoadImages, w.GetFrontFile(),w.GetRightFile(), w.GetBackFile()));
@@ -796,6 +824,11 @@ void WeightCtrl::AddWeightStat() {
 	w.muscle = (double)edit.muscle.GetData();
 	w.bmi = (double)edit.bmi.GetData();
 	w.is_dexa = edit.dexa.Get();
+	w.sentiment = edit.sentiment.GetIndex();
+	w.health = edit.health.GetIndex();
+	w.workload = edit.workload.GetIndex();
+	w.walking = (double)edit.walking.GetData();
+	w.excess = (double)edit.excess.GetData();
 	w.prog = 1.0 - (w.weight - conf.tgt_weight) / (prof.weights[0].weight - conf.tgt_weight);
 	
 	if (!front.IsEmpty())

@@ -24,7 +24,7 @@ struct Version {
 		if (s.IsStoring())
 			s.Put(&write_v, sizeof(write_v));
 		else
-			s.Put(&read_v, sizeof(read_v));
+			s.Get(&read_v, sizeof(read_v));
 	}
 	
 	bool Is(byte cmp_v) {

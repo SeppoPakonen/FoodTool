@@ -1,0 +1,16 @@
+description "\377B0,0,255";
+
+uses
+	CtrlLib;
+
+file
+	TimelineCtrl.h,
+	TimelineCtrl.cpp,
+	Timeline.h,
+	Timeline.cpp,
+	Common.h,
+	TimelineCtrl.iml;
+
+mainconfig
+	"" = "GUI";
+

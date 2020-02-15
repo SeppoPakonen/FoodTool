@@ -56,20 +56,31 @@ struct ProgramUsageStat : Moveable<ProgramUsageStat> {
 	}
 };
 
+enum {
+	WORST = 0, LOWEST= 0,
+	BAD = 1, LOW = 1,
+	NORMAL = 2,
+	GOOD = 3, HIGH = 3,
+	BEST = 4, HIGHEST = 4,
+};
+
 struct WeightLossStat : Moveable<WeightLossStat> {
 	Time added;
 	float weight, fat, liquid, muscle, bmi, prog;
 	bool is_dexa;
 	
+	byte sentiment = NORMAL, health = NORMAL, workload = NORMAL;
+	float walking = 0, excess = 0;
+	
 	void Serialize(Stream& s) {
-		VER(0);
+		VER(2);
 		FOR_VER(0) {
-			s
-				%  added
-				%  weight % fat % liquid % muscle % bmi % prog
-				%  is_dexa
-				;
+			s	% added
+				% weight % fat % liquid % muscle % bmi % prog
+				% is_dexa;
 		}
+		FOR_VER(1) {s	% sentiment % health % workload % walking;}
+		FOR_VER(2) {s	% excess;}
 	}
 	String GetGenericJpg() const {return Format("%d_%d_%d_%d_%d_%d.jpg", (int)added.year, (int)added.month, (int)added.day, (int)added.hour, (int)added.minute, (int)added.second);}
 	String GetFrontFile() const {return GetImageFile("front_" + GetGenericJpg());}

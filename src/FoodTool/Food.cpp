@@ -940,7 +940,7 @@ double MealPreset::GetOptimizerEnergy(const Ingredient& target_sum, const Index<
 	}
 	
 	
-	if (0) {
+	if (1) {
 		fabs_sum += 10 * fabs((double)total_sum.grams / target_sum.grams - 1);
 		count += 10;
 	}
