@@ -182,6 +182,10 @@ struct WeightCtrl : public ParentCtrl {
 };
 
 struct MultipurposeGraph : public Ctrl {
+	enum {
+		MEASURES_BEGIN = 14
+	};
+	
 	struct Line : Moveable<Line> {
 		String title;
 		Color color;

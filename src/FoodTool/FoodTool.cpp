@@ -480,6 +480,7 @@ void ConfigurationCtrl::SelectConf() {
 	conf.easy_day_interval.SetData(c.easy_day_interval);
 	conf.waking.SetTime(c.waking_hour,c.waking_minute, 0);
 	conf.sleeping.SetTime(c.sleeping_hour,c.sleeping_minute,0);
+	conf.coffee.SetData(c.daily_coffee);
 }
 
 void ConfigurationCtrl::AddConf() {
@@ -503,6 +504,7 @@ void ConfigurationCtrl::AddConf() {
 	c.waking_minute = conf.waking.GetMinute();
 	c.sleeping_hour = conf.sleeping.GetHour();
 	c.sleeping_minute = conf.sleeping.GetMinute();
+	c.daily_coffee = conf.coffee.GetData();
 	
 	prof.Start(true);
 	
@@ -600,6 +602,7 @@ void NoteCtrl::Data() {
 		}
 		list.SetCursor(0);
 		SelectNote();
+		split.SetPos(2500);
 	}
 }
 
@@ -792,6 +795,14 @@ void WeightCtrl::SelectWeightStat() {
 	edit.workload.SetIndex(w.workload);
 	edit.walking.SetData(w.walking);
 	edit.excess.SetData(w.excess);
+	edit.neck.SetData(w.neck);
+	edit.bicep.SetData(w.bicep);
+	edit.forearm.SetData(w.forearm);
+	edit.chest.SetData(w.chest);
+	edit.waist.SetData(w.waist);
+	edit.buttocks.SetData(w.buttocks);
+	edit.thigh.SetData(w.thigh);
+	edit.leg.SetData(w.leg);
 	edit.smiley.SetImage(GetSmiley(w.prog));
 	
 	Thread::Start(THISBACK3(LoadImages, w.GetFrontFile(),w.GetRightFile(), w.GetBackFile()));
@@ -829,6 +840,14 @@ void WeightCtrl::AddWeightStat() {
 	w.workload = edit.workload.GetIndex();
 	w.walking = (double)edit.walking.GetData();
 	w.excess = (double)edit.excess.GetData();
+	w.neck = (double)edit.neck.GetData();
+	w.bicep = (double)edit.bicep.GetData();
+	w.forearm = (double)edit.forearm.GetData();
+	w.chest = (double)edit.chest.GetData();
+	w.waist = (double)edit.waist.GetData();
+	w.buttocks = (double)edit.buttocks.GetData();
+	w.thigh = (double)edit.thigh.GetData();
+	w.leg = (double)edit.leg.GetData();
 	w.prog = 1.0 - (w.weight - conf.tgt_weight) / (prof.weights[0].weight - conf.tgt_weight);
 	
 	if (!front.IsEmpty())
@@ -839,6 +858,7 @@ void WeightCtrl::AddWeightStat() {
 		JPGEncoder().SaveFile(w.GetBackFile(), back);
 	
 	prof.StoreThis();
+	StoreThis();
 	
 	Data();
 };
@@ -1433,7 +1453,9 @@ void MultipurposeGraph::Paint(Draw& d) {
 	
 	int vert = GetVertLine(src);
 	
-	double min = vert ? +DBL_MAX : 0;
+	bool get_min = vert || src >= MEASURES_BEGIN;
+	
+	double min = get_min ? +DBL_MAX : 0;
 	double max = -DBL_MAX;
 	double last = 0.0;
 	
@@ -1446,7 +1468,7 @@ void MultipurposeGraph::Paint(Draw& d) {
 			double d = values[j];
 			if (d > max)
 				max = d;
-			if (vert && d < min)
+			if (get_min && d < min)
 				min = d;
 		}
 	}

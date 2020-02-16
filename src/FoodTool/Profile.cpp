@@ -102,8 +102,14 @@ Date Profile::GetCurrentQuarterBegin() {
 
 bool Profile::UpdatePlan() {
 	const Database& db = DB();
+	
 	Configuration* conf = &confs[0];
+	Configuration* next_conf = 1 < confs.GetCount() ? &confs[1] : NULL;
+	int conf_i = 0;
+	
 	WeightLossStat* wl = &weights[0];
+	WeightLossStat* next_wl = 1 < weights.GetCount() ? &weights[1] : NULL;
+	int wl_i = 0;
 	
 	double begin_weight = wl->weight;
 	double begin_bodyfat = conf->bodyfat;
@@ -127,12 +133,28 @@ bool Profile::UpdatePlan() {
 			planned_nutrients.FindAdd(db.nutr_recom[i].nutr_no);
 	}
 	
+	Date today = GetSysTime();
+	Date yesterday = today - 1;
+	int today_i = -1;
+	for(int i = 0; i < planned_daily.GetCount(); i++)
+		if (planned_daily[i].date == today)
+			{today_i = i; weight = planned_daily[i].weight; break;}
+	for(int i = 0; i < weights.GetCount(); i++)
+		if (Date(weights[i].added) == today || Date(weights[i].added) == yesterday)
+			{weight = weights[i].weight; break;}
+			
 	int easy_day_counter = 0;
-	Date date = begin_date;
-	planned_daily.SetCount(0);
+	Date date = planned_daily.IsEmpty() ? begin_date : today;
+	planned_daily.SetCount(max(0, today_i));
 	planned_daily.Reserve(2*365);
 	while (weight > conf->tgt_weight) {
 		DailyPlan& d = planned_daily.Add();
+		
+		while (next_conf && date >= Date(next_conf->added)) {
+			conf = next_conf;
+			conf_i++;
+			next_conf = (conf_i+1) < confs.GetCount() ? &confs[conf_i+1] : NULL;
+		}
 		
 		d.mode = MODE_WEIGHTLOSS;
 		d.date = date++;
@@ -145,6 +167,16 @@ bool Profile::UpdatePlan() {
 		d.lean_body_kgs = weight * (1.0 - d.fat_perc);
 		
 		d.maintain_calories = conf->GetCaloriesMaintainWeight(weight);
+		
+		// Coffee
+		double coffee_g = conf->daily_coffee;
+		double caffeine_mg = 40 * (coffee_g / 100.0);
+		double rmr_increase_100mg_caffeine = 0.04;
+		double increase_length = 150.0 / (24*60);
+		double rmr_increase = caffeine_mg / 100.0 * rmr_increase_100mg_caffeine;
+		double coffee_maintain_calorie_increase = rmr_increase * d.maintain_calories;
+		ASSERT(coffee_maintain_calorie_increase >= 0);
+		d.maintain_calories += coffee_maintain_calorie_increase;
 		
 		double min_protein = d.lean_body_kgs * 0.8;
 		double min_fat = 30.0 / 2000.0 * d.maintain_calories;
@@ -210,6 +242,14 @@ bool Profile::UpdatePlan() {
 		}
 		
 		weight -= d.burned_kgs;
+		
+		
+		while (next_wl && date >= Date(next_wl->added)) {
+			wl = next_wl;
+			wl_i++;
+			next_wl = (wl_i+1) < weights.GetCount() ? &weights[wl_i+1] : NULL;
+			weight = wl->weight;
+		}
 	}
 	
 	av_calorie_deficit = calorie_deficit_sum / planned_daily.GetCount();
