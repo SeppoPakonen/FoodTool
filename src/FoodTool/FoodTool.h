@@ -293,4 +293,6 @@ public:
 	void SetTodayTab();
 };
 
+void FillVector(Vector<double>& v);
+
 #endif

@@ -144,6 +144,14 @@ bool Profile::UpdatePlan() {
 			{weight = weights[i].weight; break;}
 			
 	int easy_day_counter = 0;
+	/*
+		TODO
+		 - Don't reset easy_day_counter
+		 - use latest walking speed from WeightLossStat
+		 - use dexa fat ratio
+		
+	*/
+	
 	Date date = planned_daily.IsEmpty() ? begin_date : today;
 	planned_daily.SetCount(max(0, today_i));
 	planned_daily.Reserve(2*365);

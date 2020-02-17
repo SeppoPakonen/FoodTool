@@ -13,6 +13,7 @@ GUI_APP_MAIN
 		SetExitCode(1);
 		return;
 	}
+	db.VLCD_Preset();
 	db.SetCommonNutrs();
 	
 	

@@ -201,6 +201,16 @@ bool Database::Init() {
 	AddRecommendation("GLU_G", 15 / 70.0, true);
 	//AddRecommendation("GLY_G", 5 / 70.0, true);
 	AddRecommendation("GLY_G", 5 / 70.0, true);
+	AddRecommendation("VITK1", 120 / 70.0, true);
+	AddRecommendation("PRO_G", 1 / 70.0, true);
+	AddRecommendation("CHOLE", 300 / 70.0, true);
+	AddRecommendation("FATRN", 2 / 70.0, true);
+	AddRecommendation("FASAT", 13  / 70.0, true);
+	AddRecommendation("FAMS", 33  / 70.0, true);
+	AddRecommendation("FAPU", 33  / 70.0, true);
+	AddRecommendation("FATRNM", 1 / 70.0, true);
+	AddRecommendation("FATRNP", 1 / 70.0, true);
+	AddRecommendation("FIBTG", 30 / 70.0, true);
 	
 	
 	
@@ -565,6 +575,13 @@ int Database::FindFood(String long_desc) const {
 int Database::FindNutrition(String key) const {
 	for(int i = 0; i < nutr_types.GetCount(); i++)
 		if (nutr_types[i].tagname == key)
+			return i;
+	return -1;
+}
+
+int Database::FindNutritionRecommendation(String key) const {
+	for(int i = 0; i < nutr_recom.GetCount(); i++)
+		if (nutr_types[nutr_recom[i].nutr_no].tagname == key)
 			return i;
 	return -1;
 }

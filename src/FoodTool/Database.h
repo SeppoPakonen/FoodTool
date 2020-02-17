@@ -91,6 +91,12 @@ struct NutritionRecommendation : Moveable<NutritionRecommendation> {
 				% per_kg;
 		}
 	}
+	double GetValue(double weight) const {
+		if (per_kg)
+			return value * weight;
+		else
+			return value;
+	}
 };
 
 struct LocalProduct : Moveable<LocalProduct> {
@@ -146,8 +152,10 @@ struct Database {
 	void StartStoreThis() {Thread::Start(THISBACK(StoreThis));}
 	int FindFood(String long_desc) const;
 	int FindNutrition(String key) const;
+	int FindNutritionRecommendation(String key) const;
 	void AddRecommendation(String nutr, double value, bool per_kg) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg;}
 	void SetCommonNutrs();
+	
 	
 	void VLCD_Preset();
 };

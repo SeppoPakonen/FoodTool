@@ -70,11 +70,11 @@ struct WeightLossStat : Moveable<WeightLossStat> {
 	bool is_dexa;
 	
 	byte sentiment = NORMAL, health = NORMAL, workload = NORMAL;
-	float walking = 0, excess = 0;
+	float walking = 0, walking_mins = 0, excess = 0;
 	float neck = 0, bicep = 0, forearm = 0, chest = 0, waist = 0, buttocks = 0, thigh = 0, leg = 0;
 	
 	void Serialize(Stream& s) {
-		VER(3);
+		VER(4);
 		FOR_VER(0) {
 			s	% added
 				% weight % fat % liquid % muscle % bmi % prog
@@ -83,6 +83,7 @@ struct WeightLossStat : Moveable<WeightLossStat> {
 		FOR_VER(1) {s	% sentiment % health % workload % walking;}
 		FOR_VER(2) {s	% excess;}
 		FOR_VER(3) {s	% neck % bicep % forearm % chest % waist % buttocks % thigh % leg;}
+		FOR_VER(4) {s	% walking_mins;}
 	}
 	String GetGenericJpg() const {return Format("%d_%d_%d_%d_%d_%d.jpg", (int)added.year, (int)added.month, (int)added.day, (int)added.hour, (int)added.minute, (int)added.second);}
 	String GetFrontFile() const {return GetImageFile("front_" + GetGenericJpg());}
