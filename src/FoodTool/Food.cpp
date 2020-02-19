@@ -280,7 +280,7 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 			
 			if (d.generated_meals.GetCount()) {
 				m.gen_i = d.generated_meals.GetKey(0);
-				const MealPreset& mp = prof.generated_foods[m.gen_i];
+				const MealPreset& mp = prof.presets[m.gen_i];
 				ASSERT(mp.serving_grams > 0);
 				m.grams = mp.serving_grams;
 				int& count = d.generated_meals[0];
@@ -309,17 +309,20 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 		}
 		
 		if (gen_for_today > 0) {
+			Panic("TODO");
+			
 			// Generate until later part of the next day
 			int gen_count = gen_for_today + d.meals.GetCount() * (2.0 / 3.0);
-			int gen_i = prof.generated_foods.GetCount();
-			MealPreset& new_food = prof.generated_foods.Add();
-			new_food.name = "Food #" + IntStr(prof.generated_foods.GetCount());
+			int gen_i = prof.presets.GetCount();
+			MealPreset& new_food = prof.presets.Add();
+			new_food.name = "Food #" + IntStr(prof.presets.GetCount());
 			new_food.type = BREAKFAST;
 			new_food.ingredients.SetCount(db.used_foods.GetCount());
 			for(int i = 0; i < db.used_foods.GetCount(); i++) {
 				MealIngredient& ing = new_food.ingredients[i];
 				ing.db_food_no = db.used_foods[i];
-				ing.grams = 0;
+				ing.min_grams = 0;
+				ing.max_grams = 0;
 				const FoodDescription& d = db.food_descriptions[ing.db_food_no];
 				if (d.require_soaking)
 					ing.pre_day_instructions.GetAdd(1)
@@ -350,7 +353,7 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 				for(int i = 0; i < db.used_foods.GetCount(); i++) {
 					MealIngredient& ing = new_food.ingredients[i];
 					double new_grams = max(0.0, trial[i]);
-					ing.grams = new_grams;
+					ing.max_grams = new_grams;
 				}
 				
 				MealDebugger dbg;
@@ -365,7 +368,7 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 			for(int i = 0; i < db.used_foods.GetCount(); i++) {
 				MealIngredient& ing = new_food.ingredients[i];
 				double grams = max(0.0, best[i]);
-				ing.grams = grams;
+				ing.max_grams = grams;
 			}
 			
 			static thread_local Ingredient ing;
@@ -376,7 +379,7 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 			ASSERT(IsFin(kcal_mul));
 			if (kcal_mul < 1.0) {
 				for (auto& ing : new_food.ingredients) {
-					ing.grams *= kcal_mul;
+					ing.max_grams *= kcal_mul;
 				}
 			}
 			#endif
@@ -537,9 +540,9 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 						break;
 					
 					if (fat_factor < limit)
-						new_food.ingredients[high_fat_foods[0]].grams += 1.0;
+						new_food.ingredients[high_fat_foods[0]].max_grams += 1.0;
 					if (prot_factor < limit)
-						new_food.ingredients[high_prot_foods[0]].grams += 1.0;
+						new_food.ingredients[high_prot_foods[0]].max_grams += 1.0;
 					
 					new_food.GetNutritions(ing);
 				}
@@ -549,27 +552,27 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 				VectorMap<int, double> ing_grams;
 				for(int i = 0; i < new_food.ingredients.GetCount(); i++) {
 					const MealIngredient& ing = new_food.ingredients[i];
-					if (ing.grams > 0)
-						ing_grams.Add(i, ing.grams);
+					if (ing.max_grams > 0)
+						ing_grams.Add(i, ing.max_grams);
 				}
 				SortByValue(ing_grams, StdGreater<double>());
 				for(int i = 12; i < ing_grams.GetCount(); i++) {
 					int j = ing_grams.GetKey(i);
-					new_food.ingredients[j].grams = 0;
+					new_food.ingredients[j].max_grams = 0;
 				}
 				
 				new_food.GetNutritions(ing);
 				double kcal_mul = d.target_sum.nutr[KCAL] / ing.nutr[KCAL];
 				ASSERT(IsFin(kcal_mul));
 				for (auto& ing : new_food.ingredients) {
-					ing.grams *= kcal_mul;
+					ing.max_grams *= kcal_mul;
 				}
 				new_food.GetNutritions(ing);
 			}
 			
 			double grams_sum = 0;
 			for (auto& ing : new_food.ingredients)
-				grams_sum += ing.grams;
+				grams_sum += ing.max_grams;
 			
 			new_food.serving_grams = grams_sum / d.meals.GetCount();
 			
@@ -608,8 +611,8 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 			for(int i = 0; i < new_food.ingredients.GetCount(); i++) {
 				const MealIngredient& ing = new_food.ingredients[i];
 				const FoodDescription& f = db.food_descriptions[ing.db_food_no];
-				if (ing.grams >= 1.0) {
-					float grams = mul * ing.grams;
+				if (ing.max_grams >= 1.0) {
+					float grams = mul * ing.max_grams;
 					grams_sum += grams;
 					d.preparation << Format(" - (%s) %1n grams (%1n grams total)\n", f.long_desc, grams, grams_sum);
 					d.food_usage.GetAdd(ing.db_food_no, 0) += grams;
@@ -903,10 +906,10 @@ void MealPreset::GetNutritions(Ingredient& dst) const {
 	for(int i = 0; i < ingredients.GetCount(); i++) {
 		const MealIngredient& src = ingredients[i];
 		const FoodDescription& d = db.food_descriptions[src.db_food_no];
-		if (!src.grams)
+		if (!src.max_grams)
 			continue;
-		dst.grams += src.grams;
-		double mul = src.grams / 100.0;
+		dst.grams += src.max_grams;
+		double mul = src.max_grams / 100.0;
 		for(const NutritionInfo& info : d.nutr)
 			dst.nutr[info.nutr_no] += info.nutr_value * mul;
 	}
@@ -931,7 +934,7 @@ double MealPreset::GetOptimizerEnergy(const Ingredient& target_sum, const Index<
 	if (0) {
 		int ing_count = 0;
 		for(int i = 0; i < ingredients.GetCount(); i++)
-			if (ingredients[i].grams > 0.0)
+			if (ingredients[i].max_grams > 0.0)
 				ing_count++;
 		if (ing_count > 8) {
 			fabs_sum += (ing_count - 7) * 10;
@@ -949,7 +952,7 @@ double MealPreset::GetOptimizerEnergy(const Ingredient& target_sum, const Index<
 	if (1) {
 		int penalties = 0;
 		for(int i = 0; i < ingredients.GetCount(); i++)
-			if (ingredients[i].grams > 250.0)
+			if (ingredients[i].max_grams > 250.0)
 				penalties++;
 		fabs_sum += 10 * penalties;
 		count += 10;

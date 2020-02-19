@@ -13,7 +13,9 @@ GUI_APP_MAIN
 		SetExitCode(1);
 		return;
 	}
-	db.VLCD_Preset();
+	if (db.used_foods.IsEmpty())
+		db.VLCD_Preset();
+	db.RemoveDuplicates();
 	db.SetCommonNutrs();
 	
 	

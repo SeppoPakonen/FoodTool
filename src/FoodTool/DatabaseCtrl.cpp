@@ -100,9 +100,8 @@ void DatabaseCtrl::Filter() {
 	}
 	food_list.SetCount(list.GetCount());
 	
-	if (!food_list.IsCursor() && food_list.GetCount()) {
+	if (!food_list.IsCursor() && food_list.GetCount())
 		food_list.SetCursor(0);
-	}
 	
 	SelectFood();
 }
@@ -146,9 +145,8 @@ void DatabaseCtrl::NutrientData() {
 	}
 	nutr_list.SetCount(d.nutr.GetCount());
 	
-	if (!nutr_list.IsCursor() && nutr_list.GetCount()) {
+	if (!nutr_list.IsCursor() && nutr_list.GetCount())
 		nutr_list.SetCursor(0);
-	}
 	
 	SelectNutrition();
 }

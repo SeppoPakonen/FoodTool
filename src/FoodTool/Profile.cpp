@@ -9,7 +9,7 @@ Profile::Profile() {
 	if (is_initialised) {
 		if (storage.days.IsEmpty())
 			storage.Init(begin_date);
-		Start(false);
+		//Start(false);
 	}
 }
 
@@ -351,6 +351,12 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	Sort(s.items, ScheduleToday());
 }
 
+void Profile::VLCD_Preset() {
+	
+	
+	
+	
+}
 
 
 

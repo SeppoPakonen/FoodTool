@@ -51,12 +51,13 @@ enum {
 struct MealIngredient : Moveable<MealIngredient> {
 	VectorMap<int, String> pre_day_instructions;
 	String instructions;
-	double grams;
+	double min_grams = 0, max_grams = 0;
 	int db_food_no = -1;
 	
 	void Serialize(Stream& s) {
-		VER(0);
-		FOR_VER(0) {s % pre_day_instructions % instructions % grams % db_food_no;}
+		VER(1);
+		FOR_VER(0) {s % pre_day_instructions % instructions % max_grams % db_food_no;}
+		FOR_VER(1) {s % min_grams;}
 	}
 };
 
@@ -76,12 +77,14 @@ struct MealPreset : Moveable<MealPreset> {
 	String instructions;
 	String name;
 	double serving_grams = 0;
-	double score = 0;
+	double score = 0, mass_factor = 0, taste_factor = 0;
 	int type = 0;
+	Time added;
 	
 	void Serialize(Stream& s) {
-		VER(0);
+		VER(1);
 		FOR_VER(0) {s % pre_day_instructions % ingredients % instructions % name % serving_grams % score % type;}
+		FOR_VER(1) {s % added % mass_factor % taste_factor;}
 	}
 	double GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg);
 	void GetNutritions(Ingredient& ing) const;

@@ -155,6 +155,7 @@ struct Database {
 	int FindNutritionRecommendation(String key) const;
 	void AddRecommendation(String nutr, double value, bool per_kg) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg;}
 	void SetCommonNutrs();
+	void RemoveDuplicates();
 	
 	
 	void VLCD_Preset();

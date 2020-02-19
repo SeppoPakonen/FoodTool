@@ -87,6 +87,7 @@ FoodTool::FoodTool()
 	tabs.Add(exc.SizePos(), "Exceptions");
 	tabs.Add(notes.SizePos(), "Notes");
 	tabs.Add(usage.SizePos(), "Usage");
+	tabs.Add(preset.SizePos(), "Meal Presets");
 	tabs.Add(conf.SizePos(), "Configuration");
 	tabs.WhenSet << THISBACK(Data);
 	
@@ -132,6 +133,8 @@ void FoodTool::Data() {
 		else if (tab == 8)
 			usage.Data();
 		else if (tab == 9)
+			preset.Data();
+		else if (tab == 10)
 			conf.Data();
 	}
 	was_updating = is_updating;
@@ -452,7 +455,8 @@ void ConfigurationCtrl::Data() {
 			list.Set(row, 0, i+1);
 			list.Set(row, 1, c.added);
 		}
-		list.SetCursor(0);
+		if (!list.IsCursor() && list.GetCount())
+			list.SetCursor(0);
 		SelectConf();
 	}
 }
@@ -545,7 +549,8 @@ void ExceptionsCtrl::Data(bool force) {
 			list.Set(row, 3, e.calorie_deficit);
 			list.Set(row, 4, e.reason);
 		}
-		list.SetCursor(0);
+		if (!list.IsCursor() && list.GetCount())
+			list.SetCursor(0);
 	}
 }
 
@@ -600,7 +605,8 @@ void NoteCtrl::Data() {
 			list.Set(row, 0, n.added);
 			list.Set(row, 1, n.title);
 		}
-		list.SetCursor(0);
+		if (!list.IsCursor() && list.GetCount())
+			list.SetCursor(0);
 		SelectNote();
 		split.SetPos(2500);
 	}
@@ -706,6 +712,7 @@ WeightCtrl::WeightCtrl() {
 	
 	edit.capture_images <<= THISBACK(CaptureImages);
 	edit.preview_cam <<= THISBACK(PreviewCamera);
+	edit.save <<= THISBACK(SaveWeightStat);
 	edit.add <<= THISBACK(AddWeightStat);
 	edit.reset <<= THISBACK(Reset);
 }
@@ -826,10 +833,15 @@ void WeightCtrl::LoadImages(String f, String r, String b) {
 
 void WeightCtrl::AddWeightStat() {
 	Profile& prof = GetProfile();
-	const Configuration& conf = prof.confs.Top();
-	
 	WeightLossStat& w = prof.weights.Add();
 	w.added = GetSysTime();
+	SetWeightStat(w);
+}
+
+void WeightCtrl::SetWeightStat(WeightLossStat& w) {
+	Profile& prof = GetProfile();
+	const Configuration& conf = prof.confs.Top();
+	
 	w.weight = (double)edit.weight.GetData();
 	w.fat = (double)edit.fat.GetData();
 	w.liquid = (double)edit.liquid.GetData();
@@ -863,7 +875,17 @@ void WeightCtrl::AddWeightStat() {
 	StoreThis();
 	
 	Data();
-};
+}
+
+void WeightCtrl::SaveWeightStat() {
+	if (!list.IsCursor())
+		return;
+	int i = list.GetCursor();
+	int w_i = list.GetCount() - 1 - i;
+	Profile& prof = GetProfile();
+	WeightLossStat& w = prof.weights[w_i];
+	SetWeightStat(w);
+}
 
 void WeightCtrl::PreviewCamera() {
 	if (!stopped)
@@ -1216,7 +1238,8 @@ GraphCtrl::GraphCtrl() {
 	
 	list <<= THISBACK(SelectSource);
 	
-	list.SetCursor(0);
+	if (!list.IsCursor() && list.GetCount())
+		list.SetCursor(0);
 	SelectSource();
 }
 
@@ -1857,7 +1880,8 @@ void NutrientDeficitCtrl::Data() {
 			const NutrientDeficitProfile& n = prof.defs[i];
 			list.Set(row, 0, n.added);
 		}
-		list.SetCursor(0);
+		if (!list.IsCursor() && list.GetCount())
+			list.SetCursor(0);
 		SelectItem();
 	}
 }

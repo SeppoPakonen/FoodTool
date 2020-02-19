@@ -158,7 +158,7 @@ void ProfileCreator::Next() {
 		
 		tab4.edit.Data();
 	}
-	/*else if (tab == 4) {
+	else if (tab == 4) {
 		DB().StartStoreThis();
 		
 		Profile& prof = GetProfile();
@@ -166,8 +166,7 @@ void ProfileCreator::Next() {
 			prof.VLCD_Preset();
 		}
 	}
-	else if (tab == 5) {*/
-	else if (tab == 4) {
+	else if (tab == 5) {
 		DB().StartStoreThis();
 		
 		Profile& prof = GetProfile();

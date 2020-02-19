@@ -241,13 +241,13 @@ bool ScheduleCtrl::Key(dword key, int count) {
 	}
 	
 	if (key == K_LEFT) {
-		shift --;
+		shift--;
 		Refresh();
 		return true;
 	}
 	
 	if (key == K_RIGHT) {
-		shift --;
+		shift++;
 		Refresh();
 		return true;
 	}

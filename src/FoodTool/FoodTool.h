@@ -168,7 +168,9 @@ struct WeightCtrl : public ParentCtrl {
 	void SetInstruction(String s) {edit.instruction.SetLabel(s);}
 	void Stop() {running = false; Wait();}
 	void Wait() {while (!stopped) Sleep(100);}
+	void SaveWeightStat();
 	void AddWeightStat();
+	void SetWeightStat(WeightLossStat& w);
 	void PreviewCamera();
 	void CaptureImages();
 	void SetCamImage();
@@ -283,6 +285,7 @@ class FoodTool : public TopWindow {
 	GraphCtrl graphs;
 	TodayScheduleCtrl today;
 	NutrientDeficitCtrl def;
+	MealPresetCtrl preset;
 	
 	TimeCallback tc;
 public:

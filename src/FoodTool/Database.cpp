@@ -595,7 +595,27 @@ void Database::SetCommonNutrs() {
 	ASSERT(PROT >= 0 && FAT >= 0 && CARB >= 0 && KCAL >= 0 && SODIUM >= 0);
 }
 
-
+void Database::RemoveDuplicates() {
+	Index<String> food_long;
+	
+	for(int i = 0; i < food_descriptions.GetCount(); i++) {
+		const FoodDescription& d = food_descriptions[i];
+		if (food_long.Find(d.long_desc) >= 0)
+			food_descriptions.Remove(i--);
+		else
+			food_long.Add(d.long_desc);
+	}
+	
+	Index<int> used;
+	
+	for(int i = 0; i < used_foods.GetCount(); i++) {
+		int f_i = used_foods[i];
+		if (used.Find(f_i) >= 0)
+			used_foods.Remove(i--);
+		else
+			used.Add(f_i);
+	}
+}
 
 
 

@@ -180,7 +180,7 @@ struct Profile {
 	Vector<DailyPlan> planned_daily;
 	Vector<Configuration> confs;
 	Vector<NutrientDeficitProfile> defs;
-	Vector<MealPreset> generated_foods;
+	Vector<MealPreset> presets;
 	Index<int> planned_nutrients;
 	
 	FoodStorage storage;
@@ -215,7 +215,7 @@ struct Profile {
 				% planned_daily
 				% confs
 				% defs
-				% generated_foods
+				% presets
 				% planned_nutrients
 				% storage
 				% begin_date
@@ -238,6 +238,7 @@ struct Profile {
 	void Stop() {flag.Stop();}
 	void ProcessUpdate(bool replan);
 	bool IsRunning() {return flag.running || flag.workers_running > 0;}
+	void VLCD_Preset();
 	
 	void LoadThis();
 	void StoreThis();
