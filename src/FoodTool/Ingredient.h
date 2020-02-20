@@ -71,7 +71,7 @@ struct IngredientT : Moveable<IngredientT<T>> {
 	void ChangeGrams(double new_grams) {
 		ASSERT(grams > 0.0 && IsFin(new_grams));
 		double mul = new_grams / grams;
-		ASSERT(d.nutr.GetCount());
+		ASSERT(nutr.GetCount());
 		for(auto& f : nutr) {
 			f *= mul;
 			ASSERT(IsFin(f));

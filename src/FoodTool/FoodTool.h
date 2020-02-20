@@ -275,6 +275,8 @@ class FoodTool : public TopWindow {
 	bool was_updating = true;
 	Label updating_lbl;
 	
+	MenuBar menu;
+	
 	MotivationCtrl motivation;
 	StatusCtrl status;
 	ConfigurationCtrl conf;
@@ -286,12 +288,15 @@ class FoodTool : public TopWindow {
 	TodayScheduleCtrl today;
 	NutrientDeficitCtrl def;
 	MealPresetCtrl preset;
+	DatabaseCtrl db;
 	
 	TimeCallback tc;
 public:
 	typedef FoodTool CLASSNAME;
 	FoodTool();
 	
+	void MainMenu(Bar& bar);
+	void SaveProfile();
 	void Data();
 	void SetTodayTab();
 };

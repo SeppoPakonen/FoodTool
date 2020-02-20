@@ -21,6 +21,14 @@ struct NutritionType : Moveable<NutritionType> {
 	}
 };
 
+enum {
+	OTHER,
+	VITAMIN,
+	MINERAL,
+	AMINOACID,
+	FATTYACID,
+};
+
 struct NutritionInfo : Moveable<NutritionInfo> {
 	uint16 nutr_no = 0;
 	float nutr_value = 0;
@@ -82,14 +90,16 @@ struct NutritionRecommendation : Moveable<NutritionRecommendation> {
 	int nutr_no;
 	double value;
 	bool per_kg;
+	byte group = 0;
 	
 	void Serialize(Stream& s) {
-		VER(0);
+		VER(1);
 		FOR_VER(0) {
 			s	% nutr_no
 				% value
 				% per_kg;
 		}
+		FOR_VER(1) {s % group;}
 	}
 	double GetValue(double weight) const {
 		if (per_kg)
@@ -153,7 +163,7 @@ struct Database {
 	int FindFood(String long_desc) const;
 	int FindNutrition(String key) const;
 	int FindNutritionRecommendation(String key) const;
-	void AddRecommendation(String nutr, double value, bool per_kg) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg;}
+	void AddRecommendation(String nutr, double value, bool per_kg, int group) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg; n.group = group;}
 	void SetCommonNutrs();
 	void RemoveDuplicates();
 	

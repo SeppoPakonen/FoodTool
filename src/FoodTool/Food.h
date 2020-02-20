@@ -54,6 +54,15 @@ struct MealIngredient : Moveable<MealIngredient> {
 	double min_grams = 0, max_grams = 0;
 	int db_food_no = -1;
 	
+	MealIngredient() {}
+	MealIngredient(const MealIngredient& s) {*this = s;}
+	void operator=(const MealIngredient& s) {
+		pre_day_instructions <<= s.pre_day_instructions;
+		instructions = s.instructions;
+		min_grams = s.min_grams;
+		max_grams = s.max_grams;
+		db_food_no = s.db_food_no;
+	}
 	void Serialize(Stream& s) {
 		VER(1);
 		FOR_VER(0) {s % pre_day_instructions % instructions % max_grams % db_food_no;}
@@ -71,23 +80,45 @@ typedef VectorMap<int, int> FoodQuantityInt;
 
 struct FoodDay;
 
+struct MealPresetVariant : Moveable<MealPresetVariant> {
+	Vector<MealIngredient> ingredients;
+	String name;
+	double score = 0, mass_factor = 0, taste_factor = 0;
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % ingredients % name % score % mass_factor % taste_factor;}
+	}
+	void UpdateFactors();
+};
+
 struct MealPreset : Moveable<MealPreset> {
 	VectorMap<int, String> pre_day_instructions;
 	Vector<MealIngredient> ingredients;
+	Vector<MealPresetVariant> variants;
 	String instructions;
-	String name;
+	String key, name;
 	double serving_grams = 0;
 	double score = 0, mass_factor = 0, taste_factor = 0;
 	int type = 0;
 	Time added;
 	
 	void Serialize(Stream& s) {
-		VER(1);
+		VER(3);
 		FOR_VER(0) {s % pre_day_instructions % ingredients % instructions % name % serving_grams % score % type;}
 		FOR_VER(1) {s % added % mass_factor % taste_factor;}
+		FOR_VER(2) {s % key;}
+		FOR_VER(3) {s % variants;}
+		
+		//if (s.IsLoading()) variants.Clear();
+		if (key.IsEmpty()) MakeUnique();
 	}
+	void MakeUnique() {key=""; for(int i = 0; i < 8; i++) key.Cat('a' + Random('z' - 'a' + 1));}
 	double GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg);
 	void GetNutritions(Ingredient& ing) const;
+	void UpdateFactors();
+	void MakeVariants();
+	int FindIngredient(int food_no) const;
 };
 
 struct Meal : Moveable<Meal> {

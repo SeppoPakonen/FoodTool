@@ -60,12 +60,25 @@ Image GetSmiley(double progress) {
     return Image();
 }
 
+
+
+
+
+
+
+
+
+
+
 FoodTool::FoodTool()
 {
 	Title("FoodTool");
 	Icon(Images::icon);
 	Sizeable().MaximizeBox().MinimizeBox();
 	Maximize();
+	
+	AddFrame(menu);
+	menu.Set(THISBACK(MainMenu));
 	
 	Add(updating_lbl.HCenterPos(300).VCenterPos(30));
 	Add(tabs.SizePos());
@@ -87,11 +100,23 @@ FoodTool::FoodTool()
 	tabs.Add(exc.SizePos(), "Exceptions");
 	tabs.Add(notes.SizePos(), "Notes");
 	tabs.Add(usage.SizePos(), "Usage");
+	tabs.Add(db.SizePos(), "Food Database");
 	tabs.Add(preset.SizePos(), "Meal Presets");
 	tabs.Add(conf.SizePos(), "Configuration");
 	tabs.WhenSet << THISBACK(Data);
 	
 	tc.Set(-500, THISBACK(Data));
+}
+
+void FoodTool::MainMenu(Bar& bar) {
+	bar.Sub("App", [this](Bar& bar) {
+		bar.Add("Save Profile", THISBACK(SaveProfile)).Key(K_CTRL_S);
+	});
+	
+}
+
+void FoodTool::SaveProfile() {
+	GetProfile().StoreThis();
 }
 
 void FoodTool::SetTodayTab() {
@@ -133,8 +158,10 @@ void FoodTool::Data() {
 		else if (tab == 8)
 			usage.Data();
 		else if (tab == 9)
-			preset.Data();
+			db.Data();
 		else if (tab == 10)
+			preset.Data();
+		else if (tab == 11)
 			conf.Data();
 	}
 	was_updating = is_updating;

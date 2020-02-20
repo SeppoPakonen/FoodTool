@@ -150,68 +150,123 @@ bool Database::Init() {
 		}
 	}
 	
-	AddRecommendation("PROCNT", 0.8, true);
-	AddRecommendation("FAT", 60.5 / 70.0, true);
-	AddRecommendation("CA", 1000 / 70.0, true);
-	AddRecommendation("FE", 19.8 / 70.0, true);
-	AddRecommendation("MG", 420 / 70.0, true);
-	AddRecommendation("P", 700 / 70.0, true);
-	AddRecommendation("K", 4100 / 70.0, true);
-	AddRecommendation("NA", 1500 / 70.0, true);
-	AddRecommendation("ZN", 11 / 70.0, true);
-	AddRecommendation("CU", 1 / 70.0, true);
+	AddRecommendation("PROCNT", 0.8, true, OTHER);
+	AddRecommendation("FAT", 60.5 / 70.0, true, OTHER);
+	AddRecommendation("CA", 1000 / 70.0, true, MINERAL);
+	AddRecommendation("FE", 19.8 / 70.0, true, MINERAL);
+	AddRecommendation("MG", 420 / 70.0, true, MINERAL);
+	AddRecommendation("P", 700 / 70.0, true, MINERAL);
+	AddRecommendation("K", 4100 / 70.0, true, MINERAL);
+	AddRecommendation("NA", 1500 / 70.0, true, MINERAL);
+	AddRecommendation("ZN", 11 / 70.0, true, MINERAL);
+	AddRecommendation("CU", 1 / 70.0, true, MINERAL);
 	//AddRecommendation("FLD", 50, true);
-	AddRecommendation("MN", 2.3, true);
-	AddRecommendation("SE", 100 / 70.0, true);
-	AddRecommendation("VITA_IU", 3000, true);
-	AddRecommendation("RETOL", 900 / 70.0, true);
-	AddRecommendation("VITA_RAE", 900 / 70.0, true);
-	AddRecommendation("CARTB", 15000 / 70.0, true);
-	AddRecommendation("CARTA", 600 / 70.0, true);
-	AddRecommendation("TOCPHA", 15 / 70.0, true);
+	AddRecommendation("MN", 2.3, true, MINERAL);
+	AddRecommendation("SE", 100 / 70.0, true, MINERAL);
+	AddRecommendation("VITA_IU", 3000, true, VITAMIN);
+	AddRecommendation("RETOL", 900 / 70.0, true, VITAMIN);
+	AddRecommendation("VITA_RAE", 900 / 70.0, true, VITAMIN);
+	AddRecommendation("CARTB", 15000 / 70.0, true, VITAMIN);
+	AddRecommendation("CARTA", 600 / 70.0, true, VITAMIN);
+	AddRecommendation("TOCPHA", 15 / 70.0, true, VITAMIN);
 	//AddRecommendation("VITD", 800 / 70.0, true); // use D2+D3 instead
-	AddRecommendation("VITDMCR", 100 / 70.0, true);
-	AddRecommendation("LYCPN", 21000 / 70.0, true);
-	AddRecommendation("VITC", 90 / 70.0, true);
-	AddRecommendation("THIA", 1.2 / 70.0, true);
-	AddRecommendation("RIBF", 3 / 70.0, true);
-	AddRecommendation("NIA", 16 / 70.0, true);
-	AddRecommendation("PANTAC", 5 / 70.0, true);
-	AddRecommendation("VITB6A", 1.3 / 70.0, true);
-	AddRecommendation("FOL", 400 / 70.0, true);
-	AddRecommendation("VITB12", 1.8 / 70.0, true);
-	AddRecommendation("CHOLN", 500 / 70.0, true);
+	AddRecommendation("VITDMCR", 100 / 70.0, true, VITAMIN);
+	AddRecommendation("LYCPN", 21000 / 70.0, true, VITAMIN);
+	AddRecommendation("VITC", 90 / 70.0, true, VITAMIN);
+	AddRecommendation("THIA", 1.2 / 70.0, true, VITAMIN);
+	AddRecommendation("RIBF", 3 / 70.0, true, VITAMIN);
+	AddRecommendation("NIA", 16 / 70.0, true, VITAMIN);
+	AddRecommendation("PANTAC", 5 / 70.0, true, VITAMIN);
+	AddRecommendation("VITB6A", 1.3 / 70.0, true, VITAMIN);
+	AddRecommendation("FOL", 400 / 70.0, true, VITAMIN);
+	AddRecommendation("VITB12", 1.8 / 70.0, true, VITAMIN);
+	AddRecommendation("CHOLN", 500 / 70.0, true, VITAMIN);
 	//AddRecommendation("MK4", 92.5 / 70.0, true); // bad for you
 	//AddRecommendation("VITK1D", 0 / 70.0, true); // bad for you
-	AddRecommendation("FOLAC", 400 / 70.0, true);
-	AddRecommendation("BETN", 550 / 70.0, true);
-	AddRecommendation("TRP_G", 0.006, true);
-	AddRecommendation("THR_G", 0.015, true);
-	AddRecommendation("ILE_G", 1.4 / 70.0, true);
-	AddRecommendation("LEU_G", 2.7 / 70.0, true);
-	AddRecommendation("LYS_G", 1 / 70.0, true);
-	AddRecommendation("MET_G", 0.019, true);
-	AddRecommendation("PHE_G", 0.026, true);
-	AddRecommendation("TYR_G", 6 / 70.0, true);
-	AddRecommendation("VAL_G", 1.8 / 70.0, true);
-	AddRecommendation("ARG_G", 6 / 70.0, true);
-	AddRecommendation("HISTN_G", 1 / 70.0, true);
-	AddRecommendation("ALA_G", 3.5 / 70.0, true);
-	AddRecommendation("ASP_G", 3 / 70.0, true);
-	AddRecommendation("GLU_G", 15 / 70.0, true);
+	AddRecommendation("FOLAC", 400 / 70.0, true, VITAMIN);
+	AddRecommendation("BETN", 550 / 70.0, true, VITAMIN);
+	AddRecommendation("TRP_G", 0.006, true, AMINOACID);
+	AddRecommendation("THR_G", 0.015, true, AMINOACID);
+	AddRecommendation("ILE_G", 1.4 / 70.0, true, AMINOACID);
+	AddRecommendation("LEU_G", 2.7 / 70.0, true, AMINOACID);
+	AddRecommendation("LYS_G", 1 / 70.0, true, AMINOACID);
+	AddRecommendation("MET_G", 0.019, true, AMINOACID);
+	AddRecommendation("PHE_G", 0.026, true, AMINOACID);
+	AddRecommendation("TYR_G", 6 / 70.0, true, AMINOACID);
+	AddRecommendation("VAL_G", 1.8 / 70.0, true, AMINOACID);
+	AddRecommendation("ARG_G", 6 / 70.0, true, AMINOACID);
+	AddRecommendation("HISTN_G", 1 / 70.0, true, AMINOACID);
+	AddRecommendation("ALA_G", 3.5 / 70.0, true, AMINOACID);
+	AddRecommendation("ASP_G", 3 / 70.0, true, AMINOACID);
+	AddRecommendation("GLU_G", 15 / 70.0, true, AMINOACID);
 	//AddRecommendation("GLY_G", 5 / 70.0, true);
-	AddRecommendation("GLY_G", 5 / 70.0, true);
-	AddRecommendation("VITK1", 120 / 70.0, true);
-	AddRecommendation("PRO_G", 1 / 70.0, true);
-	AddRecommendation("CHOLE", 300 / 70.0, true);
-	AddRecommendation("FATRN", 2 / 70.0, true);
-	AddRecommendation("FASAT", 13  / 70.0, true);
-	AddRecommendation("FAMS", 33  / 70.0, true);
-	AddRecommendation("FAPU", 33  / 70.0, true);
-	AddRecommendation("FATRNM", 1 / 70.0, true);
-	AddRecommendation("FATRNP", 1 / 70.0, true);
-	AddRecommendation("FIBTG", 30 / 70.0, true);
+	AddRecommendation("GLY_G", 5 / 70.0, true, AMINOACID);
+	AddRecommendation("VITK1", 120 / 70.0, true, VITAMIN);
+	AddRecommendation("PRO_G", 1 / 70.0, true, AMINOACID);
+	AddRecommendation("CHOLE", 300 / 70.0, true, OTHER);
+	AddRecommendation("FATRN", 2 / 70.0, true, OTHER);
 	
+	double fat_saturated = 13  / 70.0 * 5;
+	double fat_monounsaturated = 33  / 70.0 * 5;
+	double fat_polyunsaturated = 33  / 70.0 * 5;
+	AddRecommendation("FASAT", fat_saturated, true, OTHER);
+	AddRecommendation("FAMS", fat_monounsaturated, true, OTHER);
+	AddRecommendation("FAPU", fat_polyunsaturated, true, OTHER);
+	AddRecommendation("FATRNM", 1 / 70.0, true, OTHER);
+	AddRecommendation("FATRNP", 1 / 70.0, true, OTHER);
+	AddRecommendation("FIBTG", 30 / 70.0, true, OTHER);
+	
+	// https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6769731/
+	double fat_saturated_part = 1.0 / 12;
+	AddRecommendation("F4D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F6D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F8D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F10D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F12D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F14D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F15D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F16D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F17D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F18D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F20D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	AddRecommendation("F24D0", fat_saturated / fat_saturated_part, true, FATTYACID);
+	
+	double fat_monounsaturated_part = 1.0 / 7;
+	AddRecommendation("F14D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	AddRecommendation("F15D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	AddRecommendation("F16D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D1", fat_monounsaturated / fat_monounsaturated_part, true, FATTYACID);
+	
+	double fat_monounsaturated__analog_part = 1.0 / 12;
+	AddRecommendation("F24D1C", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F16D1T", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F16D1C", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F18D1T", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F18D1C", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F18D3CN6", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F18D3CN3", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F20D3N3", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F20D3N6", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F20D4N6", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F22D4", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F18D2CN6", fat_monounsaturated / fat_monounsaturated__analog_part, true, FATTYACID);
+	
+	double fat_polyunsaturated_part = 1.0 / 10;
+	AddRecommendation("F18D2", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D3", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D4", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D6", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D4", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D5", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D5", fat_polyunsaturated / fat_polyunsaturated_part, true, FATTYACID);
+	
+	AddRecommendation("F22D1T", 0, false, FATTYACID);
+	AddRecommendation("F18D2TT", 0, false, FATTYACID);
+	AddRecommendation("F18D2CLA", 0, false, FATTYACID);
+	AddRecommendation("F22D1C", 0, false, FATTYACID);
 	
 	
 	#if 0
@@ -371,7 +426,6 @@ FoodDescription& FoodDescription::AddNutrition(int nutr_no, double value, double
 }
 
 void Database::VLCD_Preset() {
-	
 	AddFood("OTHER", "Salt, iodized", "", "Meira", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(25, 38758, 0);
 	AddFood("0100", "Magnex sitraatti + B6- vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
@@ -557,10 +611,27 @@ void Database::VLCD_Preset() {
 	used_foods.Add(8795);
 	used_foods.Add(8796);
 	used_foods.Add(8797);
+	used_foods.Add(6140);
+	used_foods.Add(2938);
+	used_foods.Add(883);
+	used_foods.Add(261);
+	used_foods.Add(276);
+	used_foods.Add(3000);
+	used_foods.Add(266);
+	used_foods.Add(5880);
+	used_foods.Add(8681);
+	used_foods.Add(3322);
+	used_foods.Add(278);
+	used_foods.Add(239);
+	used_foods.Add(2923);
+	used_foods.Add(2826);
+	used_foods.Add(117);
+	used_foods.Add(289);
+	used_foods.Add(3009);
+	used_foods.Add(2690);
+	used_foods.Add(6511);
 	
-
-
-
+	
 	
 	SortIndex(used_foods, StdLess<int>());
 }

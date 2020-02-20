@@ -12,14 +12,24 @@ MealPresetCtrl::MealPresetCtrl() {
 	list.AddColumn("Name");
 	list.AddColumn("Mass");
 	list.AddColumn("Taste");
-	list.ColumnWidths("3 1 1");
+	list.AddColumn("Score");
+	list.ColumnWidths("3 1 1 1");
 	list.WhenAction = THISBACK(SelectPreset);
 	list.WhenLeftClick = THISBACK(SelectPreset);
+	
+	variants.AddColumn("Variant");
+	variants.AddColumn("Mass");
+	variants.AddColumn("Taste");
+	variants.AddColumn("Score");
+	variants.ColumnWidths("3 1 1 1");
+	variants.WhenAction = THISBACK(SelectPreset);
+	variants.WhenLeftClick = THISBACK(SelectPreset);
 	
 	inglist.AddColumn("Name");
 	inglist.AddColumn("Min (g)");
 	inglist.AddColumn("Max (g)");
-	inglist.ColumnWidths("2 1 1");
+	inglist.AddColumn("Variant");
+	inglist.ColumnWidths("3 1 1 1");
 	
 	food_list.AddIndex();
 	food_list.AddColumn("Long description");
@@ -29,9 +39,14 @@ MealPresetCtrl::MealPresetCtrl() {
 	
 	add <<= THISBACK(Add);
 	remove <<= THISBACK(Remove);
+	makevars <<= THISBACK(MakeVariants);
 	add_ingredient <<= THISBACK(AddIngredient);
 	remove_ingredient <<= THISBACK(RemoveIngredient);
 	filter.WhenEnter << THISBACK(Filter);
+	add_vitamins <<= THISBACK(AddVitamins);
+	add_minerals <<= THISBACK(AddMinerals);
+	add_aminoacids <<= THISBACK(AddAminoAcids);
+	add_fattyacids <<= THISBACK(AddFattyAcids);
 	
 	prev.Hide();
 	next.Hide();
@@ -46,12 +61,19 @@ void MealPresetCtrl::Data() {
 	if (prof.presets.GetCount() != list.GetCount()) {
 		for(int i = 0; i < prof.presets.GetCount(); i++) {
 			int row = prof.presets.GetCount() - 1 - i;
-			const MealPreset& mp = prof.presets[i];
+			MealPreset& mp = prof.presets[i];
+			if (!mp.score)
+				mp.UpdateFactors();
+			if (mp.ingredients.GetCount() && mp.variants.IsEmpty())
+				mp.MakeVariants();
 			list.Set(row, 0, i);
 			list.Set(row, 1, mp.name);
-			list.Set(row, 2, mp.mass_factor);
-			list.Set(row, 3, mp.taste_factor);
+			list.Set(row, 2, Format("%1n", mp.mass_factor));
+			list.Set(row, 3, Format("%1n", mp.taste_factor));
+			list.Set(row, 4, Format("%1n", mp.score));
 		}
+		list.SetCount(prof.presets.GetCount());
+		list.SetSortColumn(3, true);
 		if (!list.IsCursor() && list.GetCount())
 			list.SetCursor(0);
 		SelectPreset();
@@ -64,10 +86,26 @@ void MealPresetCtrl::SelectPreset() {
 	
 	const Database& db = DB();
 	int cursor = list.GetCursor();
-	int note_i = list.GetCount() - 1 - cursor;
+	int note_i = list.Get(cursor, 0);
 	
 	Profile& prof = GetProfile();
 	const MealPreset& mp = prof.presets[note_i];
+	
+	for(int i = 0; i < mp.variants.GetCount(); i++) {
+		const MealPresetVariant& var = mp.variants[i];
+		variants.Set(i, 0, var.name);
+		variants.Set(i, 1, Format("%1n", var.mass_factor));
+		variants.Set(i, 2, Format("%1n", var.taste_factor));
+		variants.Set(i, 3, Format("%1n", var.score));
+	}
+	variants.SetCount(mp.variants.GetCount());
+	if (!variants.IsCursor() && variants.GetCount())
+		variants.SetCursor(0);
+	
+	const MealPresetVariant* var = NULL;
+	int var_i = variants.GetCursor();
+	if (var_i >= 0 && var_i < mp.variants.GetCount())
+		var = &mp.variants[var_i];
 	
 	name.SetData(mp.name);
 	instructions.SetData(mp.instructions);
@@ -88,6 +126,11 @@ void MealPresetCtrl::SelectPreset() {
 		inglist.SetCtrl(i, 2, max_edit);
 		inglist.Set(i, 2, mi.max_grams);
 		
+		if (var && i < var->ingredients.GetCount())
+			inglist.Set(i, 3, (int)var->ingredients[i].max_grams);
+		else
+			inglist.Set(i, 3, "");
+		
 		min_edit.WhenAction << THISBACK(PresetChanged);
 		max_edit.WhenAction << THISBACK(PresetChanged);
 	}
@@ -100,7 +143,7 @@ void MealPresetCtrl::PresetChanged() {
 	
 	const Database& db = DB();
 	int cursor = list.GetCursor();
-	int note_i = list.GetCount() - 1 - cursor;
+	int note_i = list.Get(cursor, 0);
 	
 	Profile& prof = GetProfile();
 	MealPreset& mp = prof.presets[note_i];
@@ -114,7 +157,12 @@ void MealPresetCtrl::PresetChanged() {
 		mi.max_grams = max_mass[i].GetData();
 	}
 	
+	mp.UpdateFactors();
+	
 	list.Set(cursor, 1, mp.name);
+	list.Set(cursor, 2, Format("%1n", mp.mass_factor));
+	list.Set(cursor, 3, Format("%1n", mp.taste_factor));
+	list.Set(cursor, 4, Format("%1n", mp.score));
 }
 
 void MealPresetCtrl::AddIngredient() {
@@ -123,7 +171,7 @@ void MealPresetCtrl::AddIngredient() {
 	
 	const Database& db = DB();
 	int cursor = list.GetCursor();
-	int note_i = list.GetCount() - 1 - cursor;
+	int note_i = list.Get(cursor, 0);
 	
 	Profile& prof = GetProfile();
 	MealPreset& mp = prof.presets[note_i];
@@ -139,6 +187,7 @@ void MealPresetCtrl::AddIngredient() {
 	
 	MealIngredient& mi = mp.ingredients.Add();
 	mi.db_food_no = food_i;
+	mi.max_grams = 1.0;
 	
 	SelectPreset();
 	inglist.ScrollEnd();
@@ -150,7 +199,7 @@ void MealPresetCtrl::RemoveIngredient() {
 	
 	const Database& db = DB();
 	int cursor = list.GetCursor();
-	int note_i = list.GetCount() - 1 - cursor;
+	int note_i = list.Get(cursor, 0);
 	
 	Profile& prof = GetProfile();
 	MealPreset& mp = prof.presets[note_i];
@@ -168,9 +217,11 @@ void MealPresetCtrl::RemoveIngredient() {
 void MealPresetCtrl::Add() {
 	Profile& prof = GetProfile();
 	MealPreset& mp = prof.presets.Add();
+	mp.MakeUnique();
 	mp.added = GetSysTime();
 	mp.name = t_("Unnamed");
 	Data();
+	list.SetCursor(list.GetCount()-1);
 }
 
 void MealPresetCtrl::Remove() {
@@ -179,12 +230,27 @@ void MealPresetCtrl::Remove() {
 	
 	const Database& db = DB();
 	int cursor = list.GetCursor();
-	int note_i = list.GetCount() - 1 - cursor;
+	int note_i = list.Get(cursor, 0);
 	
 	Profile& prof = GetProfile();
 	if (note_i >= 0 && note_i < prof.presets.GetCount()) {
 		prof.presets.Remove(note_i);
 		Data();
+	}
+}
+
+void MealPresetCtrl::MakeVariants() {
+	if (!list.IsCursor())
+		return;
+	
+	const Database& db = DB();
+	int cursor = list.GetCursor();
+	int note_i = list.Get(cursor, 0);
+	
+	Profile& prof = GetProfile();
+	if (note_i >= 0 && note_i < prof.presets.GetCount()) {
+		prof.presets[note_i].MakeVariants();
+		SelectPreset();
 	}
 }
 
@@ -234,4 +300,81 @@ void MealPresetCtrl::Filter() {
 	if (!food_list.IsCursor() && food_list.GetCount())
 		food_list.SetCursor(0);
 	
+}
+
+void MealPresetCtrl::AddByNutritionGroup(int group) {
+	if (!list.IsCursor())
+		return;
+	
+	const Database& db = DB();
+	int cursor = list.GetCursor();
+	int note_i = list.Get(cursor, 0);
+	
+	Profile& prof = GetProfile();
+	if (note_i >= 0 && note_i < prof.presets.GetCount()) {
+		Index<int> to_add;
+		for(const NutritionRecommendation& recom : db.nutr_recom) {
+			if (recom.group != group || recom.value == 0.0)
+				continue;
+			
+			
+			VectorMap<int, double> food_values;
+			for(int i = 0; i < food_list.GetCount(); i++) {
+				int fd_i = food_list.Get(i, 0);
+				const FoodDescription& d = db.food_descriptions[fd_i];
+				for (const NutritionInfo& ni : d.nutr) {
+					if (ni.nutr_no == recom.nutr_no) {
+						if (d.long_desc.Find("formula,") >= 0 ||
+							d.long_desc.Find("palm") >= 0 || // not sold separately
+							d.long_desc.Find("Shortening") >= 0 || // not everywhere
+							d.long_desc.Find("skin,") >= 0 || // not everywhere
+							d.long_desc.Find("Lamb") >= 0 || // very expensive
+							d.long_desc.Find("DONALD") >= 0 || // very expensive
+							d.long_desc.Find("New Zeal") >= 0 || // very expensive
+							d.long_desc.Find("beluga") >= 0 || // very rare
+							d.long_desc.Find("industrial") >= 0) // seems bad
+						{
+							
+						}
+						else {
+							food_values.Add(fd_i, ni.nutr_value);
+						}
+						break;
+					}
+				}
+			}
+			SortByValue(food_values, StdGreater<double>());
+			for(int i = 0; i < food_values.GetCount() && i < 3; i++)
+				to_add.FindAdd(food_values.GetKey(i));
+		}
+		SortIndex(to_add, StdLess<int>());
+		MealPreset& mp = prof.presets[note_i];
+		for(int i = 0; i < to_add.GetCount(); i++) {
+			int fd_i = to_add[i];
+			if (mp.FindIngredient(fd_i) < 0) {
+				MealIngredient& mi = mp.ingredients.Add();
+				mi.db_food_no = fd_i;
+				mi.min_grams = 0;
+				mi.max_grams = 100;
+			}
+		}
+		SelectPreset();
+		PresetChanged();
+	}
+}
+
+void MealPresetCtrl::AddVitamins() {
+	AddByNutritionGroup(VITAMIN);
+}
+
+void MealPresetCtrl::AddMinerals() {
+	AddByNutritionGroup(MINERAL);
+}
+
+void MealPresetCtrl::AddAminoAcids() {
+	AddByNutritionGroup(AMINOACID);
+}
+
+void MealPresetCtrl::AddFattyAcids() {
+	AddByNutritionGroup(FATTYACID);
 }

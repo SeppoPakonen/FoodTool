@@ -12,11 +12,17 @@ struct MealPresetCtrl : WithMealPresetLayout<ParentCtrl> {
 	void Data();
 	void Add();
 	void Remove();
+	void MakeVariants();
 	void SelectPreset();
 	void PresetChanged();
 	void AddIngredient();
 	void RemoveIngredient();
 	void Filter();
+	void AddByNutritionGroup(int group);
+	void AddVitamins();
+	void AddMinerals();
+	void AddAminoAcids();
+	void AddFattyAcids();
 	
 	
 };
