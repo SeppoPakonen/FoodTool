@@ -26,6 +26,7 @@ using namespace Upp;
 #include "StepOptimizer.h"
 #include "Ingredient.h"
 #include "Food.h"
+#include "FoodStorage.h"
 #include "Profile.h"
 #include "VideoCapture.h"
 #include "ScheduleCtrl.h"
@@ -70,7 +71,6 @@ struct ConfigurationCtrl : public ParentCtrl {
 	Splitter split;
 	ArrayCtrl list;
 	WithConfigurationLayout<ParentCtrl> conf;
-	FatPercentageReferenceWindow iw;
 	
 	typedef ConfigurationCtrl CLASSNAME;
 	ConfigurationCtrl();
@@ -78,7 +78,6 @@ struct ConfigurationCtrl : public ParentCtrl {
 	void Data();
 	void SelectConf();
 	void AddConf();
-	void ShowWeightReference();
 };
 
 struct ExceptionsCtrl : public ParentCtrl {
@@ -224,6 +223,7 @@ class FoodTool : public TopWindow {
 	NutrientDeficitCtrl def;
 	MealPresetCtrl preset;
 	DatabaseCtrl db;
+	FoodStorageCtrl storage;
 	
 	TimeCallback tc;
 public:
@@ -232,6 +232,7 @@ public:
 	
 	void MainMenu(Bar& bar);
 	void SaveProfile();
+	void Replan();
 	void Data();
 	void SetTodayTab();
 };

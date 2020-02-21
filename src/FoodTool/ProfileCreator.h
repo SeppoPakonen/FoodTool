@@ -1,15 +1,6 @@
 #ifndef _FoodTool_ProfileCreator_h_
 #define _FoodTool_ProfileCreator_h_
 
-struct FatPercentageReferenceWindow : public TopWindow {
-	ImageCtrl img;
-	Button close;
-	
-	typedef FatPercentageReferenceWindow CLASSNAME;
-	FatPercentageReferenceWindow();
-	void Close0() {Close();Close();}
-};
-
 class ProfileCreator : public TopWindow {
 	WithWelcomeLayout<ParentCtrl> tab0;
 	WithConfigurationLayout<ParentCtrl> tab1;
@@ -20,7 +11,6 @@ class ProfileCreator : public TopWindow {
 	int tab = 0;
 	
 	VectorMap<int, double> height_bmis;
-	FatPercentageReferenceWindow iw;
 	
 public:
 	typedef ProfileCreator CLASSNAME;
@@ -28,7 +18,6 @@ public:
 	
 	void Previous();
 	void Next();
-	void ShowWeightReference();
 };
 
 

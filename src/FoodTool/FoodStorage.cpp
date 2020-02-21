@@ -17,7 +17,7 @@ void FoodStorage::Init(Date begin) {
 	first_day.total_consumed.Reset();
 }
 
-void FoodStorage::Update(const Vector<DailyPlan>& planned_daily) {
+void FoodStorage::Update(bool replan, const Vector<DailyPlan>& planned_daily) {
 	ASSERT_(days.GetCount(), "Run Init first");
 	while (!HasEnoughPreplanned())
 		PlanWeek(planned_daily);
@@ -941,6 +941,47 @@ void FoodStorage::MakeMenu(const DailyPlan& p, FoodDay& d) {
 	else if (d.mode == MODE_MUSCLEGAIN) {
 		Panic("TODO");
 	}
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FoodStorageCtrl::FoodStorageCtrl() {
+	
+}
+	
+void FoodStorageCtrl::Data() {
 	
 	
 	

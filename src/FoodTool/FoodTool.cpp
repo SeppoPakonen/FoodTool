@@ -102,6 +102,7 @@ FoodTool::FoodTool()
 	tabs.Add(usage.SizePos(), "Usage");
 	tabs.Add(db.SizePos(), "Food Database");
 	tabs.Add(preset.SizePos(), "Meal Presets");
+	tabs.Add(storage.SizePos(), "Meal Presets");
 	tabs.Add(conf.SizePos(), "Configuration");
 	tabs.WhenSet << THISBACK(Data);
 	
@@ -111,12 +112,17 @@ FoodTool::FoodTool()
 void FoodTool::MainMenu(Bar& bar) {
 	bar.Sub("App", [this](Bar& bar) {
 		bar.Add("Save Profile", THISBACK(SaveProfile)).Key(K_CTRL_S);
+		bar.Add("Replan", THISBACK(Replan)).Key(K_CTRL_R);
 	});
 	
 }
 
 void FoodTool::SaveProfile() {
 	GetProfile().StoreThis();
+}
+
+void FoodTool::Replan() {
+	GetProfile().Start(true);
 }
 
 void FoodTool::SetTodayTab() {
@@ -162,6 +168,8 @@ void FoodTool::Data() {
 		else if (tab == 10)
 			preset.Data();
 		else if (tab == 11)
+			storage.Data();
+		else if (tab == 12)
 			conf.Data();
 	}
 	was_updating = is_updating;
@@ -458,11 +466,6 @@ ConfigurationCtrl::ConfigurationCtrl() {
 	list.WhenAction = THISBACK(SelectConf);
 	list.WhenLeftClick = THISBACK(SelectConf);
 	
-}
-
-void ConfigurationCtrl::ShowWeightReference() {
-	if (!iw.IsOpen())
-		iw.Open(this);
 }
 
 void ConfigurationCtrl::Data() {
@@ -856,12 +859,10 @@ GraphCtrl::GraphCtrl() {
 	
 	list.Add(t_("Measured weight"));
 	graph.Add()
-		.Add(t_("Planned weight"), 1, GrayColor())
 		.Add(t_("Weight"), 2, Color(109, 0, 117));
 	
 	list.Add(t_("Measured fat"));
 	graph.Add()
-		.Add(t_("Planned Fat"), 1, GrayColor())
 		.Add(t_("Fat"), 2, Color(81, 48, 0));
 		
 	list.Add(t_("Measured liquid"));
@@ -912,13 +913,15 @@ int MultipurposeGraph::GetLineCount(int s) {return src[s].lines.GetCount();}
 Color MultipurposeGraph::GetLineColor(int s, int l) {return src[s].lines[l].color;}
 int MultipurposeGraph::GetLineWidth(int s, int l) {return src[s].lines[l].width;}
 
+#define MEASURE_FORECAST 10
+
 int MultipurposeGraph::GetCount(int s) {
 	if (s < 4)
 		return GetProfile().planned_daily.GetCount();
 	else if (s < 14)
 		return GetProfile().storage.days.GetCount();
 	else if (s < 27)
-		return GetProfile().weights.GetCount();
+		return GetProfile().weights.GetCount() + MEASURE_FORECAST;
 	Panic("Invalid source");
 	return -1;
 }
@@ -928,6 +931,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 		tmp.SetCount(l+1);
 	
 	const Profile& prof = GetProfile();
+	const Configuration& conf = prof.confs.Top();
 	const Database& db = DB();
 	
 	Vector<double>& v = tmp[l];
@@ -1150,132 +1154,173 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 		
 		else if (src == 14) {
 			if (l == 0) {
+				int i = 0;
+				for(; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& s = prof.weights[i];
+					v[i] = s.weight;
+				}
+				
 				const DailyPlan* p = prof.planned_daily.Begin();
 				const DailyPlan* end = prof.planned_daily.End();
-				for(int i = 0; i < prof.weights.GetCount(); i++) {
-					const WeightLossStat& w = prof.weights[i];
-					while (p->date != Date(w.added) && p != end) p++;
-					if (p == end) break;
-					v[i] = p->weight;
+				
+				Date begin = Date(prof.weights.Top().added) + 1;
+				while (p != end) {
+					if (p->date >= begin)
+						break;
+					p++;
 				}
-			}
-			else if (l == 1) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].weight;
+				int count = 0;
+				while (p != end) {
+					v[i + count++] = p->weight;
+					v[i + count++] = p->weight;
+					if (count >= MEASURE_FORECAST)
+						break;
+					p++;
+				}
 			}
 		}
 		else if (src == 15) {
 			if (l == 0) {
+				int i = 0;
+				for(; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& s = prof.weights[i];
+					v[i] = s.weight * s.fat * 0.01;
+				}
+				
 				const DailyPlan* p = prof.planned_daily.Begin();
 				const DailyPlan* end = prof.planned_daily.End();
 				
-				for(int i = 0; i < prof.weights.GetCount(); i++) {
-					const WeightLossStat& w = prof.weights[i];
-					while (p->date != Date(w.added) && p != end) p++;
-					if (p == end) break;
-					v[i] = p->fat_perc * 100;
+				Date begin = Date(prof.weights.Top().added) + 1;
+				while (p != end) {
+					if (p->date >= begin)
+						break;
+					p++;
+				}
+				int count = 0;
+				while (p != end) {
+					v[i + count++] = p->fat_kgs;
+					v[i + count++] = p->fat_kgs;
+					if (count >= MEASURE_FORECAST)
+						break;
+					p++;
 				}
 			}
-			else if (l == 1) {
-				// Normalize non-dexa measurements (usually inaccurate cheap scale)
-				double begin_fat_perc = prof.planned_daily[0].fat_perc * 100;
-				v[0] = begin_fat_perc;
-				if (v.GetCount() > 1) {
-					double prev = begin_fat_perc;
-					double prev_meas = prof.weights[1].fat;
-					for(int i = 1; i < prof.weights.GetCount(); i++) {
-						const WeightLossStat& w = prof.weights[i];
-						if (w.is_dexa) {
-							double cur = w.fat;
-							v[i] = cur;
-							prev = cur;
-						}
-						else {
-							double cur_meas = w.fat;
-							double mul = cur_meas / prev_meas;
-							double cur = prev * mul;
-							v[i] = cur;
-							prev = cur;
-							prev_meas = cur_meas;
-						}
-					}
-				}
-			}
+			FillVector(v);
 		}
 		else if (src == 16) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].liquid;
+				#define MEAS(var) \
+				for(int i = 0; i < prof.weights.GetCount(); i++) \
+					v[i] = prof.weights[i].var; \
+				double diff = (prof.weights.Top().var - prof.weights[0].var) / prof.weights.GetCount(); \
+				for(int i = prof.weights.GetCount(); i < v.GetCount(); i++) \
+					v[i] = v[i-1] + diff;
+				MEAS(GetLiquidKg());
 			}
 			FillVector(v);
 		}
 		else if (src == 17) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].muscle;
+				int i = 0;
+				for(; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& s = prof.weights[i];
+					v[i] = s.weight * s.muscle * 0.01;
+				}
+				
+				const DailyPlan* p = prof.planned_daily.Begin();
+				const DailyPlan* end = prof.planned_daily.End();
+				
+				Date begin = Date(prof.weights.Top().added) + 1;
+				while (p != end) {
+					if (p->date >= begin)
+						break;
+					p++;
+				}
+				int count = 0;
+				while (p != end) {
+					v[i + count++] = p->lean_kgs;
+					v[i + count++] = p->lean_kgs;
+					if (count >= MEASURE_FORECAST)
+						break;
+					p++;
+				}
 			}
 			FillVector(v);
 		}
 		else if (src == 18) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].bmi;
+				int i = 0;
+				for(; i < prof.weights.GetCount(); i++) {
+					const WeightLossStat& s = prof.weights[i];
+					v[i] = GetBMI(conf.height * 0.01, s.weight);
+				}
+				
+				const DailyPlan* p = prof.planned_daily.Begin();
+				const DailyPlan* end = prof.planned_daily.End();
+				
+				Date begin = Date(prof.weights.Top().added) + 1;
+				while (p != end) {
+					if (p->date >= begin)
+						break;
+					p++;
+				}
+				int count = 0;
+				while (p != end) {
+					double bmi = GetBMI(conf.height * 0.01, p->weight);
+					v[i + count++] = bmi;
+					v[i + count++] = bmi;
+					if (count >= MEASURE_FORECAST)
+						break;
+					p++;
+				}
 			}
 			FillVector(v);
 		}
 		else if (src == 19) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].neck;
+				MEAS(neck);
 			}
 			FillVector(v);
 		}
 		else if (src == 20) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].bicep;
+				MEAS(bicep);
 			}
 			FillVector(v);
 		}
 		else if (src == 21) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].forearm;
+				MEAS(forearm);
 			}
 			FillVector(v);
 		}
 		else if (src == 22) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].chest;
+				MEAS(chest);
 			}
 			FillVector(v);
 		}
 		else if (src == 23) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].waist;
+				MEAS(waist);
 			}
 			FillVector(v);
 		}
 		else if (src == 24) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].buttocks;
+				MEAS(buttocks);
 			}
 			FillVector(v);
 		}
 		else if (src == 25) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].thigh;
+				MEAS(thigh);
 			}
 			FillVector(v);
 		}
 		else if (src == 26) {
 			if (l == 0) {
-				for(int i = 0; i < prof.weights.GetCount(); i++)
-					v[i] = prof.weights[i].leg;
+				MEAS(leg);
 			}
 			FillVector(v);
 		}
@@ -1305,7 +1350,7 @@ int MultipurposeGraph::GetHorzLine(int s) {
 		return 0;
 	}
 	else if (s < 27)
-		return 0;
+		return prof.weights.GetCount();
 	Panic("Invalid source");
 	return -1;
 }

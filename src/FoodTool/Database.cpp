@@ -643,6 +643,13 @@ int Database::FindFood(String long_desc) const {
 	return -1;
 }
 
+int Database::FindFoodLeft(String long_desc) const {
+	for(int i = 0; i < food_descriptions.GetCount(); i++)
+		if (food_descriptions[i].long_desc.Left(long_desc.GetCount()) == long_desc)
+			return i;
+	return -1;
+}
+
 int Database::FindNutrition(String key) const {
 	for(int i = 0; i < nutr_types.GetCount(); i++)
 		if (nutr_types[i].tagname == key)

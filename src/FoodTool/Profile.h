@@ -89,6 +89,7 @@ struct WeightLossStat : Moveable<WeightLossStat> {
 	String GetFrontFile() const {return GetImageFile("front_" + GetGenericJpg());}
 	String GetRightFile() const {return GetImageFile("right_" + GetGenericJpg());}
 	String GetBackFile() const {return GetImageFile("back_" + GetGenericJpg());}
+	double GetLiquidKg() const {return weight * liquid * 0.01;}
 };
 
 struct Configuration : Moveable<Configuration> {
@@ -170,7 +171,7 @@ struct ScheduleToday {
 
 int GetTargetWeight(double height_m);
 int GetBmiWeight(double height_m, int bmi);
-int GetBMI(double height_m, double weight_kg);
+double GetBMI(double height_m, double weight_kg);
 
 
 struct Profile {
@@ -240,6 +241,7 @@ struct Profile {
 	void ProcessUpdate(bool replan);
 	bool IsRunning() {return flag.running || flag.workers_running > 0;}
 	void VLCD_Preset();
+	void CookedToRaw();
 	
 	void LoadThis();
 	void StoreThis();

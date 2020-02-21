@@ -59,23 +59,6 @@ ProfileCreator::ProfileCreator() {
 	
 }
 
-FatPercentageReferenceWindow::FatPercentageReferenceWindow() {
-	Title("Fat-percentage reference");
-	String bodyfat_jpg = BZ2Decompress(bodyfat, bodyfat_length);
-	Image i = StreamRaster::LoadStringAny(bodyfat_jpg);
-	img.SetImage(i);
-	SetRect(0, 0, i.GetWidth(), i.GetHeight() + 30);
-	Add(img.HSizePos().VSizePos(0,30));
-	Add(close.HSizePos().BottomPos(0,30));
-	close.SetLabel("Close");
-	close <<= THISBACK(Close0);
-}
-
-void ProfileCreator::ShowWeightReference() {
-	if (!iw.IsOpen())
-		iw.Open(this);
-}
-
 void ProfileCreator::Previous() {
 	tab0.Hide();
 	tab1.Hide();

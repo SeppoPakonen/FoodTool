@@ -4,22 +4,46 @@
 
 Profile::Profile() {
 	LoadThis();
-	if (weights.GetCount() && weights[0].fat == 0.0)
-		weights.Remove(0);
-	weights[7].added = Time(2020,2,17,20,0,0);
+	
+	//if (weights.GetCount() && weights[0].fat == 0.0) weights.Remove(0);
+	//weights[7].added = Time(2020,2,17,20,0,0);
+	if (0) {
+		#define FIX(x) \
+		{ \
+			double value = 0.0; \
+			int i = 0;\
+			for(; i < weights.GetCount(); i++) \
+				if ((value = weights[i].x) > 0.0) \
+					break;\
+			for(; i >= 0; i--) \
+				weights[i].x = value; \
+		}
+		FIX(neck);
+		FIX(bicep);
+		FIX(forearm);
+		FIX(chest);
+		FIX(waist);
+		FIX(buttocks);
+		FIX(thigh);
+		FIX(leg);
+	}
+	
 	tmp_usage_start = GetSysTime();
+	
+	//CookedToRaw();
 	
 	if (is_initialised) {
 		if (storage.days.IsEmpty())
 			storage.Init(begin_date);
-		Start(true);
+		Start(false);
 	}
 }
 
 void Profile::ProcessUpdate(bool replan) {
 	TimeStop ts;
 	
-	planned_daily.Clear();
+	//planned_daily.Clear();
+	if (planned_daily.IsEmpty()) replan = true;
 	
 	int prev_days = 0;
 	if (planned_daily.GetCount())
@@ -28,7 +52,7 @@ void Profile::ProcessUpdate(bool replan) {
 	if (replan)
 		UpdatePlan();
 	
-	//storage.Update(planned_daily);
+	//storage.Update(replan, planned_daily);
 	version++;
 	
 	StoreThis();
@@ -124,7 +148,7 @@ bool Profile::UpdatePlan() {
 	const double cals_in_kg_fat = 3500/0.453592;
 	const double tgt_weight = GetTargetWeight(conf->height * 0.01);
 	const double tgt_fat_perc = is_male ? 8 * 0.01 : 21 * 0.01;
-	
+	const double max_lean_gain = 226 / 7.0; // around 0.5 pounds lean in a week
 	const double begin_weight = wl->weight;
 	const double begin_fat_perc = wl->fat * 0.01;
 	const double begin_lean_perc = wl->muscle * 0.01;
@@ -158,10 +182,11 @@ bool Profile::UpdatePlan() {
 	int easy_day_counter = 0;
 	
 	int count = 0;
-	while (fabs(fat_perc - tgt_fat_perc) > 0.01 || fabs(tgt_lean_perc - lean_perc) > 0.01) {
+	while (fabs(fat_perc - tgt_fat_perc) > 0.01 || fabs(tgt_lean_perc - lean_perc) > 0.01 || fabs(weight - tgt_weight) > 1.0) {
 		double prog = max(0.0, min(1.0, 1.0 - fabs(weight - tgt_weight) / fabs(begin_weight - tgt_weight)));
 		//if (planned_daily.GetCount() && planned_daily.Top().prog > prog) break;
-		//if (count++ > 180) break;
+		if (count > 365) break;
+		count++;
 		
 		DailyPlan& d = planned_daily.Add();
 		
@@ -234,14 +259,14 @@ bool Profile::UpdatePlan() {
 			easy_day_counter = (easy_day_counter + 1) % conf->easy_day_interval;
 		}
 		else if (fat_perc >= tgt_fat_perc) {
-			d.allowed_calories = 0.8 * d.maintain_calories;
+			d.allowed_calories = 0.6 * d.maintain_calories;
 			prot_cals = min_protein * 4.4;
 			fat_cals = (d.allowed_calories - prot_cals) * 0.33;
 			carb_cals = (d.allowed_calories - prot_cals) * 0.67;
 			d.is_easy_day = false;
 		}
 		else {
-			d.allowed_calories = 1.2 * d.maintain_calories;
+			d.allowed_calories = 1.4 * d.maintain_calories;
 			prot_cals = min_protein * 4.4;
 			fat_cals = (d.allowed_calories - prot_cals) * 0.33;
 			carb_cals = (d.allowed_calories - prot_cals) * 0.67;
@@ -267,7 +292,7 @@ bool Profile::UpdatePlan() {
 		d.burned_calories = d.maintain_burned_calories + d.walking_burned_calories + d.jogging_burned_calories;
 		
 		#if 1
-		double burned_protein_grams = maintain_protein - (prot_cals / 4.4);
+		double burned_protein_grams = max(-max_lean_gain * 0.26, maintain_protein - (prot_cals / 4.4));
 		double burned_lean_cals = burned_protein_grams / 26.0 * 250.0; // from beef... lol
 		double burned_lean_kgs  = burned_protein_grams / 26.0 * 0.1; // prot 26g/100g --> kgs
 		double burned_fat_cals = d.burned_calories - burned_lean_cals;
@@ -295,6 +320,7 @@ bool Profile::UpdatePlan() {
 		
 		double new_lean_kgs = lean_kgs - burned_lean_kgs;
 		double new_fat_kgs = fat_kgs - burned_fat_kgs;
+		ASSERT(new_lean_kgs <= lean_kgs + max_lean_gain);
 		internal_kgs = (new_fat_kgs + new_lean_kgs) / (1.0 - internal_perc) * internal_perc;
 		fat_perc = new_fat_kgs / (new_fat_kgs + new_lean_kgs + internal_kgs);
 		lean_perc = new_lean_kgs / (new_fat_kgs + new_lean_kgs + internal_kgs);
@@ -422,6 +448,33 @@ void Profile::VLCD_Preset() {
 	
 }
 
+void Profile::CookedToRaw() {
+	Database& db = DB();
+	
+	for(int i = 0; i < presets.GetCount(); i++) {
+		MealPreset& mp = presets[i];
+		bool has_changes = false;
+		
+		for(MealIngredient& ing : mp.ingredients) {
+			const FoodDescription& d = db.food_descriptions[ing.db_food_no];
+			int a = d.long_desc.Find(" cooked");
+			if (a >= 0) {
+				String search_str = d.long_desc.Left(a) + " raw";
+				int j = db.FindFoodLeft(search_str);
+				if (j >= 0) {
+					ing.db_food_no = j;
+					has_changes = true;
+				}
+			}
+		
+		}
+		
+		if (has_changes)
+			mp.MakeVariants();
+	}
+	
+	
+}
 
 
 
@@ -450,7 +503,7 @@ int GetBmiWeight(double height_m, int bmi) {
 	return bmi * height_m * height_m;
 }
 
-int GetBMI(double height_m, double weight_kg) {
+double GetBMI(double height_m, double weight_kg) {
 	return weight_kg / (height_m * height_m);
 }
 

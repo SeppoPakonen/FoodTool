@@ -161,6 +161,7 @@ struct Database {
 	int AddNutrition(String name, String unit, String desc);
 	void StartStoreThis() {Thread::Start(THISBACK(StoreThis));}
 	int FindFood(String long_desc) const;
+	int FindFoodLeft(String long_desc) const;
 	int FindNutrition(String key) const;
 	int FindNutritionRecommendation(String key) const;
 	void AddRecommendation(String nutr, double value, bool per_kg, int group) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg; n.group = group;}

@@ -175,37 +175,5 @@ struct FoodDay : Moveable<FoodDay> {
 	}
 };
 
-struct FoodStorage {
-	Array<FoodDay> days;
-	
-	// Temporary
-	VectorMap<String, MealPreset> meal_types;
-	
-	
-	FoodStorage();
-	
-	void Serialize(Stream& s) {
-		VER(0);
-		FOR_VER(0) {s % days;}
-	}
-	
-	MealPreset& AddMealPreset(String code);
-	
-	void Init(Date begin);
-	void Update(const Vector<DailyPlan>& planned_daily);
-	Date GetLastShopping();
-	Date GetNextShopping();
-	String GetTodaysMenu();
-	String GetNextShoppingList();
-	bool HasEnoughPreplanned();
-	void PlanWeek(const Vector<DailyPlan>& planned_daily);
-	void MakeMenu(const DailyPlan& p, FoodDay& d);
-	void AddFoodQuantity(const FoodQuantityInt& src, FoodQuantity& dst);
-	
-	bool NeedShopping();
-	void DoShop();
-	void ConsumeDay();
-};
-
 
 #endif

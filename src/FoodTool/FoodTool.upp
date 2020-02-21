@@ -28,6 +28,7 @@ file
 	Ingredient.cpp,
 	Food.h,
 	Food.cpp,
+	FoodStorage.h,
 	FoodStorage.cpp,
 	Profile.h,
 	Profile.cpp,
