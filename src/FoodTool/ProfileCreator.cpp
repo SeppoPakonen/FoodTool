@@ -9,7 +9,7 @@ ProfileCreator::ProfileCreator() {
 	
 	CtrlLayout(tab0);
 	CtrlLayout(tab1);
-	CtrlLayout(tab2);
+	//CtrlLayout(tab2);
 	CtrlLayout(tab3);
 	CtrlLayout(tab4);
 	SetRect(tab0.GetSize());
@@ -28,26 +28,23 @@ ProfileCreator::ProfileCreator() {
 	
 	tab0.next <<= THISBACK(Next);
 	tab1.next <<= THISBACK(Next);
-	tab2.next <<= THISBACK(Next);
+	//tab2.next <<= THISBACK(Next);
 	tab3.next <<= THISBACK(Next);
 	tab4.next <<= THISBACK(Next);
 	tab5.next <<= THISBACK(Next);
 	tab5.prev <<= THISBACK(Previous);
 	tab4.prev <<= THISBACK(Previous);
 	tab3.prev <<= THISBACK(Previous);
-	tab2.prev <<= THISBACK(Previous);
+	//tab2.prev <<= THISBACK(Previous);
 	tab1.prev <<= THISBACK(Previous);
 	
 	tab0.welcome.SetQTF(BZ2Decompress(welcome_qtf, welcome_qtf_length));
 	
 	tab1.gender.SetData(1);
 	tab1.height.SetData(176);
-	tab1.weight.SetData(100);
 	tab1.age.SetData(30);
-	tab1.bodyfat.SetData(40);
 	tab1.activity.SetData(0);
 	tab1.walking_dist.SetData(0);
-	tab1.tgt_weight.SetData(65);
 	tab1.tgt_walking_dist.SetData(6.6);
 	tab1.tgt_jogging_dist.SetData(0);
 	tab1.shop_interval.SetData(5);
@@ -55,16 +52,11 @@ ProfileCreator::ProfileCreator() {
 	tab1.easy_day_interval.SetData(7);
 	tab1.waking.SetTime(5,0,0);
 	tab1.sleeping.SetTime(20,0,0);
-	UpdateTargetWeight();
-	tab1.height <<= THISBACK(UpdateTargetWeight);
-	tab1.fatref <<= THISBACK(ShowWeightReference);
+	
+	tab2.edit.add.WhenAction << THISBACK(Next);
 	
 	tab3.preset.SetData(0);
 	
-}
-
-void ProfileCreator::UpdateTargetWeight() {
-	tab1.tgt_weight.SetData(GetTargetWeight((double)tab1.height.GetData() * 0.01, 19));
 }
 
 FatPercentageReferenceWindow::FatPercentageReferenceWindow() {
@@ -114,10 +106,8 @@ void ProfileCreator::Next() {
 		conf.added = GetSysTime();
 		conf.height = tab1.height.GetData();
 		conf.age = tab1.age.GetData();
-		conf.bodyfat = tab1.bodyfat.GetData();
 		conf.activity = tab1.activity.GetData();
 		conf.walking_dist = tab1.walking_dist.GetData();
-		conf.tgt_weight = tab1.tgt_weight.GetData();
 		conf.tgt_walking_dist = tab1.tgt_walking_dist.GetData();
 		conf.tgt_jogging_dist = tab1.tgt_jogging_dist.GetData();
 		conf.shop_interval = tab1.shop_interval.GetData();
@@ -131,19 +121,15 @@ void ProfileCreator::Next() {
 		prof.begin_date = GetSysTime();
 		prof.begin_date--;
 		
-		if (prof.weights.IsEmpty())
-			prof.AddWeightStat(tab1.weight.GetData());
-		
-		if (prof.storage.days.IsEmpty())
-			prof.storage.Init(prof.begin_date);
-		
+		SetRect(tab2.GetSize());
 	}
 	else if (tab == 2) {
 		Profile& prof = GetProfile();
-		if (prof.defs.IsEmpty())
-			prof.defs.Add(tab2.edit.prof);
-		else
-			prof.defs.Top() = tab2.edit.prof;
+			
+		if (prof.storage.days.IsEmpty())
+			prof.storage.Init(prof.begin_date);
+		
+		SetRect(tab3.GetSize());
 	}
 	else if (tab == 3) {
 		Database& db = DB();

@@ -13,7 +13,7 @@ struct FatPercentageReferenceWindow : public TopWindow {
 class ProfileCreator : public TopWindow {
 	WithWelcomeLayout<ParentCtrl> tab0;
 	WithConfigurationLayout<ParentCtrl> tab1;
-	WithNutrientDeficitLayout<ParentCtrl> tab2;
+	WeightCtrl tab2;
 	WithDatabasePresetLayout<ParentCtrl> tab3;
 	WithDatabaseEditLayout<ParentCtrl> tab4;
 	MealPresetCtrl tab5;
@@ -28,7 +28,6 @@ public:
 	
 	void Previous();
 	void Next();
-	void UpdateTargetWeight();
 	void ShowWeightReference();
 };
 

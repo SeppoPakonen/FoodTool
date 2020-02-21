@@ -41,6 +41,8 @@ file
 	Database.cpp,
 	DatabaseCtrl.h,
 	DatabaseCtrl.cpp,
+	WeightCtrl.h,
+	WeightCtrl.cpp,
 	MealPresetCtrl.h,
 	MealPresetCtrl.cpp,
 	Shop.h,

@@ -14,7 +14,7 @@ struct DailyPlan : Moveable<DailyPlan> {
 	Date date;
 	Ingredient food;
 	double weight, prog;
-	double fat_perc, fat_kgs, lean_body_kgs;
+	double fat_perc, fat_kgs, lean_kgs;
 	double maintain_calories, allowed_calories, maintain_burned_calories;
 	double walking_burned_calories, jogging_burned_calories, burned_calories;
 	double burned_kgs;
@@ -27,7 +27,7 @@ struct DailyPlan : Moveable<DailyPlan> {
 			s	% date
 				% food
 				% weight % prog
-				% fat_perc % fat_kgs % lean_body_kgs
+				% fat_perc % fat_kgs % lean_kgs
 				% maintain_calories % allowed_calories % maintain_burned_calories
 				% walking_burned_calories % jogging_burned_calories % burned_calories
 				% burned_kgs

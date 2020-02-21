@@ -99,8 +99,8 @@ struct Configuration : Moveable<Configuration> {
 	int easy_day_interval;
 	int waking_hour, waking_minute;
 	int sleeping_hour, sleeping_minute;
-	int height, age, bodyfat, activity;
-	int tgt_weight;
+	int height, age, removed0, activity;
+	int removed1;
 	int shop_interval;
 	int daily_coffee = 0;
 	
@@ -121,9 +121,9 @@ struct Configuration : Moveable<Configuration> {
 				% sleeping_minute
 				% height
 				% age
-				% bodyfat
+				% removed0
 				% activity
-				% tgt_weight
+				% removed1
 				% shop_interval
 				;
 		}
@@ -168,7 +168,8 @@ struct ScheduleToday {
 	}
 };
 
-int GetTargetWeight(double height_m, int bmi);
+int GetTargetWeight(double height_m);
+int GetBmiWeight(double height_m, int bmi);
 int GetBMI(double height_m, double weight_kg);
 
 
