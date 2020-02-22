@@ -5,6 +5,8 @@
 
 GUI_APP_MAIN
 {
+	for(int i = 0; i < 1000; i++) Random(1000);
+	
 	SetLanguage(GetSystemLNG());
 	
 	Database& db = GetDatabase();

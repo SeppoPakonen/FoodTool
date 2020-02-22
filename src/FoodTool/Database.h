@@ -167,7 +167,7 @@ struct Database {
 	void AddRecommendation(String nutr, double value, bool per_kg, int group) {auto& n = nutr_recom.Add(); n.nutr_no = FindNutrition(nutr); n.value = value; ASSERT(n.nutr_no >= 0); n.per_kg = per_kg; n.group = group;}
 	void SetCommonNutrs();
 	void RemoveDuplicates();
-	
+	void GetBestMacroFoods();
 	
 	void VLCD_Preset();
 };

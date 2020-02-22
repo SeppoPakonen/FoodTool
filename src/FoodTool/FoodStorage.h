@@ -2,7 +2,7 @@
 #define _FoodTool_FoodStorage_h_
 
 
-struct FoodStorageSnapshot : Moveable<FoodStorageSnapshot> {
+struct FoodStorageSnapshotRemoved : Moveable<FoodStorageSnapshotRemoved> {
 	Date date;
 	FoodQuantity food_grams;
 	
@@ -15,7 +15,8 @@ struct FoodStorageSnapshot : Moveable<FoodStorageSnapshot> {
 
 struct FoodStorage {
 	Array<FoodDay> days;
-	Array<FoodStorageSnapshot> snaps;
+	
+	Array<FoodStorageSnapshotRemoved> removed0;
 	
 	
 	// Temporary
@@ -27,7 +28,7 @@ struct FoodStorage {
 	void Serialize(Stream& s) {
 		VER(1);
 		FOR_VER(0) {s % days;}
-		FOR_VER(1) {s % snaps;}
+		FOR_VER(1) {s % removed0;}
 	}
 	
 	MealPreset& AddMealPreset(String code);
@@ -38,8 +39,8 @@ struct FoodStorage {
 	Date GetNextShopping();
 	String GetTodaysMenu();
 	String GetNextShoppingList();
-	bool HasEnoughPreplanned();
-	void PlanWeek(const Vector<DailyPlan>& planned_daily);
+	void PlanDay(int i, const Vector<DailyPlan>& planned_daily);
+	void PlanShopping(int i, const Vector<DailyPlan>& planned_daily);
 	void MakeMenu(const DailyPlan& p, FoodDay& d);
 	void AddFoodQuantity(const FoodQuantityInt& src, FoodQuantity& dst);
 	
@@ -48,15 +49,8 @@ struct FoodStorage {
 	void ConsumeDay();
 };
 
+int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantity& food_left, const VectorMap<String, int>& used_meal_amount, const Ingredient& target_sum);
 
-struct FoodStorageCtrl : public ParentCtrl {
-	
-	
-	typedef FoodStorageCtrl CLASSNAME;
-	FoodStorageCtrl();
-	
-	void Data();
-	
-};
+void FindSetFoodStorageSnapshot(Date date, FoodQuantity& food_grams);
 
 #endif

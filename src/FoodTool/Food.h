@@ -10,6 +10,31 @@ enum {
 	MODE_MUSCLEGAIN,
 };
 
+enum {
+	VARIANT_SCORE,
+	VARIANT_EASIEST,
+	VARIANT_AMINOACIDS,
+	VARIANT_FATTYACIDS,
+	VARIANT_WEIGHTLOSS,
+	VARIANT_MUSCLEGAIN,
+	VARIANT_MAINTENANCE,
+	
+	VARIANT_COUNT,
+};
+
+inline String GetVariantString(int i) {
+	switch (i) {
+		case VARIANT_SCORE:       return "Score";
+		case VARIANT_EASIEST:     return "Easiest";
+		case VARIANT_AMINOACIDS:  return "Amino Acids";
+		case VARIANT_FATTYACIDS:  return "Fatty Acids";
+		case VARIANT_WEIGHTLOSS:  return "Weight Loss";
+		case VARIANT_MUSCLEGAIN:  return "Muscle Gain";
+		case VARIANT_MAINTENANCE: return "Maintenance";
+		default: return "Invalid variant";
+	};
+}
+
 struct DailyPlan : Moveable<DailyPlan> {
 	Date date;
 	Ingredient food;
@@ -18,11 +43,11 @@ struct DailyPlan : Moveable<DailyPlan> {
 	double maintain_calories, allowed_calories, maintain_burned_calories;
 	double walking_burned_calories, jogging_burned_calories, burned_calories;
 	double burned_kgs;
-	byte mode;
+	byte mode, variant_type;
 	bool is_easy_day;
 	
 	void Serialize(Stream& s) {
-		VER(0);
+		VER(1);
 		FOR_VER(0) {
 			s	% date
 				% food
@@ -35,6 +60,7 @@ struct DailyPlan : Moveable<DailyPlan> {
 				% is_easy_day
 				;
 		}
+		FOR_VER(1) {s % variant_type;}
 	}
 };
 
@@ -82,15 +108,20 @@ struct FoodDay;
 
 struct MealPresetVariant : Moveable<MealPresetVariant> {
 	Vector<MealIngredient> ingredients;
-	String name;
 	double score = 0, mass_factor = 0, taste_factor = 0;
+	
+	String removed0;
 	
 	void Serialize(Stream& s) {
 		VER(0);
-		FOR_VER(0) {s % ingredients % name % score % mass_factor % taste_factor;}
+		FOR_VER(0) {s % ingredients % removed0 % score % mass_factor % taste_factor;}
+		removed0.Clear();
 	}
 	void UpdateFactors();
+	void GetNutritions(Ingredient& ing) const;
 };
+
+void GetIngredientNutritions(Ingredient& dst, const Vector<MealIngredient>& ingredients);
 
 struct MealPreset : Moveable<MealPreset> {
 	VectorMap<int, String> pre_day_instructions;
@@ -126,11 +157,11 @@ struct Meal : Moveable<Meal> {
 	Time time;
 	FoodQuantity food;
 	float grams = 0;
-	int gen_i = -1;
+	int removed0 = -1;
 	
 	void Serialize(Stream& s) {
 		VER(0);
-		FOR_VER(0) {s % key % time % food % grams % gen_i;}
+		FOR_VER(0) {s % key % time % food % grams % removed0;}
 	}
 };
 
@@ -142,12 +173,13 @@ struct FoodDay : Moveable<FoodDay> {
 	FoodQuantityInt buy_amount;
 	FoodQuantity used_food_amount;
 	VectorMap<String, int> used_meal_amount;
-	VectorMap<int, int> generated_meals;
 	Ingredient target_sum, total_sum;
 	IngredientDouble total_consumed;
 	bool is_shopping = false;
 	String menu, preparation, shopping_list;
 	byte mode;
+	
+	VectorMap<int, int> removed0;
 	
 	void SetMealGrams(const Vector<double>& grams, bool check=false);
 	double GetOptimizerEnergy();
@@ -162,7 +194,7 @@ struct FoodDay : Moveable<FoodDay> {
 				% buy_amount
 				% used_food_amount
 				% used_meal_amount
-				% generated_meals
+				% removed0
 				% target_sum
 				% total_sum
 				% total_consumed

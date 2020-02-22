@@ -30,6 +30,8 @@ file
 	Food.cpp,
 	FoodStorage.h,
 	FoodStorage.cpp,
+	FoodStorageCtrl.h,
+	FoodStorageCtrl.cpp,
 	Profile.h,
 	Profile.cpp,
 	ProfileCreator.h,

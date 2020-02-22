@@ -695,7 +695,58 @@ void Database::RemoveDuplicates() {
 	}
 }
 
-
+void Database::GetBestMacroFoods() {
+	Index<int> high_fat_foods, high_prot_foods, high_vitamin_foods, other_foods;
+	Index<int> fat_nutr, prot_nutr;
+	for(int i = 0; i < used_foods.GetCount(); i++) {
+		int db_i = used_foods[i];
+		const FoodDescription& f = food_descriptions[db_i];
+		Ingredient ing;
+		ing.Reset();
+		for (const auto& n : f.nutr)
+			ing.nutr[n.nutr_no] = n.nutr_value;
+		
+		if (ing.nutr[PROT] >= 80)
+			high_prot_foods.Add(i);
+		else if (ing.nutr[FAT] >= 80)
+			high_fat_foods.Add(i);
+		else {
+			OnlineAverage1 vit_av;
+			for(const NutritionRecommendation& r: nutr_recom) {
+				double value = ing.nutr[r.nutr_no];
+				double target = r.GetValue(70);
+				ASSERT(target > 0);
+				double frac = value / target;
+				vit_av.Add(frac);
+			}
+			if (vit_av.GetMean() > 1.0)
+				high_vitamin_foods.Add(i);
+			else
+				other_foods.Add(i);
+		}
+	}
+	fat_nutr.Add(FAT);
+	prot_nutr.Add(PROT);
+	
+	if (1) {
+		for(int i = 0; i < high_fat_foods.GetCount(); i++) {
+			const FoodDescription& d = food_descriptions[used_foods[high_fat_foods[i]]];
+			LOG("High fat food " << i << ": " << d.long_desc);
+		}
+		for(int i = 0; i < high_prot_foods.GetCount(); i++) {
+			const FoodDescription& d = food_descriptions[used_foods[high_prot_foods[i]]];
+			LOG("High protein food " << i << ": " << d.long_desc);
+		}
+		for(int i = 0; i < high_vitamin_foods.GetCount(); i++) {
+			const FoodDescription& d = food_descriptions[used_foods[high_vitamin_foods[i]]];
+			LOG("High vitamin food " << i << ": " << d.long_desc);
+		}
+		for(int i = 0; i < other_foods.GetCount(); i++) {
+			const FoodDescription& d = food_descriptions[used_foods[other_foods[i]]];
+			LOG("Other food " << i << ": " << d.long_desc);
+		}
+	}
+}
 
 
 

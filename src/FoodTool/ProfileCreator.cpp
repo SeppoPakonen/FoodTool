@@ -49,6 +49,7 @@ ProfileCreator::ProfileCreator() {
 	tab1.tgt_jogging_dist.SetData(0);
 	tab1.shop_interval.SetData(5);
 	tab1.hours_between_meals.SetData(1);
+	tab1.hours_between_making_meals.SetData(8);
 	tab1.easy_day_interval.SetData(7);
 	tab1.waking.SetTime(5,0,0);
 	tab1.sleeping.SetTime(20,0,0);
@@ -95,6 +96,7 @@ void ProfileCreator::Next() {
 		conf.tgt_jogging_dist = tab1.tgt_jogging_dist.GetData();
 		conf.shop_interval = tab1.shop_interval.GetData();
 		conf.hours_between_meals = tab1.hours_between_meals.GetData();
+		conf.hours_between_making_meals = tab1.hours_between_making_meals.GetData();
 		conf.easy_day_interval = tab1.easy_day_interval.GetData();
 		conf.waking_hour = tab1.waking.GetHour();
 		conf.waking_minute = tab1.waking.GetMinute();

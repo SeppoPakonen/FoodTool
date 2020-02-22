@@ -74,9 +74,7 @@ double FoodDay::GetOptimizerEnergy() {
 
 
 
-
-
-void MealPreset::GetNutritions(Ingredient& dst) const {
+void GetIngredientNutritions(Ingredient& dst, const Vector<MealIngredient>& ingredients) {
 	const Database& db = DB();
 	dst.Reset();
 	for(int i = 0; i < ingredients.GetCount(); i++) {
@@ -89,6 +87,14 @@ void MealPreset::GetNutritions(Ingredient& dst) const {
 		for(const NutritionInfo& info : d.nutr)
 			dst.nutr[info.nutr_no] += info.nutr_value * mul;
 	}
+}
+
+void MealPreset::GetNutritions(Ingredient& dst) const {
+	GetIngredientNutritions(dst, ingredients);
+}
+
+void MealPresetVariant::GetNutritions(Ingredient& dst) const {
+	GetIngredientNutritions(dst, ingredients);
 }
 
 double MealPreset::GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg) {
@@ -394,13 +400,13 @@ void MealPreset::MakeVariants() {
 		
 		double kcal_tgt = 1800;
 		switch (i) {
-			case 0: eval = &VariantScore<0>; var.name = "Score"; break;
-			case 1: eval = &VariantScore<5>; var.name = "Easiest"; break;
-			case 2: eval = &VariantNutritionGroup<AMINOACID>; var.name = "Amino Acids"; break;
-			case 3: eval = &VariantNutritionGroup<FATTYACID>; var.name = "Fatty Acids"; break;
-			case 4: eval = &VariantScore<-1>; var.name = "Weight Loss"; kcal_tgt = 600; break;
-			case 5: eval = &VariantMaintenance<2000, 8>; var.name = "Muscle Gain"; kcal_tgt = 2000; break;
-			case 6: eval = &VariantMaintenance<1800, 22>; var.name = "Maintenance"; break;
+			case VARIANT_SCORE:       eval = &VariantScore<0>; break;
+			case VARIANT_EASIEST:     eval = &VariantScore<5>; break;
+			case VARIANT_AMINOACIDS:  eval = &VariantNutritionGroup<AMINOACID>; break;
+			case VARIANT_FATTYACIDS:  eval = &VariantNutritionGroup<FATTYACID>; break;
+			case VARIANT_WEIGHTLOSS:  eval = &VariantScore<-1>; kcal_tgt = 600; break;
+			case VARIANT_MUSCLEGAIN:  eval = &VariantMaintenance<2000, 8>; kcal_tgt = 2000; break;
+			case VARIANT_MAINTENANCE: eval = &VariantMaintenance<1800, 22>; break;
 			default: Panic("Invalid variant code");
 		}
 		

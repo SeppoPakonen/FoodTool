@@ -52,7 +52,7 @@ void Profile::ProcessUpdate(bool replan) {
 	if (replan)
 		UpdatePlan();
 	
-	//storage.Update(replan, planned_daily);
+	storage.Update(replan, planned_daily);
 	version++;
 	
 	StoreThis();
@@ -65,6 +65,8 @@ void Profile::ProcessUpdate(bool replan) {
 	LOG("Stopping " << Format("%", planned_daily.Top().date));
 	//LOG("Days total " << days << (days_diff ? "(Diff " + (days_diff < 0 ? "-" : "+") + IntStr(days_diff) + ")" : "");
 	LOG(Format("Days total %d (Diff %+d)", days, days_diff));
+	
+	WhenUpdateReady();
 	
 	flag.SetNotRunning();
 	flag.IncreaseStopped();
@@ -147,7 +149,7 @@ bool Profile::UpdatePlan() {
 	const double jogging_speed = 2.500; // m/s
 	const double cals_in_kg_fat = 3500/0.453592;
 	const double tgt_weight = GetTargetWeight(conf->height * 0.01);
-	const double tgt_fat_perc = is_male ? 8 * 0.01 : 21 * 0.01;
+	const double tgt_fat_perc = is_male ? 6 * 0.01 : 21 * 0.01;
 	const double max_lean_gain = 226 / 7.0; // around 0.5 pounds lean in a week
 	const double begin_weight = wl->weight;
 	const double begin_fat_perc = wl->fat * 0.01;
@@ -178,14 +180,23 @@ bool Profile::UpdatePlan() {
 	Date date = begin_date;
 	planned_daily.SetCount(0);
 	planned_daily.Reserve(2*365);
-		
+	
+	Date end_date = GetSysTime();
+	end_date += 30;
+	
 	int easy_day_counter = 0;
 	
 	int count = 0;
-	while (fabs(fat_perc - tgt_fat_perc) > 0.01 || fabs(tgt_lean_perc - lean_perc) > 0.01 || fabs(weight - tgt_weight) > 1.0) {
+	int maintenance_day_count = 0;
+	while (
+		fabs(fat_perc - tgt_fat_perc) > 0.01 ||
+		fabs(tgt_lean_perc - lean_perc) > 0.01 ||
+		fabs(weight - tgt_weight) > 1.0 ||
+		date < end_date ||
+		maintenance_day_count < 30) {
 		double prog = max(0.0, min(1.0, 1.0 - fabs(weight - tgt_weight) / fabs(begin_weight - tgt_weight)));
 		//if (planned_daily.GetCount() && planned_daily.Top().prog > prog) break;
-		if (count > 365) break;
+		//if (count > 365) break;
 		count++;
 		
 		DailyPlan& d = planned_daily.Add();
@@ -222,12 +233,26 @@ bool Profile::UpdatePlan() {
 		
 		double maintain_protein = weight * 0.8;
 		double min_protein;
-		if (fabs(lean_kgs - tgt_lean_kgs) < 0.5 || fat_perc > tgt_fat_perc + 0.04)
+		if (fat_perc > tgt_fat_perc + 0.01) {
 			min_protein = maintain_protein;
-		else if (tgt_lean_kgs > lean_kgs)
+			d.variant_type = VARIANT_WEIGHTLOSS;
+			maintenance_day_count = 0;
+		}
+		else if (fabs(lean_kgs - tgt_lean_kgs) < 0.5) {
+			min_protein = maintain_protein;
+			d.variant_type = VARIANT_MAINTENANCE;
+			maintenance_day_count++;
+		}
+		else if (tgt_lean_kgs > lean_kgs) {
 			min_protein = weight * 2.2;
-		else
+			d.variant_type = VARIANT_MUSCLEGAIN;
+			maintenance_day_count = 0;
+		}
+		else {
 			min_protein = weight * 0.4;
+			d.variant_type = VARIANT_FATTYACIDS;
+			maintenance_day_count = 0;
+		}
 		
 		double min_fat = 30.0 / 2000.0 * d.maintain_calories;
 		double prot_cals, fat_cals, carb_cals;
@@ -273,6 +298,9 @@ bool Profile::UpdatePlan() {
 			d.is_easy_day = false;
 		}
 		
+		if (d.is_easy_day)
+			d.variant_type = VARIANT_SCORE;
+		
 		double calorie_deficit = 1.0 - (d.allowed_calories / d.maintain_calories);
 		max_calorie_deficit = max(calorie_deficit, max_calorie_deficit);
 		calorie_deficit_sum += calorie_deficit;
@@ -305,18 +333,18 @@ bool Profile::UpdatePlan() {
 		d.burned_kgs = burned_lean_kgs + burned_fat_kgs;
 		
 		d.food.Reset();
-		d.food.grams = weight / 100.0 * 2000.0;
-		d.food.nutr[KCAL] = d.allowed_calories;
-		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
-		d.food.nutr[FAT] = max(min_fat, fat_cals / 9.0); // based on coconut oil nutrients
-		d.food.nutr[CARB] = carb_cals / 10.0;
-		ASSERT(db.nutr_recom.GetCount());
 		for(const NutritionRecommendation& r : db.nutr_recom) {
 			if (r.per_kg)
 				d.food.nutr[r.nutr_no] = weight * r.value;
 			else
 				d.food.nutr[r.nutr_no] = r.value;
 		}
+		d.food.grams = weight / 100.0 * 2000.0;
+		d.food.nutr[KCAL] = d.allowed_calories;
+		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
+		d.food.nutr[FAT] = max(min_fat, fat_cals / 9.0); // based on coconut oil nutrients
+		d.food.nutr[CARB] = carb_cals / 10.0;
+		ASSERT(db.nutr_recom.GetCount());
 		
 		double new_lean_kgs = lean_kgs - burned_lean_kgs;
 		double new_fat_kgs = fat_kgs - burned_fat_kgs;
@@ -392,17 +420,16 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	if (day_i < 0)
 		return;
 	const FoodDay& day = storage.days[day_i];
-	int days_left_tomorrow = planned_daily.GetCount() - day_i - 1;
 	
 	auto& wake = s.items.Add();
 	wake.time = Time(s.day.year, s.day.month, s.day.day, conf.waking_hour, conf.waking_minute, 0);
 	wake.type = ScheduleToday::WAKING;
-	wake.msg = Format("Good morning. Have %d calories today!", (int)day.total_sum.nutr[KCAL]);
+	wake.msg = Format(t_("Good morning. Have %d calories today!"), (int)day.total_sum.nutr[KCAL]);
 	
 	auto& sleep = s.items.Add();
 	sleep.time = Time(s.day.year, s.day.month, s.day.day, conf.sleeping_hour, conf.sleeping_minute, 0);
 	sleep.type = ScheduleToday::SLEEPING;
-	sleep.msg = Format("Good night. Only %d days left tomorrow!", days_left_tomorrow);
+	sleep.msg = t_("Good night!");
 	if (sleep.time < wake.time)
 		sleep.time += 24*60*60;
 	
@@ -415,24 +442,24 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 		if (j >= 0)
 			meal.msg = storage.meal_types.Get(m.key).name;
 		else
-			meal.msg = Format("%d grams", m.grams);
+			meal.msg = Format(t_("%d grams"), m.grams);
 	}
 	
 	int day_len = sleep.time.Get() - wake.time.Get();
-	Time exercise_time = wake.time + day_len * 3 / 4;
+	Time exercise_time = wake.time + day_len * 3 / 8;
 	
 	if (conf.tgt_walking_dist > 0) {
 		auto& walk = s.items.Add();
 		walk.time = exercise_time;
 		walk.type = ScheduleToday::WALKING;
-		walk.msg = "Go walk " + Format("%2n", conf.tgt_walking_dist) + "km!";
+		walk.msg = Format(t_("Go walk  %2n km!"), conf.tgt_walking_dist);
 	}
 	
 	if (conf.tgt_jogging_dist > 0) {
 		auto& jogging = s.items.Add();
 		jogging.time = exercise_time;
 		jogging.type = ScheduleToday::RUNNING;
-		jogging.msg = "Go jogging " + Format("%2n", conf.tgt_jogging_dist) + "km!";
+		jogging.msg = Format(t_("Go jogging %2n km!"), conf.tgt_jogging_dist);
 	}
 	
 	for(auto& it : s.items)
@@ -584,3 +611,19 @@ double Configuration::GetCaloriesJoggingDistSpeed(double weight_kg, double dista
 
 
 
+
+void FoodStorageSnapshot::GetNutritions(Ingredient& dst) const {
+	const Database& db = DB();
+	dst.Reset();
+	for(int i = 0; i < foods.GetCount(); i++) {
+		int db_food_no = foods.GetKey(i);
+		int grams = foods[i];
+		const FoodDescription& d = db.food_descriptions[db_food_no];
+		if (!grams)
+			continue;
+		dst.grams += grams;
+		double mul = grams / 100.0;
+		for(const NutritionInfo& info : d.nutr)
+			dst.nutr[info.nutr_no] += info.nutr_value * mul;
+	}
+}

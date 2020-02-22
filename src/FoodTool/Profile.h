@@ -96,7 +96,7 @@ struct Configuration : Moveable<Configuration> {
 	Time added;
 	Date end_date;
 	double tgt_walking_dist, tgt_jogging_dist, walking_dist;
-	double hours_between_meals;
+	double hours_between_meals, hours_between_making_meals = 8;
 	int easy_day_interval;
 	int waking_hour, waking_minute;
 	int sleeping_hour, sleeping_minute;
@@ -106,7 +106,7 @@ struct Configuration : Moveable<Configuration> {
 	int daily_coffee = 0;
 	
 	void Serialize(Stream& s) {
-		VER(1);
+		VER(2);
 		FOR_VER(0) {
 			s
 				% added
@@ -129,6 +129,7 @@ struct Configuration : Moveable<Configuration> {
 				;
 		}
 		FOR_VER(1) {s % daily_coffee;}
+		FOR_VER(2) {s % hours_between_making_meals;}
 	}
 	
 	double GetBMR(double weight);
@@ -173,6 +174,16 @@ int GetTargetWeight(double height_m);
 int GetBmiWeight(double height_m, int bmi);
 double GetBMI(double height_m, double weight_kg);
 
+struct FoodStorageSnapshot : Moveable<FoodStorageSnapshot> {
+	Date date;
+	FoodQuantityInt foods;
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % date % foods;}
+	}
+	void GetNutritions(Ingredient& ing) const;
+};
 
 struct Profile {
 	Vector<IntakeExceptions> exceptions;
@@ -183,6 +194,7 @@ struct Profile {
 	Vector<Configuration> confs;
 	Vector<NutrientDeficitProfile> defs;
 	Vector<MealPreset> presets;
+	Vector<FoodStorageSnapshot> storage_snaps;
 	Index<int> planned_nutrients;
 	
 	FoodStorage storage;
@@ -207,7 +219,7 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		VER(0);
+		VER(1);
 		FOR_VER(0) {
 			s
 				% exceptions
@@ -227,6 +239,7 @@ struct Profile {
 				% is_initialised
 				;
 		}
+		FOR_VER(1) {s % storage_snaps;}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);
@@ -245,6 +258,8 @@ struct Profile {
 	
 	void LoadThis();
 	void StoreThis();
+	
+	Callback WhenUpdateReady;
 };
 
 inline Profile& GetProfile() {return Single<Profile>();}

@@ -37,6 +37,7 @@ using namespace Upp;
 #include "DatabaseCtrl.h"
 #include "MealPresetCtrl.h"
 #include "WeightCtrl.h"
+#include "FoodStorageCtrl.h"
 
 #define LAYOUTFILE <FoodTool/FoodTool2.lay>
 #include <CtrlCore/lay.h>
@@ -235,6 +236,7 @@ public:
 	void Replan();
 	void Data();
 	void SetTodayTab();
+	void PostData() {PostCallback(THISBACK(Data));}
 };
 
 void FillVector(Vector<double>& v);

@@ -2,6 +2,24 @@
 #define _FoodTool_Util_h_
 
 
+struct FloatTrans {
+	double value;
+	
+	void Serialize(Stream& s) {
+		if (s.IsLoading()) {
+			float f;
+			s % f;
+			value = f;
+		}
+		else {
+			s % value;
+		}
+	}
+	
+	double operator=(double d) {value = d; return d;}
+	operator double() const {return value;}
+};
+
 struct RunningFlag {
 	int sleep_time = 100;
 	bool running = false;

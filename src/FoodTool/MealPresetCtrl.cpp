@@ -93,7 +93,7 @@ void MealPresetCtrl::SelectPreset() {
 	
 	for(int i = 0; i < mp.variants.GetCount(); i++) {
 		const MealPresetVariant& var = mp.variants[i];
-		variants.Set(i, 0, var.name);
+		variants.Set(i, 0, GetVariantString(i));
 		variants.Set(i, 1, Format("%1n", var.mass_factor));
 		variants.Set(i, 2, Format("%1n", var.taste_factor));
 		variants.Set(i, 3, Format("%1n", var.score));
@@ -110,8 +110,8 @@ void MealPresetCtrl::SelectPreset() {
 	name.SetData(mp.name);
 	instructions.SetData(mp.instructions);
 	
-	min_mass.SetCount(mp.ingredients.GetCount());
-	max_mass.SetCount(mp.ingredients.GetCount());
+	min_mass.SetCount(max(min_mass.GetCount(), mp.ingredients.GetCount()));
+	max_mass.SetCount(max(max_mass.GetCount(), mp.ingredients.GetCount()));
 	for(int i = 0; i < mp.ingredients.GetCount(); i++) {
 		const MealIngredient& mi = mp.ingredients[i];
 		const FoodDescription& d = db.food_descriptions[mi.db_food_no];
@@ -135,6 +135,8 @@ void MealPresetCtrl::SelectPreset() {
 		max_edit.WhenAction << THISBACK(PresetChanged);
 	}
 	inglist.SetCount(mp.ingredients.GetCount());
+	min_mass.SetCount(mp.ingredients.GetCount());
+	max_mass.SetCount(mp.ingredients.GetCount());
 }
 
 void MealPresetCtrl::PresetChanged() {
