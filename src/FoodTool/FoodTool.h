@@ -177,6 +177,7 @@ struct TodayScheduleCtrl : public Ctrl {
 	Color walking_top, walking_btm;
 	Color running_top, running_btm;
 	Color sleeping_top, sleeping_btm;
+	Color muscletraining_top, muscletraining_btm;
 	TimeCallback tc;
 	
 	
@@ -205,6 +206,19 @@ struct NutrientDeficitCtrl : public ParentCtrl {
 	void AddItem();
 };
 
+struct FoodInstructionCtrl : public ParentCtrl {
+	ArrayCtrl list, meallist, inglist, nutrlist;
+	Splitter vsplit0, vsplit1, hsplit;
+	
+	
+	typedef FoodInstructionCtrl CLASSNAME;
+	FoodInstructionCtrl();
+	void Data();
+	void SelectDate();
+	void SelectMeal();
+	void SelectIngredient();
+};
+
 class FoodTool : public TopWindow {
 	TabCtrl tabs;
 	bool was_updating = true;
@@ -214,6 +228,7 @@ class FoodTool : public TopWindow {
 	
 	MotivationCtrl motivation;
 	StatusCtrl status;
+	FoodInstructionCtrl fins;
 	ConfigurationCtrl conf;
 	ExceptionsCtrl exc;
 	NoteCtrl notes;

@@ -94,6 +94,7 @@ FoodTool::FoodTool()
 	tabs.Add(motivation.SizePos(), "Motivation");
 	tabs.Add(today.SizePos(), "Today");
 	tabs.Add(status.SizePos(), "Status");
+	tabs.Add(fins.SizePos(), "Food Instructions");
 	tabs.Add(graphs.SizePos(), "Graphs");
 	tabs.Add(weight.SizePos(), "Weight");
 	tabs.Add(def.SizePos(), "Nutrient Deficits");
@@ -146,33 +147,21 @@ void FoodTool::Data() {
 			updating_lbl.Hide();
 		}
 		int tab = tabs.Get();
-		
-		if (tab == 0)
-			motivation.Data();
-		else if (tab == 1)
-			today.Data();
-		else if (tab == 2)
-			status.Data();
-		else if (tab == 3)
-			graphs.Data();
-		else if (tab == 4)
-			weight.Data();
-		else if (tab == 5)
-			def.Data();
-		else if (tab == 6)
-			exc.Data();
-		else if (tab == 7)
-			notes.Data();
-		else if (tab == 8)
-			usage.Data();
-		else if (tab == 9)
-			db.Data();
-		else if (tab == 10)
-			preset.Data();
-		else if (tab == 11)
-			storage.Data();
-		else if (tab == 12)
-			conf.Data();
+		int i = 0;
+		if      (tab == i++)	motivation.Data();
+		else if (tab == i++)	today.Data();
+		else if (tab == i++)	status.Data();
+		else if (tab == i++)	fins.Data();
+		else if (tab == i++)	graphs.Data();
+		else if (tab == i++)	weight.Data();
+		else if (tab == i++)	def.Data();
+		else if (tab == i++)	exc.Data();
+		else if (tab == i++)	notes.Data();
+		else if (tab == i++)	usage.Data();
+		else if (tab == i++)	db.Data();
+		else if (tab == i++)	preset.Data();
+		else if (tab == i++)	storage.Data();
+		else if (tab == i++)	conf.Data();
 	}
 	was_updating = is_updating;
 }
@@ -183,44 +172,42 @@ void FoodTool::Data() {
 
 
 MotivationCtrl::MotivationCtrl() {
-	quotes.Add("\"If you have discipline, drive, and determination... nothing is impossible.\" - Dana Linn Bailey");
-	quotes.Add("\"Make time for it. Just get it done. Nobody ever got strong or got in shape by thinking about it. They did it.\" - Jim Wendler");
-	quotes.Add("\"The groundwork of all happiness is health.\" - Leigh Hunt");
-	quotes.Add("\"The scale is merely a measure of my relationship with gravity.\" - Lauren Harris-Pincus");
-	quotes.Add("\"Don't work out because you hate your body — work out because you love it.\" - Author Unknown");
-	quotes.Add("\"Obstacles don't have to stop you. If you run into a wall, don't turn around and give up. Figure out how to climb it, go through it, or work around it.\" - Michael Jordan");
-	quotes.Add("\"Strength does not come from what you can do. It comes from overcoming the things you once thought you couldn't.\" - Nikki Rogers");
-	quotes.Add("\"Wisdom is doing now what you are going to be happy with later on.\" - Joyce Meyer");
-	quotes.Add("\"Decide. Commit. Succeed.\" - Justin Seedman");
-	quotes.Add("\"Eliminate the mindset of can't — because you can do anything.\" - Toni Horton");
-	quotes.Add("\"Exercise should be regarded as a tribute to the heart.\" - Gene Tunney");
-	quotes.Add("\"Unless you puke, faint, or die, keep going!\" - Jillian Michaels");
-	quotes.Add("\"To give anything less than your best is to sacrifice the gift.\" - Steve Prefontaine");
-	quotes.Add("\"When you feel like quitting, think about why you started.\" - Author Unknown");
-	quotes.Add("\"My weight does not determine my worth.\" - Kristin Oja");
-	quotes.Add("\"Some people want it to happen. Some wish it would happen. Others make it happen.\" - Michael Jordan");
-	quotes.Add("\"If you wait, all that happens is you get older.\" - Larry McMurtry");
-	quotes.Add("\"You miss 100 percent of the shots you never take.\" - Wayne Gretzky");
-	quotes.Add("\"If you don't do what's best for your body, you're the one who comes up on the short end.\" - Julius Erving");
-	quotes.Add("\"If you keep good food in your fridge, you will eat good food.\" - Errick McAdams");
-	quotes.Add("\"Instead of indulging in 'comfort food', indulge in comfort meditation, comfort journaling, comfort walking, comfort talking, comfort manicures, comfort reading, comfort yoga, comfort hugging.\" - Karen Salmansohn");
-	quotes.Add("\"My body is less judgmental of my diet than my mind is.\" - Mackenzie Banta");
-	quotes.Add("\"You can have your cake and lose weight, too!\" - Anonymous");
-	quotes.Add("\"Let food be thy medicine, and medicine be thy food.\" - Hippocrates");
-	quotes.Add("\"To ensure good health: eat lightly, breathe deeply, live moderately, cultivate cheerfulness, and maintain an interest in life.\" - William Londen");
-	quotes.Add("\"New meal; fresh start.\" - Michelle Hyman");
-	quotes.Add("\"I am a better person when I have less on my plate.\" - Elizabeth Gilbert");
-	quotes.Add("\"Food can be both enjoyable and nourishing.\" - Alyssa Ardolino");
-	quotes.Add("\"If I don't eat junk, I don't gain weight.\" - Paula Christensen");
-	quotes.Add("\"The cardiologist's diet: If it tastes good spit it out.\" - Anonymous");
-	quotes.Add("\"When I buy cookies I just eat four and throw the rest away. But first I spray them with Raid so I won't dig them out of the garbage later. Be careful, though, because that Raid really doesn't taste that bad.\" - Janette Barber");
-	quotes.Add("\"I'm allergic to food. Every time I eat it breaks out into fat.\" - Jennifer Greene Duncan");
-	quotes.Add("\"The only way to lose weight is to check it in as airline baggage.\" - Peggy Ryan");
+	quotes.Add("Discipline, drive, and determination makes weight loss possible, but not everything.");
+	quotes.Add("Don't just start doing, but plan it beforehand. Those who just thought about getting to a weight loss TV-show got the all weight back.");
+	quotes.Add("You don't need to be lightweight to be happy, but it helps.");
+	quotes.Add("The scale doesn't lie, unlike people.");
+	quotes.Add("Use the naturally evolved instinct of seeing the beauty in a healthy body for your motivation.");
+	quotes.Add("Obstacles can occur, which might stop you entirely. Plan beforehand and avoid them.");
+	quotes.Add("Strength comes from what you can do. Use your strengths to gain more strength.");
+	quotes.Add("Wisdom is doing what makes you happy now and tomorrow as you think of yesterday.");
+	quotes.Add("Be curious about health.");
+	quotes.Add("Eliminate the mindset of \"everything is possible\". It's not, but your weight loss is. Focus it.");
+	quotes.Add("There is nothing holy or sacred in an physical exercise. It is just something, what we have evolved to do for surviving.");
+	quotes.Add("You should be respectful to all of your millions of ancestors. Their choices caused the evolution, which made you fat for not eating like them.");
+	quotes.Add("You have better chance to live healthy live than any of millions of your ancestors. Why not use it?");
+	quotes.Add("If you have a feeling, that you might puke, faint, or die, stop and make a new plan.");
+	quotes.Add("When you feel like quitting, make an exception to your schedule to have less or none calorie deficit for some time.");
+	quotes.Add("High fat percentage makes you worthless and high lean muscle percentage makes you the most valuable.");
+	quotes.Add("Wanting to make something happen is the first step of making it happen. Hold onto it. Cherish it.");
+	quotes.Add("Be sensitive to your environment even when you are just waiting for something. It's not all about you getting older.");
+	quotes.Add("Don't try to do something repeatedly. Plan to do it once, without possibility of fail, but only with a possibility delaying the success.");
+	quotes.Add("If you don't do what's best for your body, others will suffer too in the long term.");
+	quotes.Add("The only \"bad\" food is the unethically made one. What people means with \"bad\" is too high/low density, too nutritionally weak or too unpleasantly tasting food.");
+	quotes.Add("Instead of indulging in 'comfort food' with high energy density, indulge in 'comfort food' with low energy density. With a little bit of salt, vinegar, oil and spices even cabbage and cucumber tastes good.");
+	quotes.Add("The human body is very judgemental about unhealthy habits, people just have unconsciously trained their brain to ignore it.");
+	quotes.Add("You should eat high energy density foods with very high awareness of the energy. You probably gain weight if you don't.");
+	quotes.Add("A medicine can't replace healthy food nor otherwise. Do your research about both before ingesting.");
+	quotes.Add("To ensure happiness: write your thoughts about everything hourly and read them later to spot mistake in your thought. Nothing can ensure health in your life, but using this app helps.");
+	quotes.Add("New meal, same old life.");
+	quotes.Add("You are a better person, when you have a lot of low energy density food in your plate.");
+	quotes.Add("The high energy density food will always reward your brain the most, but you can choose to have lower expectations about the reward.");
+	quotes.Add("You can gain weight even with the low energy density food. It is just more improbable to gain weight with it after losing the track of calories.");
+	quotes.Add("Oversimplified and stereotypical rules about unhealthy food tasting good and healthy food tasting bad only hurts everybody");
+	quotes.Add("Using this app helps you to resist eating everything in your house.");
+	/*quotes.Add("\"The only way to lose weight is to check it in as airline baggage.\" - Peggy Ryan");
 	quotes.Add("\"It would be far easier to lose weight permanently if replacement parts weren't so handy in the refrigerator.\" - Hugh Allen");
 	quotes.Add("\"When we lose twenty pounds, we may be losing the twenty best pounds we have! We may be losing the pounds that contain our genius, our humanity, our love and honesty.\" - Woody Allen");
-	quotes.Add("\"A diet is when you watch what you eat and wish you could eat what you watch.\" - Hermione Gingold");
 	quotes.Add("\"Keep an open mind and a closed refrigerator.\" - Anonymous");
-	quotes.Add("\"Never eat more than you can lift.\" - Miss Piggy");
 	quotes.Add("\"My favorite exercise is a cross between a lunge and a crunch. I call it lunch.\" - Anonymous");
 	quotes.Add("\"Only I can change my life. No one can do it for me.\" - Anonymous");
 	quotes.Add("\"Weight loss doesn't begin in the gym with a dumbbell; it starts in your head with a decision.\" - Toni Sorenson");
@@ -335,7 +322,7 @@ MotivationCtrl::MotivationCtrl() {
 	quotes.Add("\"It is better to take small steps in the right direction than to make a great leap forward only to stumble backward.\" - Proverb");
 	quotes.Add("\"The past cannot be changed. The future is yet in your power.\"― Mary Pickford");
 	quotes.Add("\"Weight loss doesn't begin in the gym with a dumbbell; it starts in your head with a decision.\" - Toni Sorenson");
-	quotes.Add("\"Triumph by putting a little soul into it!\" - Nancy Mure");
+	quotes.Add("\"Triumph by putting a little soul into it!\" - Nancy Mure");*/
 	
 }
 
@@ -1507,6 +1494,8 @@ TodayScheduleCtrl::TodayScheduleCtrl() {
 	eating_btm = Color(255, 195, 163);
 	walking_top = Color(187, 255, 184);
 	walking_btm = Color(241, 255, 160);
+	muscletraining_top = Color(106, 31, 0);
+	muscletraining_btm = Color(198, 42, 0);
 	sleeping_top = Color(156, 158, 193);
 	sleeping_btm = Color(180, 196, 229);
 	
@@ -1586,6 +1575,11 @@ void TodayScheduleCtrl::Paint(Draw& d) {
 			typestr = t_("Sleeping");
 			top = sleeping_top;
 			btm = sleeping_btm;
+		}
+		else if (it.type == ScheduleToday::MUSCLETRAINING) {
+			typestr = t_("Training");
+			top = muscletraining_top;
+			btm = muscletraining_btm;
 		}
 		String txt;
 		txt << Format("%d:%02d ", (int)it.time.hour, (int)it.time.minute)
@@ -1682,4 +1676,216 @@ void FillVector(Vector<double>& v) {
 		else
 			prev = d;
 	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FoodInstructionCtrl::FoodInstructionCtrl() {
+	Add(hsplit.SizePos());
+	hsplit.Horz() << vsplit0 << vsplit1;
+	hsplit.SetPos(3333);
+	vsplit0.Vert() <<    list << meallist;
+	vsplit1.Vert() << inglist << nutrlist;
+	
+	list.AddIndex();
+	list.AddColumn("Date");
+	list.AddColumn("Variant");
+	list <<= THISBACK(SelectDate);
+	
+	meallist.AddIndex();
+	meallist.AddIndex();
+	meallist.AddColumn("#");
+	meallist.AddColumn("Name");
+	meallist.AddColumn("Grams");
+	meallist.ColumnWidths("1 5 1");
+	meallist <<= THISBACK(SelectMeal);
+	
+	inglist.AddIndex();
+	inglist.AddIndex();
+	inglist.AddColumn("Ingredient");
+	inglist.AddColumn("Mass (g)");
+	inglist.AddColumn("Energy");
+	inglist.AddColumn("Protein");
+	inglist.AddColumn("Carbs");
+	inglist.AddColumn("Fat");
+	inglist.ColumnWidths("4 1 1 1 1");
+	inglist <<= THISBACK(SelectIngredient);
+	
+	nutrlist.AddColumn("Key");
+	nutrlist.AddColumn("Value");
+	
+}
+
+void FoodInstructionCtrl::Data() {
+	Profile& prof = GetProfile();
+	
+	if (prof.storage.days.GetCount() != list.GetCount()) {
+		Date today = GetSysTime();
+		for(int i = 0; i < prof.storage.days.GetCount(); i++) {
+			int row = prof.storage.days.GetCount() - 1 - i;
+			const FoodDay& day = prof.storage.days[i];
+			const DailyPlan& plan = prof.planned_daily[i];
+			String txt = Format("%d.%d.%d", (int)day.date.day, (int)day.date.month, (int)day.date.year);
+			
+			list.Set(row, 0, (int)plan.variant_type);
+			if (day.date == today)
+				list.Set(row, 1, AttrText(txt).Paper(Color(28, 85, 0)).Ink(White()));
+			else
+				list.Set(row, 1, txt);
+			list.Set(row, 2, GetVariantString(plan.variant_type));
+		}
+		if (!list.IsCursor() && list.GetCount())
+			list.SetCursor(0);
+		SelectDate();
+	}
+}
+
+void FoodInstructionCtrl::SelectDate() {
+	if (!list.IsCursor())
+		return;
+	int cursor = list.GetCursor();
+	int day_i = list.GetCount() - 1 - cursor;
+	
+	Profile& prof = GetProfile();
+	const FoodDay& day = prof.storage.days[day_i];
+	
+	VectorMap<int, int> mealtype_grams;
+	for(int i = 0; i < day.meals.GetCount(); i++) {
+		const Meal& m = day.meals[i];
+		int j = prof.FindMealPreset(m.key);
+		if (j >= 0)
+			mealtype_grams.GetAdd(j, 0) += m.grams;
+	}
+	
+	for(int i = 0; i < mealtype_grams.GetCount(); i++) {
+		int preset_i = mealtype_grams.GetKey(i);
+		int grams = mealtype_grams[i];
+		const MealPreset& mp = prof.presets[preset_i];
+		meallist.Set(i, 0, preset_i);
+		meallist.Set(i, 1, grams);
+		meallist.Set(i, 2, i+1);
+		meallist.Set(i, 3, mp.name);
+		meallist.Set(i, 4, grams);
+	}
+	meallist.SetCount(mealtype_grams.GetCount());
+	
+	if (!meallist.IsCursor() && meallist.GetCount())
+		meallist.SetCursor(0);
+	
+	SelectMeal();
+}
+
+void FoodInstructionCtrl::SelectMeal() {
+	if (!list.IsCursor() || !meallist.IsCursor())
+		return;
+	int cursor = list.GetCursor();
+	int variant = list.Get(cursor, 0);
+	int mcursor = meallist.GetCursor();
+	int preset_i = meallist.Get(mcursor, 0);
+	int grams = meallist.Get(mcursor, 1);
+	
+	const Database& db = DB();
+	const Profile& prof = GetProfile();
+	const MealPreset& mp = prof.presets[preset_i];
+	const MealPresetVariant& var = mp.variants[variant];
+	
+	Ingredient ing;
+	var.GetNutritions(ing);
+	
+	int row = 0;
+	double mul = (double)grams / ing.grams;
+	
+	for(int i = 0; i < var.ingredients.GetCount(); i++) {
+		const MealIngredient& mi = var.ingredients[i];
+		const FoodDescription& d = db.food_descriptions[mi.db_food_no];
+		int grams = mi.max_grams * mul;
+		if (grams > 0) {
+			Ingredient ing;
+			ing.Set(grams, d);
+			inglist.Set(row, 0, mi.db_food_no);
+			inglist.Set(row, 1, grams);
+			inglist.Set(row, 2, d.long_desc);
+			inglist.Set(row, 3, grams);
+			inglist.Set(row, 4, Format("%2n", ing.nutr[KCAL]));
+			inglist.Set(row, 5, Format("%2n", ing.nutr[PROT]));
+			inglist.Set(row, 6, Format("%2n", ing.nutr[CARB]));
+			inglist.Set(row, 7, Format("%2n", ing.nutr[FAT]));
+			row++;
+		}
+	}
+	
+	ing.ChangeGrams(grams);
+	inglist.Set(row, 0, -1);
+	inglist.Set(row, 1, -1);
+	inglist.Set(row, 2, AttrText("Total").NormalPaper(Color(204, 206, 255)));
+	inglist.Set(row, 3, ing.grams);
+	inglist.Set(row, 4, Format("%2n", ing.nutr[KCAL]));
+	inglist.Set(row, 5, Format("%2n", ing.nutr[PROT]));
+	inglist.Set(row, 6, Format("%2n", ing.nutr[CARB]));
+	inglist.Set(row, 7, Format("%2n", ing.nutr[FAT]));
+	row++;
+	
+	inglist.SetCount(row);
+	
+	if (!inglist.IsCursor() && inglist.GetCount())
+		inglist.SetCursor(0);
+	
+	SelectIngredient();
+}
+
+void FoodInstructionCtrl::SelectIngredient() {
+	if (!list.IsCursor() || !meallist.IsCursor() || !inglist.IsCursor())
+		return;
+	int icursor = inglist.GetCursor();
+	int db_no;
+	
+	int cursor = list.GetCursor();
+	int variant = list.Get(cursor, 0);
+	int mcursor = meallist.GetCursor();
+	int preset_i = meallist.Get(mcursor, 0);
+	int grams = meallist.Get(mcursor, 1);
+	
+	const Database& db = DB();
+	const Profile& prof = GetProfile();
+	const MealPreset& mp = prof.presets[preset_i];
+	const MealPresetVariant& var = mp.variants[variant];
+	
+	if (icursor >= 0) {
+		Ingredient ing;
+		db_no = inglist.Get(icursor, 0);
+		if (db_no >= 0) {
+			const Database& db = DB();
+			const FoodDescription& d = db.food_descriptions[db_no];
+			int grams = inglist.Get(icursor, 1);
+			
+			ing.Set(grams, d);
+		}
+		else {
+			var.GetNutritions(ing);
+			ing.ChangeGrams(grams);
+		}
+		int row = 0;
+		nutrlist.Set(row, 0, "Mass");
+		nutrlist.Set(row++, 1, ing.grams);
+		for(int i = 0; i < ing.nutr.GetCount(); i++) {
+			double value = ing.nutr[i];
+			if (value) {
+				nutrlist.Set(row, 0, db.nutr_types[i].nutr_desc);
+				nutrlist.Set(row++, 1, Format("%4n", value));
+			}
+		}
+		nutrlist.SetCount(row);
+	}
+	else nutrlist.SetCount(0);
 }

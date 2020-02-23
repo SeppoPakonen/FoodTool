@@ -150,6 +150,7 @@ struct ScheduleToday {
 		WALKING,
 		RUNNING,
 		SLEEPING,
+		MUSCLETRAINING,
 	};
 	
 	struct Item : Moveable<Item> {
@@ -255,6 +256,7 @@ struct Profile {
 	bool IsRunning() {return flag.running || flag.workers_running > 0;}
 	void VLCD_Preset();
 	void CookedToRaw();
+	int FindMealPreset(String key);
 	
 	void LoadThis();
 	void StoreThis();

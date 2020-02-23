@@ -1,17 +1,34 @@
 [ $$0,0#00000000000000000000000000000000:Default]
 [{_}%EN-US 
-[s0;= [* Welcome to use the FoodTool!]&]
+[s0;= [* Read this document!]&]
 [s0;* &]
+[s0; Welcome to use the FoodTool!&]
+[s0; &]
 [s0; [+92 The FoodTool makes it possible for you to lose weight with 
 minimal hunger, to gain muscle efficiently or to maintain your 
-weight healthy.]&]
+weight healthy. This ][*+92 application is not connected to Internet 
+in any way][+92 . You can use the builtin camera feature to follow 
+your weight loss progress without worries about privacy. I`'m 
+glad that you chose this application.]&]
 [s0;+92 &]
-[s0; [+92 This ][*+92 application is not connected to Internet in any 
-way][+92 . You can use the builtin camera feature to follow your 
-weight loss progress without worries about privacy.]&]
+[s0; [+92 There is few ][*+92 extremely important things to note][+92 :]&]
+[s0;i150;O0; [*+92 Protein is needed][+92  in weight loss diet to maintain 
+lean muscle.]&]
+[s0;i150;O0; [*+92 But][+92  ][/^https`:`/`/thestrongkitchen`.com`/blog`/post`/insulin`-response`-it`-comes`-from`-eating`-protein`-too^ p
+rotein stimulates insulin release as much as carbohydrate does.]&]
+[s0;i150;O0; For fat burning, you need your insulin levels to be 
+relatively lower than your glucagon levels. [* Increasing insulin 
+levels will prevent you burning fat].&]
+[s0;i150;O0; [* Eating ][*^https`:`/`/www`.ncbi`.nlm`.nih`.gov`/pmc`/articles`/PMC6398820`/^ p
+lant`-derived PUFA decreases insulin]. [^https`:`/`/en`.wikipedia`.org`/wiki`/Sunflower`_oil^ S
+unflower oil] is your best choice. Also [/^https`:`/`/www`.endocrinologynetwork`.com`/insulin`/how`-fats`-impact`-insulin`-resistance`-t2dm^ r
+eplacing carbohydrate with polyunsaturated fat significantly 
+lowered HbA1c and fasting insulin.]&]
 [s0;+92 &]
-[s0; [+92 I`'m glad that you chose this application.]&]
-[s0;+92 &]
+[s0; [+92 I am not a doctor and I won`'t take any responsibility of 
+you using this application.]&]
+[s0; [*+92 By clicking `'next`' you release the author of this application 
+from all responsibilities.]&]
 [s0;+92 &]
 [s0; [+92 Sincerely,]&]
 [s0; [+92 Seppo Pakonen,]&]

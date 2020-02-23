@@ -17,6 +17,7 @@ struct IngredientT : Moveable<IngredientT<T>> {
 	}
 	void Set(T grams, const FoodDescription& d) {
 		Reset();
+		this->grams = grams;
 		for(const auto& n : d.nutr)
 			nutr[n.nutr_no] = n.nutr_value * 0.01 * grams;
 	}

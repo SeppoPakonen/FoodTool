@@ -447,6 +447,7 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	
 	int day_len = sleep.time.Get() - wake.time.Get();
 	Time exercise_time = wake.time + day_len * 3 / 8;
+	Time muscletraining_time = wake.time + day_len * 4 / 8;
 	
 	if (conf.tgt_walking_dist > 0) {
 		auto& walk = s.items.Add();
@@ -460,6 +461,13 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 		jogging.time = exercise_time;
 		jogging.type = ScheduleToday::RUNNING;
 		jogging.msg = Format(t_("Go jogging %2n km!"), conf.tgt_jogging_dist);
+	}
+	
+	if (1) {
+		auto& jogging = s.items.Add();
+		jogging.time = muscletraining_time;
+		jogging.type = ScheduleToday::MUSCLETRAINING;
+		jogging.msg = t_("Do muscle resistance exercises!");
 	}
 	
 	for(auto& it : s.items)
@@ -503,6 +511,12 @@ void Profile::CookedToRaw() {
 	
 }
 
+int Profile::FindMealPreset(String key) {
+	for(int i = 0; i < presets.GetCount(); i++)
+		if (presets[i].key == key)
+			return i;
+	return -1;
+}
 
 
 
