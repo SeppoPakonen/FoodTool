@@ -12,6 +12,7 @@ library(LINUX) "opencv_core opencv_video opencv_videoio opencv_imgcodecs";
 
 file
 	Readme.txt,
+	Muistio.txt,
 	Recipes.txt,
 	Welcome.qtf,
 	Translation.t,

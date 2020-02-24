@@ -206,14 +206,54 @@ bool Database::Init() {
 	AddRecommendation("CHOLE", 300 / 70.0, true, OTHER);
 	AddRecommendation("FATRN", 2 / 70.0, true, OTHER);
 	
-	double fat_saturated = 13  / 70.0 * 5;
-	double fat_monounsaturated = 33  / 70.0 * 5;
-	double fat_polyunsaturated = 33  / 70.0 * 5;
+	/*
+	Important 'need to know':
+		- Only small dense LDL colesterol (sdLDL-c) is associated with metabolic syntrome.
+		  All LDL is not 'bad', even though majority of public information states so.
+		  (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6341753/)
+		- sdLDL-c is highly correlated by triglyceride levels
+		  (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5270205/)
+		- The causal relation between triglyceride and sdLDL-c IS NOT DETERMINED (1Q 2020).
+		  The assumed sdLDL-c --> triglyceride causality is NOT proven nor even studied.
+		  (lack of sources)
+		- Starch, sugar and excess calories creates excess triglycerides.
+		  (e.g. https://healthyeating.sfgate.com/conversion-carbohydrates-triglycerides-2218.html)
+		- Reduction of trans- and saturated fat is not valid by "LDL is bad" argument
+		- Trans-fats have anti-cancer properties, and the global reduction of usage of trans
+		  and saturated fatty acids might be the partial reason for growing cancer rates.
+		- official recommendation of 2-5.8g trans fats and 5-6g saturates fats IS MURDER!
+		- waist circumference and body fat percentage is best predictor of MetS
+		  (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4450687/)
+		- Triglycerides are released from cells by glucagon, when the body requires fatty acids as an
+		  energy source. Insulin causes triglycerides to be taken back to cells. You have too
+		  much triglycerides in your blood when cells cannot absorb any more, e.g. when you
+		  have eaten too much.
+		  (https://en.wikipedia.org/wiki/Triglyceride)
+		  (https://en.wikipedia.org/wiki/Fatty_acid_metabolism)
+		  
+		----> The root of the problem is excess calories and pharmaceutical industry
+			  shamelessly spread misleading information to sell all sorts of medicine an other:
+			    - diabetes medicine
+			    - ineffective cancer treatment
+			    - dementia medicine
+				- causing erucic acid ban
+						Eurcic acid actually causes weight loss by releasing triglycerides from cells
+						allowing you to eat less and lose weight faster, but if you don't "spend"
+						those it will increase sdLDL-c, of course...
+						This is banned because it is too healthy for people's stupid habits.
+				
+	*/
+	
+	double mul = 1;
+	double total = 130 / 70.0 * mul;
+	double fat_trans = total / 3;
+	double fat_saturated = total / 3;
+	double fat_unsaturated = total / 3;
 	AddRecommendation("FASAT", fat_saturated, true, OTHER);
-	AddRecommendation("FAMS", fat_monounsaturated, true, OTHER);
-	AddRecommendation("FAPU", fat_polyunsaturated, true, OTHER);
-	AddRecommendation("FATRNM", 1 / 70.0, true, OTHER);
-	AddRecommendation("FATRNP", 1 / 70.0, true, OTHER);
+	AddRecommendation("FAMS", fat_unsaturated / 2, true, OTHER);
+	AddRecommendation("FAPU", fat_unsaturated / 2, true, OTHER);
+	AddRecommendation("FATRNM", fat_trans / 2, true, OTHER);
+	AddRecommendation("FATRNP", fat_trans / 2, true, OTHER);
 	AddRecommendation("FIBTG", 30 / 70.0, true, OTHER);
 	
 	// https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6769731/
@@ -231,42 +271,42 @@ bool Database::Init() {
 	AddRecommendation("F20D0", fat_saturated * fat_saturated_part, true, FATTYACID);
 	AddRecommendation("F24D0", fat_saturated * fat_saturated_part, true, FATTYACID);
 	
-	double fat_monounsaturated_part = 1.0 / 7;
-	AddRecommendation("F14D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
-	AddRecommendation("F15D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
-	AddRecommendation("F16D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
-	AddRecommendation("F18D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
-	AddRecommendation("F20D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
-	AddRecommendation("F22D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
-	AddRecommendation("F22D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
+	double fat_unsaturated_part = 1.0 / (7 + 12 + 7);
+	AddRecommendation("F14D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F15D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F16D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D1", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
 	
-	double fat_monounsaturated__analog_part = 1.0 / 14;
-	AddRecommendation("F24D1C", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F16D1T", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F16D1C", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F18D1T", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F18D1C", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F18D3CN6", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F18D3CN3", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F20D3N3", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F20D3N6", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F20D4N6", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F22D4", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F18D2CN6", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
-	AddRecommendation("F18D2TT", fat_monounsaturated * fat_monounsaturated__analog_part, false, FATTYACID);
-	AddRecommendation("F18D2CLA", fat_monounsaturated * fat_monounsaturated__analog_part, false, FATTYACID);
+	AddRecommendation("F24D1C", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F16D1C", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D1C", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D3CN6", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D3CN3", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D3N3", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D3N6", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D4N6", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D4", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D2CN6", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D2CLA", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D1C", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
 	
-	double fat_polyunsaturated_part = 1.0 / 10;
-	AddRecommendation("F18D2", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
-	AddRecommendation("F18D3", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
-	AddRecommendation("F20D4", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
-	AddRecommendation("F22D6", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
-	AddRecommendation("F18D4", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
-	AddRecommendation("F20D5", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
-	AddRecommendation("F22D5", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D2", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D3", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D4", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D6", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F18D4", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F20D5", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
+	AddRecommendation("F22D5", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
 	
-	AddRecommendation("F22D1T", 0.001, false, FATTYACID);
-	AddRecommendation("F22D1C", 0.001, false, FATTYACID);
+	double fat_trans_part = 1.0 / 4;
+	AddRecommendation("F16D1T", fat_trans * fat_trans_part, true, FATTYACID);
+	AddRecommendation("F18D1T", fat_trans * fat_trans_part, true, FATTYACID);
+	AddRecommendation("F18D2TT", fat_trans * fat_trans_part, true, FATTYACID);
+	AddRecommendation("F22D1T", fat_trans * fat_trans_part, true, FATTYACID);
+	
 	
 	
 	#if 0
@@ -426,6 +466,7 @@ FoodDescription& FoodDescription::AddNutrition(int nutr_no, double value, double
 }
 
 void Database::VLCD_Preset() {
+
 	AddFood("OTHER", "Salt, iodized", "", "Meira", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(25, 38758, 0);
 	AddFood("0100", "Magnex sitraatti + B6- vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
@@ -509,7 +550,16 @@ void Database::VLCD_Preset() {
 		.AddNutrition(24, 1390, 0)
 		.AddNutrition(22, 263, 0)
 		.AddNutrition(30, 34, 0);
+	AddFood("OTHER", "Rainbow Omega 3+ ADE kalaöljy-vitamiinikapseli, 100 kapselia 94 g", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+		.AddNutrition(1, 67, 0)
+		.AddNutrition(90, 10.6000003814697, 0)
+		.AddNutrition(2, 10, 0)
+		.AddNutrition(0, 18, 0)
+		.AddNutrition(33, 54794, 0)
+		.AddNutrition(40, 1369, 0)
+		.AddNutrition(36, 1369, 0);
 	used_foods.Add(15);
+	used_foods.Add(16);
 	used_foods.Add(117);
 	used_foods.Add(239);
 	used_foods.Add(261);
@@ -518,6 +568,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(278);
 	used_foods.Add(289);
 	used_foods.Add(291);
+	used_foods.Add(294);
 	used_foods.Add(657);
 	used_foods.Add(658);
 	used_foods.Add(659);
@@ -527,6 +578,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(716);
 	used_foods.Add(725);
 	used_foods.Add(883);
+	used_foods.Add(1057);
 	used_foods.Add(2122);
 	used_foods.Add(2150);
 	used_foods.Add(2155);
@@ -555,8 +607,11 @@ void Database::VLCD_Preset() {
 	used_foods.Add(2384);
 	used_foods.Add(2392);
 	used_foods.Add(2423);
+	used_foods.Add(2596);
+	used_foods.Add(2666);
 	used_foods.Add(2823);
 	used_foods.Add(2826);
+	used_foods.Add(2836);
 	used_foods.Add(2862);
 	used_foods.Add(2870);
 	used_foods.Add(2878);
@@ -577,12 +632,15 @@ void Database::VLCD_Preset() {
 	used_foods.Add(3009);
 	used_foods.Add(3029);
 	used_foods.Add(3051);
+	used_foods.Add(3079);
 	used_foods.Add(3094);
 	used_foods.Add(3150);
 	used_foods.Add(3166);
+	used_foods.Add(3179);
 	used_foods.Add(3187);
 	used_foods.Add(3222);
 	used_foods.Add(3238);
+	used_foods.Add(3295);
 	used_foods.Add(3305);
 	used_foods.Add(3322);
 	used_foods.Add(3435);
@@ -599,16 +657,32 @@ void Database::VLCD_Preset() {
 	used_foods.Add(3689);
 	used_foods.Add(3715);
 	used_foods.Add(4262);
+	used_foods.Add(4431);
+	used_foods.Add(4752);
+	used_foods.Add(4754);
+	used_foods.Add(4765);
+	used_foods.Add(4775);
+	used_foods.Add(4778);
+	used_foods.Add(4787);
 	used_foods.Add(4794);
 	used_foods.Add(4806);
+	used_foods.Add(4808);
+	used_foods.Add(4817);
 	used_foods.Add(4824);
 	used_foods.Add(4853);
 	used_foods.Add(4858);
 	used_foods.Add(4875);
+	used_foods.Add(5610);
 	used_foods.Add(5880);
 	used_foods.Add(6140);
 	used_foods.Add(6194);
 	used_foods.Add(6452);
+	used_foods.Add(6496);
+	used_foods.Add(6560);
+	used_foods.Add(6582);
+	used_foods.Add(6616);
+	used_foods.Add(6621);
+	used_foods.Add(7615);
 	used_foods.Add(8604);
 	used_foods.Add(8681);
 	used_foods.Add(8789);
@@ -620,33 +694,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(8795);
 	used_foods.Add(8796);
 	used_foods.Add(8797);
-	used_foods.Add(4431);
-	used_foods.Add(3079);
-	used_foods.Add(6621);
-	used_foods.Add(6582);
-	used_foods.Add(7615);
-	used_foods.Add(2666);
-	used_foods.Add(1057);
-	used_foods.Add(6616);
-	used_foods.Add(2596);
-	used_foods.Add(6496);
-	used_foods.Add(6560);
-	used_foods.Add(3179);
-	used_foods.Add(4752);
-	used_foods.Add(4817);
-	used_foods.Add(4808);
-	used_foods.Add(2836);
-	used_foods.Add(3295);
-	used_foods.Add(4754);
-	used_foods.Add(4765);
-	used_foods.Add(4775);
-	used_foods.Add(4778);
-	used_foods.Add(4787);
-	used_foods.Add(5610);
-	used_foods.Add(294);
-	used_foods.Add(16);
-
-	
+	used_foods.Add(8798);
 	
 	
 	SortIndex(used_foods, StdLess<int>());

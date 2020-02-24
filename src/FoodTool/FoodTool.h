@@ -243,6 +243,19 @@ struct FoodWishCtrl : public ParentCtrl {
 	void ValueChanged(int preset_i);
 };
 
+struct SupplementCtrl : public WithSupplementLayout<ParentCtrl> {
+	Array<Option> is_weightloss, is_maintenance;
+	
+	typedef SupplementCtrl CLASSNAME;
+	SupplementCtrl();
+	void Data();
+	void AddFood();
+	void RemoveFood();
+	void SelectNutrition();
+	void ValueChanged(int nutr_i);
+};
+
+
 class FoodTool : public TopWindow {
 	TabCtrl tabs;
 	bool was_updating = true;
@@ -266,6 +279,7 @@ class FoodTool : public TopWindow {
 	DatabaseCtrl db;
 	FoodStorageCtrl storage;
 	FoodWishCtrl wish;
+	SupplementCtrl supp;
 	
 	TimeCallback tc;
 public:

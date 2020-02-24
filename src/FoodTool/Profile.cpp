@@ -234,6 +234,7 @@ bool Profile::UpdatePlan() {
 		double maintain_protein = weight * 0.8;
 		double min_protein;
 		if (fat_perc > tgt_fat_perc + 0.01) {
+			maintain_protein = weight * 1.2; // tends to be needed more than 0.8 while fasting
 			min_protein = maintain_protein;
 			d.variant_type = VARIANT_WEIGHTLOSS;
 			maintenance_day_count = 0;
@@ -518,7 +519,13 @@ int Profile::FindMealPreset(String key) {
 	return -1;
 }
 
-
+DailyPlan* Profile::GetTodayPlan() {
+	Date today = GetSysTime();
+	for(DailyPlan& plan : planned_daily)
+		if (plan.date == today)
+			return &plan;
+	return NULL;
+}
 
 
 

@@ -186,6 +186,16 @@ struct FoodStorageSnapshot : Moveable<FoodStorageSnapshot> {
 	void GetNutritions(Ingredient& ing) const;
 };
 
+struct NutritionSupplement : Moveable<NutritionSupplement> {
+	Index<int> used_food;
+	bool is_weightloss = false, is_maintenance = false;
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % used_food % is_weightloss % is_maintenance;}
+	}
+};
+
 struct Profile {
 	Vector<IntakeExceptions> exceptions;
 	Vector<Note> notes;
@@ -196,6 +206,7 @@ struct Profile {
 	Vector<NutrientDeficitProfile> defs;
 	Vector<MealPreset> presets;
 	Vector<FoodStorageSnapshot> storage_snaps;
+	Vector<NutritionSupplement> supplements;
 	Index<int> planned_nutrients;
 	
 	FoodStorage storage;
@@ -207,6 +218,8 @@ struct Profile {
 	
 	
 	VectorMap<String, int> removed0;
+	Index<int> removed1;
+	Ingredient removed2;
 	
 	Time tmp_usage_start;
 	RunningFlag flag;
@@ -222,7 +235,7 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		VER(2);
+		VER(4);
 		FOR_VER(0) {
 			s
 				% exceptions
@@ -244,6 +257,8 @@ struct Profile {
 		}
 		FOR_VER(1) {s % storage_snaps;}
 		FOR_VER(2) {s % removed0;}
+		FOR_VER(3) {s % removed1 % removed2;}
+		FOR_VER(4) {s % supplements;}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);
@@ -260,6 +275,7 @@ struct Profile {
 	void VLCD_Preset();
 	void CookedToRaw();
 	int FindMealPreset(String key);
+	DailyPlan* GetTodayPlan();
 	
 	void LoadThis();
 	void StoreThis();

@@ -250,9 +250,9 @@ LAYOUT(WeightLayout, 928, 584)
 END_LAYOUT
 
 LAYOUT(FoodStorageLayout, 880, 448)
-	ITEM(ArrayCtrl, list, LeftPosZ(4, 336).VSizePosZ(4, 32))
-	ITEM(Button, add_snap, SetLabel(t_("Add Snapshot")).LeftPosZ(4, 336).BottomPosZ(5, 23))
-	ITEM(ArrayCtrl, food_list, HSizePosZ(344, 4).VSizePosZ(4, 4))
+	ITEM(ArrayCtrl, list, LeftPosZ(4, 572).VSizePosZ(4, 32))
+	ITEM(Button, add_snap, SetLabel(t_("Add Snapshot")).LeftPosZ(4, 572).BottomPosZ(5, 23))
+	ITEM(ArrayCtrl, food_list, HSizePosZ(580, 4).VSizePosZ(4, 4))
 END_LAYOUT
 
 LAYOUT(FoodWishLayout, 604, 472)
@@ -260,5 +260,13 @@ LAYOUT(FoodWishLayout, 604, 472)
 	ITEM(Button, add, SetLabel(t_("->")).HCenterPosZ(36, 0).VCenterPosZ(48, -32))
 	ITEM(Button, remove, SetLabel(t_("<-")).HCenterPosZ(36, 0).VCenterPosZ(48, 20))
 	ITEM(ArrayCtrl, wishes, HCenterPosZ(276, 160).VCenterPosZ(464, 0))
+END_LAYOUT
+
+LAYOUT(SupplementLayout, 912, 524)
+	ITEM(ArrayCtrl, nutrlist, HCenterPosZ(328, -288).VCenterPosZ(516, 0))
+	ITEM(ArrayCtrl, usedlist, HCenterPosZ(572, 166).VCenterPosZ(100, -208))
+	ITEM(ArrayCtrl, foodlist, HCenterPosZ(572, 166).VCenterPosZ(376, 70))
+	ITEM(Button, add, SetLabel(t_("Add")).HCenterPosZ(116, 98).VCenterPosZ(32, -138))
+	ITEM(Button, remove, SetLabel(t_("Remove")).HCenterPosZ(116, 218).VCenterPosZ(32, -138))
 END_LAYOUT
 
