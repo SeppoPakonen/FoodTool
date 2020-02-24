@@ -94,6 +94,7 @@ FoodTool::FoodTool()
 	tabs.Add(motivation.SizePos(), "Motivation");
 	tabs.Add(today.SizePos(), "Today");
 	tabs.Add(status.SizePos(), "Status");
+	tabs.Add(nutr.SizePos(), "Daily Nutritions");
 	tabs.Add(fins.SizePos(), "Food Instructions");
 	tabs.Add(graphs.SizePos(), "Graphs");
 	tabs.Add(weight.SizePos(), "Weight");
@@ -151,6 +152,7 @@ void FoodTool::Data() {
 		if      (tab == i++)	motivation.Data();
 		else if (tab == i++)	today.Data();
 		else if (tab == i++)	status.Data();
+		else if (tab == i++)	nutr.Data();
 		else if (tab == i++)	fins.Data();
 		else if (tab == i++)	graphs.Data();
 		else if (tab == i++)	weight.Data();
@@ -1802,6 +1804,7 @@ void FoodInstructionCtrl::SelectMeal() {
 	
 	Ingredient ing;
 	var.GetNutritions(ing);
+	ing.ChangeGrams(grams);
 	
 	int row = 0;
 	double mul = (double)grams / ing.grams;
@@ -1883,6 +1886,184 @@ void FoodInstructionCtrl::SelectIngredient() {
 			if (value) {
 				nutrlist.Set(row, 0, db.nutr_types[i].nutr_desc);
 				nutrlist.Set(row++, 1, Format("%4n", value));
+			}
+		}
+		nutrlist.SetCount(row);
+	}
+	else nutrlist.SetCount(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DailyNutritionsCtrl::DailyNutritionsCtrl() {
+	Add(hsplit.SizePos());
+	hsplit.Horz() << list << vsplit;
+	hsplit.SetPos(3333);
+	vsplit.Vert() << srclist << nutrlist;
+	vsplit.SetPos(2000);
+	
+	list.AddIndex();
+	list.AddIndex();
+	list.AddColumn("Date");
+	list.AddColumn("Variant");
+	list.AddColumn("Target kcal");
+	list.AddColumn("Target weight");
+	list.ColumnWidths("2 2 1 1");
+	list <<= THISBACK(SelectDate);
+	
+	srclist.AddColumn("Ingredient");
+	srclist.AddColumn("Mass (g)");
+	srclist.AddColumn("Energy");
+	srclist.AddColumn("Protein");
+	srclist.AddColumn("Carbs");
+	srclist.AddColumn("Fat");
+	srclist.ColumnWidths("4 1 1 1 1");
+	srclist <<= THISBACK(SelectSource);
+	
+	nutrlist.AddColumn("Key");
+	nutrlist.AddColumn("Value");
+	nutrlist.AddColumn("Recommended");
+	nutrlist.AddColumn("\% of recommended");
+	nutrlist.ColumnWidths("3 1 1 1");
+}
+
+void DailyNutritionsCtrl::Data() {
+	Profile& prof = GetProfile();
+	
+	if (prof.storage.days.GetCount() != list.GetCount()) {
+		Date today = GetSysTime();
+		for(int i = 0; i < prof.storage.days.GetCount(); i++) {
+			int row = prof.storage.days.GetCount() - 1 - i;
+			const FoodDay& day = prof.storage.days[i];
+			const DailyPlan& plan = prof.planned_daily[i];
+			String txt = Format("%d.%d.%d", (int)day.date.day, (int)day.date.month, (int)day.date.year);
+			
+			list.Set(row, 0, i);
+			list.Set(row, 1, (int)plan.variant_type);
+			if (day.date == today)
+				list.Set(row, 2, AttrText(txt).Paper(Color(28, 85, 0)).Ink(White()));
+			else
+				list.Set(row, 2, txt);
+			list.Set(row, 3, GetVariantString(plan.variant_type));
+			list.Set(row, 4, (int)plan.food.nutr[KCAL]);
+			list.Set(row, 5, Format("%1n", plan.weight));
+		}
+		if (!list.IsCursor() && list.GetCount())
+			list.SetCursor(0);
+		SelectDate();
+	}
+}
+
+void DailyNutritionsCtrl::SelectDate() {
+	if (!list.IsCursor())
+		return;
+	int cursor = list.GetCursor();
+	int day_i = list.Get(cursor, 0);
+	int variant = list.Get(cursor, 1);
+	
+	Profile& prof = GetProfile();
+	const FoodDay& day = prof.storage.days[day_i];
+	
+	src.Clear();
+	
+	Ingredient& total = src.Add("Total");
+	{
+		Ingredient& food_total = src.Insert(0, "Food");
+		
+		VectorMap<int, int> mealtype_grams;
+		for(int i = 0; i < day.meals.GetCount(); i++) {
+			const Meal& m = day.meals[i];
+			int j = prof.FindMealPreset(m.key);
+			if (j >= 0)
+				mealtype_grams.GetAdd(j, 0) += m.grams;
+		}
+		
+		for(int i = 0; i < mealtype_grams.GetCount(); i++) {
+			int preset_i = mealtype_grams.GetKey(i);
+			int grams = mealtype_grams[i];
+			const MealPreset& mp = prof.presets[preset_i];
+			
+			const MealPresetVariant& var = mp.variants[variant];
+		
+			Ingredient ing;
+			var.GetNutritions(ing);
+			ing.ChangeGrams(grams);
+			food_total += ing;
+		}
+		
+		total += food_total;
+	}
+	
+	for(int i = 0; i < src.GetCount(); i++) {
+		const Ingredient& ing = src[i];
+		srclist.Set(i, 0, src.GetKey(i));
+		srclist.Set(i, 1, Format("%2n", ing.grams));
+		srclist.Set(i, 2, Format("%2n", ing.nutr[KCAL]));
+		srclist.Set(i, 3, Format("%2n", ing.nutr[PROT]));
+		srclist.Set(i, 4, Format("%2n", ing.nutr[CARB]));
+		srclist.Set(i, 5, Format("%2n", ing.nutr[FAT]));
+	}
+	srclist.SetCount(src.GetCount());
+	
+	if (!srclist.IsCursor() && srclist.GetCount())
+		srclist.SetCursor(0);
+	
+	SelectSource();
+}
+
+void DailyNutritionsCtrl::SelectSource() {
+	if (!list.IsCursor() || !srclist.IsCursor())
+		return;
+	
+	int daycursor = list.GetCursor();
+	int day_i = list.Get(daycursor, 0);
+	int cursor = srclist.GetCursor();
+	double weight = GetProfile().planned_daily[day_i].weight;
+	
+	if (cursor >= 0) {
+		const Database& db = DB();
+		Ingredient& ing = src[cursor];
+		VectorMap<int, double> values;
+		for(int i = 0; i < ing.nutr.GetCount(); i++) {
+			double value = ing.nutr[i];
+			if (value)
+				values.Add(i, value);
+		}
+		
+		int row = 0;
+		nutrlist.Set(row, 0, "Mass");
+		nutrlist.Set(row++, 1, Format("%2n", ing.grams));
+		for(const NutritionRecommendation& recom : db.nutr_recom) {
+			double value = values.Get(recom.nutr_no, 0);
+			if (value > 0.0) {
+				double recom_value = recom.GetValue(weight);
+				const NutritionType& nt = db.nutr_types[recom.nutr_no];
+				nutrlist.Set(row, 0, nt.nutr_desc);
+				nutrlist.Set(row, 1, Format("%2n%s", value, nt.units));
+				nutrlist.Set(row, 2, Format("%2n%s", recom_value, nt.units));
+				nutrlist.Set(row, 3, Format("%1n", value / recom_value * 100));
+				row++;
 			}
 		}
 		nutrlist.SetCount(row);

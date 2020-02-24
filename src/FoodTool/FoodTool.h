@@ -219,6 +219,18 @@ struct FoodInstructionCtrl : public ParentCtrl {
 	void SelectIngredient();
 };
 
+struct DailyNutritionsCtrl : public ParentCtrl {
+	ArrayCtrl list, srclist, nutrlist;
+	Splitter vsplit, hsplit;
+	ArrayMap<String, Ingredient> src;
+	
+	typedef DailyNutritionsCtrl CLASSNAME;
+	DailyNutritionsCtrl();
+	void Data();
+	void SelectDate();
+	void SelectSource();
+};
+
 class FoodTool : public TopWindow {
 	TabCtrl tabs;
 	bool was_updating = true;
@@ -228,6 +240,7 @@ class FoodTool : public TopWindow {
 	
 	MotivationCtrl motivation;
 	StatusCtrl status;
+	DailyNutritionsCtrl nutr;
 	FoodInstructionCtrl fins;
 	ConfigurationCtrl conf;
 	ExceptionsCtrl exc;
