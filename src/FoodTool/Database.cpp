@@ -240,7 +240,7 @@ bool Database::Init() {
 	AddRecommendation("F22D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
 	AddRecommendation("F22D1", fat_monounsaturated * fat_monounsaturated_part, true, FATTYACID);
 	
-	double fat_monounsaturated__analog_part = 1.0 / 12;
+	double fat_monounsaturated__analog_part = 1.0 / 14;
 	AddRecommendation("F24D1C", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
 	AddRecommendation("F16D1T", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
 	AddRecommendation("F16D1C", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
@@ -253,6 +253,8 @@ bool Database::Init() {
 	AddRecommendation("F20D4N6", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
 	AddRecommendation("F22D4", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
 	AddRecommendation("F18D2CN6", fat_monounsaturated * fat_monounsaturated__analog_part, true, FATTYACID);
+	AddRecommendation("F18D2TT", fat_monounsaturated * fat_monounsaturated__analog_part, false, FATTYACID);
+	AddRecommendation("F18D2CLA", fat_monounsaturated * fat_monounsaturated__analog_part, false, FATTYACID);
 	
 	double fat_polyunsaturated_part = 1.0 / 10;
 	AddRecommendation("F18D2", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
@@ -264,8 +266,6 @@ bool Database::Init() {
 	AddRecommendation("F22D5", fat_polyunsaturated * fat_polyunsaturated_part, true, FATTYACID);
 	
 	AddRecommendation("F22D1T", 0.001, false, FATTYACID);
-	AddRecommendation("F18D2TT", 0.001, false, FATTYACID);
-	AddRecommendation("F18D2CLA", 0.001, false, FATTYACID);
 	AddRecommendation("F22D1C", 0.001, false, FATTYACID);
 	
 	

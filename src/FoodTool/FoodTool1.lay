@@ -255,3 +255,10 @@ LAYOUT(FoodStorageLayout, 880, 448)
 	ITEM(ArrayCtrl, food_list, HSizePosZ(344, 4).VSizePosZ(4, 4))
 END_LAYOUT
 
+LAYOUT(FoodWishLayout, 604, 472)
+	ITEM(ArrayCtrl, presets, HCenterPosZ(276, -160).VCenterPosZ(464, 0))
+	ITEM(Button, add, SetLabel(t_("->")).HCenterPosZ(36, 0).VCenterPosZ(48, -32))
+	ITEM(Button, remove, SetLabel(t_("<-")).HCenterPosZ(36, 0).VCenterPosZ(48, 20))
+	ITEM(ArrayCtrl, wishes, HCenterPosZ(276, 160).VCenterPosZ(464, 0))
+END_LAYOUT
+

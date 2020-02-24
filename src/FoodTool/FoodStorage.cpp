@@ -455,8 +455,7 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 		//double local_usage_factor = (double)local_usage_count / var.ingredients.GetCount();
 		double local_usage_factor = local_usage_mass / local_usage_required;
 		double super_match = 0;
-		if (local_usage_factor >= 0.9)
-			super_match = 1000000;
+		//if (local_usage_factor >= 0.9) super_match = 1000000;
 		
 		int usage_before = usages[i];
 		double existing_usage_factor = 1.0 - (double)usage_before / max_usage_before;
@@ -479,7 +478,8 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 			      var.score +
 			 10 * existing_usage_factor +
 			 10 * mass_score +
-			100 * target_score +
+			 10 * target_score +
+			mp.wished_factor +
 			super_match
 			 ;
 		preset_scores.Add(i, score);

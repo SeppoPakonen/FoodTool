@@ -132,14 +132,16 @@ struct MealPreset : Moveable<MealPreset> {
 	double serving_grams = 0;
 	double score = 0, mass_factor = 0, taste_factor = 0;
 	int type = 0;
+	int wished_factor = 0;
 	Time added;
 	
 	void Serialize(Stream& s) {
-		VER(3);
+		VER(4);
 		FOR_VER(0) {s % pre_day_instructions % ingredients % instructions % name % serving_grams % score % type;}
 		FOR_VER(1) {s % added % mass_factor % taste_factor;}
 		FOR_VER(2) {s % key;}
 		FOR_VER(3) {s % variants;}
+		FOR_VER(4) {s % wished_factor;}
 		
 		//if (s.IsLoading()) variants.Clear();
 		if (key.IsEmpty()) MakeUnique();

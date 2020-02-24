@@ -231,6 +231,18 @@ struct DailyNutritionsCtrl : public ParentCtrl {
 	void SelectSource();
 };
 
+struct FoodWishCtrl : public ParentCtrl {
+	Splitter vsplit;
+	ArrayCtrl list, ingredients;
+	Array<EditIntSpin> edits;
+	
+	typedef FoodWishCtrl CLASSNAME;
+	FoodWishCtrl();
+	void Data();
+	void SelectIngredient();
+	void ValueChanged(int preset_i);
+};
+
 class FoodTool : public TopWindow {
 	TabCtrl tabs;
 	bool was_updating = true;
@@ -253,6 +265,7 @@ class FoodTool : public TopWindow {
 	MealPresetCtrl preset;
 	DatabaseCtrl db;
 	FoodStorageCtrl storage;
+	FoodWishCtrl wish;
 	
 	TimeCallback tc;
 public:

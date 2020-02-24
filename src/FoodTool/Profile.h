@@ -206,6 +206,8 @@ struct Profile {
 	bool is_initialised = false;
 	
 	
+	VectorMap<String, int> removed0;
+	
 	Time tmp_usage_start;
 	RunningFlag flag;
 	
@@ -220,7 +222,7 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		VER(1);
+		VER(2);
 		FOR_VER(0) {
 			s
 				% exceptions
@@ -241,6 +243,7 @@ struct Profile {
 				;
 		}
 		FOR_VER(1) {s % storage_snaps;}
+		FOR_VER(2) {s % removed0;}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);
