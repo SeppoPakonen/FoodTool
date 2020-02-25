@@ -65,7 +65,8 @@ inline void PlayCameraShutter() {}
 inline void PlayAlert() {}
 #endif
 
-Color Rainbow(float progress);
+Color Rainbow(double progress);
+Color CoolBlue(double progress);
 
 
 

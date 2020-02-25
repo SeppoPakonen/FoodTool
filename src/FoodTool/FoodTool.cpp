@@ -6,8 +6,17 @@
 #define IMAGEFILE <FoodTool/Images.iml>
 #include <Draw/iml_source.h>
 
-Color Rainbow(float progress) {
-    float div = (fabs(progress - (int)progress) * 6);
+#define GRADCOLOR(x) Rainbow(x)
+
+Color CoolBlue(double progress) {
+	double alpha = progress - (int)progress;
+	Color a = Color(28, 170, 255);
+	Color b = Color(28, 42, 200);
+	return Blend(a, b, alpha * 0x100);
+}
+
+Color Rainbow(double progress) {
+    double div = (fabs(progress - (int)progress) * 6);
     int ascending = (int) ((div - (int)div) * 255);
     int descending = 255 - ascending;
 
@@ -781,24 +790,26 @@ GraphCtrl::GraphCtrl() {
 		.Add(t_("Planned sodium"), 1, GrayColor())
 		.Add(t_("Eaten sodium"), 2, GrayColor(128+32));
 	
+	
+	
 	int i = 0;
 	int vitamin_count = 13;
 	list.Add(t_("Menu vitamins (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add("A", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B1", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B2", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B3", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B5", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B6", 1, Rainbow((double)i++ / vitamin_count))
-		//.Add("B7", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B9", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("B12", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("C", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("D", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("E", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("K", 1, Rainbow((double)i++ / vitamin_count))
-		.Add("Carotenoids", 1, Rainbow((double)i++ / vitamin_count))
+		.Add("A", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B1", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B2", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B3", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B5", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B6", 1, GRADCOLOR((double)i++ / vitamin_count))
+		//.Add("B7", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B9", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("B12", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("C", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("D", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("E", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("K", 1, GRADCOLOR((double)i++ / vitamin_count))
+		.Add("Carotenoids", 1, GRADCOLOR((double)i++ / vitamin_count))
 		;
 	
 	
@@ -806,76 +817,76 @@ GraphCtrl::GraphCtrl() {
 	int aminoacid_count = 14;
 	list.Add(t_("Menu essential amino acids (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add(t_("Histidine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Isoleucine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Leucine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Lysine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Methionine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Phenylalanine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Threonine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Tryptophan"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Valine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Arginine"), 1, Rainbow((double)i++ / aminoacid_count))
-		//.Add(t_("Cystine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Glutamine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Glycine"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Proline"), 1, Rainbow((double)i++ / aminoacid_count))
-		.Add(t_("Tyrosine"), 1, Rainbow((double)i++ / aminoacid_count))
+		.Add(t_("Histidine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Isoleucine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Leucine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Lysine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Methionine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Phenylalanine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Threonine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Tryptophan"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Valine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Arginine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		//.Add(t_("Cystine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Glutamine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Glycine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Proline"), 1, GRADCOLOR((double)i++ / aminoacid_count))
+		.Add(t_("Tyrosine"), 1, GRADCOLOR((double)i++ / aminoacid_count))
 		;
 		
 	int mineral_count = 10;
 	list.Add(t_("Menu essential minerals (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add(t_("Potassium"), 1, Rainbow(0.0 / mineral_count))
-		.Add(t_("Sodium"), 1, Rainbow(2.0 / mineral_count))
-		//.Add(t_("Chloride"), 1, Rainbow(1.0 / mineral_count))
-		.Add(t_("Calcium"), 1, Rainbow(3.0 / mineral_count))
-		.Add(t_("Phosphorus"), 1, Rainbow(4.0 / mineral_count))
-		.Add(t_("Magnesium"), 1, Rainbow(5.0 / mineral_count))
-		.Add(t_("Iron"), 1, Rainbow(6.0 / mineral_count))
-		.Add(t_("Zinc"), 1, Rainbow(7.0 / mineral_count))
-		.Add(t_("Manganese"), 1, Rainbow(8.0 / mineral_count))
-		.Add(t_("Copper"), 1, Rainbow(9.0 / mineral_count))
-		//.Add(t_("Iodine"), 1, Rainbow(10.0 / mineral_count))
-		//.Add(t_("Chromium"), 1, Rainbow(11.0 / mineral_count))
-		//.Add(t_("Molybdenum"), 1, Rainbow(12.0 / mineral_count))
-		.Add(t_("Selenium"), 1, Rainbow(13.0 / mineral_count))
-		//.Add(t_("Cobalt"), 1, Rainbow(14.0 / mineral_count))
-		//.Add(t_("Boron"), 1, Rainbow(15.0 / mineral_count))
-		//.Add(t_("Silicon"), 1, Rainbow(16.0 / mineral_count))
-		//.Add(t_("Bromine"), 1, Rainbow(17.0 / mineral_count))
-		//.Add(t_("Arsenic"), 1, Rainbow(18.0 / mineral_count))
-		//.Add(t_("Nickel"), 1, Rainbow(19.0 / mineral_count))
-		//.Add(t_("Fluoride"), 1, Rainbow(20.0 / mineral_count))
-		//.Add(t_("Lithium"), 1, Rainbow(21.0 / mineral_count))
-		//.Add(t_("Strontium"), 1, Rainbow(22.0 / mineral_count))
-		//.Add(t_("Vanadium"), 1, Rainbow(23.0 / mineral_count))
-		//.Add(t_("Tin"), 1, Rainbow(31.0 / mineral_count))
-		//.Add(t_("Phosphate"), 1, Rainbow(32.0 / mineral_count))
-		//.Add(t_("Bicarbonate"), 1, Rainbow(33.0 / mineral_count))
+		.Add(t_("Potassium"), 1, GRADCOLOR(0.0 / mineral_count))
+		.Add(t_("Sodium"), 1, GRADCOLOR(2.0 / mineral_count))
+		//.Add(t_("Chloride"), 1, GRADCOLOR(1.0 / mineral_count))
+		.Add(t_("Calcium"), 1, GRADCOLOR(3.0 / mineral_count))
+		.Add(t_("Phosphorus"), 1, GRADCOLOR(4.0 / mineral_count))
+		.Add(t_("Magnesium"), 1, GRADCOLOR(5.0 / mineral_count))
+		.Add(t_("Iron"), 1, GRADCOLOR(6.0 / mineral_count))
+		.Add(t_("Zinc"), 1, GRADCOLOR(7.0 / mineral_count))
+		.Add(t_("Manganese"), 1, GRADCOLOR(8.0 / mineral_count))
+		.Add(t_("Copper"), 1, GRADCOLOR(9.0 / mineral_count))
+		//.Add(t_("Iodine"), 1, GRADCOLOR(10.0 / mineral_count))
+		//.Add(t_("Chromium"), 1, GRADCOLOR(11.0 / mineral_count))
+		//.Add(t_("Molybdenum"), 1, GRADCOLOR(12.0 / mineral_count))
+		.Add(t_("Selenium"), 1, GRADCOLOR(13.0 / mineral_count))
+		//.Add(t_("Cobalt"), 1, GRADCOLOR(14.0 / mineral_count))
+		//.Add(t_("Boron"), 1, GRADCOLOR(15.0 / mineral_count))
+		//.Add(t_("Silicon"), 1, GRADCOLOR(16.0 / mineral_count))
+		//.Add(t_("Bromine"), 1, GRADCOLOR(17.0 / mineral_count))
+		//.Add(t_("Arsenic"), 1, GRADCOLOR(18.0 / mineral_count))
+		//.Add(t_("Nickel"), 1, GRADCOLOR(19.0 / mineral_count))
+		//.Add(t_("Fluoride"), 1, GRADCOLOR(20.0 / mineral_count))
+		//.Add(t_("Lithium"), 1, GRADCOLOR(21.0 / mineral_count))
+		//.Add(t_("Strontium"), 1, GRADCOLOR(22.0 / mineral_count))
+		//.Add(t_("Vanadium"), 1, GRADCOLOR(23.0 / mineral_count))
+		//.Add(t_("Tin"), 1, GRADCOLOR(31.0 / mineral_count))
+		//.Add(t_("Phosphate"), 1, GRADCOLOR(32.0 / mineral_count))
+		//.Add(t_("Bicarbonate"), 1, GRADCOLOR(33.0 / mineral_count))
 		;
 	
 	i = 0;
 	int fattyacid_count = 7;
 	list.Add(t_("Menu essential fatty acids (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add(t_("Cholesterol"), 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add(t_("Fatty acids, total trans"), 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add(t_("Fatty acids, total saturated"), 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add(t_("Fatty acids, total monounsaturated"), 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add(t_("Fatty acids, total polyunsaturated"), 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add(t_("Fatty acids, total trans-monoenoic"), 1, Rainbow((double)(i++) / fattyacid_count))
-		.Add(t_("Fatty acids, total trans-polyenoic"), 1, Rainbow((double)(i++) / fattyacid_count));
+		.Add(t_("Cholesterol"), 1, GRADCOLOR((double)(i++) / fattyacid_count))
+		.Add(t_("Fatty acids, total trans"), 1, GRADCOLOR((double)(i++) / fattyacid_count))
+		.Add(t_("Fatty acids, total saturated"), 1, GRADCOLOR((double)(i++) / fattyacid_count))
+		.Add(t_("Fatty acids, total monounsaturated"), 1, GRADCOLOR((double)(i++) / fattyacid_count))
+		.Add(t_("Fatty acids, total polyunsaturated"), 1, GRADCOLOR((double)(i++) / fattyacid_count))
+		.Add(t_("Fatty acids, total trans-monoenoic"), 1, GRADCOLOR((double)(i++) / fattyacid_count))
+		.Add(t_("Fatty acids, total trans-polyenoic"), 1, GRADCOLOR((double)(i++) / fattyacid_count));
 	
 	i = 0;
 	int other_count = 2;
 	list.Add(t_("Menu essential other (\% of recommended)"));
 	graph.Add().Vert(100)
-		.Add(t_("Choline"), 1, Rainbow((double)(i++) / other_count))
-		.Add(t_("Fiber"), 1, Rainbow((double)(i++) / other_count))
-		//.Add(t_("Inositol"), 1, Rainbow((double)(i++) / other_count))
-		//.Add(t_("Taurine"), 1, Rainbow((double)(i++) / other_count))
-		//.Add(t_("Nucleotides"), 1, Rainbow((double)(i++) / other_count))
+		.Add(t_("Choline"), 1, GRADCOLOR((double)(i++) / other_count))
+		.Add(t_("Fiber"), 1, GRADCOLOR((double)(i++) / other_count))
+		//.Add(t_("Inositol"), 1, GRADCOLOR((double)(i++) / other_count))
+		//.Add(t_("Taurine"), 1, GRADCOLOR((double)(i++) / other_count))
+		//.Add(t_("Nucleotides"), 1, GRADCOLOR((double)(i++) / other_count))
 		;
 		
 	
@@ -883,13 +894,13 @@ GraphCtrl::GraphCtrl() {
 	int electrolyte_count = 5;
 	list.Add(t_("Menu electrolytes (\% of recommended)"));
 	graph.Add().Vert(100)
-		//.Add(t_("Bicarbonate"), 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add(t_("Calcium"), 1, Rainbow((double)(i++) / electrolyte_count))
-		//.Add(t_("Chloride"), 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add(t_("Magnesium"), 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add(t_("Phosphorus"), 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add(t_("Potassium"), 1, Rainbow((double)(i++) / electrolyte_count))
-		.Add(t_("Sodium"), 1, Rainbow((double)(i++) / electrolyte_count));
+		//.Add(t_("Bicarbonate"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
+		.Add(t_("Calcium"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
+		//.Add(t_("Chloride"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
+		.Add(t_("Magnesium"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
+		.Add(t_("Phosphorus"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
+		.Add(t_("Potassium"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
+		.Add(t_("Sodium"), 1, GRADCOLOR((double)(i++) / electrolyte_count));
 	
 	list.Add(t_("Measured weight"));
 	graph.Add()
@@ -1808,10 +1819,10 @@ void FoodInstructionCtrl::SelectMeal() {
 	
 	Ingredient ing;
 	var.GetNutritions(ing);
+	double mul = (double)grams / ing.grams;
 	ing.ChangeGrams(grams);
 	
 	int row = 0;
-	double mul = (double)grams / ing.grams;
 	
 	for(int i = 0; i < var.ingredients.GetCount(); i++) {
 		const MealIngredient& mi = var.ingredients[i];
@@ -1992,34 +2003,9 @@ void DailyNutritionsCtrl::SelectDate() {
 	const FoodDay& day = prof.storage.days[day_i];
 	
 	src.Clear();
-	
-	Ingredient& total = src.Add("Total");
-	{
-		Ingredient& food_total = src.Insert(0, "Food");
-		
-		VectorMap<int, int> mealtype_grams;
-		for(int i = 0; i < day.meals.GetCount(); i++) {
-			const Meal& m = day.meals[i];
-			int j = prof.FindMealPreset(m.key);
-			if (j >= 0)
-				mealtype_grams.GetAdd(j, 0) += m.grams;
-		}
-		
-		for(int i = 0; i < mealtype_grams.GetCount(); i++) {
-			int preset_i = mealtype_grams.GetKey(i);
-			int grams = mealtype_grams[i];
-			const MealPreset& mp = prof.presets[preset_i];
-			
-			const MealPresetVariant& var = mp.variants[variant];
-		
-			Ingredient ing;
-			var.GetNutritions(ing);
-			ing.ChangeGrams(grams);
-			food_total += ing;
-		}
-		
-		total += food_total;
-	}
+	src.Add("Supplements", day.supplement_sum);
+	src.Add("Food", day.food_sum);
+	src.Add("Total", day.total_sum);
 	
 	for(int i = 0; i < src.GetCount(); i++) {
 		const Ingredient& ing = src[i];

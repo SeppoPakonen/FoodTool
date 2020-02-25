@@ -171,11 +171,11 @@ struct FoodDay : Moveable<FoodDay> {
 	Date date;
 	Time wake_time, sleep_time;
 	Vector<Meal> meals;
-	FoodQuantity food_grams, food_usage;
+	FoodQuantity food_grams, food_usage, supplement_usage;
 	FoodQuantityInt buy_amount;
 	FoodQuantity used_food_amount;
 	VectorMap<String, int> used_meal_amount;
-	Ingredient target_sum, total_sum;
+	Ingredient target_sum, total_sum, supplement_sum, food_sum;
 	IngredientDouble total_consumed;
 	bool is_shopping = false;
 	String menu, preparation, shopping_list;
@@ -186,7 +186,7 @@ struct FoodDay : Moveable<FoodDay> {
 	void SetMealGrams(const Vector<double>& grams, bool check=false);
 	double GetOptimizerEnergy();
 	void Serialize(Stream& s) {
-		VER(0);
+		VER(1);
 		FOR_VER(0) {
 			s	% date
 				% wake_time % sleep_time
@@ -206,6 +206,17 @@ struct FoodDay : Moveable<FoodDay> {
 				% shopping_list
 				% mode;
 		}
+		FOR_VER(1) {s % supplement_usage % supplement_sum % food_sum;}
+	}
+	void ResetPlan() {
+		total_sum.Reset();
+		menu.Clear();
+		preparation.Clear();
+		meals.Clear();
+		food_usage.Clear();
+		supplement_usage.Clear();
+		supplement_sum.Reset();
+		food_sum.Reset();
 	}
 };
 

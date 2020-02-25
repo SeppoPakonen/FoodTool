@@ -126,7 +126,7 @@ struct LocalProduct : Moveable<LocalProduct> {
 	}
 };
 
-extern int KCAL, PROT, FAT, CARB, SODIUM;
+extern int KCAL, PROT, FAT, CARB, SODIUM, PUFA;
 
 struct Database {
 	VectorMap<String, FoodGroup> food_groups;

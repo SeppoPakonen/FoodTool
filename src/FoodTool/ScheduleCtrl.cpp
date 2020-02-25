@@ -139,7 +139,8 @@ void ScheduleCtrl::Paint(Draw& d) {
 				}
 				else {
 					w = other_w;
-					c = Rainbow((j - 4) * 1.333 / (showed_nutr.GetCount()-4));
+					//c = Rainbow((j - 4) * 1.333 / (showed_nutr.GetCount()-4));
+					c = CoolBlue((double)(j - 4) / (showed_nutr.GetCount()-4));
 				}
 				
 				value = day.total_sum.nutr[nutr_i] / day.target_sum.nutr[nutr_i] - 1;

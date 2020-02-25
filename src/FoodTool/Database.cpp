@@ -1,6 +1,6 @@
 #include "FoodTool.h"
 
-int KCAL, PROT, FAT, CARB, SODIUM;
+int KCAL, PROT, FAT, CARB, SODIUM, PUFA;
 
 
 
@@ -204,7 +204,6 @@ bool Database::Init() {
 	AddRecommendation("VITK1", 120 / 70.0, true, VITAMIN);
 	AddRecommendation("PRO_G", 1 / 70.0, true, AMINOACID);
 	AddRecommendation("CHOLE", 300 / 70.0, true, OTHER);
-	AddRecommendation("FATRN", 2 / 70.0, true, OTHER);
 	
 	/*
 	Important 'need to know':
@@ -249,11 +248,12 @@ bool Database::Init() {
 	double fat_trans = total / 3;
 	double fat_saturated = total / 3;
 	double fat_unsaturated = total / 3;
+	AddRecommendation("FATRN", fat_trans, true, OTHER);
 	AddRecommendation("FASAT", fat_saturated, true, OTHER);
 	AddRecommendation("FAMS", fat_unsaturated / 2, true, OTHER);
 	AddRecommendation("FAPU", fat_unsaturated / 2, true, OTHER);
-	AddRecommendation("FATRNM", fat_trans / 2, true, OTHER);
-	AddRecommendation("FATRNP", fat_trans / 2, true, OTHER);
+	AddRecommendation("FATRNM", 0.873 * fat_trans, true, OTHER);
+	AddRecommendation("FATRNP", 0.126 * fat_trans, true, OTHER);
 	AddRecommendation("FIBTG", 30 / 70.0, true, OTHER);
 	
 	// https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6769731/
@@ -301,11 +301,11 @@ bool Database::Init() {
 	AddRecommendation("F20D5", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
 	AddRecommendation("F22D5", fat_unsaturated * fat_unsaturated_part, true, FATTYACID);
 	
-	double fat_trans_part = 1.0 / 4;
-	AddRecommendation("F16D1T", fat_trans * fat_trans_part, true, FATTYACID);
-	AddRecommendation("F18D1T", fat_trans * fat_trans_part, true, FATTYACID);
-	AddRecommendation("F18D2TT", fat_trans * fat_trans_part, true, FATTYACID);
-	AddRecommendation("F22D1T", fat_trans * fat_trans_part, true, FATTYACID);
+	double fat_trans_part = 1.0 / 2;
+	AddRecommendation("F16D1T", fat_trans * 0.01 * fat_trans_part, true, FATTYACID);
+	AddRecommendation("F18D2TT", fat_trans * 0.01 * fat_trans_part, true, FATTYACID);
+	AddRecommendation("F22D1T", 0.015 / 70, true, FATTYACID);
+	AddRecommendation("F18D1T", 0.001, false, FATTYACID);
 	
 	
 	
@@ -466,7 +466,6 @@ FoodDescription& FoodDescription::AddNutrition(int nutr_no, double value, double
 }
 
 void Database::VLCD_Preset() {
-
 	AddFood("OTHER", "Salt, iodized", "", "Meira", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(25, 38758, 0);
 	AddFood("0100", "Magnex sitraatti + B6- vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
@@ -557,7 +556,8 @@ void Database::VLCD_Preset() {
 		.AddNutrition(0, 18, 0)
 		.AddNutrition(33, 54794, 0)
 		.AddNutrition(40, 1369, 0)
-		.AddNutrition(36, 1369, 0);
+		.AddNutrition(36, 1369, 0)
+		.AddNutrition(4, 693, 0);
 	used_foods.Add(15);
 	used_foods.Add(16);
 	used_foods.Add(117);
@@ -695,6 +695,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(8796);
 	used_foods.Add(8797);
 	used_foods.Add(8798);
+
 	
 	
 	SortIndex(used_foods, StdLess<int>());
@@ -734,7 +735,8 @@ void Database::SetCommonNutrs() {
 	CARB = FindNutrition("CHOCDF");
 	KCAL = FindNutrition("ENERC_KCAL");
 	SODIUM = FindNutrition("NA");
-	ASSERT(PROT >= 0 && FAT >= 0 && CARB >= 0 && KCAL >= 0 && SODIUM >= 0);
+	PUFA = FindNutrition("FAPU");
+	ASSERT(PROT >= 0 && FAT >= 0 && CARB >= 0 && KCAL >= 0 && SODIUM >= 0 && PUFA >= 0);
 }
 
 void Database::RemoveDuplicates() {

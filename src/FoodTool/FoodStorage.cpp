@@ -178,6 +178,8 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 			value = target;
 		else if (value < target) // Decrease in target is not allowed
 			value = target;
+		else if (value > 2*target)
+			value = target;
 	}
 	day.target_sum.grams = plan.food.grams;
 	day.target_sum.nutr[KCAL] = plan.food.nutr[KCAL];
@@ -190,7 +192,21 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 		LOG(t.nutr_desc << ": " << orig_target_sum.nutr[j]);
 	}*/
 	
-	MakeMenu(plan, day);
+	Ingredient remaining(day.target_sum);
+	day.ResetPlan();
+	
+	// Do supplements first with low calories
+	if (remaining.nutr[KCAL] <= 1000) {
+		double supplement_kcal = min(800.0f, remaining.nutr[KCAL]);
+		MakeSupplements(plan, day, supplement_kcal, remaining);
+		
+		if (remaining.nutr[KCAL] >= 50)
+			MakeMenu(plan, day, remaining.nutr[KCAL], remaining);
+	}
+	else {
+		MakeMenu(plan, day, remaining.nutr[KCAL] - 800, remaining);
+		MakeSupplements(plan, day, remaining.nutr[KCAL], remaining);
+	}
 	
 	day.total_consumed = prev.total_consumed;
 	day.total_consumed += day.total_sum;
@@ -220,6 +236,29 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 			const NutritionType& t = db.nutr_types[k];
 			LOG(j << ": " << t.nutr_desc << ": " << value << ": " << day.target_sum.nutr[k] << " = " << target_diff.nutr[k]);
 		}
+	}
+	
+	day.preparation << "Kcals/day: " << day.total_sum.nutr[KCAL] << "\n";
+	day.preparation << "Fat g/day: " << day.total_sum.nutr[FAT] << "\n";
+	day.preparation << "Protein g/day: " << day.total_sum.nutr[PROT] << "\n";
+	day.preparation << "Carbs g/day: " << day.total_sum.nutr[CARB] << "\n";
+	
+	static int nutrilet_i;
+	if (!nutrilet_i)
+		nutrilet_i = db.FindFood("Nutrilet");
+	if (nutrilet_i >= 0) {
+		Ingredient nutri_ing;
+		nutri_ing.Reset();
+		const FoodDescription& fd = db.food_descriptions[nutrilet_i];
+		OnlineAverage1 av;
+		for(const NutritionInfo& ni : fd.nutr) {
+			double a = day.total_sum.nutr[ni.nutr_no];
+			double b = ni.nutr_value;
+			double ratio = min(2.0, a / b);
+			//if (ni.nutr_no == KCAL || ni.nutr_no == FAT || ni.nutr_no == PROT) continue;
+			av.Add(ratio);
+		}
+		day.preparation << Format("Nutrilet factor: %2n", av.GetMean()) << "\n";
 	}
 }
 
@@ -313,24 +352,193 @@ void FoodStorage::PlanShopping(int day_i, const Vector<DailyPlan>& planned_daily
 	}
 }
 
-void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day) {
-	ASSERT(day.target_sum.nutr[FAT]  >= 0 && day.target_sum.nutr[FAT]  < 2000);
-	ASSERT(day.target_sum.nutr[CARB] >= 0 && day.target_sum.nutr[CARB] < 2000);
-	ASSERT(day.target_sum.nutr[PROT] >= 0 && day.target_sum.nutr[PROT] < 2000);
+void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double target_kcal, Ingredient& remaining) {
+	const Database& db = DB();
+	const Configuration& conf = GetProfile().confs.Top();
+	Profile& prof = GetProfile();
+	
+	bool dbg = 0;
+	int dbg_no = db.FindFoodLeft("Rainbow 72g monivitamiini");
+	
+	Ingredient tmp;
+	int limit_count = 0;
+	Vector<bool> limit_nutrition;
+	Index<int> filled_nutrients;
+	VectorMap<int, OnlineAverage1> supplement_foods;
+	for(int i = 0; i < prof.supplements.GetCount(); i++) {
+		const auto& s = prof.supplements[i];
+		if ((plan.variant_type == VARIANT_WEIGHTLOSS && s.is_weightloss) ||
+			(plan.variant_type != VARIANT_WEIGHTLOSS && s.is_maintenance)) {
+			const NutritionRecommendation& recom = db.nutr_recom[i];
+			int nutr_no = recom.nutr_no;
+			double target = remaining.nutr[nutr_no];
+			if (target > 0) {
+				for(const int db_no : s.used_food) {
+					const FoodDescription& d = db.food_descriptions[db_no];
+					tmp.Set(1, d);
+					double value = tmp.nutr[nutr_no];
+					double rel = value / target;
+					double grams = 1.0 / rel;
+					supplement_foods.GetAdd(db_no).Add(grams);
+					
+					if (dbg && db_no == dbg_no) {
+						LOG("DBG: " << db.nutr_types[nutr_no].nutr_desc << " = " << grams);
+					}
+				}
+				filled_nutrients.Add(nutr_no);
+				
+				bool limit = true;
+				if (recom.group == AMINOACID)
+					limit = false;
+				limit_nutrition.Add(limit);
+				if (limit)
+					limit_count++;
+			}
+		}
+	}
+	
+	if (filled_nutrients.IsEmpty())
+		return;
+	
+	if (dbg) {
+		for(int i = 0; i < supplement_foods.GetCount(); i++) {
+			const FoodDescription& d = db.food_descriptions[supplement_foods.GetKey(i)];
+			LOG("Food " << i << ": " << d.long_desc << " " << supplement_foods[i].GetMean());
+		}
+	}
+	
+	Optimizer opt;
+	opt.Min().SetCount(supplement_foods.GetCount());
+	opt.Max().SetCount(supplement_foods.GetCount());
+	for(int i = 0; i < supplement_foods.GetCount(); i++) {
+		double fill_mean = supplement_foods[i].GetMean();
+		opt.Min()[i] = -fill_mean * 2;
+		opt.Max()[i] = +fill_mean * 2;
+	}
+	opt.SetMaxGenerations(100);
+	opt.Init(supplement_foods.GetCount(), 100);
+	
+	double best_score = -DBL_MAX;
+	double best_mul = 0;
+	Vector<double> best;
+	Ingredient opt_nutr_sum;
+	while (!opt.IsEnd()) {
+		opt.Start();
+		
+		opt_nutr_sum.Reset();
+		const Vector<double>& trial = opt.GetTrialSolution();
+		for(int i = 0; i < supplement_foods.GetCount(); i++) {
+			const FoodDescription& d = db.food_descriptions[supplement_foods.GetKey(i)];
+			double grams = max(0.0, trial[i]);
+			if (grams > 0.0) {
+				tmp.Set(grams, d);
+				opt_nutr_sum += tmp;
+			}
+		}
+		
+		double kcal = opt_nutr_sum.nutr[KCAL];
+		double mul = 1;
+		if (kcal > target_kcal) {
+			mul = target_kcal / kcal;
+			opt_nutr_sum *= mul;
+		}
+		
+		// Partial score: how well protein is filled
+		double protein_score = 0;
+		{
+			double target = remaining.nutr[PROT];
+			if (target > 0) {
+				double value = opt_nutr_sum.nutr[PROT];
+				double rel = min(1.0, value / target);
+				protein_score = rel;
+			}
+		}
+		
+		// Partial score: how well PUFA is filled. It's required for insulin reduction
+		double pufa_score = 0;
+		{
+			double target = remaining.nutr[PUFA];
+			if (target > 0) {
+				double value = opt_nutr_sum.nutr[PUFA];
+				double rel = min(1.0, value / target);
+				pufa_score = rel;
+			}
+		}
+		
+		// Partial score: how well all nutrition targets are filled
+		double target_fill_score = 0;
+		for(int nutr_no : filled_nutrients) {
+			double target = remaining.nutr[nutr_no];
+			if (target > 0) {
+				double value = opt_nutr_sum.nutr[nutr_no];
+				double rel = min(1.0, value / target);
+				target_fill_score += rel;
+			}
+		}
+		target_fill_score /= filled_nutrients.GetCount();
+		
+		// Partial score: how nutrition targets are exceeded
+		double target_exceed_score = 0;
+		if (limit_count) {
+			for(int i = 0; i < filled_nutrients.GetCount(); i++) {
+				if (limit_nutrition[i]) {
+					int nutr_no = filled_nutrients[i];
+					double target = remaining.nutr[nutr_no];
+					if (target > 0) {
+						double value = opt_nutr_sum.nutr[nutr_no];
+						double rel = max(0.0, value / target - 1.0);
+						target_exceed_score -= rel;
+					}
+				}
+			}
+			target_exceed_score /= limit_count;
+		}
+		
+		// Get full score
+		double score =
+			 100 * protein_score +
+			 100 * pufa_score +
+			  10 * target_fill_score +
+			   3 * target_exceed_score
+			;
+		
+		//LOG(opt.GetRound() << ": " << score);
+		
+		if (score > best_score) {
+			best_score = score;
+			best_mul = mul;
+			best <<= trial;
+		}
+		opt.Stop(score);
+	}
+	
+	for(int i = 0; i < supplement_foods.GetCount(); i++) {
+		int db_no = supplement_foods.GetKey(i);
+		const FoodDescription& d = db.food_descriptions[db_no];
+		double grams = max(0.0, best[i] * best_mul);
+		if (grams > 0.0) {
+			day.supplement_usage.GetAdd(db_no) = grams;
+			tmp.Set(grams, d);
+			day.supplement_sum += tmp;
+			
+			day.menu << d.long_desc << ": " << Format(t_("%4n grams"), grams) << "\n";
+		}
+	}
+	
+	remaining -= day.supplement_sum;
+	remaining.Limit();
+	day.total_sum += day.supplement_sum;
+}
+
+void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day, double target_kcal, Ingredient& remaining) {
+	ASSERT(remaining.nutr[FAT]  >= 0 && remaining.nutr[FAT]  < 2000);
+	ASSERT(remaining.nutr[CARB] >= 0 && remaining.nutr[CARB] < 2000);
+	ASSERT(remaining.nutr[PROT] >= 0 && remaining.nutr[PROT] < 2000);
 	const Database& db = DB();
 	const Configuration& conf = GetProfile().confs.Top();
 	Profile& prof = GetProfile();
 	Time now = GetSysTime();
-	
-	
 	Time t = day.wake_time;
-	
-	day.total_sum.Reset();
-	day.menu.Clear();
-	day.preparation.Clear();
-	day.meals.Clear();
-	day.food_usage.Clear();
-	
 	FoodQuantity food_left;
 	food_left <<= day.food_grams;
 	
@@ -349,10 +557,11 @@ void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day) {
 		t += conf.hours_between_meals * 60 * 60;
 	}
 	
-	Ingredient meal_type_target = day.target_sum;
+	Ingredient meal_type_target = remaining;
+	meal_type_target.nutr[KCAL] = target_kcal;
 	meal_type_target *= 1.0 / different_mealtypes;
 	int prev_preset_i = -1;
-	double kcal_per_mealtype = day.target_sum.nutr[KCAL] / different_mealtypes;
+	double kcal_per_mealtype = target_kcal / different_mealtypes;
 	for(int i = 0; i < different_mealtypes; i++) {
 		int preset_i = FindBestMeal(plan.weight, kcal_per_mealtype, plan.variant_type, food_left, day.used_meal_amount, meal_type_target);
 		//if (prof.presets.GetCount() > 1) do {preset_i = Random(prof.presets.GetCount());} while (preset_i == prev_preset_i);
@@ -362,7 +571,7 @@ void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day) {
 		Ingredient ing;
 		var.GetNutritions(ing);
 		double mealtype_grams = ing.grams * kcal_per_mealtype / ing.nutr[KCAL];
-		day.total_sum.Add(mealtype_grams, ing);
+		day.food_sum.Add(mealtype_grams, ing);
 		
 		Index<int> meals;
 		for(int j = 0; j < meal_presets.GetCount(); j++)
@@ -392,28 +601,9 @@ void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day) {
 		day.used_meal_amount.GetAdd(mp.key, 0)++;
 	}
 	
-	day.preparation << "Kcals/day: " << day.total_sum.nutr[KCAL] << "\n";
-	day.preparation << "Fat g/day: " << day.total_sum.nutr[FAT] << "\n";
-	day.preparation << "Protein g/day: " << day.total_sum.nutr[PROT] << "\n";
-	day.preparation << "Carbs g/day: " << day.total_sum.nutr[CARB] << "\n";
-	
-	static int nutrilet_i;
-	if (!nutrilet_i)
-		nutrilet_i = db.FindFood("Nutrilet");
-	if (nutrilet_i >= 0) {
-		Ingredient nutri_ing;
-		nutri_ing.Reset();
-		const FoodDescription& fd = db.food_descriptions[nutrilet_i];
-		OnlineAverage1 av;
-		for(const NutritionInfo& ni : fd.nutr) {
-			double a = day.total_sum.nutr[ni.nutr_no];
-			double b = ni.nutr_value;
-			double ratio = min(2.0, a / b);
-			//if (ni.nutr_no == KCAL || ni.nutr_no == FAT || ni.nutr_no == PROT) continue;
-			av.Add(ratio);
-		}
-		day.preparation << Format("Nutrilet factor: %2n", av.GetMean()) << "\n";
-	}
+	remaining -= day.food_sum;
+	remaining.Limit();
+	day.total_sum += day.food_sum;
 }
 
 int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantity& food_left, const VectorMap<String, int>& used_meal_amount, const Ingredient& target_sum) {
