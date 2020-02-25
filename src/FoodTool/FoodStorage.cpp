@@ -163,7 +163,7 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 		grams -= prev.food_usage[j];
 		if (grams < 0) grams = 0;
 	}
-	FindSetFoodStorageSnapshot(day.date-1, day.food_grams);
+	FindSetFoodStorageSnapshot(EndOfYesterday(day.date), day.food_grams);
 	// Increase those nutritional values, which has not reached recommendation previously.
 	// Don't let anything to be less than recommended.
 	// Keep planned values in mass, energy, protein, fat, carbs and sodium.
@@ -339,7 +339,7 @@ void FoodStorage::PlanShopping(int day_i, const Vector<DailyPlan>& planned_daily
 		if (i == day_i+1)
 			AddFoodQuantity(prev->buy_amount, day.food_grams);
 		
-		FindSetFoodStorageSnapshot(day.date-1, day.food_grams);
+		FindSetFoodStorageSnapshot(EndOfYesterday(day.date), day.food_grams);
 		
 		/*for(int j = 0; j < day.food_usage.GetCount(); j++) {
 			int db_i = day.food_usage.GetKey(j);

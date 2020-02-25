@@ -255,11 +255,59 @@ struct SupplementCtrl : public WithSupplementLayout<ParentCtrl> {
 	void ValueChanged(int nutr_i);
 };
 
+enum {
+	FOODLOG,
+	GROCERYLOG,
+	RECEIPTLOG,
+};
+
+struct FoodLogCtrl : public ParentCtrl {
+	Splitter hsplit, vsplit;
+	ArrayCtrl queue, history;
+	WithProductListLayout<ParentCtrl> products;
+	Array<EditIntSpin> grams, servings, batch;
+	Array<EditDoubleSpin> price;
+	Array<EditString> shop;
+	
+	int mode = 0;
+	
+	
+	typedef FoodLogCtrl CLASSNAME;
+	FoodLogCtrl();
+	void Data();
+	void SelectHistory();
+	void SelectQueue();
+	void Add();
+	void Zero();
+	void Expand();
+	void Reduce();
+	void Load(const FoodPrice& p);
+	ProductQueueHistory& GetData();
+	void SetData(ArrayCtrl& list, Vector<FoodPrice>& data);
+	void SetEditCount(int i);
+};
+
+struct PriceCtrl : public ParentCtrl {
+	Splitter hsplit;
+	ArrayCtrl foodlist;
+	WithQuoteListLayout<ParentCtrl> history;
+	Array<EditIntSpin> grams, servings, batch;
+	Array<EditDoubleSpin> price;
+	Array<EditString> shop;
+	
+	typedef PriceCtrl CLASSNAME;
+	PriceCtrl();
+	void Data(bool force);
+	void SelectFood();
+	void Add();
+	void ValueChanged(int quote);
+};
 
 class FoodTool : public TopWindow {
 	TabCtrl tabs;
 	bool was_updating = true;
 	Label updating_lbl;
+	int prev_tab = -1;
 	
 	MenuBar menu;
 	
@@ -280,6 +328,8 @@ class FoodTool : public TopWindow {
 	FoodStorageCtrl storage;
 	FoodWishCtrl wish;
 	SupplementCtrl supp;
+	FoodLogCtrl foodlog, shoplog, receiptlog;
+	PriceCtrl prices;
 	
 	TimeCallback tc;
 public:

@@ -217,5 +217,6 @@ struct TopValueSorter {
 
 
 
+Time EndOfYesterday(Date d);
 
 #endif

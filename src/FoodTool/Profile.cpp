@@ -31,6 +31,7 @@ Profile::Profile() {
 	tmp_usage_start = GetSysTime();
 	
 	//CookedToRaw();
+	SetMealPresetFoodsUsed();
 	
 	if (is_initialised) {
 		if (storage.days.IsEmpty())
@@ -527,6 +528,14 @@ DailyPlan* Profile::GetTodayPlan() {
 	return NULL;
 }
 
+void Profile::SetMealPresetFoodsUsed() {
+	Database& db = DB();
+	for(const MealPreset& preset : presets) {
+		for(const MealIngredient& mi : preset.ingredients) {
+			db.used_foods.FindAdd(mi.db_food_no);
+		}
+	}
+}
 
 
 
@@ -648,3 +657,54 @@ void FoodStorageSnapshot::GetNutritions(Ingredient& dst) const {
 			dst.nutr[info.nutr_no] += info.nutr_value * mul;
 	}
 }
+
+String FoodPriceQuote::GetPriceString() const {
+	if (servings == 1 && serving_batch == 1) {
+		double g_price = price / grams;
+		double kg_price = g_price * 1000;
+		if (kg_price >= 0.1)
+			return Format(t_("%2n`EUR/kg"), kg_price);
+		else
+			return Format(t_("%2n`EUR/g"), g_price);
+	}
+	else if (servings > 1 && serving_batch == 1) {
+		double serving_price = price / servings;
+		double serving_g = grams / servings;
+		double serving_kg = serving_g * 0.001;
+		if (serving_kg >= 1)
+			return Format(t_("%2n`EUR (~%2n`kg)"), serving_price, serving_kg);
+		else
+			return Format(t_("%2n`EUR (~%2n`g)"), serving_price, serving_g);
+	}
+	else if (servings > 1 && serving_batch > 1) {
+		double serving_price = price / servings;
+		double batch_price = price / servings * serving_batch;
+		double serving_g = grams / servings;
+		double serving_kg = serving_g * 0.001;
+		if (serving_kg >= 1)
+			return Format(t_("%2n`EUR %d`pc. (%2n`EUR/pc., ~%2n`kg/pc.)"), batch_price, serving_batch, serving_price, serving_kg);
+		else
+			return Format(t_("%2n`EUR %d`pc. (%2n`EUR/pc., ~%2n`g/pc.)"), batch_price, serving_batch, serving_price, serving_g);
+	}
+	else return t_("Invalid price");
+}
+
+
+
+
+
+
+
+
+
+String GetSnapshotSourceString(int i) {
+	switch(i) {
+		case SNAPSRC_USER: return "User";
+		case SNAPSRC_FOODLOG: return "Food Log";
+		case SNAPSRC_SHOPLOG: return "Shop Log";
+		case SNAPSRC_RECEIPTLOG: return "Receipt Log";
+		default: return "Invalid Source";
+	}
+}
+
+

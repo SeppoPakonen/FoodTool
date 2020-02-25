@@ -171,7 +171,7 @@ void MealPresetCtrl::AddIngredient() {
 	if (!list.IsCursor())
 		return;
 	
-	const Database& db = DB();
+	Database& db = DB();
 	int cursor = list.GetCursor();
 	int note_i = list.Get(cursor, 0);
 	
@@ -190,6 +190,8 @@ void MealPresetCtrl::AddIngredient() {
 	MealIngredient& mi = mp.ingredients.Add();
 	mi.db_food_no = food_i;
 	mi.max_grams = 1.0;
+	
+	db.used_foods.FindAdd(food_i);
 	
 	SelectPreset();
 	inglist.ScrollEnd();

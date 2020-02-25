@@ -270,3 +270,18 @@ LAYOUT(SupplementLayout, 912, 524)
 	ITEM(Button, remove, SetLabel(t_("Remove")).HCenterPosZ(116, 218).VCenterPosZ(32, -138))
 END_LAYOUT
 
+LAYOUT(QuoteListLayout, 400, 200)
+	ITEM(Button, add, SetLabel(t_("Add")).LeftPosZ(4, 108).TopPosZ(4, 24))
+	ITEM(ArrayCtrl, list, HSizePosZ(0, 0).VSizePosZ(32, 0))
+END_LAYOUT
+
+LAYOUT(ProductListLayout, 704, 200)
+	ITEM(Button, add, SetLabel(t_("Add")).LeftPosZ(4, 108).TopPosZ(4, 24))
+	ITEM(Button, zero, SetLabel(t_("Zero")).LeftPosZ(116, 108).TopPosZ(4, 24))
+	ITEM(Button, expand, SetLabel(t_("Expand")).LeftPosZ(228, 108).TopPosZ(4, 24))
+	ITEM(Button, reduce, SetLabel(t_("Reduce")).LeftPosZ(340, 108).TopPosZ(4, 24))
+	ITEM(ArrayCtrl, list, HSizePosZ(0, 4).VSizePosZ(32, 0))
+	ITEM(Label, dv___5, SetLabel(t_("Apply store to all:")).SetAlign(ALIGN_RIGHT).LeftPosZ(452, 104).TopPosZ(4, 24))
+	ITEM(EditString, store, LeftPosZ(560, 140).TopPosZ(4, 24))
+END_LAYOUT
+

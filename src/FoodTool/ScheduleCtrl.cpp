@@ -119,17 +119,18 @@ void ScheduleCtrl::Paint(Draw& d) {
 			double max = +1;
 			double range = max - min;
 			int zero_y = (0 - min) * nutr_h / range;
-			int main_w = 20;
-			int other_w = (gw - 4 * main_w) / (showed_nutr.GetCount()-4);
-			int nx = 0;
+			double xstep = (double)gw / (4 * 3 + showed_nutr.GetCount());
+			int xi = 0;
 			for(int j = 0; j < showed_nutr.GetCount(); j++) {
 				int nutr_i = showed_nutr[j];
 				int w = 0;
 				Color c;
 				double value = 0;
+				int nx = xi * xstep;
 				
 				if (j < 4) {
-					w = main_w;
+					w = (xi + 4) * xstep - nx;
+					xi += 4;
 					switch (j) {
 						case 0: c = GrayColor(); break;
 						case 1: c = Color(198, 127, 0); break;
@@ -138,7 +139,8 @@ void ScheduleCtrl::Paint(Draw& d) {
 					}
 				}
 				else {
-					w = other_w;
+					w = (xi + 1) * xstep - nx;
+					xi += 1;
 					//c = Rainbow((j - 4) * 1.333 / (showed_nutr.GetCount()-4));
 					c = CoolBlue((double)(j - 4) / (showed_nutr.GetCount()-4));
 				}
@@ -156,8 +158,6 @@ void ScheduleCtrl::Paint(Draw& d) {
 					int h = zero_y - ny;
 					d.DrawRect(x + nx, y + nutr_h-zero_y, w, h, c);
 				}
-				
-				nx += w;
 			}
 			int ly = y + nutr_h-zero_y;
 			d.DrawLine(x, ly, x + gw, ly, 1, GrayColor(128-32));

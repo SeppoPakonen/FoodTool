@@ -5,12 +5,13 @@ FoodStorageCtrl::FoodStorageCtrl() {
 	CtrlLayout(*this);
 	
 	list.AddColumn(t_("Added"));
+	list.AddColumn(t_("Source"));
 	list.AddColumn(t_("Mass"));
 	list.AddColumn(t_("Carbs"));
 	list.AddColumn(t_("Fat"));
 	list.AddColumn(t_("Protein"));
 	list.AddColumn(t_("Energy"));
-	list.ColumnWidths("4 1 1 1 1 1");
+	list.ColumnWidths("3 1 1 1 1 1 1");
 	list.WhenAction << THISBACK(SelectSnap);
 	list.WhenLeftClick << THISBACK(SelectSnap);
 	
@@ -30,12 +31,13 @@ void FoodStorageCtrl::Data() {
 			const FoodStorageSnapshot& n = prof.storage_snaps[i];
 			Ingredient ing;
 			n.GetNutritions(ing);
-			list.Set(row, 0, n.date);
-			list.Set(row, 1, (int)ing.grams);
-			list.Set(row, 2, (int)ing.nutr[CARB]);
-			list.Set(row, 3, (int)ing.nutr[FAT]);
-			list.Set(row, 4, (int)ing.nutr[PROT]);
-			list.Set(row, 5, (int)ing.nutr[KCAL]);
+			list.Set(row, 0, n.time);
+			list.Set(row, 1, GetSnapshotSourceString(n.adder));
+			list.Set(row, 2, (int)ing.grams);
+			list.Set(row, 3, (int)ing.nutr[CARB]);
+			list.Set(row, 4, (int)ing.nutr[FAT]);
+			list.Set(row, 5, (int)ing.nutr[PROT]);
+			list.Set(row, 6, (int)ing.nutr[KCAL]);
 		}
 		if (!list.IsCursor() && list.GetCount())
 			list.SetCursor(0);
@@ -46,7 +48,7 @@ void FoodStorageCtrl::Data() {
 void FoodStorageCtrl::AddSnap() {
 	Profile& prof = GetProfile();
 	FoodStorageSnapshot& snap = prof.storage_snaps.Add();
-	snap.date = GetSysTime();
+	snap.time = GetSysTime();
 	if (prof.storage_snaps.GetCount() >= 2)
 		snap.foods <<= prof.storage_snaps[prof.storage_snaps.GetCount()-2].foods;
 	
@@ -106,11 +108,18 @@ void FoodStorageCtrl::SnapChanged() {
 }
 
 
-void FindSetFoodStorageSnapshot(Date date, FoodQuantity& food_grams) {
+void FindSetFoodStorageSnapshot(Time time, FoodQuantity& food_grams) {
 	const Profile& prof = GetProfile();
+	/*
+		[0] = 08:00
+		[1] = 16:00
+		time = 12:00
+		1. cmp(12:00 >= 16:00) = false
+		2. cmp(12:00 >= 08:00) = true
+	*/
 	for(int i = prof.storage_snaps.GetCount()-1; i >= 0; i--) {
 		const FoodStorageSnapshot& snap = prof.storage_snaps[i];
-		if (snap.date == date) {
+		if (time >= snap.time && Date(time) == Date(snap.time)) {
 			for(int j = 0; j < snap.foods.GetCount(); j++) {
 				int db_no = snap.foods.GetKey(j);
 				int grams = snap.foods[j];

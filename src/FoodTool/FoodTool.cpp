@@ -99,6 +99,10 @@ FoodTool::FoodTool()
 	
 	today.WhenAlert = THISBACK(SetTodayTab);
 	
+	foodlog.mode = FOODLOG;
+	shoplog.mode = GROCERYLOG;
+	receiptlog.mode = RECEIPTLOG;
+	
 	tabs.Hide();
 	tabs.Add(motivation.SizePos(), "Motivation");
 	tabs.Add(today.SizePos(), "Today");
@@ -115,7 +119,11 @@ FoodTool::FoodTool()
 	tabs.Add(preset.SizePos(), "Meal Presets");
 	tabs.Add(supp.SizePos(), "Food Supplements");
 	tabs.Add(wish.SizePos(), "Food Wish-list");
+	tabs.Add(foodlog.SizePos(), "Food Log");
+	tabs.Add(shoplog.SizePos(), "Shop Log");
+	tabs.Add(receiptlog.SizePos(), "Receipt Log");
 	tabs.Add(storage.SizePos(), "Food Storage");
+	tabs.Add(prices.SizePos(), "Prices");
 	tabs.Add(conf.SizePos(), "Configuration");
 	tabs.WhenSet << THISBACK(Data);
 	
@@ -159,6 +167,9 @@ void FoodTool::Data() {
 			updating_lbl.Hide();
 		}
 		int tab = tabs.Get();
+		bool tab_changed = tab != prev_tab;
+		prev_tab = tab;
+		
 		int i = 0;
 		if      (tab == i++)	motivation.Data();
 		else if (tab == i++)	today.Data();
@@ -175,7 +186,11 @@ void FoodTool::Data() {
 		else if (tab == i++)	preset.Data();
 		else if (tab == i++)	supp.Data();
 		else if (tab == i++)	wish.Data();
+		else if (tab == i++)	foodlog.Data();
+		else if (tab == i++)	shoplog.Data();
+		else if (tab == i++)	receiptlog.Data();
 		else if (tab == i++)	storage.Data();
+		else if (tab == i++)	prices.Data(tab_changed);
 		else if (tab == i++)	conf.Data();
 	}
 	was_updating = is_updating;
@@ -2309,4 +2324,411 @@ void FoodWishCtrl::ValueChanged(int preset_i) {
 	Profile& prof = GetProfile();
 	int value = edits[preset_i].GetData();
 	prof.presets[preset_i].wished_factor = value;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FoodLogCtrl::FoodLogCtrl() {
+	CtrlLayout(products);
+	
+	ParentCtrl::Add(hsplit.SizePos());
+	hsplit.Horz() << vsplit << products;
+	hsplit.SetPos(2500);
+	vsplit.Vert() << queue << history;
+	
+	queue.AddIndex();
+	queue.AddColumn("Time");
+	queue.AddColumn("Products");
+	queue.AddColumn("Price");
+	queue.ColumnWidths("2 1 1");
+	queue.WhenAction = THISBACK(SelectQueue);
+	queue.WhenLeftClick = THISBACK(SelectQueue);
+	
+	history.AddIndex();
+	history.AddColumn("Time");
+	history.AddColumn("Products");
+	history.AddColumn("Price");
+	history.ColumnWidths("2 1 1");
+	history.WhenAction = THISBACK(SelectHistory);
+	history.WhenLeftClick = THISBACK(SelectHistory);
+	
+	products.list.AddIndex();
+	products.list.AddColumn("Time");
+	products.list.AddColumn("Grams");
+	products.list.AddColumn("Servings");
+	products.list.AddColumn("Batch Size");
+	products.list.AddColumn("Price (EUR)");
+	products.list.AddColumn("Shop");
+}
+
+ProductQueueHistory& FoodLogCtrl::GetData() {
+	Profile& prof = GetProfile();
+	switch (mode) {
+		case FOODLOG:		return prof.foodlog;
+		case GROCERYLOG:	return prof.shoplog;
+		case RECEIPTLOG:	return prof.receiptlog;
+	}
+	Panic("Invalid mode");
+	throw Exc();
+}
+
+void FoodLogCtrl::SetData(ArrayCtrl& list, Vector<FoodPrice>& data) {
+	
+	if (data.GetCount() != list.GetCount()) {
+		for(int i = 0; i < data.GetCount(); i++) {
+			FoodPrice& p = data[i];
+			int row = data.GetCount() - 1 - i;
+			list.Set(row, 0, p.time);
+			list.Set(row, 1, i);
+		}
+		list.SetCount(data.GetCount());
+	}
+	
+}
+
+void FoodLogCtrl::Data() {
+	Profile& prof = GetProfile();
+	ProductQueueHistory& data = GetData();
+	
+	SetData(queue, data.queue);
+	SetData(history, data.history);
+	
+}
+
+void FoodLogCtrl::SelectQueue() {
+	if (!queue.IsCursor())
+		return;
+	
+	int cursor = queue.GetCursor();
+	int data_i = queue.Get(cursor, 0);
+	const FoodPrice& p = GetData().queue[data_i];
+	Load(p);
+}
+
+void FoodLogCtrl::SelectHistory() {
+	if (!history.IsCursor())
+		return;
+	
+	int cursor = history.GetCursor();
+	int data_i = history.Get(cursor, 0);
+	const FoodPrice& p = GetData().history[data_i];
+	Load(p);
+}
+
+void FoodLogCtrl::Add() {
+	ArrayCtrl& list = products.list;
+	FoodPrice& p = GetData().queue.Add();
+	p.time = GetSysTime();
+	for(int i = 0; i < list.GetCount(); i++) {
+		String key = list.Get(i, 0);
+		FoodPriceQuote& q = p.values.Add(key);
+		q.grams = list.Get(i, 2);
+		q.servings = list.Get(i, 3);
+		q.serving_batch = list.Get(i, 4);
+		q.price = list.Get(i, 5);
+	}
+}
+
+void FoodLogCtrl::Zero() {
+	ArrayCtrl& list = products.list;
+	const Database& db = DB();
+	
+	SetEditCount(db.used_foods.GetCount());
+	
+	for(int i = 0; i < db.used_foods.GetCount(); i++) {
+		int db_no = db.used_foods[i];
+		String key = db.food_descriptions.GetKey(db_no);
+		const FoodDescription& d = db.food_descriptions[db_no];
+		
+		EditIntSpin& grams = this->grams[i];
+		EditIntSpin& servings = this->servings[i];
+		EditIntSpin& batch = this->batch[i];
+		EditDoubleSpin& price = this->price[i];
+		EditString& shop = this->shop[i];
+		
+		list.Set(i, 0, key);
+		list.Set(i, 1, d.long_desc);
+		list.SetCtrl(i, 1, grams);
+		list.SetCtrl(i, 2, servings);
+		list.SetCtrl(i, 3, batch);
+		list.SetCtrl(i, 4, price);
+		list.SetCtrl(i, 5, shop);
+		list.Set(i, 2, 0);
+		list.Set(i, 3, 0);
+		list.Set(i, 4, 0);
+		list.Set(i, 5, 0);
+		list.Set(i, 6, "");
+	}
+	list.SetCount(db.used_foods.GetCount());
+}
+
+void FoodLogCtrl::Expand() {
+	ArrayCtrl& list = products.list;
+	const Database& db = DB();
+	
+	SetEditCount(db.used_foods.GetCount());
+	
+	Index<String> existing_foods;
+	for(int i = 0; i < list.GetCount(); i++)
+		existing_foods.Add(list.Get(i, 0));
+	
+	int row = list.GetCount();
+	for(int i = 0; i < db.used_foods.GetCount(); i++) {
+		int db_no = db.used_foods[i];
+		String key = db.food_descriptions.GetKey(db_no);
+		if (existing_foods.Find(key) >= 0)
+			continue;
+		
+		const FoodDescription& d = db.food_descriptions[db_no];
+		
+		EditIntSpin& grams = this->grams[row];
+		EditIntSpin& servings = this->servings[row];
+		EditIntSpin& batch = this->batch[row];
+		EditDoubleSpin& price = this->price[row];
+		EditString& shop = this->shop[row];
+		
+		list.Set(row, 0, key);
+		list.Set(row, 1, d.long_desc);
+		list.SetCtrl(row, 1, grams);
+		list.SetCtrl(row, 2, servings);
+		list.SetCtrl(row, 3, batch);
+		list.SetCtrl(row, 4, price);
+		list.SetCtrl(row, 5, shop);
+		list.Set(row, 2, 0);
+		list.Set(row, 3, 0);
+		list.Set(row, 4, 0);
+		list.Set(row, 5, 0);
+		list.Set(row, 6, "");
+		row++;
+	}
+	list.SetCount(row);
+}
+
+void FoodLogCtrl::Reduce() {
+	ArrayCtrl& list = products.list;
+	for(int i = 0; i < list.GetCount(); i++) {
+		double grams = list.Get(i, 2);
+		if (grams <= 0.0)
+			list.Remove(i--);
+	}
+}
+
+void FoodLogCtrl::SetEditCount(int i) {
+	int count = max(grams.GetCount(), i);
+	grams.SetCount(count);
+	servings.SetCount(count);
+	batch.SetCount(count);
+	price.SetCount(count);
+	shop.SetCount(count);
+}
+
+void FoodLogCtrl::Load(const FoodPrice& p) {
+	ArrayCtrl& list = products.list;
+	const Database& db = DB();
+	
+	SetEditCount(p.values.GetCount());
+	
+	for(int i = 0; i < p.values.GetCount(); i++) {
+		String key = p.values.GetKey(i);
+		const FoodPriceQuote& q = p.values[i];
+		const FoodDescription& d = db.food_descriptions.Get(key);
+		
+		EditIntSpin& grams = this->grams[i];
+		EditIntSpin& servings = this->servings[i];
+		EditIntSpin& batch = this->batch[i];
+		EditDoubleSpin& price = this->price[i];
+		EditString& shop = this->shop[i];
+		
+		list.Set(i, 0, key);
+		list.Set(i, 1, d.long_desc);
+		list.SetCtrl(i, 1, grams);
+		list.SetCtrl(i, 2, servings);
+		list.SetCtrl(i, 3, batch);
+		list.SetCtrl(i, 4, price);
+		list.SetCtrl(i, 5, shop);
+		list.Set(i, 2, q.grams);
+		list.Set(i, 3, q.servings);
+		list.Set(i, 4, q.serving_batch);
+		list.Set(i, 5, q.price);
+		list.Set(i, 6, q.shop);
+	}
+	list.SetCount(p.values.GetCount());
+}
+
+
+
+
+
+
+
+
+
+
+PriceCtrl::PriceCtrl() {
+	CtrlLayout(history);
+	
+	ParentCtrl::Add(hsplit.SizePos());
+	hsplit.Horz() << foodlist << history;
+	
+	foodlist.AddIndex();
+	foodlist.AddColumn("Food name");
+	foodlist.AddColumn("Latest quote age");
+	foodlist.AddColumn("Latest price");
+	foodlist.AddColumn("Used by meals");
+	foodlist.ColumnWidths("3 1 1 2");
+	foodlist <<= THISBACK(SelectFood);
+	
+	history.list.AddIndex();
+	history.list.AddColumn("Time");
+	history.list.AddColumn("Grams");
+	history.list.AddColumn("Servings");
+	history.list.AddColumn("Batch Size");
+	history.list.AddColumn("Price (EUR)");
+	history.list.AddColumn("Shop");
+	history.add <<= THISBACK(Add);
+	
+}
+
+void PriceCtrl::Data(bool force) {
+	const Database& db = DB();
+	Profile& prof = GetProfile();
+	Date today = GetSysTime();
+	
+	VectorMap<int, String> meal_str;
+	for(const MealPreset& mp : prof.presets) {
+		for(const MealIngredient& mi : mp.ingredients) {
+			String& s = meal_str.GetAdd(mi.db_food_no);
+			if (s.GetCount()) s << ", ";
+			s << mp.name;
+		}
+	}
+	
+	if (foodlist.GetCount() != db.used_foods.GetCount() || force) {
+		for(int i = 0; i < db.used_foods.GetCount(); i++) {
+			int db_no = db.used_foods[i];
+			String key = db.food_descriptions.GetKey(db_no);
+			const FoodDescription& d = db.food_descriptions[db_no];
+			
+			foodlist.Set(i, 0, key);
+			foodlist.Set(i, 1, d.long_desc);
+			
+			const Vector<FoodPriceQuote>& quotes = prof.price.history.GetAdd(key);
+			if (quotes.GetCount()) {
+				const FoodPriceQuote& quote = quotes.Top();
+				Date date = quote.time;
+				int age = today.Get() - date.Get();
+				
+				foodlist.Set(i, 2, Format(t_("%d days"), age));
+				foodlist.Set(i, 3, quote.GetPriceString());
+			}
+			else {
+				foodlist.Set(i, 2, "");
+				foodlist.Set(i, 3, "");
+			}
+			foodlist.Set(i, 4, meal_str.Get(db_no, ""));
+		}
+		foodlist.SetCount(db.used_foods.GetCount());
+		foodlist.SetSortColumn(0);
+		
+		if (!foodlist.IsCursor())
+			foodlist.SetCursor(0);
+		SelectFood();
+	}
+}
+
+void PriceCtrl::SelectFood() {
+	if (!foodlist.IsCursor())
+		return;
+	
+	Profile& prof = GetProfile();
+	int cursor = foodlist.GetCursor();
+	String key = foodlist.Get(cursor, 0);
+	const Vector<FoodPriceQuote>& quotes = prof.price.history.Get(key);
+	
+	int resize = max(grams.GetCount(), quotes.GetCount());
+	grams.SetCount(resize);
+	servings.SetCount(resize);
+	batch.SetCount(resize);
+	price.SetCount(resize);
+	shop.SetCount(resize);
+	for(int i = 0; i < quotes.GetCount(); i++) {
+		const FoodPriceQuote& q = quotes[i];
+		int row = quotes.GetCount() - 1 - i;
+		
+		EditIntSpin& grams = this->grams[i];
+		EditIntSpin& servings = this->servings[i];
+		EditIntSpin& batch = this->batch[i];
+		EditDoubleSpin& price = this->price[i];
+		EditString& shop = this->shop[i];
+		grams    <<= THISBACK1(ValueChanged, i);
+		servings <<= THISBACK1(ValueChanged, i);
+		batch    <<= THISBACK1(ValueChanged, i);
+		price    <<= THISBACK1(ValueChanged, i);
+		shop     <<= THISBACK1(ValueChanged, i);
+		
+		history.list.Set(row, 0, i);
+		history.list.Set(row, 1, q.time);
+		history.list.SetCtrl(row, 1, grams);
+		history.list.SetCtrl(row, 2, servings);
+		history.list.SetCtrl(row, 3, batch);
+		history.list.SetCtrl(row, 4, price);
+		history.list.SetCtrl(row, 5, shop);
+		history.list.Set(row, 2, q.grams);
+		history.list.Set(row, 3, q.servings);
+		history.list.Set(row, 4, q.serving_batch);
+		history.list.Set(row, 5, q.price);
+		history.list.Set(row, 6, q.shop);
+	}
+	history.list.SetCount(quotes.GetCount());
+}
+
+void PriceCtrl::Add() {
+	if (!foodlist.IsCursor())
+		return;
+	
+	Profile& prof = GetProfile();
+	int cursor = foodlist.GetCursor();
+	String key = foodlist.Get(cursor, 0);
+	Vector<FoodPriceQuote>& quotes = prof.price.history.Get(key);
+	FoodPriceQuote& quote = quotes.Add();
+	quote.time = GetSysTime();
+	
+	SelectFood();
+	history.list.SetCursor(0);
+}
+
+void PriceCtrl::ValueChanged(int quote_i) {
+	if (!foodlist.IsCursor())
+		return;
+	
+	Profile& prof = GetProfile();
+	int cursor = foodlist.GetCursor();
+	String key = foodlist.Get(cursor, 0);
+	Vector<FoodPriceQuote>& quotes = prof.price.history.Get(key);
+	FoodPriceQuote& quote = quotes[quote_i];
+	quote.grams = grams[quote_i].GetData();
+	quote.servings = servings[quote_i].GetData();
+	quote.serving_batch = batch[quote_i].GetData();
+	quote.price = price[quote_i].GetData();
+	quote.shop = shop[quote_i].GetData();
+	
+	foodlist.Set(cursor, 3, quote.GetPriceString());
 }

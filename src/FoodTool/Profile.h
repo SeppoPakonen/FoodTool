@@ -175,13 +175,28 @@ int GetTargetWeight(double height_m);
 int GetBmiWeight(double height_m, int bmi);
 double GetBMI(double height_m, double weight_kg);
 
+enum {
+	SNAPSRC_USER,
+	SNAPSRC_FOODLOG,
+	SNAPSRC_SHOPLOG,
+	SNAPSRC_RECEIPTLOG,
+};
+
+String GetSnapshotSourceString(int i);
+
 struct FoodStorageSnapshot : Moveable<FoodStorageSnapshot> {
-	Date date;
+	Time time;
 	FoodQuantityInt foods;
+	byte adder = 0;
 	
+	Date removed0;
+	
+	FoodStorageSnapshot() {removed0.year = 0;}
 	void Serialize(Stream& s) {
-		VER(0);
-		FOR_VER(0) {s % date % foods;}
+		VER(1);
+		FOR_VER(0) {s % removed0 % foods;}
+		FOR_VER(1) {s % time % adder;}
+		if (s.IsLoading() && removed0.year != 0) time = Time(removed0.year, removed0.month, removed0.day, 0,0,0);
 	}
 	void GetNutritions(Ingredient& ing) const;
 };
@@ -193,6 +208,52 @@ struct NutritionSupplement : Moveable<NutritionSupplement> {
 	void Serialize(Stream& s) {
 		VER(0);
 		FOR_VER(0) {s % used_food % is_weightloss % is_maintenance;}
+	}
+};
+
+struct FoodPriceQuote : Moveable<FoodPriceQuote> {
+	Time time;
+	double price = 0;
+	double grams = 0;
+	int servings = 0, serving_batch = 0;
+	String shop;
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % time % price % grams % servings % serving_batch % shop;}
+	}
+	String GetPriceString() const;
+};
+
+struct FoodPriceHistory : Moveable<FoodPriceHistory> {
+	VectorMap<String, Vector<FoodPriceQuote>> history;
+	Time time;
+	
+	void Serialize(Stream& s) {
+		VER(1);
+		FOR_VER(0) {s % history;}
+		FOR_VER(1) {s % time;}
+	}
+};
+
+struct FoodPrice : Moveable<FoodPrice> {
+	VectorMap<String, FoodPriceQuote> values;
+	Time time;
+	
+	void Serialize(Stream& s) {
+		VER(1);
+		FOR_VER(0) {s % values;}
+		FOR_VER(1) {s % time;}
+	}
+};
+
+struct ProductQueueHistory {
+	Vector<FoodPrice> queue, history;
+	
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % queue % history;}
 	}
 };
 
@@ -208,7 +269,9 @@ struct Profile {
 	Vector<FoodStorageSnapshot> storage_snaps;
 	Vector<NutritionSupplement> supplements;
 	Index<int> planned_nutrients;
+	ProductQueueHistory foodlog, shoplog, receiptlog;
 	
+	FoodPriceHistory price;
 	FoodStorage storage;
 	Date begin_date;
 	double av_calorie_deficit;
@@ -235,7 +298,7 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		VER(4);
+		VER(6);
 		FOR_VER(0) {
 			s
 				% exceptions
@@ -259,6 +322,8 @@ struct Profile {
 		FOR_VER(2) {s % removed0;}
 		FOR_VER(3) {s % removed1 % removed2;}
 		FOR_VER(4) {s % supplements;}
+		FOR_VER(5) {s % price;}
+		FOR_VER(6) {s % foodlog % shoplog % receiptlog;}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);
@@ -276,6 +341,7 @@ struct Profile {
 	void CookedToRaw();
 	int FindMealPreset(String key);
 	DailyPlan* GetTodayPlan();
+	void SetMealPresetFoodsUsed();
 	
 	void LoadThis();
 	void StoreThis();

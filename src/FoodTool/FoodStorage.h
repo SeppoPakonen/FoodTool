@@ -52,6 +52,6 @@ struct FoodStorage {
 
 int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantity& food_left, const VectorMap<String, int>& used_meal_amount, const Ingredient& target_sum);
 
-void FindSetFoodStorageSnapshot(Date date, FoodQuantity& food_grams);
+void FindSetFoodStorageSnapshot(Time time, FoodQuantity& food_grams);
 
 #endif
