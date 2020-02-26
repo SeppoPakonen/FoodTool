@@ -211,6 +211,15 @@ Time EndOfYesterday(Date d) {
 	return t;
 }
 
+double nround (double n, unsigned int c)
+{
+    double marge = pow (10, c);
+    double up    = n * marge;
+    double ret   = round (up) / marge;
+
+    return ret;
+}
+
 
 
 

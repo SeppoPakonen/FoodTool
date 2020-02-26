@@ -1,7 +1,6 @@
 #ifndef _FoodTool_Food_h_
 #define _FoodTool_Food_h_
 
-#define DEFAULT_STEP_GRAMS 10
 #define MINIMUM_DAILY_KCAL 600.0
 
 enum {
@@ -157,13 +156,14 @@ struct MealPreset : Moveable<MealPreset> {
 struct Meal : Moveable<Meal> {
 	String key;
 	Time time;
-	FoodQuantity food;
 	float grams = 0;
+	
 	int removed0 = -1;
+	FoodQuantity removed1;
 	
 	void Serialize(Stream& s) {
 		VER(0);
-		FOR_VER(0) {s % key % time % food % grams % removed0;}
+		FOR_VER(0) {s % key % time % removed1 % grams % removed0;}
 	}
 };
 
@@ -178,12 +178,12 @@ struct FoodDay : Moveable<FoodDay> {
 	Ingredient target_sum, total_sum, supplement_sum, food_sum;
 	IngredientDouble total_consumed;
 	bool is_shopping = false;
-	String menu, preparation, shopping_list;
+	String menu, preparation;
 	byte mode;
 	
 	VectorMap<int, int> removed0;
+	String removed1;
 	
-	void SetMealGrams(const Vector<double>& grams, bool check=false);
 	double GetOptimizerEnergy();
 	void Serialize(Stream& s) {
 		VER(1);
@@ -203,7 +203,7 @@ struct FoodDay : Moveable<FoodDay> {
 				% is_shopping
 				% menu
 				% preparation
-				% shopping_list
+				% removed1
 				% mode;
 		}
 		FOR_VER(1) {s % supplement_usage % supplement_sum % food_sum;}

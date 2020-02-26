@@ -219,4 +219,10 @@ struct TopValueSorter {
 
 Time EndOfYesterday(Date d);
 
+double nround (double n, unsigned int c);
+
+inline String GetTimeString(Time t) {
+	return Format("%d.%d.%d %d:%02d", (int)t.day, (int)t.month, (int)t.year, (int)t.hour, (int)t.minute);
+}
+
 #endif

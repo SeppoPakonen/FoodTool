@@ -19,6 +19,7 @@ void FoodStorage::Init(Date begin) {
 
 void FoodStorage::Update(bool replan, const Vector<DailyPlan>& planned_daily) {
 	ASSERT_(days.GetCount(), "Run Init first");
+	Profile& prof = GetProfile();
 	Date today = GetSysTime();
 	
 	int target_count = 7;
@@ -47,21 +48,30 @@ void FoodStorage::Update(bool replan, const Vector<DailyPlan>& planned_daily) {
 		if (days[i].is_shopping)
 			PlanShopping(i, planned_daily);
 	}
+	
+	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--)
+		if (Date(prof.foodlog.queue[i].time) >= d)
+			prof.foodlog.queue.Remove(i);
+	
+	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--)
+		if (Date(prof.shoplog.queue[i].time) >= d)
+			prof.shoplog.queue.Remove(i);
+	
+	for(int i = today_i; i < days.GetCount(); i++) {
+		AddFoodQueue(i, planned_daily);
+		if (days[i].is_shopping)
+			AddShopQueue(i);
+	}
+	
 }
 
 void FoodStorage::AddFoodQuantity(const FoodQuantityInt& src, FoodQuantity& dst) {
 	const Database& db = DB();
 	for(int i = 0; i < src.GetCount(); i++) {
 		int db_i = src.GetKey(i);
-		int count = src[i];
-		int local_i = db.local_products.Find(db_i);
-		double food_grams = DEFAULT_STEP_GRAMS;
-		if (local_i >= 0) {
-			const LocalProduct& p = db.local_products[local_i];
-			food_grams = p.grams;
-		}
-		ASSERT(food_grams > 0);
-		dst.GetAdd(db_i, 0) += count * food_grams;
+		int grams = src[i];
+		if (grams > 0)
+			dst.GetAdd(db_i, 0) += grams;
 	}
 }
 
@@ -107,19 +117,6 @@ String FoodStorage::GetTodaysMenu() {
 	}
 	
 	return "<Error fetching today's menu>";
-}
-
-String FoodStorage::GetNextShoppingList() {
-	Date today = GetSysTime();
-	for(int i = days.GetCount()-2; i >= 0; i--) {
-		FoodDay& day = days[i];
-		if (day.date <= today)
-			break;
-		if (day.is_shopping)
-			return day.shopping_list;
-	}
-	
-	return "<Error fetching the next shopping list>";
 }
 
 bool FoodStorage::NeedShopping() {
@@ -195,6 +192,8 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 	Ingredient remaining(day.target_sum);
 	day.ResetPlan();
 	
+	double target_fat = remaining.nutr[FAT];
+	
 	// Do supplements first with low calories
 	if (remaining.nutr[KCAL] <= 1000) {
 		double supplement_kcal = min(800.0f, remaining.nutr[KCAL]);
@@ -267,7 +266,6 @@ void FoodStorage::PlanShopping(int day_i, const Vector<DailyPlan>& planned_daily
 	const DailyPlan& plan = planned_daily[day_i];
 	FoodDay& day = days[day_i];
 	
-	day.shopping_list.Clear();
 	day.buy_amount.Clear();
 	
 	if (!day.is_shopping)
@@ -299,34 +297,20 @@ void FoodStorage::PlanShopping(int day_i, const Vector<DailyPlan>& planned_daily
 	// Check what food products must be bought
 	for(int i = 0; i < total_usage.GetCount(); i++) {
 		int db_i = total_usage.GetKey(i);
-		float usage = total_usage[i];
-		float already = existing_food_grams.Get(db_i, 0);
-		float must_buy = usage - already;
+		double usage = total_usage[i];
+		double already = existing_food_grams.Get(db_i, 0);
+		double must_buy = usage - already;
 		int buy_count = 0;
-		float bought_sum = 0;
+		double bought_sum = 0;
 		
 		const FoodDescription& d = db.food_descriptions[db_i];
 		
-		if (must_buy > 0) {
-			int step_grams = DEFAULT_STEP_GRAMS;
-			
-			int local_i = db.local_products.Find(db_i);
-			if (local_i >= 0)
-				step_grams = db.local_products[local_i].grams;
-			
-			do {
-				buy_count++;
-				bought_sum += step_grams;
-			}
-			while (bought_sum < must_buy);
-			
-			day.buy_amount.Add(db_i, buy_count);
-			day.shopping_list << d.long_desc << ": " << buy_count << " * " << step_grams << "g (" << usage << "g needed)\n";
+		if (must_buy >= 1.0) {
+			day.buy_amount.Add(db_i, bought_sum + 0.5);
 		}
 	}
 	
-	if (day.buy_amount.IsEmpty())
-		day.shopping_list = "Nothing to buy at this time";
+	day.buy_amount.GetAdd(db.FindFood("Soy protein isolate"), 0) += 100;
 	
 	prev = &day;
 	for(int i = day_i+1; i < days.GetCount(); i++) {
@@ -494,10 +478,23 @@ void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double ta
 			target_exceed_score /= limit_count;
 		}
 		
+		// Partial score: limit fat intake
+		double fat_exceed_score = 0;
+		{
+			double target = remaining.nutr[FAT];
+			if (target > 0) {
+				double value = opt_nutr_sum.nutr[FAT];
+				double rel = max(0.0, value / target - 1.0);
+				fat_exceed_score = -rel;
+			}
+		}
+		
+		
 		// Get full score
 		double score =
 			 100 * protein_score +
 			 100 * pufa_score +
+			 100 * fat_exceed_score +
 			  10 * target_fill_score +
 			   3 * target_exceed_score
 			;
@@ -679,3 +676,70 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 	return preset_scores.GetKey(0);
 }
 
+void FoodStorage::AddFoodQueue(int day_i, const Vector<DailyPlan>& planned_daily) {
+	const FoodDay& day = days[day_i];
+	const DailyPlan& plan = planned_daily[day_i];
+	const Profile& prof = GetProfile();
+	Vector<FoodPrice>& out_vec = GetProfile().foodlog.queue;
+	
+	VectorMap<String, double> meal_types;
+	VectorMap<String, Time> meal_times;
+	for(int i = 0; i < day.meals.GetCount(); i++) {
+		const Meal& m = day.meals[i];
+		meal_types.GetAdd(m.key, 0) += m.grams;
+		meal_times.GetAdd(m.key, m.time);
+	}
+	
+	for(int i = 0; i < meal_types.GetCount(); i++) {
+		int preset_i = prof.FindMealPreset(meal_types.GetKey(i));
+		if (preset_i < 0) continue;
+		double grams = meal_types[i];
+		Time time = meal_times[i];
+		const MealPreset& mp = prof.presets[preset_i];
+		const MealPresetVariant& var = mp.variants[plan.variant_type];
+		Ingredient ing;
+		var.GetNutritions(ing);
+		double mul = grams / ing.grams;
+		
+		FoodPrice& out = out_vec.Add();
+		out.time = time;
+		for(int j = 0; j < var.ingredients.GetCount(); j++) {
+			const MealIngredient& mi = var.ingredients[j];
+			double grams = mi.max_grams * mul;
+			FoodPriceQuote& quote = out.values.Add(mi.db_food_no);
+			int k = prof.price.history.Find(mi.db_food_no);
+			if (k >= 0 && prof.price.history[k].GetCount()) {
+				const FoodPriceQuote& prev_quote = prof.price.history[k].Top();
+				quote.Set(time, grams, prev_quote);
+			}
+			else {
+				quote.SetPriceless(time, grams);
+			}
+		}
+	}
+}
+
+void FoodStorage::AddShopQueue(int day_i) {
+	const FoodDay& day = days[day_i];
+	const Profile& prof = GetProfile();
+	Vector<FoodPrice>& out_vec = GetProfile().shoplog.queue;
+	Time time(day.date.year, day.date.month, day.date.day, 12, 0, 0);
+	
+	if (day.buy_amount.GetCount()) {
+		FoodPrice& out = out_vec.Add();
+		out.time = time;
+		for(int i = 0; i < day.buy_amount.GetCount(); i++) {
+			int db_no = day.buy_amount.GetKey(i);
+			double grams = day.buy_amount[i];
+			FoodPriceQuote& quote = out.values.Add(db_no);
+			int k = prof.price.history.Find(db_no);
+			if (k >= 0 && prof.price.history[k].GetCount()) {
+				const FoodPriceQuote& prev_quote = prof.price.history[k].Top();
+				quote.Set(time, grams, prev_quote);
+			}
+			else {
+				quote.SetPriceless(time, grams);
+			}
+		}
+	}
+}

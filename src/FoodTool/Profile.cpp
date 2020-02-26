@@ -235,7 +235,7 @@ bool Profile::UpdatePlan() {
 		double maintain_protein = weight * 0.8;
 		double min_protein;
 		if (fat_perc > tgt_fat_perc + 0.01) {
-			maintain_protein = weight * 1.2; // tends to be needed more than 0.8 while fasting
+			maintain_protein = weight * 1.4; // tends to be needed more than 0.8 while fasting
 			min_protein = maintain_protein;
 			d.variant_type = VARIANT_WEIGHTLOSS;
 			maintenance_day_count = 0;
@@ -256,7 +256,7 @@ bool Profile::UpdatePlan() {
 			maintenance_day_count = 0;
 		}
 		
-		double min_fat = 30.0 / 2000.0 * d.maintain_calories;
+		double min_fat = 10.0 / 2000.0 * d.maintain_calories;
 		double prot_cals, fat_cals, carb_cals;
 		
 		if (fat_perc > tgt_fat_perc + 0.01) {
@@ -341,10 +341,11 @@ bool Profile::UpdatePlan() {
 			else
 				d.food.nutr[r.nutr_no] = r.value;
 		}
+		double fat_grams = max(min_fat, fat_cals / 9.0);
 		d.food.grams = weight / 100.0 * 2000.0;
 		d.food.nutr[KCAL] = d.allowed_calories;
 		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
-		d.food.nutr[FAT] = max(min_fat, fat_cals / 9.0); // based on coconut oil nutrients
+		d.food.nutr[FAT] = fat_grams; // based on coconut oil nutrients
 		d.food.nutr[CARB] = carb_cals / 10.0;
 		ASSERT(db.nutr_recom.GetCount());
 		
@@ -513,7 +514,7 @@ void Profile::CookedToRaw() {
 	
 }
 
-int Profile::FindMealPreset(String key) {
+int Profile::FindMealPreset(String key) const {
 	for(int i = 0; i < presets.GetCount(); i++)
 		if (presets[i].key == key)
 			return i;
@@ -562,6 +563,13 @@ int GetBmiWeight(double height_m, int bmi) {
 
 double GetBMI(double height_m, double weight_kg) {
 	return weight_kg / (height_m * height_m);
+}
+
+double GetNormalLiquidPercentage(double age, double height_cm, double weight_kg) {
+	// 2.447 – (0.09145 x age) + (0.1074 x height in centimeters) + (0.3362 x weight in kilograms) = total body weight (TBW) in liters
+	double liquid_kg = 2.447 - 0.09145 * age + 0.1074 * height_cm + 0.3362 * weight_kg;
+	double liquid_perc = 100 * liquid_kg / weight_kg;
+	return liquid_perc;
 }
 
 double Configuration::GetBMR(double weight) {
@@ -689,7 +697,31 @@ String FoodPriceQuote::GetPriceString() const {
 	else return t_("Invalid price");
 }
 
+void FoodPriceQuote::Set(Time time, double min_grams, const FoodPriceQuote& prev) {
+	this->time = time;
+	double gram_price = prev.servings ? prev.price / prev.grams : 0;
+	double serving_grams = prev.servings ? prev.grams / prev.servings : 10;
+	serving_batch = max(1, prev.serving_batch);
+	double fservings = min_grams / serving_grams;
+	servings = 0;
+	while (servings < fservings) servings += serving_batch;
+	grams = servings * serving_grams;
+	price = grams * gram_price;
+	shop = prev.shop;
+	/*double fservings = grams / serving_grams;
+	servings = fservings;
+	if (fservings > servings) servings++;
+	*/
+}
 
+void FoodPriceQuote::SetPriceless(Time time, double grams) {
+	this->time = time;
+	this->grams = grams;
+	price = 0;
+	servings = 1;
+	serving_batch = 1;
+	shop = "";
+}
 
 
 

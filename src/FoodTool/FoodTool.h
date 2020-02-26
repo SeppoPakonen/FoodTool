@@ -281,10 +281,14 @@ struct FoodLogCtrl : public ParentCtrl {
 	void Zero();
 	void Expand();
 	void Reduce();
+	void ApplyStore();
 	void Load(const FoodPrice& p);
 	ProductQueueHistory& GetData();
 	void SetData(ArrayCtrl& list, Vector<FoodPrice>& data);
 	void SetEditCount(int i);
+	void DebugClear() {GetData().history.Clear(); Data();}
+	void ClearQueue() {GetData().queue.Clear(); Data();}
+	void MultiplyMass();
 };
 
 struct PriceCtrl : public ParentCtrl {

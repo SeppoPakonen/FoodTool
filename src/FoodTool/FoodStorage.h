@@ -38,12 +38,13 @@ struct FoodStorage {
 	Date GetLastShopping();
 	Date GetNextShopping();
 	String GetTodaysMenu();
-	String GetNextShoppingList();
 	void PlanDay(int i, const Vector<DailyPlan>& planned_daily);
 	void PlanShopping(int i, const Vector<DailyPlan>& planned_daily);
 	void MakeSupplements(const DailyPlan& p, FoodDay& d, double target_kcal, Ingredient& remaining);
 	void MakeMenu(const DailyPlan& p, FoodDay& d, double target_kcal, Ingredient& remaining);
 	void AddFoodQuantity(const FoodQuantityInt& src, FoodQuantity& dst);
+	void AddFoodQueue(int day_i, const Vector<DailyPlan>& planned_daily);
+	void AddShopQueue(int day_i);
 	
 	bool NeedShopping();
 	void DoShop();

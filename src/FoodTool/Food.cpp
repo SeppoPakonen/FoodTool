@@ -1,45 +1,5 @@
 #include "FoodTool.h"
 
-void FoodDay::SetMealGrams(const Vector<double>& grams, bool check) {
-	Panic("TODO");
-	#if 0
-	const Database& db = DB();
-	int it = 0;
-	total_sum.Reset();
-	for(int i = 0; i < meals.GetCount(); i++) {
-		Meal& m = meals[i];
-		m.food_sum.Reset();
-		for(int j = 0; j < m.food.GetCount(); j++) {
-			int db_i = m.food.GetKey(j);
-			const FoodDescription& d = db.food_descriptions[db_i];
-			double g = grams[it++];
-			
-			int local_i = db.local_products.Find(db_i);
-			if (local_i >= 0) {
-				const LocalProduct& p = db.local_products[local_i];
-				if (p.serving_grams > 0) {
-					int count = (g + p.serving_grams * 0.5) / p.serving_grams;
-					g = count * p.serving_grams;
-				}
-			}
-			g = max(0.0, g);
-			m.food[j] = g;
-			
-			if (g > 0.0) {
-				m.food_sum.Add(g, d);
-				if (check) {
-					/*ASSERT(m.food_sum.fat >= 0 && m.food_sum.fat < 2000);
-					ASSERT(m.food_sum.carbs >= 0 && m.food_sum.carbs < 2000);
-					ASSERT(m.food_sum.protein >= 0 && m.food_sum.protein < 2000);*/
-				}
-			}
-		}
-		total_sum += m.food_sum;
-	}
-	ASSERT(it == grams.GetCount());
-	#endif
-}
-
 double FoodDay::GetOptimizerEnergy() {
 	// If weight loss mode
 	if (mode == MODE_WEIGHTLOSS) {

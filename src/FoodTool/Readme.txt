@@ -1,3 +1,6 @@
+Important studies:
+ - https://www.sciencedaily.com/releases/2017/11/171101130319.htm
+
 
 Important 'need to know':
 	- Only small dense LDL colesterol (sdLDL-c) is associated with metabolic syntrome.

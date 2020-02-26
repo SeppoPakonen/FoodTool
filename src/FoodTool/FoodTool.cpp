@@ -471,8 +471,6 @@ void StatusCtrl::Data() {
 		
 		next_shopping.SetDate(shop_end);
 		
-		shopping_list.SetData(prof.storage.GetNextShoppingList());
-		
 		Date total_begin = prof.GetCurrentTotalBegin();
 		Date total_end = prof.GetCurrentTotalEnd();
 		int64 total_total = total_end.Get() - total_begin.Get();
@@ -921,17 +919,33 @@ GraphCtrl::GraphCtrl() {
 	graph.Add()
 		.Add(t_("Weight"), 2, Color(109, 0, 117));
 	
-	list.Add(t_("Measured fat"));
+	list.Add(t_("Measured fat (kg)"));
 	graph.Add()
 		.Add(t_("Fat"), 2, Color(81, 48, 0));
 		
-	list.Add(t_("Measured liquid"));
+	list.Add(t_("Measured liquid (kg)"));
 	graph.Add()
 		.Add(t_("Liquid"), 2, Color(0, 176, 137));
 		
-	list.Add(t_("Measured muscle"));
+	list.Add(t_("Measured muscle (kg)"));
 	graph.Add()
 		.Add(t_("Muscle"), 2, Color(120, 0, 0));
+	
+	list.Add(t_("Measured fat (\%)"));
+	graph.Add()
+		.Add(t_("Fat"), 2, Color(81, 48, 0));
+		
+	list.Add(t_("Measured liquid (\%)"));
+	graph.Add()
+		.Add(t_("Liquid"), 2, Color(0, 176, 137));
+	
+	list.Add(t_("Measured muscle (\%)"));
+	graph.Add()
+		.Add(t_("Muscle"), 2, Color(120, 0, 0));
+	
+	list.Add(t_("Relative liquid (\%)"));
+	graph.Add().Vert(100)
+		.Add(t_("Liquid"), 2, Color(0, 176, 137));
 	
 	list.Add(t_("Measured BMI"));
 	graph.Add()
@@ -980,7 +994,7 @@ int MultipurposeGraph::GetCount(int s) {
 		return GetProfile().planned_daily.GetCount();
 	else if (s < 14)
 		return GetProfile().storage.days.GetCount();
-	else if (s < 27)
+	else if (s < 30)
 		return GetProfile().weights.GetCount() + MEASURE_FORECAST;
 	Panic("Invalid source");
 	return -1;
@@ -997,8 +1011,9 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 	Vector<double>& v = tmp[l];
 	if (v.IsEmpty()) {
 		v.SetCount(GetCount(src));
+		int src_i = 0;
 		
-		if (src == 0) {
+		if (src == src_i++) {
 			if (l == 0) {
 				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
 					v[i] = prof.planned_daily[i].lean_kgs;
@@ -1012,7 +1027,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 					v[i] = prof.planned_daily[i].weight;
 			}
 		}
-		else if (src == 1) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
 					v[i] = prof.planned_daily[i].maintain_calories;
@@ -1026,13 +1041,13 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 					v[i] = prof.planned_daily[i].allowed_calories;
 			}
 		}
-		else if (src == 2) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				for(int i = 0; i < prof.planned_daily.GetCount(); i++)
 					v[i] = prof.planned_daily[i].burned_kgs;
 			}
 		}
-		else if (src == 3) {
+		else if (src == src_i++) {
 			int n;
 			if (l == 0) {
 				n = FAT;
@@ -1047,7 +1062,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				v[i] = prof.planned_daily[i].food.nutr[n];
 		}
 		
-		else if (src == 4) {
+		else if (src == src_i++) {
 			int n = KCAL;
 			if (l == 0) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
@@ -1058,7 +1073,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 					v[i] = prof.storage.days[i].total_sum.nutr[n];
 			}
 		}
-		else if (src == 5) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
 					v[i] = prof.storage.days[i].target_sum.grams;
@@ -1068,7 +1083,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 					v[i] = prof.storage.days[i].total_sum.grams;
 			}
 		}
-		else if (src == 6) {
+		else if (src == src_i++) {
 			int n = -1;
 			if (l == 0 || l == 3) {
 				n = FAT;
@@ -1088,7 +1103,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 					v[i] = prof.storage.days[i].total_sum.nutr[n];
 			}
 		}
-		else if (src == 7) {
+		else if (src == src_i++) {
 			int n = SODIUM;
 			if (l == 0) {
 				for(int i = 0; i < prof.storage.days.GetCount(); i++)
@@ -1100,7 +1115,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			}
 		}
 		
-		else if (src == 8) {
+		else if (src == src_i++) {
 			String key;
 			switch (l) {
 				case 0: key = ("VITA_RAE"); break;
@@ -1123,7 +1138,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			for(int i = 0; i < prof.storage.days.GetCount(); i++)
 				v[i] = prof.storage.days[i].total_sum.nutr[n] / recom.GetValue(prof.planned_daily[i].weight) * 100;
 		}
-		else if (src == 9) {
+		else if (src == src_i++) {
 			String key;
 			switch (l) {
 				case 0: key = ("HISTN_G"); break;
@@ -1147,7 +1162,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			for(int i = 0; i < prof.storage.days.GetCount(); i++)
 				v[i] = prof.storage.days[i].total_sum.nutr[n] / recom.GetValue(prof.planned_daily[i].weight) * 100;
 		}
-		else if (src == 10) {
+		else if (src == src_i++) {
 			String key;
 			switch (l) {
 				case 0: key = ("K"); break;
@@ -1167,7 +1182,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			for(int i = 0; i < prof.storage.days.GetCount(); i++)
 				v[i] = prof.storage.days[i].total_sum.nutr[n] / recom.GetValue(prof.planned_daily[i].weight) * 100;
 		}
-		else if (src == 11) {
+		else if (src == src_i++) {
 			String key;
 			switch (l) {
 				case 0: key = ("CHOLE"); break;
@@ -1184,7 +1199,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			for(int i = 0; i < prof.storage.days.GetCount(); i++)
 				v[i] = prof.storage.days[i].total_sum.nutr[n] / recom.GetValue(prof.planned_daily[i].weight) * 100;
 		}
-		else if (src == 12) {
+		else if (src == src_i++) {
 			String key;
 			switch (l) {
 				case 0: key = ("CHOLN"); break;
@@ -1196,7 +1211,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			for(int i = 0; i < prof.storage.days.GetCount(); i++)
 				v[i] = prof.storage.days[i].total_sum.nutr[n] / recom.GetValue(prof.planned_daily[i].weight) * 100;
 		}
-		else if (src == 13) {
+		else if (src == src_i++) {
 			String key;
 			switch (l) {
 				case 0: key = ("CA"); break;
@@ -1212,7 +1227,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				v[i] = prof.storage.days[i].total_sum.nutr[n] / recom.GetValue(prof.planned_daily[i].weight) * 100;
 		}
 		
-		else if (src == 14) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				int i = 0;
 				for(; i < prof.weights.GetCount(); i++) {
@@ -1239,7 +1254,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				}
 			}
 		}
-		else if (src == 15) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				int i = 0;
 				for(; i < prof.weights.GetCount(); i++) {
@@ -1267,19 +1282,19 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			}
 			FillVector(v);
 		}
-		else if (src == 16) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				#define MEAS(var) \
 				for(int i = 0; i < prof.weights.GetCount(); i++) \
 					v[i] = prof.weights[i].var; \
-				double diff = (prof.weights.Top().var - prof.weights[0].var) / prof.weights.GetCount(); \
+				double diff = (prof.weights.Top().var - prof.weights[0].var) / (prof.weights.GetCount()-1); \
 				for(int i = prof.weights.GetCount(); i < v.GetCount(); i++) \
 					v[i] = v[i-1] + diff;
 				MEAS(GetLiquidKg());
 			}
 			FillVector(v);
 		}
-		else if (src == 17) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				int i = 0;
 				for(; i < prof.weights.GetCount(); i++) {
@@ -1307,7 +1322,39 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			}
 			FillVector(v);
 		}
-		else if (src == 18) {
+		else if (src == src_i++) {
+			if (l == 0) {
+				MEAS(fat);
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
+				MEAS(liquid);
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
+				MEAS(muscle);
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
+				int count = prof.weights.GetCount();
+				for(int i = 0; i < count; i++) {
+					const WeightLossStat& wl = prof.weights[i];
+					double normal = GetNormalLiquidPercentage(conf.age, conf.height, wl.weight);
+					v[i] = wl.liquid / normal * 100;
+				}
+				double diff = (v[count-1] - v[0]) / (count-1); \
+				for(int i = count; i < v.GetCount(); i++) \
+					v[i] = v[i-1] + diff;
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
 			if (l == 0) {
 				int i = 0;
 				for(; i < prof.weights.GetCount(); i++) {
@@ -1336,49 +1383,43 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			}
 			FillVector(v);
 		}
-		else if (src == 19) {
-			if (l == 0) {
-				MEAS(neck);
-			}
-			FillVector(v);
-		}
-		else if (src == 20) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(bicep);
 			}
 			FillVector(v);
 		}
-		else if (src == 21) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(forearm);
 			}
 			FillVector(v);
 		}
-		else if (src == 22) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(chest);
 			}
 			FillVector(v);
 		}
-		else if (src == 23) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(waist);
 			}
 			FillVector(v);
 		}
-		else if (src == 24) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(buttocks);
 			}
 			FillVector(v);
 		}
-		else if (src == 25) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(thigh);
 			}
 			FillVector(v);
 		}
-		else if (src == 26) {
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(leg);
 			}
@@ -2355,7 +2396,7 @@ FoodLogCtrl::FoodLogCtrl() {
 	vsplit.Vert() << queue << history;
 	
 	queue.AddIndex();
-	queue.AddColumn("Time");
+	queue.AddColumn("Queue Time");
 	queue.AddColumn("Products");
 	queue.AddColumn("Price");
 	queue.ColumnWidths("2 1 1");
@@ -2363,7 +2404,7 @@ FoodLogCtrl::FoodLogCtrl() {
 	queue.WhenLeftClick = THISBACK(SelectQueue);
 	
 	history.AddIndex();
-	history.AddColumn("Time");
+	history.AddColumn("History Time");
 	history.AddColumn("Products");
 	history.AddColumn("Price");
 	history.ColumnWidths("2 1 1");
@@ -2377,6 +2418,33 @@ FoodLogCtrl::FoodLogCtrl() {
 	products.list.AddColumn("Batch Size");
 	products.list.AddColumn("Price (EUR)");
 	products.list.AddColumn("Shop");
+	
+	products.store.WhenEnter = THISBACK(ApplyStore);
+	products.add <<= THISBACK(Add);
+	products.zero <<= THISBACK(Zero);
+	products.expand <<= THISBACK(Expand);
+	products.reduce <<= THISBACK(Reduce);
+	products.mul.WhenEnter = THISBACK(MultiplyMass);
+	//products.dbgclear <<= THISBACK(DebugClear);
+	products.dbgclear <<= THISBACK(ClearQueue);
+}
+
+void FoodLogCtrl::MultiplyMass() {
+	double mul = products.mul.GetData();
+	for(int i = 0; i < products.list.GetCount(); i++) {
+		double mass = products.list.Get(i, 2);
+		if (mass > 0) {
+			double new_mass = mass * mul;
+			products.list.Set(i, 2, max(1, (int)new_mass));
+		}
+	}
+}
+
+void FoodLogCtrl::ApplyStore() {
+	String store = products.store.GetData();
+	for(int i = 0; i < products.list.GetCount(); i++) {
+		products.list.Set(i, 6, store);
+	}
 }
 
 ProductQueueHistory& FoodLogCtrl::GetData() {
@@ -2391,13 +2459,19 @@ ProductQueueHistory& FoodLogCtrl::GetData() {
 }
 
 void FoodLogCtrl::SetData(ArrayCtrl& list, Vector<FoodPrice>& data) {
+	Date today = GetSysTime();
 	
 	if (data.GetCount() != list.GetCount()) {
 		for(int i = 0; i < data.GetCount(); i++) {
 			FoodPrice& p = data[i];
 			int row = data.GetCount() - 1 - i;
-			list.Set(row, 0, p.time);
-			list.Set(row, 1, i);
+			list.Set(row, 0, i);
+			list.Set(row, 1, AttrText(GetTimeString(p.time)).NormalPaper(Date(p.time) == today ? Color(170, 255, 150) : White()));
+			list.Set(row, 2, p.values.GetCount());
+			double price_sum = 0;
+			for(const FoodPriceQuote& q : p.values)
+				price_sum += q.price;
+			list.Set(row, 3, Format("%2n EUR", price_sum));
 		}
 		list.SetCount(data.GetCount());
 	}
@@ -2434,17 +2508,70 @@ void FoodLogCtrl::SelectHistory() {
 }
 
 void FoodLogCtrl::Add() {
+	if (queue.IsCursor()) {
+		int cursor = queue.GetCursor();
+		int i = queue.Get(cursor, 0);
+		GetData().queue.Remove(i);
+	}
+	
 	ArrayCtrl& list = products.list;
-	FoodPrice& p = GetData().queue.Add();
+	FoodPrice& p = GetData().history.Add();
 	p.time = GetSysTime();
 	for(int i = 0; i < list.GetCount(); i++) {
-		String key = list.Get(i, 0);
-		FoodPriceQuote& q = p.values.Add(key);
-		q.grams = list.Get(i, 2);
-		q.servings = list.Get(i, 3);
-		q.serving_batch = list.Get(i, 4);
-		q.price = list.Get(i, 5);
+		int db_no = list.Get(i, 0);
+		double grams = list.Get(i, 2);
+		if (grams > 0.0) {
+			FoodPriceQuote& q = p.values.Add(db_no);
+			q.time = p.time;
+			q.grams = grams;
+			q.servings = max(1, (int)list.Get(i, 3));
+			q.serving_batch = max(1, (int)list.Get(i, 4));
+			q.price = list.Get(i, 5);
+			q.shop = list.Get(i, 6);
+		}
 	}
+	
+	Profile& prof = GetProfile();
+	if (mode == FOODLOG) {
+		FoodStorageSnapshot& snap = prof.storage_snaps.Add();
+		if (prof.storage_snaps.GetCount() >= 2) {
+			FoodStorageSnapshot& prev = prof.storage_snaps[prof.storage_snaps.GetCount()-2];
+			snap = prev;
+		}
+		snap.time = GetSysTime();
+		snap.adder = SNAPSRC_FOODLOG;
+		for(int i = 0; i < p.values.GetCount(); i++) {
+			int db_no = p.values.GetKey(i);
+			const FoodPriceQuote& quote = p.values[i];
+			int& grams = snap.foods.GetAdd(db_no, 0);
+			grams -= quote.grams;
+			if (grams < 0) grams = 0;
+		}
+	}
+	else if (mode == GROCERYLOG) {
+		prof.receiptlog.queue.Add(p);
+	}
+	else if (mode == RECEIPTLOG) {
+		FoodStorageSnapshot& snap = prof.storage_snaps.Add();
+		if (prof.storage_snaps.GetCount() >= 2) {
+			FoodStorageSnapshot& prev = prof.storage_snaps[prof.storage_snaps.GetCount()-2];
+			snap = prev;
+		}
+		snap.time = GetSysTime();
+		snap.adder = SNAPSRC_RECEIPTLOG;
+		for(int i = 0; i < p.values.GetCount(); i++) {
+			int db_no = p.values.GetKey(i);
+			const FoodPriceQuote& quote = p.values[i];
+			ASSERT(quote.grams >= 0 && quote.grams <= 100000);
+			snap.foods.GetAdd(db_no, 0) += quote.grams;
+			
+			prof.price.history.GetAdd(db_no).Add(quote);
+		}
+	}
+	
+	prof.StoreThis();
+	
+	Data();
 }
 
 void FoodLogCtrl::Zero() {
@@ -2455,7 +2582,6 @@ void FoodLogCtrl::Zero() {
 	
 	for(int i = 0; i < db.used_foods.GetCount(); i++) {
 		int db_no = db.used_foods[i];
-		String key = db.food_descriptions.GetKey(db_no);
 		const FoodDescription& d = db.food_descriptions[db_no];
 		
 		EditIntSpin& grams = this->grams[i];
@@ -2464,7 +2590,7 @@ void FoodLogCtrl::Zero() {
 		EditDoubleSpin& price = this->price[i];
 		EditString& shop = this->shop[i];
 		
-		list.Set(i, 0, key);
+		list.Set(i, 0, db_no);
 		list.Set(i, 1, d.long_desc);
 		list.SetCtrl(i, 1, grams);
 		list.SetCtrl(i, 2, servings);
@@ -2486,15 +2612,14 @@ void FoodLogCtrl::Expand() {
 	
 	SetEditCount(db.used_foods.GetCount());
 	
-	Index<String> existing_foods;
+	Index<int> existing_foods;
 	for(int i = 0; i < list.GetCount(); i++)
 		existing_foods.Add(list.Get(i, 0));
 	
 	int row = list.GetCount();
 	for(int i = 0; i < db.used_foods.GetCount(); i++) {
 		int db_no = db.used_foods[i];
-		String key = db.food_descriptions.GetKey(db_no);
-		if (existing_foods.Find(key) >= 0)
+		if (existing_foods.Find(db_no) >= 0)
 			continue;
 		
 		const FoodDescription& d = db.food_descriptions[db_no];
@@ -2505,7 +2630,7 @@ void FoodLogCtrl::Expand() {
 		EditDoubleSpin& price = this->price[row];
 		EditString& shop = this->shop[row];
 		
-		list.Set(row, 0, key);
+		list.Set(row, 0, db_no);
 		list.Set(row, 1, d.long_desc);
 		list.SetCtrl(row, 1, grams);
 		list.SetCtrl(row, 2, servings);
@@ -2520,6 +2645,7 @@ void FoodLogCtrl::Expand() {
 		row++;
 	}
 	list.SetCount(row);
+	list.SetSortColumn(0);
 }
 
 void FoodLogCtrl::Reduce() {
@@ -2538,6 +2664,13 @@ void FoodLogCtrl::SetEditCount(int i) {
 	batch.SetCount(count);
 	price.SetCount(count);
 	shop.SetCount(count);
+	for(int i = 0; i < count; i++) {
+		grams[i].MinMax(0, 10000);
+		servings[i].MinMax(0, 100000);
+		batch[i].MinMax(0, 100000);
+		price[i].MinMax(0, 100000);
+		price[i].SetInc(0.01);
+	}
 }
 
 void FoodLogCtrl::Load(const FoodPrice& p) {
@@ -2547,9 +2680,9 @@ void FoodLogCtrl::Load(const FoodPrice& p) {
 	SetEditCount(p.values.GetCount());
 	
 	for(int i = 0; i < p.values.GetCount(); i++) {
-		String key = p.values.GetKey(i);
+		int db_no = p.values.GetKey(i);
 		const FoodPriceQuote& q = p.values[i];
-		const FoodDescription& d = db.food_descriptions.Get(key);
+		const FoodDescription& d = db.food_descriptions[db_no];
 		
 		EditIntSpin& grams = this->grams[i];
 		EditIntSpin& servings = this->servings[i];
@@ -2557,20 +2690,21 @@ void FoodLogCtrl::Load(const FoodPrice& p) {
 		EditDoubleSpin& price = this->price[i];
 		EditString& shop = this->shop[i];
 		
-		list.Set(i, 0, key);
+		list.Set(i, 0, db_no);
 		list.Set(i, 1, d.long_desc);
 		list.SetCtrl(i, 1, grams);
 		list.SetCtrl(i, 2, servings);
 		list.SetCtrl(i, 3, batch);
 		list.SetCtrl(i, 4, price);
 		list.SetCtrl(i, 5, shop);
-		list.Set(i, 2, q.grams);
+		list.Set(i, 2, q.grams < 1.0 ? 1 : (int)(q.grams + 0.5));
 		list.Set(i, 3, q.servings);
 		list.Set(i, 4, q.serving_batch);
 		list.Set(i, 5, q.price);
 		list.Set(i, 6, q.shop);
 	}
 	list.SetCount(p.values.GetCount());
+	list.SetSortColumn(0);
 }
 
 
@@ -2624,13 +2758,12 @@ void PriceCtrl::Data(bool force) {
 	if (foodlist.GetCount() != db.used_foods.GetCount() || force) {
 		for(int i = 0; i < db.used_foods.GetCount(); i++) {
 			int db_no = db.used_foods[i];
-			String key = db.food_descriptions.GetKey(db_no);
 			const FoodDescription& d = db.food_descriptions[db_no];
 			
-			foodlist.Set(i, 0, key);
+			foodlist.Set(i, 0, db_no);
 			foodlist.Set(i, 1, d.long_desc);
 			
-			const Vector<FoodPriceQuote>& quotes = prof.price.history.GetAdd(key);
+			const Vector<FoodPriceQuote>& quotes = prof.price.history.GetAdd(db_no);
 			if (quotes.GetCount()) {
 				const FoodPriceQuote& quote = quotes.Top();
 				Date date = quote.time;
@@ -2660,8 +2793,8 @@ void PriceCtrl::SelectFood() {
 	
 	Profile& prof = GetProfile();
 	int cursor = foodlist.GetCursor();
-	String key = foodlist.Get(cursor, 0);
-	const Vector<FoodPriceQuote>& quotes = prof.price.history.Get(key);
+	int db_no = foodlist.Get(cursor, 0);
+	const Vector<FoodPriceQuote>& quotes = prof.price.history.Get(db_no);
 	
 	int resize = max(grams.GetCount(), quotes.GetCount());
 	grams.SetCount(resize);
@@ -2706,8 +2839,8 @@ void PriceCtrl::Add() {
 	
 	Profile& prof = GetProfile();
 	int cursor = foodlist.GetCursor();
-	String key = foodlist.Get(cursor, 0);
-	Vector<FoodPriceQuote>& quotes = prof.price.history.Get(key);
+	int db_no = foodlist.Get(cursor, 0);
+	Vector<FoodPriceQuote>& quotes = prof.price.history.Get(db_no);
 	FoodPriceQuote& quote = quotes.Add();
 	quote.time = GetSysTime();
 	
@@ -2721,8 +2854,8 @@ void PriceCtrl::ValueChanged(int quote_i) {
 	
 	Profile& prof = GetProfile();
 	int cursor = foodlist.GetCursor();
-	String key = foodlist.Get(cursor, 0);
-	Vector<FoodPriceQuote>& quotes = prof.price.history.Get(key);
+	int db_no = foodlist.Get(cursor, 0);
+	Vector<FoodPriceQuote>& quotes = prof.price.history.Get(db_no);
 	FoodPriceQuote& quote = quotes[quote_i];
 	quote.grams = grams[quote_i].GetData();
 	quote.servings = servings[quote_i].GetData();

@@ -109,7 +109,7 @@ struct NutritionRecommendation : Moveable<NutritionRecommendation> {
 	}
 };
 
-struct LocalProduct : Moveable<LocalProduct> {
+struct Removed__LocalProduct : Moveable<Removed__LocalProduct> {
 	int food_no = 0;
 	int grams = 0;
 	int serving_grams = 0;
@@ -131,11 +131,12 @@ extern int KCAL, PROT, FAT, CARB, SODIUM, PUFA;
 struct Database {
 	VectorMap<String, FoodGroup> food_groups;
 	VectorMap<String, FoodDescription> food_descriptions;
-	VectorMap<int, LocalProduct> local_products;
 	Vector<NutritionType> nutr_types;
 	Vector<NutritionRecommendation> nutr_recom;
 	Index<int> used_foods;
 	bool is_init = false;
+	
+	VectorMap<int, Removed__LocalProduct> removed0;
 	
 	typedef Database CLASSNAME;
 	Database();
@@ -147,7 +148,7 @@ struct Database {
 		FOR_VER(0) {
 			s	% food_groups
 				% food_descriptions
-				% local_products
+				% removed0
 				% nutr_types
 				% nutr_recom
 				% used_foods

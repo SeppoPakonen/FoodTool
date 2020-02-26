@@ -174,6 +174,7 @@ struct ScheduleToday {
 int GetTargetWeight(double height_m);
 int GetBmiWeight(double height_m, int bmi);
 double GetBMI(double height_m, double weight_kg);
+double GetNormalLiquidPercentage(double age, double height_cm, double weight_kg);
 
 enum {
 	SNAPSRC_USER,
@@ -192,6 +193,12 @@ struct FoodStorageSnapshot : Moveable<FoodStorageSnapshot> {
 	Date removed0;
 	
 	FoodStorageSnapshot() {removed0.year = 0;}
+	FoodStorageSnapshot(const FoodStorageSnapshot& s) {*this = s;}
+	void operator=(const FoodStorageSnapshot& s) {
+		time = s.time;
+		foods <<= s.foods;
+		adder = s.adder;
+	}
 	void Serialize(Stream& s) {
 		VER(1);
 		FOR_VER(0) {s % removed0 % foods;}
@@ -218,32 +225,58 @@ struct FoodPriceQuote : Moveable<FoodPriceQuote> {
 	int servings = 0, serving_batch = 0;
 	String shop;
 	
+	FoodPriceQuote() {}
+	FoodPriceQuote(const FoodPriceQuote& s) {*this = s;}
+	void operator=(const FoodPriceQuote& s) {
+		time = s.time;
+		price = s.price;
+		grams = s.grams;
+		servings = s.servings;
+		serving_batch = s.serving_batch;
+		shop = s.shop;
+	}
 	void Serialize(Stream& s) {
 		VER(0);
 		FOR_VER(0) {s % time % price % grams % servings % serving_batch % shop;}
 	}
 	String GetPriceString() const;
+	void Set(Time time, double grams, const FoodPriceQuote& prev);
+	void SetPriceless(Time time, double grams);
 };
 
 struct FoodPriceHistory : Moveable<FoodPriceHistory> {
-	VectorMap<String, Vector<FoodPriceQuote>> history;
+	VectorMap<int, Vector<FoodPriceQuote>> history;
 	Time time;
 	
+	VectorMap<String, Vector<FoodPriceQuote>> removed0;
+	
 	void Serialize(Stream& s) {
-		VER(1);
-		FOR_VER(0) {s % history;}
+		VER(2);
+		FOR_VER(0) {s % removed0;}
 		FOR_VER(1) {s % time;}
+		FOR_VER(2) {s % history;}
+		removed0.Clear();
 	}
 };
 
 struct FoodPrice : Moveable<FoodPrice> {
-	VectorMap<String, FoodPriceQuote> values;
+	VectorMap<int, FoodPriceQuote> values;
 	Time time;
 	
+	VectorMap<String, FoodPriceQuote> removed0;
+	
+	FoodPrice() {}
+	FoodPrice(const FoodPrice& p) {*this = p;}
+	void operator=(const FoodPrice& p) {
+		values <<= p.values;
+		time = p.time;
+	}
 	void Serialize(Stream& s) {
-		VER(1);
-		FOR_VER(0) {s % values;}
+		VER(2);
+		FOR_VER(0) {s % removed0;}
 		FOR_VER(1) {s % time;}
+		FOR_VER(2) {s % values;}
+		removed0.Clear();
 	}
 };
 
@@ -339,7 +372,7 @@ struct Profile {
 	bool IsRunning() {return flag.running || flag.workers_running > 0;}
 	void VLCD_Preset();
 	void CookedToRaw();
-	int FindMealPreset(String key);
+	int FindMealPreset(String key) const;
 	DailyPlan* GetTodayPlan();
 	void SetMealPresetFoodsUsed();
 	
