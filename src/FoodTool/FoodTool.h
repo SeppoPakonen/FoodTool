@@ -27,6 +27,7 @@ using namespace Upp;
 #include "Ingredient.h"
 #include "Food.h"
 #include "FoodStorage.h"
+#include "Activity.h"
 #include "Profile.h"
 #include "VideoCapture.h"
 #include "ScheduleCtrl.h"
@@ -38,6 +39,7 @@ using namespace Upp;
 #include "MealPresetCtrl.h"
 #include "WeightCtrl.h"
 #include "FoodStorageCtrl.h"
+#include "ActivityCtrl.h"
 
 #define LAYOUTFILE <FoodTool/FoodTool2.lay>
 #include <CtrlCore/lay.h>
@@ -334,6 +336,7 @@ class FoodTool : public TopWindow {
 	SupplementCtrl supp;
 	FoodLogCtrl foodlog, shoplog, receiptlog;
 	PriceCtrl prices;
+	ActivityCtrl activity;
 	
 	TimeCallback tc;
 public:

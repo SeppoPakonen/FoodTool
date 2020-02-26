@@ -109,6 +109,7 @@ FoodTool::FoodTool()
 	tabs.Add(status.SizePos(), "Status");
 	tabs.Add(nutr.SizePos(), "Daily Nutritions");
 	tabs.Add(fins.SizePos(), "Food Instructions");
+	tabs.Add(activity.SizePos(), "Activity");
 	tabs.Add(graphs.SizePos(), "Graphs");
 	tabs.Add(weight.SizePos(), "Weight");
 	tabs.Add(def.SizePos(), "Nutrient Deficits");
@@ -176,6 +177,7 @@ void FoodTool::Data() {
 		else if (tab == i++)	status.Data();
 		else if (tab == i++)	nutr.Data();
 		else if (tab == i++)	fins.Data();
+		else if (tab == i++)	activity.Data();
 		else if (tab == i++)	graphs.Data();
 		else if (tab == i++)	weight.Data();
 		else if (tab == i++)	def.Data();

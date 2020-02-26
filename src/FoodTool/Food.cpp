@@ -1,30 +1,5 @@
 #include "FoodTool.h"
 
-double FoodDay::GetOptimizerEnergy() {
-	// If weight loss mode
-	if (mode == MODE_WEIGHTLOSS) {
-		const Profile& prof = GetProfile();
-		const Database& db = DB();
-		double fabs_sum = 0.0;
-		
-		ASSERT(target_sum.grams > 0);
-		fabs_sum += fabs((double)total_sum.grams / target_sum.grams - 1);
-		
-		for(int i = 0; i < prof.planned_nutrients.GetCount(); i++) {
-			int j = prof.planned_nutrients[i];
-			double total = total_sum.nutr[j];
-			double target = target_sum.nutr[j];
-			ASSERT(target > 0);
-			double value = total / target - 1;
-			fabs_sum += fabs(value);
-		}
-		
-		double fabs_av = fabs_sum / (1 + prof.planned_nutrients.GetCount());
-		ASSERT(IsFin(fabs_av));
-		return -fabs_av;
-	}
-	else Panic("TODO");
-}
 
 
 
@@ -55,90 +30,6 @@ void MealPreset::GetNutritions(Ingredient& dst) const {
 
 void MealPresetVariant::GetNutritions(Ingredient& dst) const {
 	GetIngredientNutritions(dst, ingredients);
-}
-
-double MealPreset::GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg) {
-	const Profile& prof = GetProfile();
-	const Database& db = DB();
-	double fabs_sum = 0.0;
-	
-	static thread_local Ingredient total_sum;
-	GetNutritions(total_sum);
-	
-	int count = 0;
-	
-	if (!target_sum.grams)
-		return -1000;
-	ASSERT(target_sum.grams > 0);
-	
-	
-	// Too many ingredients (doesn't work)
-	if (0) {
-		int ing_count = 0;
-		for(int i = 0; i < ingredients.GetCount(); i++)
-			if (ingredients[i].max_grams > 0.0)
-				ing_count++;
-		if (ing_count > 8) {
-			fabs_sum += (ing_count - 7) * 10;
-			count += 10;
-		}
-	}
-	
-	
-	if (1) {
-		fabs_sum += 10 * fabs((double)total_sum.grams / target_sum.grams - 1);
-		count += 10;
-	}
-	
-	// Penalty for too much for one ingredient
-	if (1) {
-		int penalties = 0;
-		for(int i = 0; i < ingredients.GetCount(); i++)
-			if (ingredients[i].max_grams > 250.0)
-				penalties++;
-		fabs_sum += 10 * penalties;
-		count += 10;
-	}
-	
-	for(int i = 0; i < nutr_idx.GetCount(); i++) {
-		int j = nutr_idx[i];
-		double total = total_sum.nutr[j];
-		double target = target_sum.nutr[j];
-		
-		
-		if (!target) {
-			if (!total)
-				continue;
-			else
-				return -10;
-		}
-		double value = total / target - 1;
-		
-		if (dbg.do_debug)
-			dbg.nutr_fabs_av[j].Add(fabs(value));
-		
-		if (j  == KCAL) {
-			value *= 100;
-			count += 100;
-		}
-		/*else if (j == PROT) {
-			//if (value > 0.0) value = 0.0;
-			value *= 50;
-			count += 50;
-		}*/
-		else {
-			if (value > 0.0)
-				value = max(0.0, value - 3.0);
-			count++;
-		}
-		
-		fabs_sum += fabs(value);
-		
-	}
-	
-	double fabs_av = fabs_sum / count;
-	ASSERT(IsFin(fabs_av));
-	return -fabs_av;
 }
 
 void GetFactors(Vector<MealIngredient>& ingredients, double& mass_factor, double& taste_factor, double& score) {

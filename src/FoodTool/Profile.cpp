@@ -197,7 +197,7 @@ bool Profile::UpdatePlan() {
 		maintenance_day_count < 30) {
 		double prog = max(0.0, min(1.0, 1.0 - fabs(weight - tgt_weight) / fabs(begin_weight - tgt_weight)));
 		//if (planned_daily.GetCount() && planned_daily.Top().prog > prog) break;
-		//if (count > 365) break;
+		if (count > 20) break;
 		count++;
 		
 		DailyPlan& d = planned_daily.Add();
@@ -212,7 +212,7 @@ bool Profile::UpdatePlan() {
 		double fat_kgs = weight * fat_perc;
 		double lean_kgs = weight * lean_perc;
 
-		d.mode = MODE_WEIGHTLOSS;
+		
 		d.date = date++;
 		d.weight = weight;
 		d.prog = prog;
@@ -235,22 +235,26 @@ bool Profile::UpdatePlan() {
 		double maintain_protein = weight * 0.8;
 		double min_protein;
 		if (fat_perc > tgt_fat_perc + 0.01) {
-			maintain_protein = weight * 1.4; // tends to be needed more than 0.8 while fasting
-			min_protein = maintain_protein;
+			d.mode = MODE_WEIGHTLOSS;
+			maintain_protein = weight * 1.0; // tends to be needed more than 0.8 while fasting
+			min_protein = weight * 1.4;
 			d.variant_type = VARIANT_WEIGHTLOSS;
 			maintenance_day_count = 0;
 		}
 		else if (fabs(lean_kgs - tgt_lean_kgs) < 0.5) {
+			d.mode = MODE_MAINTAIN;
 			min_protein = maintain_protein;
 			d.variant_type = VARIANT_MAINTENANCE;
 			maintenance_day_count++;
 		}
 		else if (tgt_lean_kgs > lean_kgs) {
-			min_protein = weight * 2.2;
+			d.mode = MODE_MUSCLEGAIN;
+			min_protein = weight * 1.4;
 			d.variant_type = VARIANT_MUSCLEGAIN;
 			maintenance_day_count = 0;
 		}
 		else {
+			d.mode = MODE_MAINTAIN;
 			min_protein = weight * 0.4;
 			d.variant_type = VARIANT_FATTYACIDS;
 			maintenance_day_count = 0;
@@ -300,8 +304,10 @@ bool Profile::UpdatePlan() {
 			d.is_easy_day = false;
 		}
 		
-		if (d.is_easy_day)
+		if (d.is_easy_day) {
+			d.mode = MODE_MAINTAIN;
 			d.variant_type = VARIANT_SCORE;
+		}
 		
 		double calorie_deficit = 1.0 - (d.allowed_calories / d.maintain_calories);
 		max_calorie_deficit = max(calorie_deficit, max_calorie_deficit);
@@ -309,17 +315,20 @@ bool Profile::UpdatePlan() {
 		
 		d.maintain_burned_calories = d.maintain_calories * calorie_deficit;
 		
-		if (walking_dist)
+		if (walking_dist && d.mode != MODE_WEIGHTLOSS)
 			d.walking_burned_calories = conf->GetCaloriesWalkingDistSpeed(weight, walking_dist, walking_speed);
 		else
 			d.walking_burned_calories = 0;
 		
-		if (jogging_dist)
+		if (jogging_dist && d.mode != MODE_WEIGHTLOSS)
 			d.jogging_burned_calories = conf->GetCaloriesJoggingDistSpeed(weight, jogging_dist, jogging_speed);
 		else
 			d.jogging_burned_calories = 0;
 		
-		d.burned_calories = d.maintain_burned_calories + d.walking_burned_calories + d.jogging_burned_calories;
+		if (d.mode == MODE_WEIGHTLOSS || d.mode == MODE_MUSCLEGAIN)
+			d.strength_burned_calories = 600;
+		
+		d.burned_calories = d.maintain_burned_calories + d.walking_burned_calories + d.jogging_burned_calories + d.strength_burned_calories;
 		
 		#if 1
 		double burned_protein_grams = max(-max_lean_gain * 0.26, maintain_protein - (prot_cals / 4.4));
@@ -423,6 +432,7 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	if (day_i < 0)
 		return;
 	const FoodDay& day = storage.days[day_i];
+	const DailyPlan& plan = planned_daily[day_i];
 	
 	auto& wake = s.items.Add();
 	wake.time = Time(s.day.year, s.day.month, s.day.day, conf.waking_hour, conf.waking_minute, 0);
@@ -452,21 +462,22 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	Time exercise_time = wake.time + day_len * 3 / 8;
 	Time muscletraining_time = wake.time + day_len * 4 / 8;
 	
-	if (conf.tgt_walking_dist > 0) {
+	// Cardio decreases muscle more than strength training during weight loss diet
+	if (conf.tgt_walking_dist > 0 && plan.mode != MODE_WEIGHTLOSS) {
 		auto& walk = s.items.Add();
 		walk.time = exercise_time;
 		walk.type = ScheduleToday::WALKING;
 		walk.msg = Format(t_("Go walk  %2n km!"), conf.tgt_walking_dist);
 	}
 	
-	if (conf.tgt_jogging_dist > 0) {
+	if (conf.tgt_jogging_dist > 0 && plan.mode != MODE_WEIGHTLOSS) {
 		auto& jogging = s.items.Add();
 		jogging.time = exercise_time;
 		jogging.type = ScheduleToday::RUNNING;
 		jogging.msg = Format(t_("Go jogging %2n km!"), conf.tgt_jogging_dist);
 	}
 	
-	if (1) {
+	if (plan.mode == MODE_WEIGHTLOSS || plan.mode == MODE_MUSCLEGAIN) {
 		auto& jogging = s.items.Add();
 		jogging.time = muscletraining_time;
 		jogging.type = ScheduleToday::MUSCLETRAINING;

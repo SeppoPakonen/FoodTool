@@ -40,13 +40,13 @@ struct DailyPlan : Moveable<DailyPlan> {
 	double weight, prog;
 	double fat_perc, fat_kgs, lean_kgs;
 	double maintain_calories, allowed_calories, maintain_burned_calories;
-	double walking_burned_calories, jogging_burned_calories, burned_calories;
+	double walking_burned_calories, jogging_burned_calories, strength_burned_calories, burned_calories;
 	double burned_kgs;
 	byte mode, variant_type;
 	bool is_easy_day;
 	
 	void Serialize(Stream& s) {
-		VER(1);
+		VER(2);
 		FOR_VER(0) {
 			s	% date
 				% food
@@ -60,6 +60,7 @@ struct DailyPlan : Moveable<DailyPlan> {
 				;
 		}
 		FOR_VER(1) {s % variant_type;}
+		FOR_VER(2) {s % strength_burned_calories;}
 	}
 };
 
@@ -146,7 +147,6 @@ struct MealPreset : Moveable<MealPreset> {
 		if (key.IsEmpty()) MakeUnique();
 	}
 	void MakeUnique() {key=""; for(int i = 0; i < 8; i++) key.Cat('a' + Random('z' - 'a' + 1));}
-	double GetOptimizerEnergy(const Ingredient& target_sum, const Index<int>& nutr_idx, MealDebugger& dbg);
 	void GetNutritions(Ingredient& ing) const;
 	void UpdateFactors();
 	void MakeVariants();
@@ -184,7 +184,6 @@ struct FoodDay : Moveable<FoodDay> {
 	VectorMap<int, int> removed0;
 	String removed1;
 	
-	double GetOptimizerEnergy();
 	void Serialize(Stream& s) {
 		VER(1);
 		FOR_VER(0) {
