@@ -4,12 +4,12 @@
 DatabaseCtrl::DatabaseCtrl() {
 	CtrlLayout(*this);
 	
-	list_sources.Add("All foods");
-	list_sources.Add("Used foods");
+	list_sources.Add(t_("All foods"));
+	list_sources.Add(t_("Used foods"));
 	list_sources.SetIndex(1);
 	
 	food_list.AddIndex();
-	food_list.AddColumn("Long description");
+	food_list.AddColumn(t_("Long description"));
 	
 	Database& db = DB();
 	for(int i = 0; i < db.food_groups.GetCount(); i++)
@@ -19,8 +19,8 @@ DatabaseCtrl::DatabaseCtrl() {
 	for(int i = 0; i < db.nutr_types.GetCount(); i++)
 		nutr_type.Add(db.nutr_types[i].nutr_desc);
 	
-	nutr_list.AddColumn("Key");
-	nutr_list.AddColumn("Value");
+	nutr_list.AddColumn(t_("Key"));
+	nutr_list.AddColumn(t_("Value"));
 	nutr_list.ColumnWidths("2 1");
 	
 	filter.WhenEnter = THISBACK(Filter);

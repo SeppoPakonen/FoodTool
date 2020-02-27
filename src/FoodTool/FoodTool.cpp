@@ -88,7 +88,7 @@ Image GetSmiley(double progress) {
 
 FoodTool::FoodTool()
 {
-	Title("FoodTool");
+	Title(t_("FoodTool"));
 	Icon(Images::icon);
 	Sizeable().MaximizeBox().MinimizeBox();
 	Maximize();
@@ -96,13 +96,14 @@ FoodTool::FoodTool()
 	AddFrame(menu);
 	menu.Set(THISBACK(MainMenu));
 	
-	Add(updating_lbl.HCenterPos(300).VCenterPos(30));
+	Add(updating_lbl.HCenterPos(500).VCenterPos(30));
 	Add(tabs.SizePos());
 	
 	updating_lbl.Show();
-	updating_lbl.SetLabel("Updating plan and meals...");
+	updating_lbl.SetLabel(t_("Updating plan and meals..."));
 	updating_lbl.SetFont(SansSerif(30*0.8));
 	updating_lbl.SetInk(Color(85, 42, 0));
+	updating_lbl.AlignCenter();
 	
 	today.WhenAlert = THISBACK(SetTodayTab);
 	
@@ -111,28 +112,28 @@ FoodTool::FoodTool()
 	receiptlog.mode = RECEIPTLOG;
 	
 	tabs.Hide();
-	tabs.Add(motivation.SizePos(), "Motivation");
-	tabs.Add(today.SizePos(), "Today");
-	tabs.Add(status.SizePos(), "Status");
-	tabs.Add(nutr.SizePos(), "Daily Nutritions");
-	tabs.Add(fins.SizePos(), "Food Instructions");
-	tabs.Add(activity.SizePos(), "Activity");
-	tabs.Add(graphs.SizePos(), "Graphs");
-	tabs.Add(weight.SizePos(), "Weight");
-	tabs.Add(def.SizePos(), "Nutrient Deficits");
-	tabs.Add(exc.SizePos(), "Exceptions");
-	tabs.Add(notes.SizePos(), "Notes");
-	tabs.Add(db.SizePos(), "Food Database");
-	tabs.Add(preset.SizePos(), "Meal Presets");
-	tabs.Add(supp.SizePos(), "Food Supplements");
-	tabs.Add(wish.SizePos(), "Food Wish-list");
-	tabs.Add(foodlog.SizePos(), "Food Log");
-	tabs.Add(shoplog.SizePos(), "Shop Log");
-	tabs.Add(receiptlog.SizePos(), "Receipt Log");
-	tabs.Add(storage.SizePos(), "Food Storage");
-	tabs.Add(prices.SizePos(), "Prices");
-	tabs.Add(conf.SizePos(), "Configuration");
-	tabs.Add(usage.SizePos(), "Usage");
+	tabs.Add(motivation.SizePos(), t_("Motivation"));
+	tabs.Add(today.SizePos(), t_("Today"));
+	tabs.Add(status.SizePos(), t_("Status"));
+	tabs.Add(nutr.SizePos(), t_("Daily Nutritions"));
+	tabs.Add(fins.SizePos(), t_("Food Instructions"));
+	tabs.Add(activity.SizePos(), t_("Activity"));
+	tabs.Add(graphs.SizePos(), t_("Graphs"));
+	tabs.Add(weight.SizePos(), t_("Weight"));
+	tabs.Add(def.SizePos(), t_("Nutrient Deficits"));
+	tabs.Add(exc.SizePos(), t_("Exceptions"));
+	tabs.Add(notes.SizePos(), t_("Notes"));
+	tabs.Add(db.SizePos(), t_("Food Database"));
+	tabs.Add(preset.SizePos(), t_("Meal Presets"));
+	tabs.Add(supp.SizePos(), t_("Food Supplements"));
+	tabs.Add(wish.SizePos(), t_("Food Wish-list"));
+	tabs.Add(foodlog.SizePos(), t_("Food Log"));
+	tabs.Add(shoplog.SizePos(), t_("Shop Log"));
+	tabs.Add(receiptlog.SizePos(), t_("Receipt Log"));
+	tabs.Add(storage.SizePos(), t_("Food Storage"));
+	tabs.Add(prices.SizePos(), t_("Prices"));
+	tabs.Add(conf.SizePos(), t_("Configuration"));
+	tabs.Add(usage.SizePos(), t_("Usage"));
 	tabs.WhenSet << THISBACK(Data);
 	
 	tc.Set(-500, THISBACK(Data));
@@ -141,9 +142,9 @@ FoodTool::FoodTool()
 }
 
 void FoodTool::MainMenu(Bar& bar) {
-	bar.Sub("App", [this](Bar& bar) {
-		bar.Add("Save Profile", THISBACK(SaveProfile)).Key(K_CTRL_S);
-		bar.Add("Replan", THISBACK(Replan)).Key(K_CTRL_R);
+	bar.Sub(t_("App"), [this](Bar& bar) {
+		bar.Add(t_("Save Profile"), THISBACK(SaveProfile)).Key(K_CTRL_S);
+		bar.Add(t_("Replan"), THISBACK(Replan)).Key(K_CTRL_R);
 	});
 	
 }
@@ -415,7 +416,7 @@ void MotivationCtrl::Paint(Draw& d) {
 		int ydiff = 0;
 		if (lowest_fat_perc) {
 			int days_remaining = lowest_fat_perc - today;
-			String remaining = IntStr(days_remaining) + t_(" days until lowest fat-\%");
+			String remaining = Format(t_("%d days until lowest fat-\%"), days_remaining);
 			if (days_remaining < 30) {
 				fnt = SansSerif(40);
 				remaining << "!!!";
@@ -434,7 +435,7 @@ void MotivationCtrl::Paint(Draw& d) {
 		
 		if (today) {
 			int days_remaining = it - today;
-			String remaining = IntStr(days_remaining) + t_(" days until maintenance");
+			String remaining = Format(t_("%d days until maintenance"), days_remaining);
 			if (days_remaining < 30) {
 				fnt = SansSerif(40);
 				remaining << "!!!";
@@ -1589,7 +1590,7 @@ void MultipurposeGraph::Paint(Draw& d) {
 		}
 	}
 	else {
-		String txt = "Waiting for data";
+		String txt = t_("Waiting for data");
 		Size txt_sz = GetTextSize(txt, fnt);
 		d.DrawText((sz.cx - txt_sz.cx) / 2, (sz.cy - txt_sz.cy) / 2, txt, fnt);
 	}
@@ -1735,10 +1736,10 @@ NutrientDeficitCtrl::NutrientDeficitCtrl() {
 	right.Add(edit.HSizePos().VSizePos(0,30));
 	right.Add(add.BottomPos(0,30).RightPos(0, 200));
 	
-	add.SetLabel("Add");
+	add.SetLabel(t_("Add"));
 	add <<= THISBACK(AddItem);
 	
-	list.AddColumn("Added");
+	list.AddColumn(t_("Added"));
 	list.WhenAction << THISBACK(SelectItem);
 	list.WhenLeftClick << THISBACK(SelectItem);
 }
@@ -1823,31 +1824,31 @@ FoodInstructionCtrl::FoodInstructionCtrl() {
 	vsplit1.Vert() << inglist << nutrlist;
 	
 	list.AddIndex();
-	list.AddColumn("Date");
-	list.AddColumn("Variant");
+	list.AddColumn(t_("Date"));
+	list.AddColumn(t_("Variant"));
 	list <<= THISBACK(SelectDate);
 	
 	meallist.AddIndex();
 	meallist.AddIndex();
 	meallist.AddColumn("#");
-	meallist.AddColumn("Name");
-	meallist.AddColumn("Grams");
+	meallist.AddColumn(t_("Name"));
+	meallist.AddColumn(t_("Grams"));
 	meallist.ColumnWidths("1 5 1");
 	meallist <<= THISBACK(SelectMeal);
 	
 	inglist.AddIndex();
 	inglist.AddIndex();
-	inglist.AddColumn("Ingredient");
-	inglist.AddColumn("Mass (g)");
-	inglist.AddColumn("Energy");
-	inglist.AddColumn("Protein");
-	inglist.AddColumn("Carbs");
-	inglist.AddColumn("Fat");
+	inglist.AddColumn(t_("Ingredient"));
+	inglist.AddColumn(t_("Mass (g)"));
+	inglist.AddColumn(t_("Energy"));
+	inglist.AddColumn(t_("Protein"));
+	inglist.AddColumn(t_("Carbs"));
+	inglist.AddColumn(t_("Fat"));
 	inglist.ColumnWidths("4 1 1 1 1");
 	inglist <<= THISBACK(SelectIngredient);
 	
-	nutrlist.AddColumn("Key");
-	nutrlist.AddColumn("Value");
+	nutrlist.AddColumn(t_("Key"));
+	nutrlist.AddColumn(t_("Value"));
 	
 }
 
@@ -1955,7 +1956,7 @@ void FoodInstructionCtrl::SelectMeal() {
 	ing.ChangeGrams(grams);
 	inglist.Set(row, 0, -1);
 	inglist.Set(row, 1, -1);
-	inglist.Set(row, 2, AttrText("Total").NormalPaper(Color(204, 206, 255)));
+	inglist.Set(row, 2, AttrText(t_("Total")).NormalPaper(Color(204, 206, 255)));
 	inglist.Set(row, 3, ing.grams);
 	inglist.Set(row, 4, Format("%2n", ing.nutr[KCAL]));
 	inglist.Set(row, 5, Format("%2n", ing.nutr[PROT]));
@@ -2003,7 +2004,7 @@ void FoodInstructionCtrl::SelectIngredient() {
 			ing.ChangeGrams(grams);
 		}
 		int row = 0;
-		nutrlist.Set(row, 0, "Mass");
+		nutrlist.Set(row, 0, t_("Mass"));
 		nutrlist.Set(row++, 1, ing.grams);
 		for(int i = 0; i < ing.nutr.GetCount(); i++) {
 			double value = ing.nutr[i];
@@ -2049,27 +2050,27 @@ DailyNutritionsCtrl::DailyNutritionsCtrl() {
 	
 	list.AddIndex();
 	list.AddIndex();
-	list.AddColumn("Date");
-	list.AddColumn("Variant");
-	list.AddColumn("Target kcal");
-	list.AddColumn("Target weight");
-	list.AddColumn("Target protein");
+	list.AddColumn(t_("Date"));
+	list.AddColumn(t_("Variant"));
+	list.AddColumn(t_("Target kcal"));
+	list.AddColumn(t_("Target weight"));
+	list.AddColumn(t_("Target protein"));
 	list.ColumnWidths("2 2 1 1 1");
 	list <<= THISBACK(SelectDate);
 	
-	srclist.AddColumn("Ingredient");
-	srclist.AddColumn("Mass (g)");
-	srclist.AddColumn("Energy");
-	srclist.AddColumn("Protein");
-	srclist.AddColumn("Carbs");
-	srclist.AddColumn("Fat");
+	srclist.AddColumn(t_("Ingredient"));
+	srclist.AddColumn(t_("Mass (g)"));
+	srclist.AddColumn(t_("Energy"));
+	srclist.AddColumn(t_("Protein"));
+	srclist.AddColumn(t_("Carbs"));
+	srclist.AddColumn(t_("Fat"));
 	srclist.ColumnWidths("4 1 1 1 1");
 	srclist <<= THISBACK(SelectSource);
 	
-	nutrlist.AddColumn("Key");
-	nutrlist.AddColumn("Value");
-	nutrlist.AddColumn("Recommended");
-	nutrlist.AddColumn("\% of recommended");
+	nutrlist.AddColumn(t_("Key"));
+	nutrlist.AddColumn(t_("Value"));
+	nutrlist.AddColumn(t_("Recommended"));
+	nutrlist.AddColumn(t_("\% of recommended"));
 	nutrlist.ColumnWidths("3 1 1 1");
 }
 
@@ -2114,9 +2115,9 @@ void DailyNutritionsCtrl::SelectDate() {
 	const FoodDay& day = prof.storage.days[day_i];
 	
 	src.Clear();
-	src.Add("Supplements", day.supplement_sum);
-	src.Add("Food", day.food_sum);
-	src.Add("Total", day.total_sum);
+	src.Add(t_("Supplements"), day.supplement_sum);
+	src.Add(t_("Food"), day.food_sum);
+	src.Add(t_("Total"), day.total_sum);
 	
 	for(int i = 0; i < src.GetCount(); i++) {
 		const Ingredient& ing = src[i];
@@ -2155,7 +2156,7 @@ void DailyNutritionsCtrl::SelectSource() {
 		}
 		
 		int row = 0;
-		nutrlist.Set(row, 0, "Mass");
+		nutrlist.Set(row, 0, t_("Mass"));
 		nutrlist.Set(row++, 1, Format("%2n", ing.grams));
 		for(const NutritionRecommendation& recom : db.nutr_recom) {
 			double value = values.Get(recom.nutr_no, 0);
@@ -2188,23 +2189,23 @@ void DailyNutritionsCtrl::SelectSource() {
 SupplementCtrl::SupplementCtrl() {
 	CtrlLayout(*this);
 	
-	nutrlist.AddColumn("Nutrition");
-	nutrlist.AddColumn("Recommendation");
-	nutrlist.AddColumn("Weight-Loss");
-	nutrlist.AddColumn("Maintenance");
+	nutrlist.AddColumn(t_("Nutrition"));
+	nutrlist.AddColumn(t_("Recommendation"));
+	nutrlist.AddColumn(t_("Weight-Loss"));
+	nutrlist.AddColumn(t_("Maintenance"));
 	nutrlist.ColumnWidths("4 1 1 1");
 	nutrlist <<= THISBACK(SelectNutrition);
 	
 	usedlist.AddIndex();
-	usedlist.AddColumn("Food Name");
-	usedlist.AddColumn("Value /100g");
-	usedlist.AddColumn("\% of recommendation");
+	usedlist.AddColumn(t_("Food Name"));
+	usedlist.AddColumn(t_("Value /100g"));
+	usedlist.AddColumn(t_("\% of recommendation"));
 	usedlist.ColumnWidths("4 1 1");
 	
 	foodlist.AddIndex();
-	foodlist.AddColumn("Food Name");
-	foodlist.AddColumn("Value /100g");
-	foodlist.AddColumn("\% of recommendation");
+	foodlist.AddColumn(t_("Food Name"));
+	foodlist.AddColumn(t_("Value /100g"));
+	foodlist.AddColumn(t_("\% of recommendation"));
 	foodlist.ColumnWidths("4 1 1");
 	
 	add <<= THISBACK(AddFood);
@@ -2357,13 +2358,13 @@ FoodWishCtrl::FoodWishCtrl() {
 	vsplit << list << ingredients;
 	
 	list.AddIndex();
-	list.AddColumn("Preset");
-	list.AddColumn("Score (0-10)");
+	list.AddColumn(t_("Preset"));
+	list.AddColumn(t_("Score (0-10)"));
 	list.ColumnWidths("4 1");
 	list <<= THISBACK(SelectIngredient);
 	
-	ingredients.AddColumn("Ingredient");
-	ingredients.AddColumn("Average mass");
+	ingredients.AddColumn(t_("Ingredient"));
+	ingredients.AddColumn(t_("Average mass"));
 	ingredients.ColumnWidths("3 1");
 }
 
@@ -2455,28 +2456,28 @@ FoodLogCtrl::FoodLogCtrl() {
 	vsplit.Vert() << queue << history;
 	
 	queue.AddIndex();
-	queue.AddColumn("Queue Time");
-	queue.AddColumn("Products");
-	queue.AddColumn("Price");
+	queue.AddColumn(t_("Queue Time"));
+	queue.AddColumn(t_("Products"));
+	queue.AddColumn(t_("Price"));
 	queue.ColumnWidths("2 1 1");
 	queue.WhenAction = THISBACK(SelectQueue);
 	queue.WhenLeftClick = THISBACK(SelectQueue);
 	
 	history.AddIndex();
-	history.AddColumn("History Time");
-	history.AddColumn("Products");
-	history.AddColumn("Price");
+	history.AddColumn(t_("History Time"));
+	history.AddColumn(t_("Products"));
+	history.AddColumn(t_("Price"));
 	history.ColumnWidths("2 1 1");
 	history.WhenAction = THISBACK(SelectHistory);
 	history.WhenLeftClick = THISBACK(SelectHistory);
 	
 	products.list.AddIndex();
-	products.list.AddColumn("Food");
-	products.list.AddColumn("Grams");
-	products.list.AddColumn("Servings");
-	products.list.AddColumn("Batch Size");
-	products.list.AddColumn("Price (EUR)");
-	products.list.AddColumn("Shop");
+	products.list.AddColumn(t_("Food"));
+	products.list.AddColumn(t_("Grams"));
+	products.list.AddColumn(t_("Servings"));
+	products.list.AddColumn(t_("Batch Size"));
+	products.list.AddColumn(t_("Price (EUR)"));
+	products.list.AddColumn(t_("Shop"));
 	
 	products.store.WhenEnter = THISBACK(ApplyStore);
 	products.showportable <<= THISBACK(ShowPortableList);
@@ -2780,7 +2781,7 @@ void FoodLogCtrl::Load(const FoodPrice& p) {
 
 PortableListCtrl::PortableListCtrl() {
 	SetRect(0,0,480,640);
-	Title("Portable List");
+	Title(t_("Portable List"));
 	Sizeable().MaximizeBox().MinimizeBox();
 	
 	
@@ -2834,20 +2835,20 @@ PriceCtrl::PriceCtrl() {
 	hsplit.Horz() << foodlist << history;
 	
 	foodlist.AddIndex();
-	foodlist.AddColumn("Food name");
-	foodlist.AddColumn("Latest quote age");
-	foodlist.AddColumn("Latest price");
-	foodlist.AddColumn("Used by meals");
+	foodlist.AddColumn(t_("Food name"));
+	foodlist.AddColumn(t_("Latest quote age"));
+	foodlist.AddColumn(t_("Latest price"));
+	foodlist.AddColumn(t_("Used by meals"));
 	foodlist.ColumnWidths("3 1 1 2");
 	foodlist <<= THISBACK(SelectFood);
 	
 	history.list.AddIndex();
-	history.list.AddColumn("Time");
-	history.list.AddColumn("Grams");
-	history.list.AddColumn("Servings");
-	history.list.AddColumn("Batch Size");
-	history.list.AddColumn("Price (EUR)");
-	history.list.AddColumn("Shop");
+	history.list.AddColumn(t_("Time"));
+	history.list.AddColumn(t_("Grams"));
+	history.list.AddColumn(t_("Servings"));
+	history.list.AddColumn(t_("Batch Size"));
+	history.list.AddColumn(t_("Price (EUR)"));
+	history.list.AddColumn(t_("Shop"));
 	history.add <<= THISBACK(Add);
 	
 }

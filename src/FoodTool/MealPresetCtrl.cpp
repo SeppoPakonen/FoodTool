@@ -3,36 +3,36 @@
 MealPresetCtrl::MealPresetCtrl() {
 	CtrlLayout(*this);
 	
-	list_sources.Add("All foods");
-	list_sources.Add("Used foods");
+	list_sources.Add(t_("All foods"));
+	list_sources.Add(t_("Used foods"));
 	list_sources.SetIndex(1);
 	list_sources <<= THISBACK(Filter);
 	
 	list.AddIndex();
-	list.AddColumn("Name");
-	list.AddColumn("Mass");
-	list.AddColumn("Taste");
-	list.AddColumn("Score");
+	list.AddColumn(t_("Name"));
+	list.AddColumn(t_("Mass"));
+	list.AddColumn(t_("Taste"));
+	list.AddColumn(t_("Score"));
 	list.ColumnWidths("3 1 1 1");
 	list.WhenAction = THISBACK(SelectPreset);
 	list.WhenLeftClick = THISBACK(SelectPreset);
 	
-	variants.AddColumn("Variant");
-	variants.AddColumn("Mass");
-	variants.AddColumn("Taste");
-	variants.AddColumn("Score");
+	variants.AddColumn(t_("Variant"));
+	variants.AddColumn(t_("Mass"));
+	variants.AddColumn(t_("Taste"));
+	variants.AddColumn(t_("Score"));
 	variants.ColumnWidths("3 1 1 1");
 	variants.WhenAction = THISBACK(SelectPreset);
 	variants.WhenLeftClick = THISBACK(SelectPreset);
 	
-	inglist.AddColumn("Name");
-	inglist.AddColumn("Min (g)");
-	inglist.AddColumn("Max (g)");
-	inglist.AddColumn("Variant");
+	inglist.AddColumn(t_("Name"));
+	inglist.AddColumn(t_("Min (g)"));
+	inglist.AddColumn(t_("Max (g)"));
+	inglist.AddColumn(t_("Variant"));
 	inglist.ColumnWidths("3 1 1 1");
 	
 	food_list.AddIndex();
-	food_list.AddColumn("Long description");
+	food_list.AddColumn(t_("Long description"));
 	
 	name <<= THISBACK(PresetChanged);
 	instructions <<= THISBACK(PresetChanged);

@@ -2,28 +2,28 @@
 
 String GetNutrientDeficitElement(int i) {
 	switch (i) {
-		case DEF_CALCIUM: return "Calcium";
-		case DEF_MAGNESIUM: return "Magnesium";
-		case DEF_SODIUM: return "Sodium";
-		case DEF_POTASSIUM: return "Potassium";
-		case DEF_COPPER: return "Copper";
-		case DEF_ZINC: return "Zinc";
-		case DEF_MANGANESE: return "Manganese";
-		case DEF_CHROMIUM: return "Chromium";
-		case DEF_VANADIUM: return "Vanadium";
-		case DEF_MOLYBDENUM: return "Molybdenum";
-		case DEF_BORON: return "Boron";
-		case DEF_IODINE: return "Iodine";
-		case DEF_LITHIUM: return "Lithium";
-		case DEF_PHOSPHORUS: return "Phosphorus";
-		case DEF_SELENIUM: return "Selenium";
-		case DEF_STRONTIUM: return "Strontium";
-		case DEF_SULFUR: return "Sulfur";
-		case DEF_COBALT: return "Cobalt";
-		case DEF_IRON: return "Iron";
-		case DEF_GERMANIUM: return "Germanium";
-		case DEF_RUBIDIUM: return "Rubidium";
-		case DEF_ZIRCONIUM: return "Zirconium";
+		case DEF_CALCIUM: return t_("Calcium");
+		case DEF_MAGNESIUM: return t_("Magnesium");
+		case DEF_SODIUM: return t_("Sodium");
+		case DEF_POTASSIUM: return t_("Potassium");
+		case DEF_COPPER: return t_("Copper");
+		case DEF_ZINC: return t_("Zinc");
+		case DEF_MANGANESE: return t_("Manganese");
+		case DEF_CHROMIUM: return t_("Chromium");
+		case DEF_VANADIUM: return t_("Vanadium");
+		case DEF_MOLYBDENUM: return t_("Molybdenum");
+		case DEF_BORON: return t_("Boron");
+		case DEF_IODINE: return t_("Iodine");
+		case DEF_LITHIUM: return t_("Lithium");
+		case DEF_PHOSPHORUS: return t_("Phosphorus");
+		case DEF_SELENIUM: return t_("Selenium");
+		case DEF_STRONTIUM: return t_("Strontium");
+		case DEF_SULFUR: return t_("Sulfur");
+		case DEF_COBALT: return t_("Cobalt");
+		case DEF_IRON: return t_("Iron");
+		case DEF_GERMANIUM: return t_("Germanium");
+		case DEF_RUBIDIUM: return t_("Rubidium");
+		case DEF_ZIRCONIUM: return t_("Zirconium");
 		default: return "<Invalid element id>";
 	}
 }
@@ -160,12 +160,12 @@ void NutrientDeficitEdit::Paint(Draw& d) {
 	d.DrawLine(x975, ry, x975, sz.cy, 1, GrayColor());
 	
 	Font fnt = SansSerif(ystep * 0.80);
-	d.DrawText(5, 0, "Your mineral levels", fnt, Black());
-	DrawTextCentered(d, x25, 0, "2.5th", fnt, Black());
-	DrawTextCentered(d, x160, 0, "16th", fnt, Black());
-	DrawTextCentered(d, x500, 0, "50th", fnt, Black());
-	DrawTextCentered(d, x840, 0, "84th", fnt, Black());
-	DrawTextCentered(d, x975, 0, "97.5th", fnt, Black());
+	d.DrawText(5, 0, t_("Your mineral levels"), fnt, Black());
+	DrawTextCentered(d, x25, 0, t_("2.5th"), fnt, Black());
+	DrawTextCentered(d, x160, 0, t_("16th"), fnt, Black());
+	DrawTextCentered(d, x500, 0, t_("50th"), fnt, Black());
+	DrawTextCentered(d, x840, 0, t_("84th"), fnt, Black());
+	DrawTextCentered(d, x975, 0, t_("97.5th"), fnt, Black());
 	
 	for(int i = 1; i < rows; i++) {
 		int y = i * ystep;

@@ -47,8 +47,8 @@ class Optimizer {
 	int64 idum2;
 	int64 iy;
 	Vector<int64> iv;
-	int max_value = 100;
-	int min_value = -100;
+	double max_value = 100;
+	double min_value = -100;
 	
 	
 	

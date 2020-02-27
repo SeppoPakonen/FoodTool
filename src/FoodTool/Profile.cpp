@@ -494,7 +494,7 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 		auto& walk = s.items.Add();
 		walk.time = exercise_time;
 		walk.type = ScheduleToday::WALKING;
-		walk.msg = Format(t_("Go walk  %2n km!"), conf.tgt_walking_dist);
+		walk.msg = Format(t_("Go walk %2n km!"), conf.tgt_walking_dist);
 	}
 	
 	if (conf.tgt_jogging_dist > 0 && plan.mode != MODE_WEIGHTLOSS) {
@@ -810,11 +810,11 @@ void FoodPriceQuote::SetPriceless(Time time, double grams) {
 
 String GetSnapshotSourceString(int i) {
 	switch(i) {
-		case SNAPSRC_USER: return "User";
-		case SNAPSRC_FOODLOG: return "Food Log";
-		case SNAPSRC_SHOPLOG: return "Shop Log";
-		case SNAPSRC_RECEIPTLOG: return "Receipt Log";
-		default: return "Invalid Source";
+		case SNAPSRC_USER: return t_("User");
+		case SNAPSRC_FOODLOG: return t_("Food Log");
+		case SNAPSRC_SHOPLOG: return t_("Shop Log");
+		case SNAPSRC_RECEIPTLOG: return t_("Receipt Log");
+		default: return t_("Invalid Source");
 	}
 }
 

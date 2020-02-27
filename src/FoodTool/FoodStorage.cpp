@@ -234,10 +234,10 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 		}
 	}
 	
-	day.preparation << "Kcals/day: " << day.total_sum.nutr[KCAL] << "\n";
-	day.preparation << "Fat g/day: " << day.total_sum.nutr[FAT] << "\n";
-	day.preparation << "Protein g/day: " << day.total_sum.nutr[PROT] << "\n";
-	day.preparation << "Carbs g/day: " << day.total_sum.nutr[CARB] << "\n";
+	day.preparation << t_("Kcals/day: ") << day.total_sum.nutr[KCAL] << "\n";
+	day.preparation << t_("Fat g/day: ") << day.total_sum.nutr[FAT] << "\n";
+	day.preparation << t_("Protein g/day: ") << day.total_sum.nutr[PROT] << "\n";
+	day.preparation << t_("Carbs g/day: ") << day.total_sum.nutr[CARB] << "\n";
 	
 	static int nutrilet_i;
 	if (!nutrilet_i)
@@ -254,7 +254,7 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 			//if (ni.nutr_no == KCAL || ni.nutr_no == FAT || ni.nutr_no == PROT) continue;
 			av.Add(ratio);
 		}
-		day.preparation << Format("Nutrilet factor: %2n", av.GetMean()) << "\n";
+		day.preparation << Format(t_("Nutrilet factor: %2n"), av.GetMean()) << "\n";
 	}
 }
 
@@ -580,7 +580,7 @@ void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day, double target_kc
 			m.grams = portion_grams;
 			m.key = mp.key;
 		}
-		day.menu << "Food #" << i+1 << ": " << mp.name << "\n" << meals.GetCount() << " * " << (int)portion_grams << " grams\n\n";
+		day.menu << Format(t_("Food #%d: %s %d * %d grams\n\n"), i+1, mp.name, meals.GetCount(), (int)portion_grams);
 		
 		double mul = mealtype_grams / ing.grams;
 		for(int j = 0; j < var.ingredients.GetCount(); j++) {

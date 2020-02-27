@@ -4,7 +4,7 @@
 
 
 ProfileCreator::ProfileCreator() {
-	Title("FoodTool first start wizard");
+	Title(t_("FoodTool first start wizard"));
 	Icon(Images::icon);
 	
 	CtrlLayout(tab0);

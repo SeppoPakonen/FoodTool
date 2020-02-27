@@ -23,14 +23,14 @@ enum {
 
 inline String GetVariantString(int i) {
 	switch (i) {
-		case VARIANT_SCORE:       return "Score";
-		case VARIANT_EASIEST:     return "Easiest";
-		case VARIANT_AMINOACIDS:  return "Amino Acids";
-		case VARIANT_FATTYACIDS:  return "Fatty Acids";
-		case VARIANT_WEIGHTLOSS:  return "Weight Loss";
-		case VARIANT_MUSCLEGAIN:  return "Muscle Gain";
-		case VARIANT_MAINTENANCE: return "Maintenance";
-		default: return "Invalid variant";
+		case VARIANT_SCORE:       return t_("Score");
+		case VARIANT_EASIEST:     return t_("Easiest");
+		case VARIANT_AMINOACIDS:  return t_("Amino Acids");
+		case VARIANT_FATTYACIDS:  return t_("Fatty Acids");
+		case VARIANT_WEIGHTLOSS:  return t_("Weight Loss");
+		case VARIANT_MUSCLEGAIN:  return t_("Muscle Gain");
+		case VARIANT_MAINTENANCE: return t_("Maintenance");
+		default: return t_("Invalid variant");
 	};
 }
 

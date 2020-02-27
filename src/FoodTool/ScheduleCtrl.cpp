@@ -107,8 +107,8 @@ void ScheduleCtrl::Paint(Draw& d) {
 			if (day.is_shopping) {
 				Font fnt = SansSerif(shop_h * 0.8);
 				DrawGradientVert(d, RectC(x, y, gw, shop_h), shop_clr_top, shop_clr_btm);
-				d.DrawText(x+xpad+2, y+2, "Groceries", fnt, Black());
-				d.DrawText(x+xpad, y, "Groceries", fnt, White());
+				d.DrawText(x+xpad+2, y+2, t_("Groceries"), fnt, Black());
+				d.DrawText(x+xpad, y, t_("Groceries"), fnt, White());
 				y += shop_h;
 			}
 			

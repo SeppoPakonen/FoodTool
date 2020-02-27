@@ -19,23 +19,23 @@ WeightCtrl::WeightCtrl() {
 	
 	Thread::Start(THISBACK(UpdateCameraCount));
 	
-	edit.sentiment.Add("Worst");
-	edit.sentiment.Add("Bad");
-	edit.sentiment.Add("Normal");
-	edit.sentiment.Add("Good");
-	edit.sentiment.Add("Best");
+	edit.sentiment.Add(t_("Worst"));
+	edit.sentiment.Add(t_("Bad"));
+	edit.sentiment.Add(t_("Normal"));
+	edit.sentiment.Add(t_("Good"));
+	edit.sentiment.Add(t_("Best"));
 	
-	edit.health.Add("Worst");
-	edit.health.Add("Bad");
-	edit.health.Add("Normal");
-	edit.health.Add("Good");
-	edit.health.Add("Best");
+	edit.health.Add(t_("Worst"));
+	edit.health.Add(t_("Bad"));
+	edit.health.Add(t_("Normal"));
+	edit.health.Add(t_("Good"));
+	edit.health.Add(t_("Best"));
 	
-	edit.workload.Add("Lowest");
-	edit.workload.Add("Low");
-	edit.workload.Add("Normal");
-	edit.workload.Add("High");
-	edit.workload.Add("Highest");
+	edit.workload.Add(t_("Lowest"));
+	edit.workload.Add(t_("Low"));
+	edit.workload.Add(t_("Normal"));
+	edit.workload.Add(t_("High"));
+	edit.workload.Add(t_("Highest"));
 	
 	edit.capture_images <<= THISBACK(CaptureImages);
 	edit.preview_cam <<= THISBACK(PreviewCamera);
@@ -55,7 +55,7 @@ void WeightCtrl::UpdateCameraCount() {
 
 void WeightCtrl::UpdateCameraList() {
 	for(int i = 0; i < last_camera_count; i++)
-		edit.cameras.Add(t_("Source #") + IntStr(i));
+		edit.cameras.Add(Format(t_("Source #%d"), i));
 	
 	if (edit.cameras.GetCount())
 		edit.cameras.SetIndex(last_camera_i);
@@ -146,6 +146,7 @@ void WeightCtrl::SelectWeightStat() {
 	edit.buttocks.SetData(w.buttocks);
 	edit.thigh.SetData(w.thigh);
 	edit.leg.SetData(w.leg);
+	edit.user.SetData(w.user_defined0);
 	
 	time = w.added;
 	UpdateSmiley();
@@ -199,6 +200,7 @@ void WeightCtrl::SetWeightStat(WeightLossStat& w) {
 	w.buttocks = (double)edit.buttocks.GetData();
 	w.thigh = (double)edit.thigh.GetData();
 	w.leg = (double)edit.leg.GetData();
+	w.user_defined0 = (double)edit.user.GetData();
 	double tgt_weight = GetTargetWeight(conf.height);
 	w.prog = 1.0 - fabs(w.weight - tgt_weight) / fabs(prof.weights[0].weight - tgt_weight);
 	

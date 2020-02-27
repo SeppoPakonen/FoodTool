@@ -3,906 +3,1213 @@
 #endif
 // FoodTool.cpp
 
-T_(" days until lowest fat-%")
-fiFI("")
+T_("FoodTool")
+fiFI("Ruokaty\303\266kalu")
 
-T_(" days until maintenance")
-fiFI("")
+T_("Updating plan and meals...")
+fiFI("P\303\244ivitet\303\244\303\244n suunnitelmaa ja aterioita...")
 
-T_("Add new")
-fiFI("")
+T_("Motivation")
+fiFI("Motivointi")
 
-T_("Added")
-fiFI("")
+T_("Today")
+fiFI("T\303\244n\303\244\303\244n")
 
-T_("Begin")
-fiFI("")
+T_("Status")
+fiFI("Tila")
 
-T_("Days")
-fiFI("")
+T_("Daily Nutritions")
+fiFI("P\303\244ivitt\303\244iset ravinto")
 
-T_("Deficit")
-fiFI("")
+T_("Food Instructions")
+fiFI("Ruokaohjeet")
 
-T_("Reason")
-fiFI("")
+T_("Activity")
+fiFI("Aktiivisuus")
 
-T_("Title")
-fiFI("")
-
-T_("End")
-fiFI("")
-
-T_("Minutes")
-fiFI("")
-
-T_("You have used this program for %d minutes.")
-fiFI("")
-
-T_("Type")
-fiFI("")
-
-T_("Planned weight")
-fiFI("")
-
-T_("Lean body weight")
-fiFI("")
-
-T_("Fat body weight")
-fiFI("")
+T_("Graphs")
+fiFI("Kuvaajat")
 
 T_("Weight")
-fiFI("")
+fiFI("Paino")
+
+T_("Nutrient Deficits")
+fiFI("Ravintopuutteet")
+
+T_("Exceptions")
+fiFI("Poikkeukset")
+
+T_("Notes")
+fiFI("Muistiinpanot")
+
+T_("Food Database")
+fiFI("Ruokatietokanta")
+
+T_("Meal Presets")
+fiFI("Ateria-esiasetukset")
+
+T_("Food Supplements")
+fiFI("Lis\303\244ravinteet")
+
+T_("Food Wish-list")
+fiFI("Toivelista")
+
+T_("Food Log")
+fiFI("Ruokaloki")
+
+T_("Shop Log")
+fiFI("Kauppaloki")
+
+T_("Receipt Log")
+fiFI("Kuittiloki")
+
+T_("Food Storage")
+fiFI("Ruokavarasto")
+
+T_("Prices")
+fiFI("Hinnat")
+
+T_("Configuration")
+fiFI("Asetukset")
+
+T_("Usage")
+fiFI("K\303\244ytt\303\266")
+
+T_("App")
+fiFI("Ohjelma")
+
+T_("Save Profile")
+fiFI("Tallenna profiili")
+
+T_("Replan")
+fiFI("Suunnittele uudelleen")
+
+T_("%d days until lowest fat-%")
+fiFI("%d p\303\244iv\303\244\303\244 kunnes alin rasvaprosentti")
+
+T_("%d days until maintenance")
+fiFI("%d p\303\244iv\303\244\303\244 kunnes yll\303\244pitoa")
+
+T_("Add new")
+fiFI("Lis\303\244\303\244 uusi")
+
+T_("Added")
+fiFI("Lis\303\244tty")
+
+T_("Begin")
+fiFI("Aloitus")
+
+T_("Days")
+fiFI("P\303\244ivi\303\244")
+
+T_("Deficit")
+fiFI("Vajaus")
+
+T_("Reason")
+fiFI("Syy")
+
+T_("Title")
+fiFI("Otsikko")
+
+T_("End")
+fiFI("Lopetus")
+
+T_("Minutes")
+fiFI("Minuuttia")
+
+T_("You have used this program for %d minutes.")
+fiFI("Olet k\303\244ytt\303\244nyt t\303\244t\303\244 ohjelmaa %d minuuttia.")
+
+T_("Type")
+fiFI("Tyyppi")
+
+T_("Planned weight")
+fiFI("Suunniteltu paino")
+
+T_("Lean body weight")
+fiFI("Rasvattoman lihaksen paino")
+
+T_("Fat body weight")
+fiFI("Rasvaisen kehon paino")
 
 T_("Planned calories")
-fiFI("")
+fiFI("Suunniteltu kalorim\303\244\303\244r\303\244")
 
 T_("Maintain calories")
-fiFI("")
+fiFI("Yll\303\244pitokalorit")
 
 T_("Burned calories")
-fiFI("")
+fiFI("Poltetut kalorit")
 
 T_("Allowed calories")
-fiFI("")
+fiFI("Sallitut kalorit")
 
 T_("Planned burned weight")
-fiFI("")
+fiFI("Suunniteltu painonpudotus")
 
 T_("Burned mass")
-fiFI("")
+fiFI("Laihdutettu m\303\244\303\244r\303\244")
 
 T_("Planned macronutrients")
-fiFI("")
+fiFI("Suunniteltu makroravinto")
 
 T_("Fat mass")
-fiFI("")
+fiFI("Rasvan m\303\244\303\244r\303\244")
 
 T_("Carbohydrate mass")
-fiFI("")
+fiFI("Hiilihydraattien m\303\244\303\244r\303\244")
 
 T_("Protein mass")
-fiFI("")
+fiFI("Proteiinin m\303\244\303\244r\303\244")
 
 T_("Menu calories")
-fiFI("")
+fiFI("Ruokalistan kalorit")
 
 T_("Eaten calories")
-fiFI("")
+fiFI("Sy\303\266dyt kalorit")
 
 T_("Menu food mass")
-fiFI("")
+fiFI("Ruokalistan ruuan m\303\244\303\244r\303\244")
 
 T_("Planned mass")
-fiFI("")
+fiFI("Suunnniteltu m\303\244\303\244r\303\244")
 
 T_("Eaten mass")
-fiFI("")
+fiFI("Sy\303\266ty m\303\244\303\244r\303\244")
 
 T_("Menu macronutrients")
-fiFI("")
+fiFI("Ruokalistan makroravinnot")
 
 T_("Planned fat mass")
-fiFI("")
+fiFI("Suunniteltu rasvan m\303\244\303\244r\303\244")
 
 T_("Planned carbohydrate mass")
-fiFI("")
+fiFI("Suunniteltu hiilihydraattien m\303\244\303\244r\303\244")
 
 T_("Planned protein mass")
-fiFI("")
+fiFI("Suunniteltu proteiinin m\303\244\303\244r\303\244")
 
 T_("Eaten fat mass")
-fiFI("")
+fiFI("Sy\303\266dyn rasvan m\303\244\303\244r\303\244")
 
 T_("Eaten carbohydrate mass")
-fiFI("")
+fiFI("Sy\303\266dyn hiilihydraatin m\303\244\303\244r\303\244")
 
 T_("Eaten protein mass")
-fiFI("")
+fiFI("Sy\303\266dyn proteiinin m\303\244\303\244r\303\244")
 
 T_("Menu sodium (salt)")
-fiFI("")
+fiFI("Ruokalistan natrium (suola)")
 
 T_("Planned sodium")
-fiFI("")
+fiFI("Suunniteltu natrium")
 
 T_("Eaten sodium")
-fiFI("")
+fiFI("Sy\303\266ty natrium")
 
 T_("Menu vitamins (% of recommended)")
-fiFI("")
+fiFI("Ruokalistan vitamiinit (% suositellusta)")
 
 T_("Menu essential amino acids (% of recommended)")
-fiFI("")
+fiFI("Ruokalistan v\303\244ltt\303\244m\303\244tt\303\266m\303\244t aminohapot "
+     "(% suositellusta)")
 
 T_("Histidine")
-fiFI("")
+fiFI("Histidiini")
 
 T_("Isoleucine")
-fiFI("")
+fiFI("Isoleusiini")
 
 T_("Leucine")
-fiFI("")
+fiFI("Leusiini")
 
 T_("Lysine")
-fiFI("")
+fiFI("Lysiini")
 
 T_("Methionine")
-fiFI("")
+fiFI("Metioniini")
 
 T_("Phenylalanine")
-fiFI("")
+fiFI("Fenyylialaniini")
 
 T_("Threonine")
-fiFI("")
+fiFI("Treoniini")
 
 T_("Tryptophan")
-fiFI("")
+fiFI("Tryptofaani")
 
 T_("Valine")
-fiFI("")
+fiFI("Valiini")
 
 T_("Arginine")
-fiFI("")
+fiFI("Arginiini")
 
 T_("Glutamine")
-fiFI("")
+fiFI("Glutamiini")
 
 T_("Glycine")
-fiFI("")
+fiFI("Glysiini")
 
 T_("Proline")
-fiFI("")
+fiFI("Proliini")
 
 T_("Tyrosine")
-fiFI("")
+fiFI("Tyrosiini")
 
 T_("Menu essential minerals (% of recommended)")
-fiFI("")
+fiFI("Ruokalistan v\303\244ltt\303\244m\303\244tt\303\266m\303\244t mineraalit "
+     "(% suositellusta)")
 
 T_("Potassium")
-fiFI("")
+fiFI("Kalium")
 
 T_("Sodium")
-fiFI("")
+fiFI("Natrium")
 
 T_("Calcium")
-fiFI("")
+fiFI("Kalsium")
 
 T_("Phosphorus")
-fiFI("")
+fiFI("Fosfori")
 
 T_("Magnesium")
-fiFI("")
+fiFI("Magnesium")
 
 T_("Iron")
-fiFI("")
+fiFI("Rauta")
 
 T_("Zinc")
-fiFI("")
+fiFI("Sinkki")
 
 T_("Manganese")
-fiFI("")
+fiFI("Mangaani")
 
 T_("Copper")
-fiFI("")
+fiFI("Kupari")
 
 T_("Selenium")
-fiFI("")
+fiFI("Seleeni")
 
 T_("Menu essential fatty acids (% of recommended)")
-fiFI("")
+fiFI("Ruokalistan v\303\244ltt\303\244m\303\244tt\303\266m\303\244t rasvahapot "
+     "(% suositellusta)")
 
 T_("Cholesterol")
-fiFI("")
+fiFI("Kolesterooli")
 
 T_("Fatty acids, total trans")
-fiFI("")
+fiFI("Rasvahapot, trans yhteens\303\244")
 
 T_("Fatty acids, total saturated")
-fiFI("")
+fiFI("Rasvahapot, tyydyttyneit\303\244 yhteens\303\244")
 
 T_("Fatty acids, total monounsaturated")
-fiFI("")
+fiFI("Rasvahapot, kertatyydyttym\303\244tt\303\266mi\303\244 yhteens\303\244")
 
 T_("Fatty acids, total polyunsaturated")
-fiFI("")
+fiFI("Rasvahapot, monityydyttym\303\244tt\303\266mi\303\244 yhteens\303\244")
 
 T_("Fatty acids, total trans-monoenoic")
-fiFI("")
+fiFI("Rasvahapot, trans-monoenoic yhteens\303\244")
 
 T_("Fatty acids, total trans-polyenoic")
-fiFI("")
+fiFI("Rasvahapot, trans-polyenoic yhteens\303\244")
 
 T_("Menu essential other (% of recommended)")
-fiFI("")
+fiFI("Ruokalistan v\303\244ltt\303\244m\303\244tt\303\266m\303\244t muut (% "
+     "suositellusta)")
 
 T_("Choline")
-fiFI("")
+fiFI("Koliini")
 
 T_("Fiber")
-fiFI("")
+fiFI("Kuitu")
 
 T_("Menu electrolytes (% of recommended)")
-fiFI("")
+fiFI("Ruokalistan elektrolyytit (% suositellusta)")
 
 T_("Measured weight (kg)")
-fiFI("")
+fiFI("Mitattu paino (kg)")
 
 T_("Weight (kg)")
-fiFI("")
+fiFI("Paino (kg)")
 
 T_("Measured fat (kg)")
-fiFI("")
+fiFI("Mitattu rasva (kg)")
 
 T_("Fat (kg)")
-fiFI("")
+fiFI("Rasva (kg)")
 
 T_("Measured liquid (kg)")
-fiFI("")
+fiFI("Mitattu neste (kg)")
 
 T_("Liquid (kg)")
-fiFI("")
+fiFI("Neste (kg)")
 
 T_("Measured muscle (kg)")
-fiFI("")
+fiFI("Mitattu lihas (kg)")
 
 T_("Muscle (kg)")
-fiFI("")
+fiFI("Lihas (kg)")
 
 T_("Measured internals (kg)")
-fiFI("")
+fiFI("Mitatut sis\303\244elimet (kg)")
 
 T_("Internals (kg)")
-fiFI("")
+fiFI("Sis\303\244elimet (kg)")
 
 T_("Measured fat (%)")
-fiFI("")
+fiFI("Mitattu rasva (%)")
 
 T_("Fat (%)")
-fiFI("")
+fiFI("Rasva (%)")
 
 T_("Measured liquid (%)")
-fiFI("")
+fiFI("Mitattu neste (%)")
 
 T_("Liquid (%)")
-fiFI("")
+fiFI("Neste (%)")
 
 T_("Measured muscle (%)")
-fiFI("")
+fiFI("Mitattu lihas (%)")
 
 T_("Muscle (%)")
-fiFI("")
+fiFI("Lihas (%)")
 
 T_("Measured internals (%)")
-fiFI("")
+fiFI("Mitatut sis\303\244elimet (%)")
 
 T_("Internals (%)")
-fiFI("")
+fiFI("Sis\303\244elimet (%)")
 
 T_("Relative liquid (%)")
-fiFI("")
+fiFI("Suhteellinen neste (%)")
 
 T_("Measured BMI")
-fiFI("")
+fiFI("Mitattu painoindeksi")
 
 T_("BMI")
-fiFI("")
+fiFI("Painoindeksi")
 
 T_("Measured neck circumference")
-fiFI("")
+fiFI("Mitattu kaulan ymp\303\244rysmitta")
 
 T_("Neck circumference")
-fiFI("")
+fiFI("Kaulan ymp\303\244rysmitta")
 
 T_("Measured bicep circumference")
-fiFI("")
+fiFI("Mitattu hauksen ymp\303\244rysmitta")
 
 T_("Bicep circumference")
-fiFI("")
+fiFI("Hauiksen ymp\303\244rysmitta")
 
 T_("Measured forearm circumference")
-fiFI("")
+fiFI("Mitattu kyyn\303\244rvarren ymp\303\244rysmitta")
 
 T_("Forearm circumference")
-fiFI("")
+fiFI("Kyyn\303\244rvarren ymp\303\244rysmitta")
 
 T_("Measured chest circumference")
-fiFI("")
+fiFI("Mitattu rinnan ymp\303\244rysmitta")
 
 T_("Chest circumference")
-fiFI("")
+fiFI("Rinnan ymp\303\244rysmitta")
 
 T_("Measured waist circumference")
-fiFI("")
+fiFI("Mitattu vy\303\266t\303\244r\303\266n ymp\303\244rysmitta")
 
 T_("Waist circumference")
-fiFI("")
+fiFI("Vy\303\266t\303\244r\303\266n ymp\303\244rysmitta")
 
 T_("Measured buttocks circumference")
-fiFI("")
+fiFI("Mitattu takapuolen ymp\303\244rysmitta")
 
 T_("Buttocks circumference")
-fiFI("")
+fiFI("Takapuolen ymp\303\244rysmitta")
 
 T_("Measured thigh circumference")
-fiFI("")
+fiFI("Mitattu reiden ymp\303\244rysmitta")
 
 T_("Thigh circumference")
-fiFI("")
+fiFI("Reiden ymp\303\244rysmitta")
 
 T_("Measured leg circumference")
-fiFI("")
+fiFI("Mitattu s\303\244\303\244ren ymp\303\244rysmitta")
 
 T_("Leg circumference")
-fiFI("")
+fiFI("S\303\244\303\244ren ymp\303\244rysmitta")
+
+T_("Waiting for data")
+fiFI("Odotetaan dataa")
 
 T_("Waking")
-fiFI("")
+fiFI("Her\303\244\303\244minen")
 
 T_("Eating")
-fiFI("")
+fiFI("Sy\303\266minen")
 
 T_("Walking")
-fiFI("")
+fiFI("K\303\244vely")
 
 T_("Running")
-fiFI("")
+fiFI("Juoksu")
 
 T_("Sleeping")
-fiFI("")
+fiFI("Nukkuminen")
 
 T_("Training")
-fiFI("")
+fiFI("Harjoittelu")
+
+T_("Add")
+fiFI("Lis\303\244\303\244")
+
+T_("Date")
+fiFI("P\303\244iv\303\244m\303\244\303\244r\303\244")
+
+T_("Variant")
+fiFI("Muunnelma")
+
+T_("Name")
+fiFI("Nimi")
+
+T_("Grams")
+fiFI("Grammaa")
+
+T_("Ingredient")
+fiFI("Ainesosa")
+
+T_("Mass (g)")
+fiFI("Massa (g)")
+
+T_("Energy")
+fiFI("Energia")
+
+T_("Protein")
+fiFI("Proteiini")
+
+T_("Carbs")
+fiFI("Hiilihydraatit")
+
+T_("Fat")
+fiFI("Rasva")
+
+T_("Key")
+fiFI("Avain")
+
+T_("Value")
+fiFI("Arvo")
+
+T_("Total")
+fiFI("Yhteens\303\244")
+
+T_("Mass")
+fiFI("Massa")
+
+T_("Target kcal")
+fiFI("Tavoite kcal")
+
+T_("Target weight")
+fiFI("Tavoite paino")
+
+T_("Target protein")
+fiFI("Tavoite proteiini")
+
+T_("Recommended")
+fiFI("Suositeltu")
+
+T_("% of recommended")
+fiFI("% suositellusta")
+
+T_("Supplements")
+fiFI("Lis\303\244ravinteet")
+
+T_("Food")
+fiFI("Ruoka")
+
+T_("Nutrition")
+fiFI("Ravintoaine")
+
+T_("Recommendation")
+fiFI("Suosittelu")
+
+T_("Weight-Loss")
+fiFI("Painon pudotus")
+
+T_("Maintenance")
+fiFI("Yll\303\244pito")
+
+T_("Food Name")
+fiFI("Ruuan nimi")
+
+T_("Value /100g")
+fiFI("Arvo /100g")
+
+T_("% of recommendation")
+fiFI("% suositellusta")
+
+T_("Preset")
+fiFI("Esiasetus")
+
+T_("Score (0-10)")
+fiFI("Piste (0-10)")
+
+T_("Average mass")
+fiFI("Keskiarvo massa")
+
+T_("Queue Time")
+fiFI("Jonon aika")
+
+T_("Products")
+fiFI("Tuotteet")
+
+T_("Price")
+fiFI("Hinnat")
+
+T_("History Time")
+fiFI("Historian aika")
+
+T_("Servings")
+fiFI("Annos")
+
+T_("Batch Size")
+fiFI("Er\303\244n koko")
+
+T_("Price (EUR)")
+fiFI("Hinta (EUR)")
+
+T_("Shop")
+fiFI("Kauppa")
+
+T_("Portable List")
+fiFI("Mobiililista")
+
+T_("Food name")
+fiFI("Ruuan nimi")
+
+T_("Latest quote age")
+fiFI("Viimeisimm\303\244n hinnan ik\303\244")
+
+T_("Latest price")
+fiFI("Viimeisin hinta")
+
+T_("Used by meals")
+fiFI("Ruuat, jotka k\303\244ytt\303\244v\303\244t")
+
+T_("Time")
+fiFI("Aika")
 
 T_("%d days")
-fiFI("")
+fiFI("%d p\303\244iv\303\244\303\244")
 
 
 // FoodTool1.lay
 
 T_("Who are you?")
-fiFI("")
+fiFI("Kuka sin\303\244 olet?")
 
 T_("Sedentary (little or no exercise)\nLightly active (light exercise/sports "
      "1-3 days/week)\nModerately active (moderate exercise/sports 3-5 days/week)\n"
      "Very active (hard exercise/sports 6-7 days a week)\nExtra active (very "
      "hard exercise/sports & physical job or 2x training)\nAgricultural worker "
      "(non mechanized) or person swimming two hours daily")
-fiFI("")
+fiFI("Istuva (v\303\244h\303\244n tai ei lainkaan harjoittelua)\nKohtalaisen "
+     "aktiivinen (kohtalainen liikunta / urheilu 3\342\200\2235 p\303\244iv\303\244\303\244 "
+     "/ viikko)\nEritt\303\244in aktiivinen (kova liikunta / urheilu 6-7 p\303\244iv\303\244\303\244 "
+     "viikossa)\nEritt\303\244in aktiivinen (eritt\303\244in kova liikunta / "
+     "urheilu ja fyysinen ty\303\266 tai 2x harjoittelu)\nMaatalouden ty\303\266ntekij\303\244 "
+     "(ei koneistettu) tai henkil\303\266, joka ui kaksi tuntia p\303\244iv\303\244ss\303\244")
 
 T_("What is your target?")
-fiFI("")
+fiFI("Mik\303\244 on sinun tavoite?")
 
 T_("Previous")
-fiFI("")
+fiFI("Edellinen")
 
 T_("Next")
-fiFI("")
+fiFI("Seuraava")
 
 T_("How much you walk as non-exercise per day (km):")
-fiFI("")
+fiFI("Kuinka paljon k\303\244velet harjoitusten ulkopuolella p\303\244ivitt\303\244in "
+     "(km):")
 
 T_("How much coffee you drink per day (g):")
-fiFI("")
+fiFI("Kuinka paljon juot kahvia p\303\244ivitt\303\244in (g):")
 
 T_("Activity:")
-fiFI("")
+fiFI("Aktiivisuus:")
 
 T_("Age (years):")
-fiFI("")
+fiFI("Ik\303\244 (vuosia):")
 
 T_("How many days between groceries:")
-fiFI("")
+fiFI("Kuinka usein teet ruokaostoksia:")
 
 T_("Jogging/day (km):")
-fiFI("")
+fiFI("H\303\266lkk\303\244yst\303\244/p\303\244iv\303\244 (km):")
 
 T_("Walking/day (km):")
-fiFI("")
+fiFI("K\303\244vely\303\244/p\303\244iv\303\244 (km):")
 
 T_("Calorie burning by exercise (kcal):")
-fiFI("")
+fiFI("Kaloreita poltettu liikunnalla (kcal):")
 
 T_("Going to sleep time:")
-fiFI("")
+fiFI("Nukkumaanmenoaika:")
 
 T_("Waking up time:")
-fiFI("")
+fiFI("Her\303\244\303\244misaika:")
 
 T_("Easy day interval:")
-fiFI("")
+fiFI("Helpon p\303\244iv\303\244n v\303\244li:")
 
 T_("Hours between meals:")
-fiFI("")
+fiFI("Aterioiden v\303\244li tunneissa")
 
 T_("Hours between making of new meals:")
-fiFI("")
+fiFI("Ruuan tekemisen v\303\244li tunneissa:")
 
 T_("Height (cm):")
-fiFI("")
+fiFI("Pituus (cm):")
 
 T_("Gender:")
-fiFI("")
+fiFI("Sukupuoli:")
 
 T_("Female\nMale")
-fiFI("")
-
-T_("Add")
-fiFI("")
+fiFI("Nainen\nMies")
 
 T_("Remove")
-fiFI("")
+fiFI("Poista")
 
 T_("Make Variants")
-fiFI("")
-
-T_("Preset")
-fiFI("")
+fiFI("Luo muunnelmat:")
 
 T_("Ingredients:")
-fiFI("")
+fiFI("Ainesosat:")
 
 T_("Filter:")
-fiFI("")
+fiFI("Suodata:")
 
 T_("Source:")
-fiFI("")
+fiFI("L\303\244hde:")
 
 T_("Name:")
-fiFI("")
+fiFI("Nimi:")
 
 T_("Instructions:")
-fiFI("")
+fiFI("Ohjeet:")
 
 T_("Add ingredient")
-fiFI("")
+fiFI("Lis\303\244\303\244 ruoka-aine")
 
 T_("Remove ingredient")
-fiFI("")
+fiFI("Poista ruoka-aine")
 
 T_("Vitam.")
-fiFI("")
+fiFI("Vitam.")
 
 T_("Miner.")
-fiFI("")
+fiFI("Miner.")
 
 T_("Amino.")
-fiFI("")
+fiFI("Amino.")
 
 T_("Fatty.")
-fiFI("")
+fiFI("Rasva.")
 
 T_("VLCD ingredients\nSet manually")
-fiFI("")
+fiFI("Eritt\303\244in matalahiilihydraattiset ruoka-ainekset\nAsetan k\303\244sin")
 
 T_("Do you want to use a preset for used foods?")
-fiFI("")
+fiFI("Haluatko k\303\244ytt\303\244\303\244 ruokien esiasetuksia")
 
 T_("<- used ->")
-fiFI("")
+fiFI("<- k\303\244ytt\303\266 ->")
 
 T_("List:")
-fiFI("")
+fiFI("Lista:")
 
 T_("Do")
-fiFI("")
+fiFI("Tee")
 
 T_("Add food")
-fiFI("")
+fiFI("Lis\303\244\303\244 ruoka")
 
 T_("Food Description")
-fiFI("")
+fiFI("Ruuan kuvaus")
 
 T_("Food group:")
-fiFI("")
+fiFI("Ruuan ryhm\303\244:")
 
 T_("Long description:")
-fiFI("")
+fiFI("Pitk\303\244 kuvaus:")
 
 T_("Short description:")
-fiFI("")
+fiFI("Lyhyt kuvaus:")
 
 T_("Company name:")
-fiFI("")
+fiFI("Yhti\303\266n nimi:")
 
 T_("Manufacturer:")
-fiFI("")
+fiFI("Valmistaja:")
 
 T_("Survey:")
-fiFI("")
+fiFI("Valvonta:")
 
 T_("Inedible parts:")
-fiFI("")
+fiFI("Sy\303\266m\303\244kelvottomat osat:")
 
 T_("Inedible %:")
-fiFI("")
+fiFI("Sy\303\266m\303\244kelvottomuus %:")
 
 T_("Scientific name:")
-fiFI("")
+fiFI("Tieteellinen nimi:")
 
 T_("Nitrogen factor:")
-fiFI("")
+fiFI("Typpikerroin:")
 
 T_("Protein factor:")
-fiFI("")
+fiFI("Proteiinikerroin:")
 
 T_("Fat factor:")
-fiFI("")
+fiFI("Rasvakerroin:")
 
 T_("Carbohydrate factor:")
-fiFI("")
+fiFI("Hiilihydraattikerroin:")
 
 T_("Require soaking:")
-fiFI("")
+fiFI("Vaatii liotusta:")
 
 T_("Type:")
-fiFI("")
+fiFI("Tyyppi:")
 
 T_("Value:")
-fiFI("")
+fiFI("Arvo:")
 
 T_("Nutrient Value")
-fiFI("")
+fiFI("Ravintoarvo")
 
 T_("Add Nutrition")
-fiFI("")
-
-T_("Shop Item")
-fiFI("")
-
-T_("Current owned amount")
-fiFI("")
-
-T_("The amount in the shopping list")
-fiFI("")
-
-T_("Familiar name:")
-fiFI("")
-
-T_("Serving mass:")
-fiFI("")
-
-T_("Bulk mass:")
-fiFI("")
-
-T_("Bulk price:")
-fiFI("")
-
-T_("Bulk usage days:")
-fiFI("")
-
-T_("Owned mass:")
-fiFI("")
-
-T_("Required mass:")
-fiFI("")
-
-T_("Confirmed mass:")
-fiFI("")
-
-T_("Confirm")
-fiFI("")
+fiFI("Lis\303\244\303\244 ravintoaines")
 
 T_("Next shopping:")
-fiFI("")
+fiFI("Seuraava ostoskerta:")
 
 T_("Current shopping:")
-fiFI("")
+fiFI("Nykyinen ostoskerta:")
 
 T_("Week progress:")
-fiFI("")
+fiFI("Viikon eteneminen:")
 
 T_("Month progress:")
-fiFI("")
+fiFI("Kuukauden eteneminen:")
 
 T_("Q4 progress:")
-fiFI("")
+fiFI("Nelj\303\244nnesvuoden eteneminen:")
 
 T_("Total progress:")
-fiFI("")
+fiFI("Eteneminen yhteens\303\244:")
 
 T_("Schedule:")
-fiFI("")
+fiFI("Aikataulu:")
 
 T_("Reason:")
-fiFI("")
+fiFI("Syy:")
 
 T_("What calorie deficit-% you want:")
-fiFI("")
+fiFI("Mink\303\244 kalorivajeprosentin haluat:")
 
-T_("How many days you wan this:")
-fiFI("")
+T_("How many days you want this:")
+fiFI("Kuinka monta p\303\244iv\303\244\303\244 haluat t\303\244t\303\244:")
 
-T_("Add  Exception")
-fiFI("")
+T_("Add Exception")
+fiFI("Lis\303\244\303\244 poikkeus")
 
 T_("Exception will begin tomorrow, not today!")
-fiFI("")
+fiFI("Poikkeus alkaa huomenna, ei t\303\244n\303\244\303\244n!")
 
 T_("Note:")
-fiFI("")
+fiFI("Muistiinpano:")
 
 T_("Title:")
-fiFI("")
+fiFI("Otsikko:")
 
 T_("Add Note")
-fiFI("")
+fiFI("Lis\303\244\303\244 muistiinpano")
 
 T_("Weight (kg):")
-fiFI("")
+fiFI("Paino (kg):")
 
 T_("Fat (%):")
-fiFI("")
+fiFI("Rasva (%):")
 
 T_("Liquid (%):")
-fiFI("")
+fiFI("Neste (%):")
 
 T_("Muscle (%):")
-fiFI("")
+fiFI("Lihas (%)")
 
 T_("BMI:")
-fiFI("")
+fiFI("Painoindeksi:")
 
 T_("Is DEXA values:")
-fiFI("")
+fiFI("Onko DEXA-mitattu arvo:")
 
 T_("Sentiment:")
-fiFI("")
+fiFI("Tunnetila:")
 
 T_("Health:")
-fiFI("")
+fiFI("Terveys:")
 
 T_("Workload:")
-fiFI("")
+fiFI("Ty\303\266m\303\244\303\244r\303\244:")
 
 T_("Walking today (km):")
-fiFI("")
+fiFI("K\303\244vely\303\244 t\303\244n\303\244\303\244n (km):")
 
 T_("Walking time (mins):")
-fiFI("")
+fiFI("K\303\244velyaika (min):")
 
 T_("Calorie excess (kcal):")
-fiFI("")
+fiFI("Ylim\303\244\303\244r\303\244iset kalorit (kcal):")
 
 T_("Neck:")
-fiFI("")
+fiFI("Kaula:")
 
 T_("Bicep:")
-fiFI("")
+fiFI("Hauis:")
 
 T_("Forearm:")
-fiFI("")
+fiFI("Kyyn\303\244rvarsi:")
 
 T_("Chest:")
-fiFI("")
+fiFI("Rinta:")
 
 T_("Waist:")
-fiFI("")
+fiFI("Vy\303\266t\303\244r\303\266:")
 
 T_("Buttocks:")
-fiFI("")
+fiFI("Takapuoli:")
 
 T_("Thigh:")
-fiFI("")
+fiFI("Reisi:")
 
 T_("Leg:")
-fiFI("")
+fiFI("S\303\244\303\244ri:")
 
 T_("Weight expression:")
-fiFI("")
+fiFI("Ilme painon suhteen:")
 
 T_("Used camera:")
-fiFI("")
+fiFI("K\303\244ytetty kamera:")
 
 T_("Front image:")
-fiFI("")
+fiFI("Kuva edest\303\244:")
 
 T_("Backside:")
-fiFI("")
+fiFI("Takaa:")
 
 T_("Right side:")
-fiFI("")
+fiFI("Oikea puoli:")
 
 T_("Preview camera")
-fiFI("")
+fiFI("Esikatsele kamera")
 
 T_("Capture images")
-fiFI("")
+fiFI("Ota kuvat")
 
 T_("Reset")
-fiFI("")
+fiFI("Nollaa")
 
 T_("Save")
-fiFI("")
+fiFI("Tallenna")
 
 T_("Circumferences (cm):")
-fiFI("")
+fiFI("Ymp\303\244rysmitat (cm):")
 
 T_("Add Snapshot")
-fiFI("")
+fiFI("Lis\303\244\303\244 Otos")
 
 T_("->")
-fiFI("")
+fiFI("->")
 
 T_("<-")
-fiFI("")
+fiFI("<-")
 
 T_("For Camera")
-fiFI("")
+fiFI("Kameralle")
 
 T_("Zero")
-fiFI("")
+fiFI("Tyhjenn\303\244")
 
 T_("Expand")
-fiFI("")
+fiFI("Laajenna")
 
 T_("Reduce")
-fiFI("")
+fiFI("V\303\244henn\303\244")
 
 T_("Apply store to all:")
-fiFI("")
+fiFI("Aseta kauppa kaikkiin:")
 
 T_("Multiply grams:")
-fiFI("")
+fiFI("Kerro grammat:")
 
 T_("C")
-fiFI("")
+fiFI("R")
+
+
+// ScheduleCtrl.cpp
+
+T_("Groceries")
+fiFI("Ruokaostokset")
+
+
+// Food.h
+
+T_("Score")
+fiFI("Piste")
+
+T_("Easiest")
+fiFI("Helpoin")
+
+T_("Amino Acids")
+fiFI("Aminohapot")
+
+T_("Fatty Acids")
+fiFI("Rasvahapot")
+
+T_("Weight Loss")
+fiFI("Painonpudotus")
+
+T_("Muscle Gain")
+fiFI("Lihaksenkasvu")
+
+T_("Invalid variant")
+fiFI("Virheellinen muunnelma")
 
 
 // FoodStorage.cpp
 
+T_("Kcals/day: ")
+fiFI("Kcal/p\303\244iv\303\244:")
+
+T_("Fat g/day: ")
+fiFI("Rasvaa g/p\303\244iv\303\244")
+
+T_("Protein g/day: ")
+fiFI("Proteiinia g/p\303\244iv\303\244")
+
+T_("Carbs g/day: ")
+fiFI("Hiilihydraatteja g/p\303\244iv\303\244")
+
+T_("Nutrilet factor: %2n")
+fiFI("Nutrilet kerroin: %2n")
+
 T_("%4n grams")
-fiFI("")
+fiFI("%4n grammaa")
+
+T_("Food #%d: %s %d * %d grams\n\n")
+fiFI("Ruoka #%d: %s %d * %d grammaa\n\n")
 
 
 // FoodStorageCtrl.cpp
 
 T_("Source")
-fiFI("")
-
-T_("Mass")
-fiFI("")
-
-T_("Carbs")
-fiFI("")
-
-T_("Fat")
-fiFI("")
-
-T_("Protein")
-fiFI("")
-
-T_("Energy")
-fiFI("")
-
-T_("Food")
-fiFI("")
-
-T_("Grams")
-fiFI("")
+fiFI("L\303\244hde")
 
 
 // Profile.cpp
 
 T_("Good morning. Have %d calories today!")
-fiFI("")
+fiFI("Hyv\303\244\303\244 huomenta. Saat %d kaloria t\303\244n\303\244\303\244n!")
 
 T_("Good night!")
-fiFI("")
+fiFI("Hyv\303\244\303\244 y\303\266t\303\244!")
 
 T_("%d grams")
-fiFI("")
+fiFI("%d grammaa")
 
-T_("Go walk  %2n km!")
-fiFI("")
+T_("Go walk %2n km!")
+fiFI("K\303\244y %2n kilometrin k\303\244velyll\303\244!")
 
 T_("Go jogging %2n km!")
-fiFI("")
+fiFI("K\303\244y %2n kilometrin h\303\266lkk\303\244yksell\303\244!")
 
 T_("Do muscle resistance exercises!")
-fiFI("")
+fiFI("Tee lihasharjoitukset!")
 
 T_("%2n`kg")
-fiFI("")
+fiFI("%2n`kg")
 
 T_("%2n`g")
-fiFI("")
+fiFI("%2n`g")
 
 T_("%d`pc. ( * ~%2n`kg = ~%2n`kg)")
-fiFI("")
+fiFI("%d`kpl ( * ~%2n`kg = ~%2n`kg)")
 
 T_("%d`pc. ( * ~%2n`g = ~%2n`g)")
-fiFI("")
+fiFI("%d`kpl ( * ~%2n`g = ~%2n`g)")
 
 T_("%d`*%d`pc. (%d * ~%2n`kg = ~%2n`kg)")
-fiFI("")
+fiFI("%d`*%d`kpl (%d * ~%2n`kg = ~%2n`kg)")
 
 T_("%d`*%d`pc. (%d * ~%2n`g = ~%2n`g)")
-fiFI("")
+fiFI("%d`*%d`kpl (%d * ~%2n`g = ~%2n`g)")
 
 T_("Invalid mass")
-fiFI("")
+fiFI("Virheellinen massa")
 
 T_("%2n`EUR/kg")
-fiFI("")
+fiFI("%2n`EUR/kg")
 
 T_("%2n`EUR/g")
-fiFI("")
+fiFI("%2n`EUR/g")
 
 T_("%2n`EUR (~%2n`kg)")
-fiFI("")
+fiFI("%2n`EUR (~%2n`kg)")
 
 T_("%2n`EUR (~%2n`g)")
-fiFI("")
+fiFI("%2n`EUR (~%2n`g)")
 
 T_("%2n`EUR/%d`pc. (%2n`EUR/%d`pc., %2n`EUR/pc., ~%2n`kg/pc.)")
-fiFI("")
+fiFI("%2n`EUR/%d`kpl (%2n`EUR/%d`kpl, %2n`EUR/kpl, ~%2n`kg/kpl)")
 
 T_("%2n`EUR/%d`pc. (%2n`EUR/%d`pc., %2n`EUR/pc., ~%2n`g/pc.)")
-fiFI("")
+fiFI("%2n`EUR/%d`kpl (%2n`EUR/%d`kpl, %2n`EUR/kpl, ~%2n`g/kpl)")
 
 T_("%2n`EUR/%d`pc. (%2n`EUR/pc., ~%2n`kg/pc.)")
-fiFI("")
+fiFI("%2n`EUR/%d`kpl (%2n`EUR/kpl, ~%2n`kg/kpl)")
 
 T_("%2n`EUR/%d`pc. (%2n`EUR/pc., ~%2n`g/pc.)")
-fiFI("")
+fiFI("%2n`EUR/%d`kpl (%2n`EUR/kpl, ~%2n`g/kpl)")
 
 T_("Invalid price")
-fiFI("")
+fiFI("Virheellinen hinta")
+
+T_("User")
+fiFI("K\303\244ytt\303\244j\303\244")
+
+T_("Invalid Source")
+fiFI("Virheellinen l\303\244hde")
+
+
+// ProfileCreator.cpp
+
+T_("FoodTool first start wizard")
+fiFI("Ruokaty\303\266kalun ensimm\303\244isen aloituksen velho")
+
+
+// DatabaseCtrl.cpp
+
+T_("All foods")
+fiFI("Kaikki ruuat")
+
+T_("Used foods")
+fiFI("K\303\244ytetyt ruuat")
+
+T_("Long description")
+fiFI("Pitk\303\244 kuvaus")
 
 
 // WeightCtrl.cpp
 
-T_("Date")
-fiFI("")
+T_("Worst")
+fiFI("Surkein")
 
-T_("Source #")
-fiFI("")
+T_("Bad")
+fiFI("Huono")
+
+T_("Normal")
+fiFI("Normaali")
+
+T_("Good")
+fiFI("Hyv\303\244")
+
+T_("Best")
+fiFI("Paras")
+
+T_("Lowest")
+fiFI("Alin")
+
+T_("Low")
+fiFI("Alhainen")
+
+T_("High")
+fiFI("Korkea")
+
+T_("Highest")
+fiFI("Korkein")
+
+T_("Source #%d")
+fiFI("L\303\244hde %d.")
 
 
 // MealPresetCtrl.cpp
 
+T_("Taste")
+fiFI("Maku")
+
+T_("Min (g)")
+fiFI("Matalin (g)")
+
+T_("Max (g)")
+fiFI("Korkein (g)")
+
 T_("Unnamed")
-fiFI("")
+fiFI("Nimet\303\266n")
 
 
-// Obsolete
+// Util.cpp
 
-T_("Measured weight")
-fiFI("")
+T_("Chromium")
+fiFI("Kromi")
 
-T_("Measured fat")
-fiFI("")
+T_("Vanadium")
+fiFI("Vanadiini")
 
-T_("Measured liquid")
-fiFI("")
+T_("Molybdenum")
+fiFI("Molybdeeni")
 
-T_("Liquid")
-fiFI("")
+T_("Boron")
+fiFI("Boori")
 
-T_("Measured muscle")
-fiFI("")
+T_("Iodine")
+fiFI("Jodi")
 
-T_("Muscle")
-fiFI("")
+T_("Lithium")
+fiFI("Litium")
+
+T_("Strontium")
+fiFI("Strontium")
+
+T_("Sulfur")
+fiFI("Rikki")
+
+T_("Cobalt")
+fiFI("Koboltti")
+
+T_("Germanium")
+fiFI("Germanium")
+
+T_("Rubidium")
+fiFI("Rubidium")
+
+T_("Zirconium")
+fiFI("Zirkonium")
+
+T_("Your mineral levels")
+fiFI("Sinun mineraalitasot")
+
+T_("2.5th")
+fiFI("2,5")
+
+T_("16th")
+fiFI("16")
+
+T_("50th")
+fiFI("50")
+
+T_("84th")
+fiFI("84")
+
+T_("97.5th")
+fiFI("97,5")
