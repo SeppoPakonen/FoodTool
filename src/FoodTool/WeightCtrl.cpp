@@ -86,7 +86,7 @@ void WeightCtrl::Reset() {
 void WeightCtrl::UpdateBMI() {
 	double weight = edit.weight.GetData();
 	if (!IsFin(weight)) return;
-	edit.bmi.SetData(GetBMI(GetProfile().confs.Top().height * 0.01, weight));
+	edit.bmi.SetData(GetBMI(GetProfile().confs.Top().height, weight));
 }
 
 void WeightCtrl::Data() {
@@ -105,7 +105,7 @@ void WeightCtrl::Data() {
 void WeightCtrl::UpdateSmiley() {
 	Profile& prof = GetProfile();
 	const Configuration& conf = prof.confs.Top();
-	double tgt_weight = GetTargetWeight(conf.height * 0.01);
+	double tgt_weight = GetTargetWeight(conf.height);
 	double prog = 1.0 - ((double)edit.weight.GetData() - tgt_weight) / (prof.weights[0].weight - tgt_weight);
 	edit.smiley.SetImage(GetSmiley(prog));
 }
@@ -190,7 +190,7 @@ void WeightCtrl::SetWeightStat(WeightLossStat& w) {
 	w.buttocks = (double)edit.buttocks.GetData();
 	w.thigh = (double)edit.thigh.GetData();
 	w.leg = (double)edit.leg.GetData();
-	double tgt_weight = GetTargetWeight(conf.height * 0.01);
+	double tgt_weight = GetTargetWeight(conf.height);
 	w.prog = 1.0 - fabs(w.weight - tgt_weight) / fabs(prof.weights[0].weight - tgt_weight);
 	
 	if (!front.IsEmpty())

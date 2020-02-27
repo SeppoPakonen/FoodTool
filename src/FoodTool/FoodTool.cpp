@@ -115,7 +115,6 @@ FoodTool::FoodTool()
 	tabs.Add(def.SizePos(), "Nutrient Deficits");
 	tabs.Add(exc.SizePos(), "Exceptions");
 	tabs.Add(notes.SizePos(), "Notes");
-	tabs.Add(usage.SizePos(), "Usage");
 	tabs.Add(db.SizePos(), "Food Database");
 	tabs.Add(preset.SizePos(), "Meal Presets");
 	tabs.Add(supp.SizePos(), "Food Supplements");
@@ -126,6 +125,7 @@ FoodTool::FoodTool()
 	tabs.Add(storage.SizePos(), "Food Storage");
 	tabs.Add(prices.SizePos(), "Prices");
 	tabs.Add(conf.SizePos(), "Configuration");
+	tabs.Add(usage.SizePos(), "Usage");
 	tabs.WhenSet << THISBACK(Data);
 	
 	tc.Set(-500, THISBACK(Data));
@@ -183,7 +183,6 @@ void FoodTool::Data() {
 		else if (tab == i++)	def.Data();
 		else if (tab == i++)	exc.Data();
 		else if (tab == i++)	notes.Data();
-		else if (tab == i++)	usage.Data();
 		else if (tab == i++)	db.Data();
 		else if (tab == i++)	preset.Data();
 		else if (tab == i++)	supp.Data();
@@ -194,6 +193,7 @@ void FoodTool::Data() {
 		else if (tab == i++)	storage.Data();
 		else if (tab == i++)	prices.Data(tab_changed);
 		else if (tab == i++)	conf.Data();
+		else if (tab == i++)	usage.Data();
 	}
 	was_updating = is_updating;
 }
@@ -554,6 +554,7 @@ void ConfigurationCtrl::SelectConf() {
 	conf.age.SetData(c.age);
 	conf.activity.SetData(c.activity);
 	conf.walking_dist.SetData(c.walking_dist);
+	conf.tgt_exercise_kcal.SetData(c.tgt_exercise_kcal);
 	conf.tgt_walking_dist.SetData(c.tgt_walking_dist);
 	conf.tgt_jogging_dist.SetData(c.tgt_jogging_dist);
 	conf.shop_interval.SetData(c.shop_interval);
@@ -575,6 +576,7 @@ void ConfigurationCtrl::AddConf() {
 	c.age = conf.age.GetData();
 	c.activity = conf.activity.GetData();
 	c.walking_dist = conf.walking_dist.GetData();
+	c.tgt_exercise_kcal = conf.tgt_exercise_kcal.GetData();
 	c.tgt_walking_dist = conf.tgt_walking_dist.GetData();
 	c.tgt_jogging_dist = conf.tgt_jogging_dist.GetData();
 	c.shop_interval = conf.shop_interval.GetData();
@@ -917,37 +919,45 @@ GraphCtrl::GraphCtrl() {
 		.Add(t_("Potassium"), 1, GRADCOLOR((double)(i++) / electrolyte_count))
 		.Add(t_("Sodium"), 1, GRADCOLOR((double)(i++) / electrolyte_count));
 	
-	list.Add(t_("Measured weight"));
+	list.Add(t_("Measured weight (kg)"));
 	graph.Add()
-		.Add(t_("Weight"), 2, Color(109, 0, 117));
+		.Add(t_("Weight (kg)"), 2, Color(109, 0, 117));
 	
 	list.Add(t_("Measured fat (kg)"));
 	graph.Add()
-		.Add(t_("Fat"), 2, Color(81, 48, 0));
+		.Add(t_("Fat (kg)"), 2, Color(81, 48, 0));
 		
 	list.Add(t_("Measured liquid (kg)"));
 	graph.Add()
-		.Add(t_("Liquid"), 2, Color(0, 176, 137));
+		.Add(t_("Liquid (kg)"), 2, Color(0, 176, 137));
 		
 	list.Add(t_("Measured muscle (kg)"));
 	graph.Add()
-		.Add(t_("Muscle"), 2, Color(120, 0, 0));
+		.Add(t_("Muscle (kg)"), 2, Color(120, 0, 0));
+	
+	list.Add(t_("Measured internals (kg)"));
+	graph.Add()
+		.Add(t_("Internals (kg)"), 2, Color(120, 0, 0));
 	
 	list.Add(t_("Measured fat (\%)"));
 	graph.Add()
-		.Add(t_("Fat"), 2, Color(81, 48, 0));
+		.Add(t_("Fat (\%)"), 2, Color(81, 48, 0));
 		
 	list.Add(t_("Measured liquid (\%)"));
 	graph.Add()
-		.Add(t_("Liquid"), 2, Color(0, 176, 137));
+		.Add(t_("Liquid (\%)"), 2, Color(0, 176, 137));
 	
 	list.Add(t_("Measured muscle (\%)"));
 	graph.Add()
-		.Add(t_("Muscle"), 2, Color(120, 0, 0));
+		.Add(t_("Muscle (\%)"), 2, Color(120, 0, 0));
+	
+	list.Add(t_("Measured internals (\%)"));
+	graph.Add()
+		.Add(t_("Internals (\%)"), 2, Color(120, 0, 0));
 	
 	list.Add(t_("Relative liquid (\%)"));
 	graph.Add().Vert(100)
-		.Add(t_("Liquid"), 2, Color(0, 176, 137));
+		.Add(t_("Liquid (\%)"), 2, Color(0, 176, 137));
 	
 	list.Add(t_("Measured BMI"));
 	graph.Add()
@@ -1326,6 +1336,12 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 		}
 		else if (src == src_i++) {
 			if (l == 0) {
+				MEAS(GetInternalKg());
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
 				MEAS(fat);
 			}
 			FillVector(v);
@@ -1339,6 +1355,12 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(muscle);
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
+				MEAS(GetInternalPerc());
 			}
 			FillVector(v);
 		}
@@ -1361,7 +1383,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				int i = 0;
 				for(; i < prof.weights.GetCount(); i++) {
 					const WeightLossStat& s = prof.weights[i];
-					v[i] = GetBMI(conf.height * 0.01, s.weight);
+					v[i] = GetBMI(conf.height, s.weight);
 				}
 				
 				const DailyPlan* p = prof.planned_daily.Begin();
@@ -1375,7 +1397,7 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				}
 				int count = 0;
 				while (p != end) {
-					double bmi = GetBMI(conf.height * 0.01, p->weight);
+					double bmi = GetBMI(conf.height, p->weight);
 					v[i + count++] = bmi;
 					v[i + count++] = bmi;
 					if (count >= MEASURE_FORECAST)

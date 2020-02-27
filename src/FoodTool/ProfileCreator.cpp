@@ -45,6 +45,7 @@ ProfileCreator::ProfileCreator() {
 	tab1.age.SetData(30);
 	tab1.activity.SetData(0);
 	tab1.walking_dist.SetData(0);
+	tab1.tgt_exercise_kcal.SetData(600);
 	tab1.tgt_walking_dist.SetData(6.6);
 	tab1.tgt_jogging_dist.SetData(0);
 	tab1.shop_interval.SetData(5);
@@ -92,6 +93,7 @@ void ProfileCreator::Next() {
 		conf.age = tab1.age.GetData();
 		conf.activity = tab1.activity.GetData();
 		conf.walking_dist = tab1.walking_dist.GetData();
+		conf.tgt_exercise_kcal = tab1.tgt_exercise_kcal.GetData();
 		conf.tgt_walking_dist = tab1.tgt_walking_dist.GetData();
 		conf.tgt_jogging_dist = tab1.tgt_jogging_dist.GetData();
 		conf.shop_interval = tab1.shop_interval.GetData();

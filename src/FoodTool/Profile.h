@@ -90,12 +90,14 @@ struct WeightLossStat : Moveable<WeightLossStat> {
 	String GetRightFile() const {return GetImageFile("right_" + GetGenericJpg());}
 	String GetBackFile() const {return GetImageFile("back_" + GetGenericJpg());}
 	double GetLiquidKg() const {return weight * liquid * 0.01;}
+	double GetInternalPerc() const {return 100 - fat - muscle;}
+	double GetInternalKg() const {return weight * (100 - fat - muscle) * 0.01;}
 };
 
 struct Configuration : Moveable<Configuration> {
 	Time added;
 	Date end_date;
-	double tgt_walking_dist, tgt_jogging_dist, walking_dist;
+	double tgt_exercise_kcal = 0, tgt_walking_dist, tgt_jogging_dist, walking_dist;
 	double hours_between_meals, hours_between_making_meals = 8;
 	int easy_day_interval;
 	int waking_hour, waking_minute;
@@ -106,7 +108,7 @@ struct Configuration : Moveable<Configuration> {
 	int daily_coffee = 0;
 	
 	void Serialize(Stream& s) {
-		VER(2);
+		VER(3);
 		FOR_VER(0) {
 			s
 				% added
@@ -130,6 +132,7 @@ struct Configuration : Moveable<Configuration> {
 		}
 		FOR_VER(1) {s % daily_coffee;}
 		FOR_VER(2) {s % hours_between_making_meals;}
+		FOR_VER(3) {s % tgt_exercise_kcal;}
 	}
 	
 	double GetBMR(double weight);
@@ -171,9 +174,9 @@ struct ScheduleToday {
 	}
 };
 
-int GetTargetWeight(double height_m);
-int GetBmiWeight(double height_m, int bmi);
-double GetBMI(double height_m, double weight_kg);
+int GetTargetWeight(double height_cm);
+int GetBmiWeight(double height_cm, int bmi);
+double GetBMI(double height_cm, double weight_kg);
 double GetNormalLiquidPercentage(double age, double height_cm, double weight_kg);
 
 enum {
@@ -290,6 +293,50 @@ struct ProductQueueHistory {
 		FOR_VER(0) {s % queue % history;}
 	}
 };
+
+struct PlanState {
+	bool is_male;
+	double tgt_fat_perc;
+	
+	double cals_in_kg_fat;
+	double exercise_kcal;
+	double walking_dist;
+	double jogging_dist;
+	double jogging_speed;
+	double tgt_weight;
+	double max_lean_gain;
+	double worst_weight;
+	double worst_fat_perc;
+	double worst_lean_perc;
+	
+	double internal_perc;
+	double tgt_lean_perc;
+	double internal_kgs;
+	double walking_speed;
+	double weight;
+	double fat_perc;
+	double lean_perc;
+	
+	OnlineAverage1 lean_fat_loss_ratio_av;
+	double calorie_deficit_sum = 0.0;
+	double max_calorie_deficit = 0.0;
+	
+	
+	
+	PlanState(bool is_male, Configuration& conf, WeightLossStat& wl);
+	bool IsReadyForMaintenance() const;
+	double GetProgress() const;
+	bool IsTooHighFatPercentage() const {return fat_perc > tgt_fat_perc + 0.01;}
+	bool IsHighFatPercentage() const {return fat_perc > tgt_fat_perc;}
+	bool IsTooLowWeight() const {return weight < tgt_weight - 1;}
+	bool IsLowWeight() const {return weight < tgt_weight;}
+	void Set(Configuration& conf);
+	void Set(WeightLossStat& wl);
+	void SetLeanAndFatMass(double new_lean_kgs, double new_fat_kgs);
+	void CheckWorst();
+	void AddCalorieDeficit(double calorie_deficit);
+};
+
 
 struct Profile {
 	Vector<IntakeExceptions> exceptions;

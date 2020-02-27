@@ -132,8 +132,6 @@ Date Profile::GetCurrentQuarterBegin() {
 	return prev;
 }
 
-
-
 bool Profile::UpdatePlan() {
 	const Database& db = DB();
 	
@@ -145,30 +143,7 @@ bool Profile::UpdatePlan() {
 	WeightLossStat* next_wl = 1 < weights.GetCount() ? &weights[1] : NULL;
 	int wl_i = 0;
 	
-	const double walking_dist = conf->walking_dist + conf->tgt_walking_dist;
-	const double jogging_dist = conf->tgt_jogging_dist;
-	const double jogging_speed = 2.500; // m/s
-	const double cals_in_kg_fat = 3500/0.453592;
-	const double tgt_weight = GetTargetWeight(conf->height * 0.01);
-	const double tgt_fat_perc = is_male ? 6 * 0.01 : 21 * 0.01;
-	const double max_lean_gain = 226 / 7.0; // around 0.5 pounds lean in a week
-	const double begin_weight = wl->weight;
-	const double begin_fat_perc = wl->fat * 0.01;
-	const double begin_lean_perc = wl->muscle * 0.01;
-	
-	double internal_perc = 0.15 + 0.25;
-	double tgt_lean_perc = 1.0 - (internal_perc + tgt_fat_perc); // skeleton 15%, organs 25%, fat
-	double tgt_lean_kgs = tgt_weight * tgt_lean_perc;
-	double internal_kgs = internal_perc * begin_weight;
-	double walking_speed = 0.916; // m/s
-	double weight = wl->weight;
-	double fat_perc = begin_fat_perc;
-	double lean_perc = begin_lean_perc;
-	double calorie_deficit_sum = 0.0;
-	double max_calorie_deficit = 0.0;
-	
-	OnlineAverage1 lean_fat_loss_ratio_av;
-	lean_fat_loss_ratio_av.Add(0.52);
+	PlanState s(is_male, *conf, *wl);
 	
 	if (planned_nutrients.IsEmpty()) {
 		planned_nutrients.FindAdd(KCAL);
@@ -189,38 +164,47 @@ bool Profile::UpdatePlan() {
 	
 	int count = 0;
 	int maintenance_day_count = 0;
-	while (
-		fabs(fat_perc - tgt_fat_perc) > 0.01 ||
-		fabs(tgt_lean_perc - lean_perc) > 0.01 ||
-		fabs(weight - tgt_weight) > 1.0 ||
-		date < end_date ||
-		maintenance_day_count < 30) {
-		double prog = max(0.0, min(1.0, 1.0 - fabs(weight - tgt_weight) / fabs(begin_weight - tgt_weight)));
+	while (!s.IsReadyForMaintenance() || date < end_date || maintenance_day_count < 30) {
+		double prog = s.GetProgress();
 		//if (planned_daily.GetCount() && planned_daily.Top().prog > prog) break;
-		if (count > 20) break;
+		
+		if (count > 2*365 ||
+			s.weight < 40 || s.weight > 400 ||
+			s.fat_perc < 0.04 || s.fat_perc > 0.80 ||
+			s.lean_perc < 0.1 || s.lean_perc > 0.80) {
+			double weight_diff = s.weight - s.tgt_weight;
+			double fat_perc_diff = s.fat_perc - s.tgt_fat_perc;
+			double lean_perc_diff = s.lean_perc - s.tgt_lean_perc;
+			LOG("Planning failed");
+			DUMP(weight_diff);
+			DUMP(fat_perc_diff);
+			DUMP(lean_perc_diff);
+			break;
+		}
 		count++;
 		
 		DailyPlan& d = planned_daily.Add();
 		
 		while (next_conf && date >= Date(next_conf->added)) {
 			conf = next_conf;
+			s.Set(*conf);
 			conf_i++;
 			next_conf = (conf_i+1) < confs.GetCount() ? &confs[conf_i+1] : NULL;
 		}
 		
-		double lean_fat_loss_ratio = lean_fat_loss_ratio_av.GetMean();
-		double fat_kgs = weight * fat_perc;
-		double lean_kgs = weight * lean_perc;
+		
+		double fat_kgs = s.weight * s.fat_perc;
+		double lean_kgs = s.weight * s.lean_perc;
 
 		
 		d.date = date++;
-		d.weight = weight;
+		d.weight = s.weight;
 		d.prog = prog;
-		d.fat_perc = fat_perc;
+		d.fat_perc = s.fat_perc;
 		d.fat_kgs = fat_kgs;
 		d.lean_kgs = lean_kgs;
 		
-		d.maintain_calories = conf->GetCaloriesMaintainWeight(weight);
+		d.maintain_calories = conf->GetCaloriesMaintainWeight(s.weight);
 		
 		// Coffee
 		double coffee_g = conf->daily_coffee;
@@ -232,39 +216,42 @@ bool Profile::UpdatePlan() {
 		ASSERT(coffee_maintain_calorie_increase >= 0);
 		d.maintain_calories += coffee_maintain_calorie_increase;
 		
-		double maintain_protein = weight * 0.8;
+		
+		// Set protein levels, generic mode and food variant
+		double maintain_protein = s.weight * 0.8;
 		double min_protein;
-		if (fat_perc > tgt_fat_perc + 0.01) {
+		if (s.IsTooHighFatPercentage()) {
 			d.mode = MODE_WEIGHTLOSS;
-			maintain_protein = weight * 1.0; // tends to be needed more than 0.8 while fasting
-			min_protein = weight * 1.4;
 			d.variant_type = VARIANT_WEIGHTLOSS;
+			maintain_protein = s.weight * 1.0; // tends to be needed more than 0.8 while fasting
+			min_protein = s.weight * 1.4;
 			maintenance_day_count = 0;
 		}
-		else if (fabs(lean_kgs - tgt_lean_kgs) < 0.5) {
-			d.mode = MODE_MAINTAIN;
-			min_protein = maintain_protein;
-			d.variant_type = VARIANT_MAINTENANCE;
-			maintenance_day_count++;
-		}
-		else if (tgt_lean_kgs > lean_kgs) {
+		else if (s.IsTooLowWeight()) {
 			d.mode = MODE_MUSCLEGAIN;
-			min_protein = weight * 1.4;
 			d.variant_type = VARIANT_MUSCLEGAIN;
+			min_protein = s.weight * 1.4;
 			maintenance_day_count = 0;
+		}
+		else if (s.IsLowWeight()) {
+			d.mode = MODE_MAINTAIN;
+			d.variant_type = VARIANT_MAINTENANCE;
+			min_protein = s.weight * 1.0;
+			maintenance_day_count++;
 		}
 		else {
 			d.mode = MODE_MAINTAIN;
-			min_protein = weight * 0.4;
 			d.variant_type = VARIANT_FATTYACIDS;
-			maintenance_day_count = 0;
+			min_protein = maintain_protein;
+			maintenance_day_count++;
 		}
 		
+		
+		// Set calories and macros
 		double min_fat = 10.0 / 2000.0 * d.maintain_calories;
 		double prot_cals, fat_cals, carb_cals;
-		
-		if (fat_perc > tgt_fat_perc + 0.01) {
-			prot_cals = min_protein * 4.4;
+		prot_cals = min_protein * 4.4;
+		if (s.IsTooHighFatPercentage()) {
 			fat_cals = min_fat * 9.0;
 			carb_cals = (prot_cals + fat_cals) / 0.95 * 0.05;
 			
@@ -289,108 +276,125 @@ bool Profile::UpdatePlan() {
 			}
 			easy_day_counter = (easy_day_counter + 1) % conf->easy_day_interval;
 		}
-		else if (fat_perc >= tgt_fat_perc) {
-			d.allowed_calories = 0.6 * d.maintain_calories;
-			prot_cals = min_protein * 4.4;
+		else if (s.IsHighFatPercentage()) {
+			d.allowed_calories = 0.9 * d.maintain_calories;
 			fat_cals = (d.allowed_calories - prot_cals) * 0.33;
 			carb_cals = (d.allowed_calories - prot_cals) * 0.67;
 			d.is_easy_day = false;
 		}
 		else {
-			d.allowed_calories = 1.4 * d.maintain_calories;
-			prot_cals = min_protein * 4.4;
+			d.allowed_calories = 1.1 * d.maintain_calories;
 			fat_cals = (d.allowed_calories - prot_cals) * 0.33;
 			carb_cals = (d.allowed_calories - prot_cals) * 0.67;
 			d.is_easy_day = false;
 		}
 		
-		if (d.is_easy_day) {
-			d.mode = MODE_MAINTAIN;
-			d.variant_type = VARIANT_SCORE;
+		if (1) {
+			String dbg_str;
+			dbg_str << planned_daily.GetCount()-1 << ":\t";
+			
+			if (s.IsTooHighFatPercentage()) dbg_str << "++F";
+			else if (s.IsHighFatPercentage()) dbg_str << "+F";
+			else dbg_str << "-F";
+			
+			if (s.IsTooLowWeight()) dbg_str << "--W";
+			else if (s.IsLowWeight()) dbg_str << "-W";
+			else dbg_str << "+W";
+			
+			dbg_str << " min_prot: " << (min_protein / s.weight) << ", cals: " << (d.allowed_calories / d.maintain_calories);
+			LOG(dbg_str);
 		}
 		
-		double calorie_deficit = 1.0 - (d.allowed_calories / d.maintain_calories);
-		max_calorie_deficit = max(calorie_deficit, max_calorie_deficit);
-		calorie_deficit_sum += calorie_deficit;
+		double calorie_deficit = max(0.0, 1.0 - (d.allowed_calories / d.maintain_calories));
+		s.AddCalorieDeficit(calorie_deficit);
 		
 		d.maintain_burned_calories = d.maintain_calories * calorie_deficit;
 		
-		if (walking_dist && d.mode != MODE_WEIGHTLOSS)
-			d.walking_burned_calories = conf->GetCaloriesWalkingDistSpeed(weight, walking_dist, walking_speed);
-		else
-			d.walking_burned_calories = 0;
+		d.walking_burned_calories = 0;
+		d.jogging_burned_calories = 0;
+		d.strength_burned_calories = 0;
 		
-		if (jogging_dist && d.mode != MODE_WEIGHTLOSS)
-			d.jogging_burned_calories = conf->GetCaloriesJoggingDistSpeed(weight, jogging_dist, jogging_speed);
-		else
+		if (s.walking_dist && d.mode != MODE_WEIGHTLOSS)
+			d.walking_burned_calories = conf->GetCaloriesWalkingDistSpeed(s.weight, s.walking_dist, s.walking_speed);
+		
+		if (s.jogging_dist && d.mode != MODE_WEIGHTLOSS)
+			d.jogging_burned_calories = conf->GetCaloriesJoggingDistSpeed(s.weight, s.jogging_dist, s.jogging_speed);
+		
+		if (d.mode == MODE_WEIGHTLOSS || d.mode == MODE_MUSCLEGAIN || planned_daily.GetCount() % 2)
+			d.strength_burned_calories = s.exercise_kcal;
+		
+		if (d.is_easy_day) {
+			d.mode = MODE_MAINTAIN;
+			d.variant_type = VARIANT_SCORE;
 			d.jogging_burned_calories = 0;
+			d.strength_burned_calories = 0;
+		}
 		
-		if (d.mode == MODE_WEIGHTLOSS || d.mode == MODE_MUSCLEGAIN)
-			d.strength_burned_calories = 600;
+		d.burned_calories = -d.allowed_calories + d.maintain_calories + d.walking_burned_calories + d.jogging_burned_calories + d.strength_burned_calories;
 		
-		d.burned_calories = d.maintain_burned_calories + d.walking_burned_calories + d.jogging_burned_calories + d.strength_burned_calories;
-		
-		#if 1
-		double burned_protein_grams = max(-max_lean_gain * 0.26, maintain_protein - (prot_cals / 4.4));
-		double burned_lean_cals = burned_protein_grams / 26.0 * 250.0; // from beef... lol
+		double max_protein_gain = s.max_lean_gain * 0.26;
+		double protein_gram_diff = (prot_cals / 4.4) - maintain_protein;
+		double gained_protein_grams = max(0.0, min(max_protein_gain, +protein_gram_diff));
+		double burned_protein_grams = max(0.0, -protein_gram_diff);
+		double gained_lean_kgs  = gained_protein_grams / 26.0 * 0.1; // prot 26g/100g --> kgs
 		double burned_lean_kgs  = burned_protein_grams / 26.0 * 0.1; // prot 26g/100g --> kgs
-		double burned_fat_cals = d.burned_calories - burned_lean_cals;
-		#else
-		double burned_lean_cals = lean_fat_loss_ratio * d.burned_calories;
-		double burned_fat_cals = (1.0 - lean_fat_loss_ratio) * d.burned_calories;
-		double burned_lean_kgs = burned_lean_cals / 250.0 * 0.1;
-		#endif
-		double burned_fat_kgs = burned_fat_cals / cals_in_kg_fat;
-		d.burned_kgs = burned_lean_kgs + burned_fat_kgs;
+		// NOTE: muscle gain comes from negative burned_protein_grams, which is too simplified
+		double released_lean_cals = burned_protein_grams / 26.0 * 250.0; // from beef... lol
+		double released_protein_cals = max(0.0, (protein_gram_diff - max_protein_gain) / 4.4);
+		
+		double fat_cals_diff = -d.burned_calories + released_lean_cals + released_protein_cals;
+		double burned_fat_cals = max(0.0, -fat_cals_diff);
+		double gained_fat_cals = max(0.0, +fat_cals_diff);
+		double burned_fat_kgs = burned_fat_cals / s.cals_in_kg_fat;
+		double gained_fat_kgs = gained_fat_cals / s.cals_in_kg_fat;
+		
+		
+		if (!s.IsHighFatPercentage() && burned_fat_cals > 0.0) {
+			double new_allowed_calories = d.allowed_calories + burned_fat_cals;
+			double diff = new_allowed_calories - d.allowed_calories;
+			ASSERT(diff > 0);
+			d.allowed_calories += diff;
+			fat_cals += diff * 0.33;
+			carb_cals += diff * 0.67;
+			burned_fat_cals = 0;
+			burned_fat_kgs = 0;
+		}
+		
+		
+		d.burned_kgs = burned_lean_kgs + burned_fat_kgs - gained_lean_kgs - gained_fat_kgs;
 		
 		d.food.Reset();
 		for(const NutritionRecommendation& r : db.nutr_recom) {
 			if (r.per_kg)
-				d.food.nutr[r.nutr_no] = weight * r.value;
+				d.food.nutr[r.nutr_no] = s.weight * r.value;
 			else
 				d.food.nutr[r.nutr_no] = r.value;
 		}
 		double fat_grams = max(min_fat, fat_cals / 9.0);
-		d.food.grams = weight / 100.0 * 2000.0;
+		d.food.grams = s.weight / 100.0 * 2000.0;
 		d.food.nutr[KCAL] = d.allowed_calories;
 		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
 		d.food.nutr[FAT] = fat_grams; // based on coconut oil nutrients
 		d.food.nutr[CARB] = carb_cals / 10.0;
 		ASSERT(db.nutr_recom.GetCount());
 		
-		double new_lean_kgs = lean_kgs - burned_lean_kgs;
-		double new_fat_kgs = fat_kgs - burned_fat_kgs;
-		ASSERT(new_lean_kgs <= lean_kgs + max_lean_gain);
-		internal_kgs = (new_fat_kgs + new_lean_kgs) / (1.0 - internal_perc) * internal_perc;
-		fat_perc = new_fat_kgs / (new_fat_kgs + new_lean_kgs + internal_kgs);
-		lean_perc = new_lean_kgs / (new_fat_kgs + new_lean_kgs + internal_kgs);
-		weight = new_fat_kgs + new_lean_kgs + internal_kgs;
+		double new_lean_kgs = lean_kgs - burned_lean_kgs + gained_lean_kgs;
+		double new_fat_kgs = fat_kgs - burned_fat_kgs + gained_fat_kgs;
+		ASSERT(new_lean_kgs <= lean_kgs + s.max_lean_gain);
+		s.SetLeanAndFatMass(new_lean_kgs, new_fat_kgs);
 		
 		while (next_wl && date >= Date(next_wl->added)) {
 			wl = next_wl;
+			s.Set(*wl);
 			wl_i++;
 			next_wl = (wl_i+1) < weights.GetCount() ? &weights[wl_i+1] : NULL;
-			if (wl->weight > 0.0 && wl->fat > 0.0 && wl->muscle > 0.0) {
-				weight = wl->weight;
-				fat_perc = wl->fat * 0.01;
-				lean_perc = wl->muscle * 0.01;
-				internal_perc = 1.0 - lean_perc - fat_perc;
-				tgt_lean_perc = 1.0 - (internal_perc + tgt_fat_perc); // skeleton 15%, organs 25%, fat
-				tgt_lean_kgs = tgt_weight * tgt_lean_perc;
-				internal_kgs = internal_perc * weight;
-				
-				double fat_loss = (begin_weight * begin_fat_perc) - (weight * fat_perc);
-				double muscle_loss = (begin_weight * (1.0 - begin_lean_perc)) - (weight * (1.0 - lean_perc));
-				if (fat_loss > 0.0 && muscle_loss > 0.0) {
-					double lean_fat_loss_ratio = muscle_loss / (fat_loss + muscle_loss);
-					lean_fat_loss_ratio_av.Add(lean_fat_loss_ratio);
-				}
-			}
 		}
 		
 	}
 	
-	av_calorie_deficit = calorie_deficit_sum / planned_daily.GetCount();
+	double lean_fat_loss_ratio = s.lean_fat_loss_ratio_av.GetMean();
+	
+	av_calorie_deficit = s.calorie_deficit_sum / planned_daily.GetCount();
 	
 	confs.Top().end_date = begin_date + planned_daily.GetCount();
 	
@@ -563,16 +567,19 @@ void Profile::SetMealPresetFoodsUsed() {
 
 
 
-int GetTargetWeight(double height_m) {
+int GetTargetWeight(double height_cm) {
+	double height_m = height_cm * 0.01;
 	double add = 4 + (15 - 4) * (height_m - 1.68) / (1.96 - 1.68);
 	return 0.942 * ((height_m * 100) - 100 + add);
 }
 
-int GetBmiWeight(double height_m, int bmi) {
+int GetBmiWeight(double height_cm, int bmi) {
+	double height_m = height_cm * 0.01;
 	return bmi * height_m * height_m;
 }
 
-double GetBMI(double height_m, double weight_kg) {
+double GetBMI(double height_cm, double weight_kg) {
+	double height_m = height_cm * 0.01;
 	return weight_kg / (height_m * height_m);
 }
 
@@ -789,3 +796,108 @@ String GetSnapshotSourceString(int i) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PlanState::PlanState(bool is_male, Configuration& conf, WeightLossStat& wl) : is_male(is_male) {
+	cals_in_kg_fat = 3500/0.453592;
+	tgt_fat_perc = is_male ? 6 * 0.01 : 21 * 0.01;
+	max_lean_gain = 226 / 7.0; // around 0.5 pounds (=~226 grams) lean in a week (TODO shouldn't the weight affect this too? how much lean gain per weight kg?)
+	walking_speed = 0.916; // m/s
+	internal_perc = 0.15 + 0.25;
+	internal_kgs = internal_perc * wl.weight;
+	
+	worst_weight = wl.weight;
+	worst_fat_perc = wl.fat * 0.01;
+	worst_lean_perc = wl.muscle * 0.01;
+	
+	Set(conf);
+	Set(wl);
+	
+	lean_fat_loss_ratio_av.Add(0.52);
+}
+
+bool PlanState::IsReadyForMaintenance() const {
+	return	tgt_fat_perc + 0.01 > fat_perc &&
+			tgt_weight - 1.0 < weight;
+}
+
+double PlanState::GetProgress() const {
+	double weight_prog = fabs(weight - tgt_weight) / fabs(worst_weight - tgt_weight);
+	double fat_perc_prog = fabs(fat_perc - tgt_fat_perc) / fabs(worst_fat_perc - tgt_fat_perc);
+	//double lean_perc_prog = fabs(lean_perc - tgt_lean_perc) / fabs(worst_lean_perc - tgt_lean_perc);
+	//double prog = (weight_prog + fat_perc_prog + lean_perc_prog) / 3.0;
+	double prog = (weight_prog + fat_perc_prog) / 2.0;
+	return prog;
+}
+
+void PlanState::Set(Configuration& conf) {
+	exercise_kcal = conf.tgt_exercise_kcal;
+	walking_dist = conf.walking_dist + conf.tgt_walking_dist;
+	jogging_dist = conf.tgt_jogging_dist;
+	tgt_weight = GetTargetWeight(conf.height);
+}
+
+void PlanState::Set(WeightLossStat& wl) {
+	tgt_lean_perc = 1.0 - (internal_perc + tgt_fat_perc); // skeleton 15%, organs 25%, fat
+	jogging_speed = 2.500; // m/s (TODO set in gui and read from wl)
+	if (wl.walking_mins > 0 && wl.walking > 0.0) {
+		double seconds = wl.walking_mins * 60;
+		double meters = wl.walking * 1000;
+		walking_speed = meters / seconds; // m/s
+	}
+	weight = wl.weight;
+	fat_perc = wl.fat * 0.01;
+	lean_perc = wl.muscle * 0.01;
+	
+	if (wl.weight > 0.0 && wl.fat > 0.0 && wl.muscle > 0.0) {
+		weight = wl.weight;
+		fat_perc = wl.fat * 0.01;
+		lean_perc = wl.muscle * 0.01;
+		internal_perc = 1.0 - lean_perc - fat_perc;
+		tgt_lean_perc = 1.0 - (internal_perc + tgt_fat_perc); // skeleton 15%, organs 25%, fat
+		internal_kgs = internal_perc * weight;
+		
+		double fat_loss = (worst_weight * worst_fat_perc) - (weight * fat_perc);
+		double muscle_loss = (worst_weight * (1.0 - worst_lean_perc)) - (weight * (1.0 - lean_perc));
+		if (fat_loss > 0.0 && muscle_loss > 0.0) {
+			double lean_fat_loss_ratio = muscle_loss / (fat_loss + muscle_loss);
+			lean_fat_loss_ratio_av.Add(lean_fat_loss_ratio);
+		}
+	}
+	
+	CheckWorst();
+}
+
+void PlanState::SetLeanAndFatMass(double new_lean_kgs, double new_fat_kgs) {
+	//internal_kgs = (new_fat_kgs + new_lean_kgs) / (1.0 - internal_perc) * internal_perc;
+	internal_perc = internal_kgs / (new_lean_kgs + new_fat_kgs + internal_kgs);
+	fat_perc = new_fat_kgs / (new_fat_kgs + new_lean_kgs + internal_kgs);
+	lean_perc = new_lean_kgs / (new_fat_kgs + new_lean_kgs + internal_kgs);
+	weight = new_fat_kgs + new_lean_kgs + internal_kgs;
+}
+
+void PlanState::CheckWorst() {
+	if (fabs(weight - tgt_weight) > fabs(worst_weight - tgt_weight))
+		worst_weight = weight;
+	if (fabs(fat_perc - tgt_fat_perc) > fabs(worst_fat_perc - tgt_fat_perc))
+		worst_fat_perc = fat_perc;
+	if (fabs(lean_perc - tgt_lean_perc) > fabs(worst_lean_perc - tgt_lean_perc))
+		worst_lean_perc = lean_perc;
+}
+
+void PlanState::AddCalorieDeficit(double calorie_deficit) {
+	max_calorie_deficit = max(calorie_deficit, max_calorie_deficit);
+	calorie_deficit_sum += calorie_deficit;
+}
