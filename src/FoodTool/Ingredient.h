@@ -95,7 +95,7 @@ inline IngredientT<T> operator-(const IngredientT<T>& a, const IngredientT<T>& b
 	return out;
 }
 
-typedef IngredientT<float> Ingredient;
+typedef IngredientT<double> Ingredient;
 typedef IngredientT<double> IngredientDouble;
 
 

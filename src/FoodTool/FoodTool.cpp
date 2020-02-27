@@ -400,11 +400,12 @@ void MotivationCtrl::Paint(Draw& d) {
 		DailyPlan* today = it;
 		DailyPlan* end = prof.planned_daily.End();
 		DailyPlan* lowest_fat_perc = NULL;
+		double tgt_fat_perc = DEFAULT_FAT_PERC(prof.is_male);
 		while (it != end) {
 			if (it->date == now)
 				today = it;
 			if (it->date > now) {
-				if (lowest_fat_perc == NULL && (it->variant_type == VARIANT_MUSCLEGAIN || it->variant_type == VARIANT_MAINTENANCE))
+				if (lowest_fat_perc == NULL && fabs(it->fat_perc - tgt_fat_perc) < 0.01)
 					lowest_fat_perc = it;
 				if (it->variant_type == VARIANT_MAINTENANCE)
 					break;
@@ -412,8 +413,8 @@ void MotivationCtrl::Paint(Draw& d) {
 			it++;
 		}
 		int ydiff = 0;
-		int days_remaining = lowest_fat_perc - today;
-		if (days_remaining >= 0) {
+		if (lowest_fat_perc) {
+			int days_remaining = lowest_fat_perc - today;
 			String remaining = IntStr(days_remaining) + t_(" days until lowest fat-\%");
 			if (days_remaining < 30) {
 				fnt = SansSerif(40);
@@ -430,8 +431,9 @@ void MotivationCtrl::Paint(Draw& d) {
 			ydiff += fnt.GetHeight();
 		}
 		
-		days_remaining = it - today;
-		if (days_remaining >= 0) {
+		
+		if (today) {
+			int days_remaining = it - today;
 			String remaining = IntStr(days_remaining) + t_(" days until maintenance");
 			if (days_remaining < 30) {
 				fnt = SansSerif(40);
@@ -2664,6 +2666,7 @@ void FoodLogCtrl::Zero() {
 		list.Set(i, 6, "");
 	}
 	list.SetCount(db.used_foods.GetCount());
+	list.SetSortColumn(0);
 }
 
 void FoodLogCtrl::Expand() {

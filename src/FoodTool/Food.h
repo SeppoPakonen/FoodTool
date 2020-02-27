@@ -101,7 +101,7 @@ struct MealDebugger {
 	bool do_debug = false;
 };
 
-typedef VectorMap<int, float> FoodQuantity;
+typedef VectorMap<int, double> FoodQuantity;
 typedef VectorMap<int, int> FoodQuantityInt;
 
 struct FoodDay;
@@ -156,7 +156,7 @@ struct MealPreset : Moveable<MealPreset> {
 struct Meal : Moveable<Meal> {
 	String key;
 	Time time;
-	float grams = 0;
+	double grams = 0;
 	
 	int removed0 = -1;
 	FoodQuantity removed1;

@@ -835,7 +835,7 @@ String GetSnapshotSourceString(int i) {
 
 PlanState::PlanState(bool is_male, Configuration& conf, WeightLossStat& wl) : is_male(is_male) {
 	cals_in_kg_fat = 3500/0.453592;
-	tgt_fat_perc = is_male ? 6 * 0.01 : 21 * 0.01;
+	tgt_fat_perc = DEFAULT_FAT_PERC(is_male);
 	max_lean_gain = 226 / 7.0; // around 0.5 pounds (=~226 grams) lean in a week (TODO shouldn't the weight affect this too? how much lean gain per weight kg?)
 	walking_speed = 0.916; // m/s
 	internal_perc = 0.15 + 0.25;

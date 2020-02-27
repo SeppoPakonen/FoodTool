@@ -153,7 +153,7 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 	day.mode = plan.mode;
 	day.food_grams <<= prev.food_grams;
 	for(int j = 0; j < prev.food_usage.GetCount(); j++) {
-		float& grams = day.food_grams.GetAdd(prev.food_usage.GetKey(j), 0);
+		double& grams = day.food_grams.GetAdd(prev.food_usage.GetKey(j), 0);
 		grams -= prev.food_usage[j];
 		if (grams < 0) grams = 0;
 	}
@@ -193,7 +193,7 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 	
 	// Do supplements first with low calories
 	if (remaining.nutr[KCAL] <= 1000) {
-		double supplement_kcal = min(800.0f, remaining.nutr[KCAL]);
+		double supplement_kcal = min<double>(800.0, remaining.nutr[KCAL]);
 		MakeSupplements(plan, day, supplement_kcal, remaining);
 		
 		if (remaining.nutr[KCAL] >= 50)
@@ -275,7 +275,7 @@ void FoodStorage::PlanShopping(int day_i, const Vector<DailyPlan>& planned_daily
 		day.used_food_amount <<= prev->used_food_amount;
 		for(int j = 0; j < day.food_usage.GetCount(); j++) {
 			int db_i = day.food_usage.GetKey(j);
-			float usage = day.food_usage[j];
+			double usage = day.food_usage[j];
 			total_usage.GetAdd(db_i, 0) += usage;
 			day.used_food_amount.GetAdd(db_i, 0) += usage;
 		}
@@ -588,7 +588,7 @@ void FoodStorage::MakeMenu(const DailyPlan& plan, FoodDay& day, double target_kc
 			double grams = mul * mi.max_grams;
 			day.food_usage.GetAdd(mi.db_food_no, 0) += grams;
 			
-			float& left = food_left.GetAdd(mi.db_food_no, 0);
+			double& left = food_left.GetAdd(mi.db_food_no, 0);
 			left = max(0.0, left - grams);
 		}
 		

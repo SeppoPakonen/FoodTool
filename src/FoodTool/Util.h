@@ -1,6 +1,7 @@
 #ifndef _FoodTool_Util_h_
 #define _FoodTool_Util_h_
 
+#define FLOAT COMBINE(flo, at)
 
 struct Gram {
 	double value = 0;
@@ -29,12 +30,15 @@ struct Kilogram {
 
 
 
-struct FloatTrans {
+#define FLOATTRANS COMBINE(Float, Trans)
+struct FLOATTRANS : Moveable<FLOATTRANS> {
 	double value;
 	
+	FLOATTRANS() {value = 0;}
+	FLOATTRANS(double d) {value = d;}
 	void Serialize(Stream& s) {
 		if (s.IsLoading()) {
-			float f;
+			FLOAT f;
 			s % f;
 			value = f;
 		}
@@ -44,7 +48,15 @@ struct FloatTrans {
 	}
 	
 	double operator=(double d) {value = d; return d;}
+	double operator+=(double d) {value += d; return d;}
+	double operator-=(double d) {value -= d; return d;}
+	double operator*=(double d) {value *= d; return d;}
+	double operator/=(double d) {value /= d; return d;}
+	bool operator==(double d) {return value == d;}
+	bool operator!=(double d) {return value != d;}
 	operator double() const {return value;}
+	operator Value() const {return value;}
+	String ToString() const {return DblStr(value);}
 };
 
 struct RunningFlag {

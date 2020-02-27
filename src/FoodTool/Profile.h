@@ -1,6 +1,7 @@
 #ifndef _FoodTool_Profile_h_
 #define _FoodTool_Profile_h_
 
+#define DEFAULT_FAT_PERC(is_male) (is_male ? 6 * 0.01 : 21 * 0.01)
 
 inline void RealizeImageFolder() {RealizeDirectory(ConfigFile("images"));}
 inline String GetImageFile(String file) {return AppendFileName(ConfigFile("images"), file);}
@@ -66,12 +67,12 @@ enum {
 
 struct WeightLossStat : Moveable<WeightLossStat> {
 	Time added;
-	float weight, fat, liquid, muscle, bmi, prog;
+	double weight, fat, liquid, muscle, bmi, prog;
 	bool is_dexa;
 	
 	byte sentiment = NORMAL, health = NORMAL, workload = NORMAL;
-	float walking = 0, walking_mins = 0, excess = 0;
-	float neck = 0, bicep = 0, forearm = 0, chest = 0, waist = 0, buttocks = 0, thigh = 0, leg = 0;
+	double walking = 0, walking_mins = 0, excess = 0;
+	double neck = 0, bicep = 0, forearm = 0, chest = 0, waist = 0, buttocks = 0, thigh = 0, leg = 0;
 	
 	void Serialize(Stream& s) {
 		VER(4);

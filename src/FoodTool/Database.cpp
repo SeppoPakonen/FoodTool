@@ -434,7 +434,7 @@ int Database::AddNutrition(String name, String unit, String desc) {
 	return i;
 }
 
-FoodDescription& Database::AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, float nf, float pf, float ff, float cf) {
+FoodDescription& Database::AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, double nf, double pf, double ff, double cf) {
 	String key;
 	for(int i = 0; i < 8; i++)
 		key.Cat('A' + Random('Z' - 'A' + 1));
@@ -466,6 +466,8 @@ FoodDescription& FoodDescription::AddNutrition(int nutr_no, double value, double
 }
 
 void Database::VLCD_Preset() {
+	
+	
 	AddFood("OTHER", "Salt, iodized", "", "Meira", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(25, 38758, 0);
 	AddFood("0100", "Magnex sitraatti + B6- vitamiini", "", "", "", "", "", 0, "", 0, 0, 0, 0)
@@ -844,6 +846,7 @@ void Database::VLCD_Preset() {
 	used_foods.Add(4499);
 	used_foods.Add(6204);
 	used_foods.Add(6389);
+	
 	
 	SortIndex(used_foods, StdLess<int>());
 }

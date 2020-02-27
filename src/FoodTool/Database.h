@@ -31,9 +31,9 @@ enum {
 
 struct NutritionInfo : Moveable<NutritionInfo> {
 	uint16 nutr_no = 0;
-	float nutr_value = 0;
+	double nutr_value = 0;
 	//int num_data_pts;
-	float std_error = 0;
+	double std_error = 0;
 	bool is_user_added = false;
 	
 	void Serialize(Stream& s) {
@@ -64,7 +64,7 @@ struct FoodDescription : Moveable<FoodDescription> {
 	String manufacturer_name, survey, ref_desc;
 	int refuse = 0;
 	String sci_name;
-	float n_factor = 0, pro_factor = 0, fat_factor = 0, cho_factor = 0;
+	double n_factor = 0, pro_factor = 0, fat_factor = 0, cho_factor = 0;
 	bool require_soaking = false;
 	bool is_user_added = false;
 	
@@ -158,7 +158,7 @@ struct Database {
 	void LoadThis() {LoadFromFile(*this, ConfigFile("latest.db"));}
 	void StoreThis() {StoreToFile(*this, ConfigFile("latest.db"));}
 	bool Init();
-	FoodDescription& AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, float nf, float pf, float ff, float cf);
+	FoodDescription& AddFood(String fg, String l, String s, String c, String m, String su, String r, int re, String sci, double nf, double pf, double ff, double cf);
 	int AddNutrition(String name, String unit, String desc);
 	void StartStoreThis() {Thread::Start(THISBACK(StoreThis));}
 	int FindFood(String long_desc) const;
