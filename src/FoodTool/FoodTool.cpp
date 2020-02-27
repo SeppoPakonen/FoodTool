@@ -8,6 +8,12 @@
 
 #define GRADCOLOR(x) Rainbow(x)
 
+
+void SplitterHotfix(Splitter& split, int pos) {
+	if (split.GetPos() <= 100)
+		split.SetPos(pos);
+}
+
 Color CoolBlue(double progress) {
 	double alpha = progress - (int)progress;
 	Color a = Color(28, 170, 255);
@@ -66,7 +72,8 @@ Image GetSmiley(double progress) {
 		case 7: return GetSmiley("verygood.png");
 		case 8: return GetSmiley("best.png");
     }
-    return Image();
+    if (progress < 0) return GetSmiley("worst.png");
+    else return GetSmiley("best.png");
 }
 
 
@@ -527,6 +534,8 @@ ConfigurationCtrl::ConfigurationCtrl() {
 void ConfigurationCtrl::Data() {
 	Profile& prof = GetProfile();
 	
+	SplitterHotfix(split, 2500);
+	
 	if (prof.confs.GetCount() != list.GetCount()) {
 		for(int i = 0; i < prof.confs.GetCount(); i++) {
 			int row = prof.confs.GetCount() - 1 - i;
@@ -618,6 +627,8 @@ ExceptionsCtrl::ExceptionsCtrl() {
 void ExceptionsCtrl::Data(bool force) {
 	Profile& prof = GetProfile();
 	
+	SplitterHotfix(split, 3333);
+	
 	if (prof.exceptions.GetCount() != list.GetCount() || force) {
 		for(int i = 0; i < prof.exceptions.GetCount(); i++) {
 			int row = prof.exceptions.GetCount() - 1 - i;
@@ -676,6 +687,8 @@ NoteCtrl::NoteCtrl() {
 
 void NoteCtrl::Data() {
 	Profile& prof = GetProfile();
+	
+	SplitterHotfix(split, 2500);
 	
 	if (prof.notes.GetCount() != list.GetCount()) {
 		for(int i = 0; i < prof.notes.GetCount(); i++) {
@@ -748,7 +761,6 @@ void UsageCtrl::Data() {
 		total.SetLabel(Format(t_("You have used this program for %d minutes."), total_mins));
 	}
 }
-
 
 
 
@@ -992,6 +1004,11 @@ GraphCtrl::GraphCtrl() {
 	if (!list.IsCursor() && list.GetCount())
 		list.SetCursor(0);
 	SelectSource();
+}
+
+void GraphCtrl::Data() {
+	graph.Refresh();
+	SplitterHotfix(split, 2500);
 }
 
 String MultipurposeGraph::GetLineTitle(int s, int l) {return src[s].lines[l].title;}
@@ -1727,6 +1744,8 @@ NutrientDeficitCtrl::NutrientDeficitCtrl() {
 void NutrientDeficitCtrl::Data() {
 	Profile& prof = GetProfile();
 	
+	SplitterHotfix(split, 2500);
+	
 	if (prof.defs.GetCount() != list.GetCount()) {
 		for(int i = 0; i < prof.defs.GetCount(); i++) {
 			int row = prof.defs.GetCount() - 1 - i;
@@ -1832,6 +1851,8 @@ FoodInstructionCtrl::FoodInstructionCtrl() {
 
 void FoodInstructionCtrl::Data() {
 	Profile& prof = GetProfile();
+	
+	SplitterHotfix(hsplit, 3333);
 	
 	if (prof.storage.days.GetCount() != list.GetCount()) {
 		Date today = GetSysTime();
@@ -2052,6 +2073,8 @@ DailyNutritionsCtrl::DailyNutritionsCtrl() {
 
 void DailyNutritionsCtrl::Data() {
 	Profile& prof = GetProfile();
+	
+	SplitterHotfix(hsplit, 2000);
 	
 	if (prof.storage.days.GetCount() != list.GetCount()) {
 		Date today = GetSysTime();
@@ -2345,6 +2368,8 @@ FoodWishCtrl::FoodWishCtrl() {
 void FoodWishCtrl::Data() {
 	Profile& prof = GetProfile();
 	
+	SplitterHotfix(vsplit, 5000);
+	
 	if (prof.presets.GetCount() != list.GetCount()) {
 		VectorMap<int, double> preset_scores;
 		for(int i = 0; i < prof.presets.GetCount(); i++)
@@ -2514,6 +2539,8 @@ void FoodLogCtrl::SetData(ArrayCtrl& list, Vector<FoodPrice>& data) {
 void FoodLogCtrl::Data() {
 	Profile& prof = GetProfile();
 	ProductQueueHistory& data = GetData();
+	
+	SplitterHotfix(hsplit, 2500);
 	
 	SetData(queue, data.queue);
 	SetData(history, data.history);
@@ -2826,6 +2853,8 @@ void PriceCtrl::Data(bool force) {
 	const Database& db = DB();
 	Profile& prof = GetProfile();
 	Date today = GetSysTime();
+	
+	SplitterHotfix(hsplit, 5000);
 	
 	VectorMap<int, String> meal_str;
 	for(const MealPreset& mp : prof.presets) {

@@ -27,6 +27,7 @@ using namespace Upp;
 #include "Ingredient.h"
 #include "Food.h"
 #include "FoodStorage.h"
+#include "Body.h"
 #include "Activity.h"
 #include "Profile.h"
 #include "VideoCapture.h"
@@ -169,7 +170,7 @@ struct GraphCtrl : public ParentCtrl {
 	typedef GraphCtrl CLASSNAME;
 	GraphCtrl();
 	
-	void Data() {graph.Refresh();}
+	void Data();
 	void SelectSource();
 };
 

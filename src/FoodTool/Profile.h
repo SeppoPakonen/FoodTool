@@ -354,6 +354,7 @@ struct Profile {
 	
 	FoodPriceHistory price;
 	FoodStorage storage;
+	Activity act;
 	Date begin_date;
 	double av_calorie_deficit;
 	int version = 0;
@@ -379,7 +380,7 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		VER(6);
+		VER(7);
 		FOR_VER(0) {
 			s
 				% exceptions
@@ -405,6 +406,7 @@ struct Profile {
 		FOR_VER(4) {s % supplements;}
 		FOR_VER(5) {s % price;}
 		FOR_VER(6) {s % foodlog % shoplog % receiptlog;}
+		FOR_VER(7) {s % act;}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);

@@ -2,6 +2,33 @@
 #define _FoodTool_Util_h_
 
 
+struct Gram {
+	double value = 0;
+	
+	Gram() {}
+	Gram(double d) : value(d) {}
+	Gram(const Gram& s) : value(s.value) {}
+	void operator=(const Gram& s) {value = s.value;}
+	operator double () const {return value;}
+	String ToString() const {return DblStr(value) + " g";}
+	static String GetUnitString() {return "g";}
+};
+
+struct Kilogram {
+	double value = 0;
+	
+	Kilogram() {}
+	Kilogram(double d) : value(d) {}
+	Kilogram(const Kilogram& s) : value(s.value) {}
+	void operator=(const Kilogram& s) {value = s.value;}
+	operator double () const {return value;}
+	String ToString() const {return DblStr(value) + " kg";}
+	static String GetUnitString() {return "kg";}
+};
+
+
+
+
 struct FloatTrans {
 	double value;
 	

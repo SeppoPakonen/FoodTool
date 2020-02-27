@@ -81,6 +81,9 @@ void WeightCtrl::Reset() {
 	edit.preview_cam.Enable();
 	edit.capture_images.Enable();
 	edit.add.Enable();
+	
+	time = GetSysTime();
+	UpdateSmiley();
 }
 
 void WeightCtrl::UpdateBMI() {
@@ -104,10 +107,14 @@ void WeightCtrl::Data() {
 
 void WeightCtrl::UpdateSmiley() {
 	Profile& prof = GetProfile();
-	const Configuration& conf = prof.confs.Top();
-	double tgt_weight = GetTargetWeight(conf.height);
-	double prog = 1.0 - ((double)edit.weight.GetData() - tgt_weight) / (prof.weights[0].weight - tgt_weight);
-	edit.smiley.SetImage(GetSmiley(prog));
+	Date date(time);
+	for(const DailyPlan& plan : prof.planned_daily) {
+		if (plan.date == date) {
+			edit.smiley.SetImage(GetSmiley(plan.prog));
+			return;
+		}
+	}
+	edit.smiley.SetImage(GetSmiley(1));
 }
 
 void WeightCtrl::SelectWeightStat() {
@@ -139,7 +146,9 @@ void WeightCtrl::SelectWeightStat() {
 	edit.buttocks.SetData(w.buttocks);
 	edit.thigh.SetData(w.thigh);
 	edit.leg.SetData(w.leg);
-	edit.smiley.SetImage(GetSmiley(w.prog));
+	
+	time = w.added;
+	UpdateSmiley();
 	
 	Thread::Start(THISBACK3(LoadImages, w.GetFrontFile(),w.GetRightFile(), w.GetBackFile()));
 	

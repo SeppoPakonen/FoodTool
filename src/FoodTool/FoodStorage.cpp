@@ -24,16 +24,17 @@ void FoodStorage::Update(bool replan, const Vector<DailyPlan>& planned_daily) {
 	Date begin = today;
 	
 	int target_count = 7;
-	int begin_i = 0;
+	int today_i = 0;
 	for(int i = 0; i < days.GetCount(); i++) {
 		const FoodDay& day = days[i];
 		if (day.date == begin) {
-			begin_i = i;
+			today_i = i;
 			target_count = i + 7;
 			break;
 		}
 	}
 	
+	int begin_i = today_i;
 	if (!replan)
 		begin_i = days.GetCount();
 	
@@ -50,19 +51,10 @@ void FoodStorage::Update(bool replan, const Vector<DailyPlan>& planned_daily) {
 			PlanShopping(i, planned_daily);
 	}
 	
-	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--) {
-		Date q(prof.foodlog.queue[i].time);
-		if (q >= d || q < today)
-			prof.foodlog.queue.Remove(i);
-	}
+	prof.foodlog.queue.Clear();
+	prof.shoplog.queue.Clear();
 	
-	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--) {
-		Date q(prof.shoplog.queue[i].time);
-		if (q >= d || q < today)
-			prof.shoplog.queue.Remove(i);
-	}
-	
-	for(int i = begin_i; i < days.GetCount(); i++) {
+	for(int i = today_i; i < days.GetCount(); i++) {
 		AddFoodQueue(i, planned_daily);
 		if (days[i].is_shopping)
 			AddShopQueue(i);
@@ -315,7 +307,7 @@ void FoodStorage::PlanShopping(int day_i, const Vector<DailyPlan>& planned_daily
 		}
 	}
 	
-	day.buy_amount.GetAdd(db.FindFood("Soy protein isolate"), 0) += 100;
+	//day.buy_amount.GetAdd(db.FindFood("Soy protein isolate"), 0) += 100;
 	
 	prev = &day;
 	for(int i = day_i+1; i < days.GetCount(); i++) {
@@ -693,6 +685,26 @@ void FoodStorage::AddFoodQueue(int day_i, const Vector<DailyPlan>& planned_daily
 		const Meal& m = day.meals[i];
 		meal_types.GetAdd(m.key, 0) += m.grams;
 		meal_times.GetAdd(m.key, m.time);
+	}
+	
+	if (day.supplement_usage.GetCount()) {
+		FoodPrice& out = out_vec.Add();
+		out.time = day.wake_time;
+		for(int i = 0; i < day.supplement_usage.GetCount(); i++) {
+			int db_no = day.supplement_usage.GetKey(i);
+			double grams = day.supplement_usage[i];
+			if (grams > 0.0) {
+				FoodPriceQuote& quote = out.values.Add(db_no);
+				int k = prof.price.history.Find(db_no);
+				if (k >= 0 && prof.price.history[k].GetCount()) {
+					const FoodPriceQuote& prev_quote = prof.price.history[k].Top();
+					quote.Set(out.time, grams, prev_quote);
+				}
+				else {
+					quote.SetPriceless(out.time, grams);
+				}
+			}
+		}
 	}
 	
 	for(int i = 0; i < meal_types.GetCount(); i++) {

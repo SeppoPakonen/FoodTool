@@ -143,6 +143,8 @@ bool Profile::UpdatePlan() {
 	WeightLossStat* next_wl = 1 < weights.GetCount() ? &weights[1] : NULL;
 	int wl_i = 0;
 	
+	NutrientDeficitProfile* def = defs.GetCount() ? &defs.Top() : NULL;
+	
 	PlanState s(is_male, *conf, *wl);
 	
 	if (planned_nutrients.IsEmpty()) {
@@ -152,6 +154,17 @@ bool Profile::UpdatePlan() {
 		for(int i = 0; i < db.nutr_recom.GetCount(); i++)
 			planned_nutrients.FindAdd(db.nutr_recom[i].nutr_no);
 	}
+	
+	Vector<int> def_nutr;
+	def_nutr.SetCount(DEF_COUNT, -1);
+	def_nutr[DEF_CALCIUM] = db.FindNutrition("CA");
+	def_nutr[DEF_MAGNESIUM] = db.FindNutrition("MG");
+	def_nutr[DEF_POTASSIUM] = db.FindNutrition("K");
+	def_nutr[DEF_ZINC] = db.FindNutrition("ZN");
+	def_nutr[DEF_MANGANESE] = db.FindNutrition("MN");
+	def_nutr[DEF_PHOSPHORUS] = db.FindNutrition("P");
+	def_nutr[DEF_SELENIUM] = db.FindNutrition("SE");
+	def_nutr[DEF_IRON] = db.FindNutrition("FE");
 	
 	Date date = begin_date;
 	planned_daily.SetCount(0);
@@ -369,6 +382,16 @@ bool Profile::UpdatePlan() {
 				d.food.nutr[r.nutr_no] = s.weight * r.value;
 			else
 				d.food.nutr[r.nutr_no] = r.value;
+		}
+		if (def) for(int i = 0; i < DEF_COUNT; i++) {
+			int nutr_i = def_nutr[i];
+			if (nutr_i >= 0) {
+				double value = def->elements[i];
+				if (value < 0.5) {
+					double mul = 1 + (0.5 - value) * 2;
+					d.food.nutr[nutr_i] *= mul;
+				}
+			}
 		}
 		double fat_grams = max(min_fat, fat_cals / 9.0);
 		d.food.grams = s.weight / 100.0 * 2000.0;
@@ -834,9 +857,9 @@ bool PlanState::IsReadyForMaintenance() const {
 }
 
 double PlanState::GetProgress() const {
-	double weight_prog = fabs(weight - tgt_weight) / fabs(worst_weight - tgt_weight);
-	double fat_perc_prog = fabs(fat_perc - tgt_fat_perc) / fabs(worst_fat_perc - tgt_fat_perc);
-	//double lean_perc_prog = fabs(lean_perc - tgt_lean_perc) / fabs(worst_lean_perc - tgt_lean_perc);
+	double weight_prog = 1.0 - fabs(weight - tgt_weight) / fabs(worst_weight - tgt_weight);
+	double fat_perc_prog = 1.0 - fabs(fat_perc - tgt_fat_perc) / fabs(worst_fat_perc - tgt_fat_perc);
+	//double lean_perc_prog = 1.0 - fabs(lean_perc - tgt_lean_perc) / fabs(worst_lean_perc - tgt_lean_perc);
 	//double prog = (weight_prog + fat_perc_prog + lean_perc_prog) / 3.0;
 	double prog = (weight_prog + fat_perc_prog) / 2.0;
 	return prog;

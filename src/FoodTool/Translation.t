@@ -246,25 +246,61 @@ fiFI("")
 T_("Menu electrolytes (% of recommended)")
 fiFI("")
 
-T_("Measured weight")
+T_("Measured weight (kg)")
 fiFI("")
 
-T_("Measured fat")
+T_("Weight (kg)")
 fiFI("")
 
-T_("Fat")
+T_("Measured fat (kg)")
 fiFI("")
 
-T_("Measured liquid")
+T_("Fat (kg)")
 fiFI("")
 
-T_("Liquid")
+T_("Measured liquid (kg)")
 fiFI("")
 
-T_("Measured muscle")
+T_("Liquid (kg)")
 fiFI("")
 
-T_("Muscle")
+T_("Measured muscle (kg)")
+fiFI("")
+
+T_("Muscle (kg)")
+fiFI("")
+
+T_("Measured internals (kg)")
+fiFI("")
+
+T_("Internals (kg)")
+fiFI("")
+
+T_("Measured fat (%)")
+fiFI("")
+
+T_("Fat (%)")
+fiFI("")
+
+T_("Measured liquid (%)")
+fiFI("")
+
+T_("Liquid (%)")
+fiFI("")
+
+T_("Measured muscle (%)")
+fiFI("")
+
+T_("Muscle (%)")
+fiFI("")
+
+T_("Measured internals (%)")
+fiFI("")
+
+T_("Internals (%)")
+fiFI("")
+
+T_("Relative liquid (%)")
 fiFI("")
 
 T_("Measured BMI")
@@ -336,6 +372,12 @@ fiFI("")
 T_("Sleeping")
 fiFI("")
 
+T_("Training")
+fiFI("")
+
+T_("%d days")
+fiFI("")
+
 
 // FoodTool1.lay
 
@@ -377,6 +419,9 @@ T_("Jogging/day (km):")
 fiFI("")
 
 T_("Walking/day (km):")
+fiFI("")
+
+T_("Calorie burning by exercise (kcal):")
 fiFI("")
 
 T_("Going to sleep time:")
@@ -697,13 +742,52 @@ fiFI("")
 T_("Add Snapshot")
 fiFI("")
 
+T_("->")
+fiFI("")
+
+T_("<-")
+fiFI("")
+
+T_("For Camera")
+fiFI("")
+
+T_("Zero")
+fiFI("")
+
+T_("Expand")
+fiFI("")
+
+T_("Reduce")
+fiFI("")
+
+T_("Apply store to all:")
+fiFI("")
+
+T_("Multiply grams:")
+fiFI("")
+
+T_("C")
+fiFI("")
+
+
+// FoodStorage.cpp
+
+T_("%4n grams")
+fiFI("")
+
 
 // FoodStorageCtrl.cpp
+
+T_("Source")
+fiFI("")
 
 T_("Mass")
 fiFI("")
 
 T_("Carbs")
+fiFI("")
+
+T_("Fat")
 fiFI("")
 
 T_("Protein")
@@ -736,13 +820,61 @@ fiFI("")
 T_("Go jogging %2n km!")
 fiFI("")
 
+T_("Do muscle resistance exercises!")
+fiFI("")
+
+T_("%2n`kg")
+fiFI("")
+
+T_("%2n`g")
+fiFI("")
+
+T_("%d`pc. ( * ~%2n`kg = ~%2n`kg)")
+fiFI("")
+
+T_("%d`pc. ( * ~%2n`g = ~%2n`g)")
+fiFI("")
+
+T_("%d`*%d`pc. (%d * ~%2n`kg = ~%2n`kg)")
+fiFI("")
+
+T_("%d`*%d`pc. (%d * ~%2n`g = ~%2n`g)")
+fiFI("")
+
+T_("Invalid mass")
+fiFI("")
+
+T_("%2n`EUR/kg")
+fiFI("")
+
+T_("%2n`EUR/g")
+fiFI("")
+
+T_("%2n`EUR (~%2n`kg)")
+fiFI("")
+
+T_("%2n`EUR (~%2n`g)")
+fiFI("")
+
+T_("%2n`EUR/%d`pc. (%2n`EUR/%d`pc., %2n`EUR/pc., ~%2n`kg/pc.)")
+fiFI("")
+
+T_("%2n`EUR/%d`pc. (%2n`EUR/%d`pc., %2n`EUR/pc., ~%2n`g/pc.)")
+fiFI("")
+
+T_("%2n`EUR/%d`pc. (%2n`EUR/pc., ~%2n`kg/pc.)")
+fiFI("")
+
+T_("%2n`EUR/%d`pc. (%2n`EUR/pc., ~%2n`g/pc.)")
+fiFI("")
+
+T_("Invalid price")
+fiFI("")
+
 
 // WeightCtrl.cpp
 
 T_("Date")
-fiFI("")
-
-T_("Weight (kg)")
 fiFI("")
 
 T_("Source #")
@@ -752,4 +884,25 @@ fiFI("")
 // MealPresetCtrl.cpp
 
 T_("Unnamed")
+fiFI("")
+
+
+// Obsolete
+
+T_("Measured weight")
+fiFI("")
+
+T_("Measured fat")
+fiFI("")
+
+T_("Measured liquid")
+fiFI("")
+
+T_("Liquid")
+fiFI("")
+
+T_("Measured muscle")
+fiFI("")
+
+T_("Muscle")
 fiFI("")

@@ -33,6 +33,8 @@ file
 	FoodStorage.cpp,
 	FoodStorageCtrl.h,
 	FoodStorageCtrl.cpp,
+	Body.h,
+	Body.cpp,
 	Activity.h,
 	Activity.cpp,
 	ActivityCtrl.h,

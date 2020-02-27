@@ -14,6 +14,7 @@ struct WeightCtrl : public ParentCtrl {
 	Image last_cap;
 	Mutex cap_lock, live_lock;
 	TimeStop ts;
+	Time time;
 	int capture_mode = 0, countdown_seconds = 0;
 	bool running = false, stopped = true;
 	
