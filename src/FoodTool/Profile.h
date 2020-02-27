@@ -239,6 +239,7 @@ struct FoodPriceQuote : Moveable<FoodPriceQuote> {
 		VER(0);
 		FOR_VER(0) {s % time % price % grams % servings % serving_batch % shop;}
 	}
+	String GetMassString() const;
 	String GetPriceString() const;
 	void Set(Time time, double grams, const FoodPriceQuote& prev);
 	void SetPriceless(Time time, double grams);

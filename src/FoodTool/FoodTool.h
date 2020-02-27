@@ -122,7 +122,9 @@ struct UsageCtrl : public ParentCtrl {
 
 struct MultipurposeGraph : public Ctrl {
 	enum {
-		MEASURES_BEGIN = 14
+		FOOD_BEGIN = 4,
+		MEASURES_BEGIN = 14,
+		GRAPH_COUNT = 31,
 	};
 	
 	struct Line : Moveable<Line> {
@@ -263,6 +265,16 @@ enum {
 	RECEIPTLOG,
 };
 
+struct FoodLogCtrl;
+
+struct PortableListCtrl : public TopWindow {
+	FoodLogCtrl* log = NULL;
+	TableDrawer table;
+	
+	PortableListCtrl();
+	void Paint(Draw& d) override;
+};
+
 struct FoodLogCtrl : public ParentCtrl {
 	Splitter hsplit, vsplit;
 	ArrayCtrl queue, history;
@@ -270,6 +282,7 @@ struct FoodLogCtrl : public ParentCtrl {
 	Array<EditIntSpin> grams, servings, batch;
 	Array<EditDoubleSpin> price;
 	Array<EditString> shop;
+	PortableListCtrl portable;
 	
 	int mode = 0;
 	
@@ -291,6 +304,8 @@ struct FoodLogCtrl : public ParentCtrl {
 	void DebugClear() {GetData().history.Clear(); Data();}
 	void ClearQueue() {GetData().queue.Clear(); Data();}
 	void MultiplyMass();
+	//void ShowPortableList() {easy.PopUp(this);}
+	void ShowPortableList() {portable.Open(this);}
 };
 
 struct PriceCtrl : public ParentCtrl {

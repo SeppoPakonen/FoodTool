@@ -21,43 +21,48 @@ void FoodStorage::Update(bool replan, const Vector<DailyPlan>& planned_daily) {
 	ASSERT_(days.GetCount(), "Run Init first");
 	Profile& prof = GetProfile();
 	Date today = GetSysTime();
+	Date begin = today;
 	
 	int target_count = 7;
-	int today_i = 0;
+	int begin_i = 0;
 	for(int i = 0; i < days.GetCount(); i++) {
 		const FoodDay& day = days[i];
-		if (day.date == today) {
-			today_i = i;
+		if (day.date == begin) {
+			begin_i = i;
 			target_count = i + 7;
 			break;
 		}
 	}
 	
 	if (!replan)
-		today_i = days.GetCount();
+		begin_i = days.GetCount();
 	
 	Date d = GetProfile().begin_date;
-	d += today_i;
+	d += begin_i;
 	days.SetCount(target_count);
-	for(int i = today_i; i < days.GetCount(); i++) {
+	for(int i = begin_i; i < days.GetCount(); i++) {
 		days[i].date = d++;
 		if (i > 0)
 			PlanDay(i, planned_daily);
 	}
-	for(int i = today_i; i < days.GetCount(); i++) {
+	for(int i = begin_i; i < days.GetCount(); i++) {
 		if (days[i].is_shopping)
 			PlanShopping(i, planned_daily);
 	}
 	
-	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--)
-		if (Date(prof.foodlog.queue[i].time) >= d)
+	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--) {
+		Date q(prof.foodlog.queue[i].time);
+		if (q >= d || q < today)
 			prof.foodlog.queue.Remove(i);
+	}
 	
-	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--)
-		if (Date(prof.shoplog.queue[i].time) >= d)
+	for(int i = prof.foodlog.queue.GetCount()-1; i >= 0; i--) {
+		Date q(prof.shoplog.queue[i].time);
+		if (q >= d || q < today)
 			prof.shoplog.queue.Remove(i);
+	}
 	
-	for(int i = today_i; i < days.GetCount(); i++) {
+	for(int i = begin_i; i < days.GetCount(); i++) {
 		AddFoodQueue(i, planned_daily);
 		if (days[i].is_shopping)
 			AddShopQueue(i);

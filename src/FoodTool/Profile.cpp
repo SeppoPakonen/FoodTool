@@ -677,6 +677,34 @@ void FoodStorageSnapshot::GetNutritions(Ingredient& dst) const {
 	}
 }
 
+String FoodPriceQuote::GetMassString() const {
+	if (servings == 1 && serving_batch == 1) {
+		if (grams >= 800)
+			return Format(t_("%2n`kg"), grams*0.001);
+		else
+			return Format(t_("%2n`g"), grams);
+	}
+	else if (servings > 1 && serving_batch == 1) {
+		double serving_g = grams / servings;
+		double serving_kg = serving_g * 0.001;
+		if (serving_kg >= 1)
+			return Format(t_("%d`pc. ( * ~%2n`kg = ~%2n`kg)"), servings, serving_kg, servings*serving_kg);
+		else
+			return Format(t_("%d`pc. ( * ~%2n`g = ~%2n`g)"), servings, serving_g, servings*serving_g);
+	}
+	else if (servings > 1 && serving_batch > 1) {
+		int batches = servings / serving_batch + (servings % serving_batch ? 1 : 0);
+		double serving_g = grams / servings;
+		double serving_kg = serving_g * 0.001;
+		int servings = batches * serving_batch;
+		if (serving_kg >= 1)
+			return Format(t_("%d`*%d`pc. (%d * ~%2n`kg = ~%2n`kg)"), batches, serving_batch, servings, serving_kg, servings*serving_kg);
+		else
+			return Format(t_("%d`*%d`pc. (%d * ~%2n`g = ~%2n`g)"), batches, serving_batch, servings, serving_g, servings*serving_g);
+	}
+	else return t_("Invalid mass");
+}
+
 String FoodPriceQuote::GetPriceString() const {
 	if (servings == 1 && serving_batch == 1) {
 		double g_price = price / grams;
@@ -696,14 +724,24 @@ String FoodPriceQuote::GetPriceString() const {
 			return Format(t_("%2n`EUR (~%2n`g)"), serving_price, serving_g);
 	}
 	else if (servings > 1 && serving_batch > 1) {
+		int batches = servings / serving_batch + (servings % serving_batch ? 1 : 0);
 		double serving_price = price / servings;
 		double batch_price = price / servings * serving_batch;
 		double serving_g = grams / servings;
 		double serving_kg = serving_g * 0.001;
-		if (serving_kg >= 1)
-			return Format(t_("%2n`EUR %d`pc. (%2n`EUR/pc., ~%2n`kg/pc.)"), batch_price, serving_batch, serving_price, serving_kg);
-		else
-			return Format(t_("%2n`EUR %d`pc. (%2n`EUR/pc., ~%2n`g/pc.)"), batch_price, serving_batch, serving_price, serving_g);
+		double total_price = batches * serving_batch * serving_price;
+		if (batches > 1) {
+			if (serving_kg >= 1)
+				return Format(t_("%2n`EUR/%d`pc. (%2n`EUR/%d`pc., %2n`EUR/pc., ~%2n`kg/pc.)"), total_price, batches * serving_batch, batch_price, serving_batch, serving_price, serving_kg);
+			else
+				return Format(t_("%2n`EUR/%d`pc. (%2n`EUR/%d`pc., %2n`EUR/pc., ~%2n`g/pc.)"), total_price, batches * serving_batch, batch_price, serving_batch, serving_price, serving_g);
+		}
+		else {
+			if (serving_kg >= 1)
+				return Format(t_("%2n`EUR/%d`pc. (%2n`EUR/pc., ~%2n`kg/pc.)"), total_price, batches * serving_batch, serving_price, serving_kg);
+			else
+				return Format(t_("%2n`EUR/%d`pc. (%2n`EUR/pc., ~%2n`g/pc.)"), total_price, batches * serving_batch, serving_price, serving_g);
+		}
 	}
 	else return t_("Invalid price");
 }

@@ -992,11 +992,11 @@ int MultipurposeGraph::GetLineWidth(int s, int l) {return src[s].lines[l].width;
 #define MEASURE_FORECAST 10
 
 int MultipurposeGraph::GetCount(int s) {
-	if (s < 4)
+	if (s < FOOD_BEGIN)
 		return GetProfile().planned_daily.GetCount();
-	else if (s < 14)
+	else if (s < MEASURES_BEGIN)
 		return GetProfile().storage.days.GetCount();
-	else if (s < 30)
+	else if (s < GRAPH_COUNT)
 		return GetProfile().weights.GetCount() + MEASURE_FORECAST;
 	Panic("Invalid source");
 	return -1;
@@ -1387,6 +1387,12 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 		}
 		else if (src == src_i++) {
 			if (l == 0) {
+				MEAS(neck);
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
 				MEAS(bicep);
 			}
 			FillVector(v);
@@ -1438,21 +1444,21 @@ int MultipurposeGraph::GetVertLine(int s) {
 
 int MultipurposeGraph::GetHorzLine(int s) {
 	const Profile& prof = GetProfile();
-	if (s < 4) {
+	if (s < FOOD_BEGIN) {
 		Date today = GetSysTime();
 		for(int i = 0; i < prof.planned_daily.GetCount(); i++)
 			if (prof.planned_daily[i].date == today)
 				return i;
 		return 0;
 	}
-	else if (s < 14) {
+	else if (s < MEASURES_BEGIN) {
 		Date today = GetSysTime();
 		for(int i = 0; i < prof.storage.days.GetCount(); i++)
 			if (prof.storage.days[i].date == today)
 				return i;
 		return 0;
 	}
-	else if (s < 27)
+	else if (s < GRAPH_COUNT)
 		return prof.weights.GetCount()-1;
 	Panic("Invalid source");
 	return -1;
@@ -2392,6 +2398,8 @@ void FoodWishCtrl::ValueChanged(int preset_i) {
 FoodLogCtrl::FoodLogCtrl() {
 	CtrlLayout(products);
 	
+	portable.log = this;
+	
 	ParentCtrl::Add(hsplit.SizePos());
 	hsplit.Horz() << vsplit << products;
 	hsplit.SetPos(2500);
@@ -2414,7 +2422,7 @@ FoodLogCtrl::FoodLogCtrl() {
 	history.WhenLeftClick = THISBACK(SelectHistory);
 	
 	products.list.AddIndex();
-	products.list.AddColumn("Time");
+	products.list.AddColumn("Food");
 	products.list.AddColumn("Grams");
 	products.list.AddColumn("Servings");
 	products.list.AddColumn("Batch Size");
@@ -2422,6 +2430,7 @@ FoodLogCtrl::FoodLogCtrl() {
 	products.list.AddColumn("Shop");
 	
 	products.store.WhenEnter = THISBACK(ApplyStore);
+	products.showportable <<= THISBACK(ShowPortableList);
 	products.add <<= THISBACK(Add);
 	products.zero <<= THISBACK(Zero);
 	products.expand <<= THISBACK(Expand);
@@ -2709,6 +2718,54 @@ void FoodLogCtrl::Load(const FoodPrice& p) {
 	list.SetSortColumn(0);
 }
 
+
+
+
+
+
+
+
+
+PortableListCtrl::PortableListCtrl() {
+	SetRect(0,0,480,640);
+	Title("Portable List");
+	Sizeable().MaximizeBox().MinimizeBox();
+	
+	
+}
+
+void PortableListCtrl::Paint(Draw& d) {
+	Size sz(GetSize());
+	
+	d.DrawRect(sz, White());
+	if (!log) return;
+	
+	ArrayCtrl& list = log->products.list;
+	if (!list.GetCount()) return;
+	
+	table.SetSize(list.GetCount(), 3);
+	table.Reset();
+	
+	int rows = 0;
+	for(int i = 0; i < list.GetCount(); i++) {
+		double grams = list.Get(i, 2);
+		if (grams > 0) {
+			FoodPriceQuote q;
+			q.grams = grams;
+			q.servings = max(1, (int)list.Get(i, 3));
+			q.serving_batch = max(1, (int)list.Get(i, 4));
+			q.price = list.Get(i, 5);
+			
+			table.Set(rows, 0, list.Get(i, 1));
+			table.Set(rows, 1, q.GetMassString());
+			table.Set(rows, 2, q.GetPriceString());
+			
+			rows++;
+		}
+	}
+	table.SetSize(rows, 3);
+	table.Paint(sz, d);
+}
 
 
 
