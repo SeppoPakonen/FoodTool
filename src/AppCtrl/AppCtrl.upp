@@ -1,0 +1,12 @@
+description "Classes for coherent coherent user experience\377";
+
+uses
+	CtrlLib;
+
+file
+	AppCtrl.h,
+	main.cpp;
+
+mainconfig
+	"" = "GUI";
+

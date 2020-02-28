@@ -1,0 +1,2 @@
+BINARY_MASK(motivation_mask, "Motivational/*.jpg" BZ2)
+BINARY(welcome_qtf, "Welcome.qtf" BZ2)

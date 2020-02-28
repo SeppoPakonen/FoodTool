@@ -1,0 +1,23 @@
+description "\377B128,0,0";
+
+uses
+	Common;
+
+file
+	Food.h,
+	Food.cpp,
+	FoodStorage.h,
+	FoodStorage.cpp,
+	Ingredient.h,
+	Plan.h,
+	Plan.cpp,
+	Profile.h,
+	Profile.cpp,
+	Database.h,
+	Database.cpp,
+	HairSampleDeficit.h,
+	HairSampleDeficit.cpp;
+
+mainconfig
+	"" = "";
+

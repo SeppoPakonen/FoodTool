@@ -1,0 +1,60 @@
+description "\377B0,0,128";
+
+uses
+	Food,
+	CommonCtrl;
+
+file
+	FoodCtrl.h,
+	data.brc,
+	ConfigurationCtrl.h,
+	ConfigurationCtrl.cpp,
+	DailyNutritionsCtrl.h,
+	DailyNutritionsCtrl.cpp,
+	DatabaseCtrl.h,
+	DatabaseCtrl.cpp,
+	ExceptionsCtrl.h,
+	ExceptionsCtrl.cpp,
+	FoodInstructionCtrl.h,
+	FoodInstructionCtrl.cpp,
+	FoodLogCtrl.h,
+	FoodLogCtrl.cpp,
+	FoodStorageCtrl.h,
+	FoodStorageCtrl.cpp,
+	FoodCtrl1.lay,
+	FoodCtrl2.lay,
+	FoodWishCtrl.h,
+	FoodWishCtrl.cpp,
+	GraphCtrl.h,
+	GraphCtrl.cpp,
+	MealPresetCtrl.h,
+	MealPresetCtrl.cpp,
+	MotivationCtrl.h,
+	MotivationCtrl.cpp,
+	MultipurposeGraph.h,
+	MultipurposeGraph.cpp,
+	NoteCtrl.h,
+	NoteCtrl.cpp,
+	HairSampleDeficitCtrl.h,
+	HairSampleDeficitCtrl.cpp,
+	PriceCtrl.h,
+	PriceCtrl.cpp,
+	ProfileCreator.h,
+	ProfileCreator.cpp,
+	ScheduleCtrl.h,
+	ScheduleCtrl.cpp,
+	StatusCtrl.h,
+	StatusCtrl.cpp,
+	SupplementCtrl.h,
+	SupplementCtrl.cpp,
+	TodayScheduleCtrl.h,
+	TodayScheduleCtrl.cpp,
+	UsageCtrl.h,
+	UsageCtrl.cpp,
+	WeightCtrl.h,
+	WeightCtrl.cpp,
+	Welcome.qtf;
+
+mainconfig
+	"" = "GUI";
+

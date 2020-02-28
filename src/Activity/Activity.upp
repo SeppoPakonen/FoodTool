@@ -1,0 +1,14 @@
+description "\377B128,128,0";
+
+uses
+	Core;
+
+file
+	Activity.h,
+	Activity.cpp,
+	Body.h,
+	Body.cpp;
+
+mainconfig
+	"" = "";
+

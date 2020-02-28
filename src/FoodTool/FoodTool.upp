@@ -1,64 +1,19 @@
 uses
-	CtrlLib,
-	plugin/jpg,
-	plugin/bz2,
-	RichEdit;
-
-library(WIN32 & DEBUG) opencv_world412d;
-
-library(WIN32 & !DEBUG) opencv_world412;
-
-library(LINUX) "opencv_core opencv_video opencv_videoio opencv_imgcodecs";
+	RichEdit,
+	FoodCtrl,
+	Activity,
+	ActivityCtrl;
 
 file
 	Readme.txt,
 	Muistio.txt,
 	Recipes.txt,
-	Welcome.qtf,
-	Translation.t,
-	main.cpp,
+	Main readonly separator,
 	FoodTool.h,
 	FoodTool.cpp,
-	FoodTool1.lay,
-	FoodTool2.lay,
-	Data.brc,
-	Images.iml,
-	ScheduleCtrl.h,
-	ScheduleCtrl.cpp,
-	Ingredient.h,
-	Ingredient.cpp,
-	Food.h,
-	Food.cpp,
-	FoodStorage.h,
-	FoodStorage.cpp,
-	FoodStorageCtrl.h,
-	FoodStorageCtrl.cpp,
-	Body.h,
-	Body.cpp,
-	Activity.h,
-	Activity.cpp,
-	ActivityCtrl.h,
-	ActivityCtrl.cpp,
-	Profile.h,
-	Profile.cpp,
-	ProfileCreator.h,
-	ProfileCreator.cpp,
-	StepOptimizer.h,
-	Optimizer.h,
-	VideoCapture.h,
-	VideoCapture.cpp,
-	Database.h,
-	Database.cpp,
-	DatabaseCtrl.h,
-	DatabaseCtrl.cpp,
-	WeightCtrl.h,
-	WeightCtrl.cpp,
-	MealPresetCtrl.h,
-	MealPresetCtrl.cpp,
-	Shop.h,
-	Shop.cpp,
-	Util.h,
-	Util.cpp;
+	main.cpp,
+	Translation.t,
+	Images.iml;
 
 mainconfig
 	"" = "GUI";
