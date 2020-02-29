@@ -41,7 +41,7 @@ FoodTool::FoodTool()
 	tabs.Add(status.SizePos(), t_("Status"));
 	tabs.Add(nutr.SizePos(), t_("Daily Nutritions"));
 	tabs.Add(fins.SizePos(), t_("Food Instructions"));
-	tabs.Add(activity.SizePos(), t_("Activity"));
+	//tabs.Add(activity.SizePos(), t_("Activity"));
 	tabs.Add(graphs.SizePos(), t_("Graphs"));
 	tabs.Add(weight.SizePos(), t_("Weight"));
 	tabs.Add(def.SizePos(), t_("Nutrient Deficits"));
@@ -56,6 +56,9 @@ FoodTool::FoodTool()
 	tabs.Add(receiptlog.SizePos(), t_("Receipt Log"));
 	tabs.Add(storage.SizePos(), t_("Food Storage"));
 	tabs.Add(prices.SizePos(), t_("Prices"));
+	tabs.Add(exeredit.SizePos(), t_("Exercise Editor"));
+	tabs.Add(exerplayer.SizePos(), t_("Exercise Player"));
+	tabs.Add(acthis.SizePos(), t_("Activity History"));
 	tabs.Add(conf.SizePos(), t_("Configuration"));
 	tabs.Add(usage.SizePos(), t_("Usage"));
 	tabs.WhenSet << THISBACK(Data);
@@ -109,7 +112,7 @@ void FoodTool::Data() {
 		else if (tab == i++)	status.Data();
 		else if (tab == i++)	nutr.Data();
 		else if (tab == i++)	fins.Data();
-		else if (tab == i++)	activity.Data();
+		//else if (tab == i++)	activity.Data();
 		else if (tab == i++)	graphs.Data();
 		else if (tab == i++)	weight.Data();
 		else if (tab == i++)	def.Data();
@@ -124,6 +127,9 @@ void FoodTool::Data() {
 		else if (tab == i++)	receiptlog.Data();
 		else if (tab == i++)	storage.Data();
 		else if (tab == i++)	prices.Data(tab_changed);
+		else if (tab == i++)	exeredit.Data();
+		else if (tab == i++)	exerplayer.Data(tab_changed);
+		else if (tab == i++)	acthis.Data();
 		else if (tab == i++)	conf.Data();
 		else if (tab == i++)	usage.Data();
 	}

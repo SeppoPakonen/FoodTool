@@ -102,6 +102,7 @@ struct Configuration : Moveable<Configuration> {
 	Date end_date;
 	double tgt_exercise_kcal = 0, tgt_walking_dist, tgt_jogging_dist, walking_dist;
 	double hours_between_meals, hours_between_making_meals = 8;
+	int tgt_exercise_count = 0, tgt_exercise_min = 0;
 	int easy_day_interval;
 	int waking_hour, waking_minute;
 	int sleeping_hour, sleeping_minute;
@@ -111,7 +112,7 @@ struct Configuration : Moveable<Configuration> {
 	int daily_coffee = 0;
 	
 	void Serialize(Stream& s) {
-		VER(3);
+		VER(4);
 		FOR_VER(0) {
 			s
 				% added
@@ -136,6 +137,7 @@ struct Configuration : Moveable<Configuration> {
 		FOR_VER(1) {s % daily_coffee;}
 		FOR_VER(2) {s % hours_between_making_meals;}
 		FOR_VER(3) {s % tgt_exercise_kcal;}
+		FOR_VER(4) {s % tgt_exercise_count % tgt_exercise_min;}
 	}
 	
 	double GetBMR(double weight);
@@ -181,7 +183,8 @@ int GetTargetWeight(double height_cm);
 int GetBmiWeight(double height_cm, int bmi);
 double GetBMI(double height_cm, double weight_kg);
 double GetNormalLiquidPercentage(double age, double height_cm, double weight_kg);
-
+double GetHeartrateCalories(bool is_male, double weight, double age, double heartrate_bpm, double duration_s);
+	
 enum {
 	SNAPSRC_USER,
 	SNAPSRC_FOODLOG,
@@ -347,6 +350,57 @@ struct Dummy__Removed {
 	}
 };
 
+enum {
+	ACT_UNKNOWN,
+	ACT_INTERVAL,
+	ACT_EXERCISE,
+	
+	ACT_COUNT,
+};
+
+struct ActivityItem : Moveable<ActivityItem> {
+	byte type = 0;
+	Time begin, end;
+	String what, msg;
+	double kcal = 0;
+	double heartrate = 0;
+	bool real_values = false;
+	
+	int removed0 = 0;
+	int removed1 = 0;
+	
+	void Serialize(Stream& s) {
+		VER(3);
+		FOR_VER(0) {s % type % begin % end % what % msg % removed0 % removed1;}
+		FOR_VER(1) {s % real_values;}
+		FOR_VER(2) {s % kcal;}
+		FOR_VER(3) {s % heartrate;}
+	}
+	String GetTypeString() const;
+};
+
+struct ActivityGroupItem : Moveable<ActivityGroupItem> {
+	Vector<ActivityItem> items;
+	ActivityItem main;
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % items % main;}
+	}
+};
+
+struct ExerciseType : Moveable<ExerciseType> {
+	Time added;
+	String name, instructions, primary_trained;
+	OnlineAverage1 av_kcal, av_heartrate;
+	VectorMap<String, byte> muscle_areas, muscles;
+	
+	void Serialize(Stream& s) {
+		VER(0);
+		FOR_VER(0) {s % added % name % instructions % primary_trained % av_kcal % av_heartrate % muscle_areas % muscles;}
+	}
+};
+
 struct Profile {
 	Vector<IntakeExceptions> exceptions;
 	Vector<Note> notes;
@@ -358,6 +412,8 @@ struct Profile {
 	Vector<MealPreset> presets;
 	Vector<FoodStorageSnapshot> storage_snaps;
 	Vector<NutritionSupplement> supplements;
+	Vector<ActivityGroupItem> activity, planned_exercises;
+	Vector<ExerciseType> exercises;
 	Index<int> planned_nutrients;
 	ProductQueueHistory foodlog, shoplog, receiptlog;
 	
@@ -389,7 +445,7 @@ struct Profile {
 		StoreThis();
 	}
 	void Serialize(Stream& s) {
-		VER(7);
+		VER(8);
 		FOR_VER(0) {
 			s
 				% exceptions
@@ -416,6 +472,7 @@ struct Profile {
 		FOR_VER(5) {s % price;}
 		FOR_VER(6) {s % foodlog % shoplog % receiptlog;}
 		FOR_VER(7) {s % removed3;}
+		FOR_VER(8) {s % activity % planned_exercises % exercises;}
 	}
 	void MakeTodaySchedule(ScheduleToday& s);
 	void AddWeightStat(int kgs);
@@ -432,6 +489,7 @@ struct Profile {
 	void VLCD_Preset();
 	void CookedToRaw();
 	int FindMealPreset(String key) const;
+	int FindExercise(String key) const;
 	DailyPlan* GetTodayPlan();
 	void SetMealPresetFoodsUsed();
 	

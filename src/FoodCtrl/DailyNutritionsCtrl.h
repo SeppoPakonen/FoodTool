@@ -12,6 +12,7 @@ struct DailyNutritionsCtrl : public ParentCtrl {
 	void Data();
 	void SelectDate();
 	void SelectSource();
+	void ValueChanged();
 };
 
 

@@ -5,5 +5,12 @@ uses
 
 file
 	ActivityCtrl.h,
-	ActivityCtrl.cpp;
+	ActivityCtrl.cpp,
+	Layouts.lay,
+	ActivityHistoryCtrl.h,
+	ActivityHistoryCtrl.cpp,
+	ExerciseEditorCtrl.h,
+	ExerciseEditorCtrl.cpp,
+	ExercisePlayerCtrl.h,
+	ExercisePlayerCtrl.cpp;
 

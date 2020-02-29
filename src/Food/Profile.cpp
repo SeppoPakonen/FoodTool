@@ -559,6 +559,13 @@ int Profile::FindMealPreset(String key) const {
 	return -1;
 }
 
+int Profile::FindExercise(String key) const {
+	for(int i = 0; i < exercises.GetCount(); i++)
+		if (exercises[i].name == key)
+			return i;
+	return -1;
+}
+
 DailyPlan* Profile::GetTodayPlan() {
 	Date today = GetSysTime();
 	for(DailyPlan& plan : planned_daily)
@@ -623,6 +630,13 @@ double Configuration::GetBMR(double weight) {
 		bmr -= 161;
 	
 	return bmr;
+}
+
+double GetHeartrateCalories(bool is_male, double weight, double age, double heartrate_bpm, double duration_s) {
+	if (is_male)
+		return (0.2017 * age + 0.1988 * weight + 0.6309 * heartrate_bpm - 55.0969) * duration_s / 60.0 / 4.184;
+	else
+		return (0.074 * age - 0.1263 * weight + 0.4472 * heartrate_bpm - 20.4022) * duration_s / 60.0 / 4.184;
 }
 
 double Configuration::GetTDEE() {
@@ -923,4 +937,30 @@ void PlanState::CheckWorst() {
 void PlanState::AddCalorieDeficit(double calorie_deficit) {
 	max_calorie_deficit = max(calorie_deficit, max_calorie_deficit);
 	calorie_deficit_sum += calorie_deficit;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+String ActivityItem::GetTypeString() const {
+	switch (type) {
+		case ACT_UNKNOWN: return t_("Unknown");
+		case ACT_INTERVAL: return t_("Interval");
+		case ACT_EXERCISE: return t_("Exercise");
+		default: return t_("Invalid");
+	}
 }

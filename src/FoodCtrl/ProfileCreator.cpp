@@ -46,6 +46,8 @@ ProfileCreator::ProfileCreator() {
 	tab1.activity.SetData(0);
 	tab1.walking_dist.SetData(0);
 	tab1.tgt_exercise_kcal.SetData(600);
+	tab1.tgt_exercise_count.SetData(5);
+	tab1.tgt_exercise_min.SetData(75);
 	tab1.tgt_walking_dist.SetData(6.6);
 	tab1.tgt_jogging_dist.SetData(0);
 	tab1.shop_interval.SetData(5);

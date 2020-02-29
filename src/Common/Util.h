@@ -127,4 +127,8 @@ struct TopValueSorter {
 
 void FillVector(Vector<double>& v);
 
+String UpperBegin(String s);
+
+String GetTimeDurationString(Time begin, Time end);
+
 #endif

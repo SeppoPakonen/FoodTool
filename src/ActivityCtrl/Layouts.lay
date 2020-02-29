@@ -1,0 +1,43 @@
+LAYOUT(ExerciseDetails, 824, 512)
+	ITEM(ArrayCtrl, list, HCenterPosZ(200, -312).VCenterPosZ(480, -16))
+	ITEM(Button, add, SetLabel(t_("Add")).HCenterPosZ(200, -312).VCenterPosZ(27, 242))
+	ITEM(Label, dv___2, SetLabel(t_("Name:")).SetAlign(ALIGN_RIGHT).HCenterPosZ(104, -160).VCenterPosZ(19, -242))
+	ITEM(EditString, name, HCenterPosZ(312, 52).VCenterPosZ(19, -242))
+	ITEM(Label, dv___4, SetLabel(t_("Instructions:")).SetAlign(ALIGN_RIGHT).HCenterPosZ(104, -160).VCenterPosZ(19, -194))
+	ITEM(DocEdit, instructions, HCenterPosZ(312, 52).VCenterPosZ(140, -158))
+	ITEM(Label, dv___6, SetLabel(t_("Video:")).SetAlign(ALIGN_RIGHT).HCenterPosZ(104, -160).VCenterPosZ(19, -74))
+	ITEM(ImageCtrl, ic, SetFrame(InsetFrame()).HCenterPosZ(168, -20).VCenterPosZ(108, -30))
+	ITEM(Button, import, SetLabel(t_("Import latest file")).HCenterPosZ(168, -20).VCenterPosZ(24, 40))
+	ITEM(ArrayCtrl, muscle_areas, HCenterPosZ(200, 312).VCenterPosZ(256, -128))
+	ITEM(ArrayCtrl, muscles, HCenterPosZ(200, 312).VCenterPosZ(256, 128))
+END_LAYOUT
+
+LAYOUT(ExerciseSelector, 676, 432)
+	ITEM(ArrayCtrl, list, LeftPosZ(4, 224).VSizePosZ(4, 4))
+	ITEM(Button, reset, SetLabel(t_("Reset")).RightPosZ(4, 36).BottomPosZ(4, 24))
+	ITEM(ArrayCtrl, items, HSizePosZ(344, 4).VSizePosZ(28, 104))
+	ITEM(Label, dv___3, SetLabel(t_("Exercises:")).SetAlign(ALIGN_RIGHT).LeftPosZ(232, 108).TopPosZ(28, 19))
+	ITEM(Label, dv___4, SetLabel(t_("Exercises:")).SetAlign(ALIGN_RIGHT).LeftPosZ(232, 108).TopPosZ(4, 19))
+	ITEM(Label, dv___5, SetLabel(t_("Total calories:")).SetAlign(ALIGN_RIGHT).LeftPosZ(232, 108).BottomPosZ(81, 19))
+	ITEM(Label, dv___6, SetLabel(t_("Average heartrate:")).SetAlign(ALIGN_RIGHT).LeftPosZ(232, 108).BottomPosZ(57, 19))
+	ITEM(Label, dv___7, SetLabel(t_("Duration:")).SetAlign(ALIGN_RIGHT).LeftPosZ(232, 108).BottomPosZ(33, 19))
+	ITEM(EditInt, kcal, Max(10000).Min(0).SetEditable(false).LeftPosZ(344, 120).BottomPosZ(81, 19))
+	ITEM(EditInt, heartrate, Max(10000).Min(0).SetEditable(false).LeftPosZ(344, 120).BottomPosZ(57, 19))
+	ITEM(EditString, duration, SetEditable(false).LeftPosZ(344, 120).BottomPosZ(33, 19))
+	ITEM(Button, start, SetLabel(t_("Start")).LeftPosZ(344, 120).BottomPosZ(4, 24))
+	ITEM(EditString, primarytype, SetEditable(false).LeftPosZ(344, 208).TopPosZ(4, 19))
+END_LAYOUT
+
+LAYOUT(ExercisePlayer, 1164, 612)
+	ITEM(StaticText, title, SetText(t_("test")).SetAlign(ALIGN_CENTER).SetFont(StdFontZ(128).Bold()).SetInk(Red).HSizePosZ(0, 0).TopPosZ(0, 136))
+	ITEM(StaticText, instructions, SetText(t_("- by standing\n- with dumbbells\n- something\n- something\n- something\n- something\n- something\n- something")).SetFont(StdFontZ(36).Bold()).SetInk(Brown).HSizePosZ(0, 852).VSizePosZ(136, 0))
+	ITEM(StaticText, seconds, SetText(t_("128 seconds")).SetAlign(ALIGN_CENTER).SetFont(StdFontZ(128).Bold()).SetInk(Color(0, 104, 59)).RightPosZ(0, 852).BottomPosZ(32, 164))
+	ITEM(Button, timeout, SetLabel(t_("TIMEOUT")).SetFont(StdFontZ(15).Bold()).RightPosZ(328, 324).BottomPosZ(0, 32))
+	ITEM(Button, stop, SetLabel(t_("STOP")).SetFont(StdFontZ(15).Bold()).RightPosZ(0, 324).BottomPosZ(0, 32))
+END_LAYOUT
+
+LAYOUT(HeartrateMeter, 404, 232)
+	ITEM(StaticText, bpm, SetText(t_("152")).SetAlign(ALIGN_CENTER).SetFont(StdFontZ(158).Bold()).SetInk(Color(28, 0, 200)).RightPosZ(0, 404).VCenterPosZ(144, -44))
+	ITEM(Button, pulse, SetLabel(t_("Pulse")).SetFont(StdFontZ(76).Bold()).RightPosZ(72, 284).VCenterPosZ(84, 70))
+END_LAYOUT
+

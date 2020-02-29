@@ -7,6 +7,10 @@
 #define MUSCLE_MODEL_MULT 43.7954542070352
 
 
+void GetMuscleGroups(VectorMap<String, String>& idx);
+void GetPrimaryTypes(VectorMap<String, String>& idx);
+void GetPrimaryTypeWeights(VectorMap<String, double>& idx);
+
 class BioObject {
 	BioObject* parent = NULL;
 	Vector<BioObject*> sub;

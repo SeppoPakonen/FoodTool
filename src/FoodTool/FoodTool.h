@@ -40,6 +40,9 @@ class FoodTool : public TopWindow {
 	FoodLogCtrl foodlog, shoplog, receiptlog;
 	PriceCtrl prices;
 	ActivityCtrl activity;
+	ExerciseEditorCtrl exeredit;
+	ExercisePlayerCtrl exerplayer;
+	ActivityHistoryCtrl acthis;
 	
 	TimeCallback tc;
 public:

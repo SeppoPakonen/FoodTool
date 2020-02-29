@@ -51,6 +51,8 @@ void ConfigurationCtrl::SelectConf() {
 	conf.activity.SetData(c.activity);
 	conf.walking_dist.SetData(c.walking_dist);
 	conf.tgt_exercise_kcal.SetData(c.tgt_exercise_kcal);
+	conf.tgt_exercise_count.SetData(c.tgt_exercise_count);
+	conf.tgt_exercise_min.SetData(c.tgt_exercise_min);
 	conf.tgt_walking_dist.SetData(c.tgt_walking_dist);
 	conf.tgt_jogging_dist.SetData(c.tgt_jogging_dist);
 	conf.shop_interval.SetData(c.shop_interval);
@@ -73,6 +75,8 @@ void ConfigurationCtrl::AddConf() {
 	c.activity = conf.activity.GetData();
 	c.walking_dist = conf.walking_dist.GetData();
 	c.tgt_exercise_kcal = conf.tgt_exercise_kcal.GetData();
+	c.tgt_exercise_count = conf.tgt_exercise_count.GetData();
+	c.tgt_exercise_min = conf.tgt_exercise_min.GetData();
 	c.tgt_walking_dist = conf.tgt_walking_dist.GetData();
 	c.tgt_jogging_dist = conf.tgt_jogging_dist.GetData();
 	c.shop_interval = conf.shop_interval.GetData();
