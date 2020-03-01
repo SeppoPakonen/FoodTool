@@ -254,7 +254,7 @@ void ExercisePlayerCtrl::Reset() {
 	}
 	
 	
-	int max_seconds = 0;
+	int max_seconds = 0, min_seconds = INT_MAX;
 	VectorMap<String, int> exercise_seconds;
 	for(const ActivityGroupItem& gr : prof.activity) {
 		for(const ActivityItem& ai : gr.items) {
@@ -263,14 +263,16 @@ void ExercisePlayerCtrl::Reset() {
 				exercise_seconds.GetAdd(ai.what, 0) += s;
 				if (s > max_seconds)
 					max_seconds = s;
+				if (s < min_seconds)
+					min_seconds = s;
 			}
 		}
 	}
 	Vector<double> exercises_mul;
 	exercises_mul.SetCount(prof.exercises.GetCount(), 1);
-	if (max_seconds) {
+	if (max_seconds > min_seconds) {
 		for(int i = 0; i < prof.exercises.GetCount(); i++)
-			exercises_mul[i] = 1.0 - (double)exercise_seconds.Get(prof.exercises[i].name, 0) / max_seconds;
+			exercises_mul[i] = 1.0 - (double)(exercise_seconds.Get(prof.exercises[i].name, 0) - min_seconds) / (double)(max_seconds - min_seconds);
 	}
 	
 	Optimizer opt;
@@ -742,16 +744,16 @@ void ExercisePlayerCtrl::ProcessExercise() {
 				if (upcoming_i < 0)
 					PostCallback(THISBACK2(SetUpcomingExercise, "", ""));
 				
-				int exer_i = prof.FindExercise(it.what);
-				if (exer_i >= 0) {
-					const ExerciseType& et = prof.exercises[exer_i];
-					if (et.av_heartrate.count < 6) {
-						heartrate_timer.Reset();
-						PostCallback(THISBACK1(SetHeartrate, 0));
-						SetMode(MODE_HEARTRATE);
-						continue;
-					}
-				}
+				//int exer_i = prof.FindExercise(plan_it.what);
+				//if (exer_i >= 0) {
+				//	const ExerciseType& et = prof.exercises[exer_i];
+				//	if (et.av_heartrate.count < 6) {
+				heartrate_timer.Reset();
+				PostCallback(THISBACK1(SetHeartrate, 0));
+				SetMode(MODE_HEARTRATE);
+				continue;
+				//	}
+				//}
 			}
 			else {
 				ActivityItem& it = current.items[active_exer_item];
