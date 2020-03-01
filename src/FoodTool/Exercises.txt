@@ -1,0 +1,2139 @@
+name: Front Dumbbell Raises
+bpm: 0
+kcal: 0
+ANDEL: 10
+instruction: """
+- nosta käsipainoja
+- alhaalta vaakatasoon, tai vähän yli
+- eteenpäin
+- rystyset yläpuolella
+- vuorotellen
+"""
+
+name: 30 Degree Dumbbell Raises
+bpm: 0
+kcal: 0
+ANDEL: 10
+DELTO: 3
+instruction: """
+- nosta käsipainoja
+- alhaalta noin 30° vaakatason yli
+- noin 45° viistosti eteen
+- rystyset sivuille päin
+- yhtäaikaa
+
+"""
+
+name: Seated Alternating Dumbbell Scaption
+bpm: 0
+kcal: 0
+ANDEL: 10
+DELTO: 3
+instruction: """
+- istuen
+- nosta käsipainoja
+- alhaalta noin 30° vaakatason yli
+- noin 45° viistosti eteen
+- rystyset sivuille päin
+- yhtäaikaa
+
+(Istuen 30 Degree Dumbbell Raises)
+"""
+
+name: Kneeling Prone Scaption On Swiss Ball
+bpm: 0
+kcal: 0
+ANDEL: 10
+DELTO: 3
+instruction: """
+- makuullaan penkillä
+- nosta käsipainoja
+- alhaalta vaakatasoon, tai vähän yli
+- noin 45° viistosti eteen
+- laske hitaasti
+
+"""
+
+name: Standing Alternate Dumbbell Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+BRACH: 3
+FORFL: 3
+instruction: """
+- seisten
+- nosta käsipainoja
+- olkavarsi alaspäin kokoajn
+- nosta kyynärvartta kääntäen
+	- alhaalta täysin ylös
+	- alhaalla rystyset sivuille
+	- ylhäällä rystyset alaspäin
+- vuorotellen
+"""
+
+name: Standing Dumbbell Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+BRACH: 3
+instruction: """
+ - seisten
+ - nosta käsipainoja
+ - kyynärpäät alaspäin
+ - alhaalta täysin ylös leukaan asti
+ - eteenpäin
+ - rystyset alaspäin
+"""
+
+name: Seated Hammer Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+DELTO: 3
+instruction: """
+ - istuen
+ - nosta käsipainoja
+ - olkavarsi alaspäin
+ - rystyset sivuille
+ - alhaalta täysin ylös
+ - suoraan eteenpäin
+
+"""
+
+name: Standing Dumbbell Curls Twisting
+bpm: 0
+kcal: 0
+BICEP: 10
+instruction: """
+ - seisten
+ - nosta käsipainoja
+ - olkavarsi viistosti alas ja keskelle
+ - nosta alhaalta täysin ylös
+ - rystyset alaspäin
+ - lopussa käännä kättä ja rannetta peukalo alaspäin
+"""
+
+name: Concentration Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+FORFL: 3
+instruction: """
+ - istuen
+ - nosta käsipainoja
+ - vuorotellen
+ - nojaa olkavarrella jalkaan ja pidä siinä
+ - nosta täysin alhaalta täysin ylös
+ - rystyset alaspäin
+
+"""
+
+name: Incline Dumbbell Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+instruction: """
+- viistosti istuen
+- nosta käsipainoja
+- olkavarsi paikoillaan alas tai viistoon
+- alhaalta täysin ylös
+- rystyset alaspäin
+- noin 45° viistosti eteen
+"""
+
+name: Standing Hammer Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+DELTO: 3
+instruction: """
+ - seisten
+ - nosta käsipainoja
+ - olkavarsi alaspäin
+ - rystyset sivuille
+ - alhaalta täysin ylös
+ - suoraan eteenpäin
+
+"""
+
+name: Single Leg Standing Dumbbell Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+BRACH: 3
+instruction: """
+ - seisten yhdellä jalalla
+ - nosta käsipainoja
+ - kyynärpäät alaspäin
+ - alhaalta täysin ylös leukaan asti
+ - eteenpäin
+ - rystyset alaspäin
+"""
+
+name: Seated Dumbbell Curls
+bpm: 0
+kcal: 0
+BICEP: 10
+BRACH: 3
+FORFL: 3
+instruction: """
+- istuen
+- nosta käsipainoja
+- olkavarsi alaspäin kokoajn
+- nosta kyynärvartta kääntäen
+	- alhaalta täysin ylös
+	- alhaalla rystyset sivuille
+	- ylhäällä rystyset alaspäin
+"""
+
+name: Stiff-legged Dumbbell Deadlifts
+bpm: 0
+kcal: 0
+BIFEM: 10
+SPINE: 3
+instruction: """
+ - jalat suorina
+ - ylhäällä seisten
+ - alhaalla etuvartalo 60° eteen
+ - käsipainoja rennosti edessä alaspäin pitäen
+ - rystyset eteenpäin
+
+"""
+
+name: Romanian Dumbbell Deadlifts
+bpm: 0
+kcal: 0
+BIFEM: 10
+SPINE: 3
+instruction: """
+ - jalat suorina kokoajan
+ - selkä suorana kokoajan
+ - ylhäällä seisten
+ - alhaalla kumarru täysin alas
+ - käsipainoja rennosti edessä alaspäin pitäen
+ - rystyset eteenpäin
+"""
+
+name: Standing Dumbbell Reverse Curls
+bpm: 0
+kcal: 0
+BICEP: 3
+BRACH: 10
+FORFL: 3
+instruction: """
+ - seisten
+ - nosta käsipainoja
+ - kyynärpäät alaspäin
+ - alhaalta täysin ylös leukaan asti
+ - eteenpäin
+ - rystyset ylöspäin
+ - jalat suoraan tai toinen edessä ja toinen takana
+"""
+
+name: Standing Dumbbell Reverse Curls Alternating
+bpm: 0
+kcal: 0
+BICEP: 3
+BRACH: 10
+FORFL: 3
+instruction: """
+ - seisten
+ - nosta käsipainoja
+ - kyynärpäät alaspäin
+ - alhaalta täysin ylös leukaan asti
+ - eteenpäin
+ - rystyset ylöspäin
+ - vuorotellen
+"""
+
+name: Seated Dumbbell Shoulder Press
+bpm: 0
+kcal: 0
+DELTO: 10
+TRAPE: 3
+TRICE: 3
+instruction: """
+ - istuen
+ - käsipainoja nostaen
+ - olkavarret sivuille
+ - ylhäällä käsi suoraan ylös
+ - alhaalla olkavarsi vähän alle vaakatason
+ - rystyset taaksepäin
+
+"""
+
+name: Standing Dumbbell Shoulder Press
+bpm: 0
+kcal: 0
+DELTO: 10
+TRAPE: 3
+TRICE: 3
+instruction: """
+ - seisten
+ - käsipainoja nostaen
+ - olkavarret sivuille
+ - ylhäällä käsi suoraan ylös
+ - alhaalla olkavarsi vähän alle vaakatason
+ - rystyset taaksepäin
+ - jalkoja voi käyttää liikkeen käynnistämiseen
+"""
+
+name: Seated Dumbbell Front Press
+bpm: 0
+kcal: 0
+DELTO: 10
+TRICE: 3
+instruction: """
+ - istuen
+ - käsipainoja nostaen
+ - olkavarret 45° eteen
+ - ylhäällä käsi suoraan ylös
+ - alhaalla olkavarsi vähän alle vaakatason
+ - rystyset taaksepäin
+
+"""
+
+name: Standing Dumbbell Front Press
+bpm: 0
+kcal: 0
+DELTO: 10
+TRICE: 3
+instruction: """
+ - seisten
+ - käsipainoja nostaen
+ - olkavarret 45° eteen
+ - ylhäällä käsi suoraan ylös
+ - alhaalla olkavarsi vähän alle vaakatason
+ - rystyset taaksepäin
+ - jalkoja voi käyttää liikkeen käynnistämiseen
+"""
+
+name: Seated Dumbbell Front Press Alternating
+bpm: 0
+kcal: 0
+DELTO: 10
+TRICE: 3
+instruction: """
+ - istuen
+ - käsipainoja nostaen
+ - olkavarret 45° eteen
+ - ylhäällä käsi suoraan ylös
+ - alhaalla olkavarsi vähän alle vaakatason
+ - rystyset taaksepäin
+ - vuorotellen
+"""
+
+name: Standing Dumbbell Front Press Alternating
+bpm: 0
+kcal: 0
+DELTO: 10
+TRICE: 3
+instruction: """
+ - seisten
+ - käsipainoja nostaen
+ - olkavarret 45° eteen
+ - ylhäällä käsi suoraan ylös
+ - alhaalla olkavarsi vähän alle vaakatason
+ - rystyset taaksepäin
+ - vuorotellen
+"""
+
+name: Plate Pickup Overhead Lift
+bpm: 0
+kcal: 0
+DELTO: 10
+instruction: """
+- seisten
+- yhtä painoa nostaen
+- täysin alhaalta täysin ylös
+- alhaalla suora käsi alas
+- ylähäällä suora käsi ylös
+- rystyset taaksepäin
+"""
+
+name: Dumbbell Arnold Shoulder Press
+bpm: 0
+kcal: 0
+DELTO: 10
+TRAPE: 3
+instruction: """
+- istuen
+- käsipainoja nostaen
+- alhaalla
+	- olkavarret viistosti alas ja eteen
+	- rystyset eteenpäin
+ - ylhäällä
+	- olkapää sivuille ja 120° ylös
+	- kyynärpää 120° ylös
+	- rystyset taaksepäin
+"""
+
+name: Dumbbell Cross Punch
+bpm: 0
+kcal: 0
+DELTO: 10
+TRAPE: 3
+instruction: """
+- seisten
+- käsipainoilla
+- vuorotellen
+- rintaa sivulle kääntäen
+	- oikealla kädellä kääntyy vasemmalle
+- alhaalla
+	- olkavarsi alaspäin
+	- kyynärvarsi vaakatasossa
+	- rystyset sivuille
+- ylhäällä/sivulla
+	- "lyö käden vastakkaiselle puolelle"
+	- rinta kääntyy
+	- käsi suoraan vaakatasossa sivulle
+	- rystyset ylöspäin
+- lepokäden kyynärvarsi vaakatasossa
+"""
+
+name: Reverse Pec Deck Flyes
+bpm: 0
+kcal: 0
+DELTO: 10
+SPINE: 3
+instruction: """
+- selällään penkillä
+- käsipainoilla
+- kädet suoraan sivuille
+- kädet lähes suorana
+- alhaalla kädet vaakatasossa tai alempana
+- ylähäällä kädet eteen ylös
+- rystyset alhaalla alas taakse ja ranteen asento pysyy
+"""
+
+name: Twisting Dumbbell Shoulder Press
+bpm: 0
+kcal: 0
+DELTO: 10
+instruction: """
+- seisten
+- käsipainoja nostaen
+- yläruumista kääntäen
+	- oikealla kädellä kääntyy vasemmalle
+- olkavarret sivuille
+- ylhäällä käsi suoraan ylös
+- alhaalla olkavarsi vähän alle vaakatason
+- rystyset taaksepäin
+- jalkoja voi käyttää liikkeen käynnistämiseen
+"""
+
+name: Seated Dumbbell Abduction
+bpm: 0
+kcal: 0
+DELTO: 10
+LOWRE: 3
+instruction: """
+- istuen
+- käsi suorana kokoajan
+- alhaalla
+	- käsi sivulla suoraan alas
+	- rystyset sivuille
+- ylhäällä
+	- käsi suorana 45° viistosti ylös
+	- rystyset ylöspäin
+"""
+
+name: Lateral Raise And Rear Lateral Raise
+bpm: 0
+kcal: 0
+DELTO: 10
+MEDDE: 3
+REARD: 3
+instruction: """
+- seisten
+- käsipainoilla
+- kädet suorana
+- alhaalla
+	- kädet suoraan alas
+	- rystyset sivuille
+- ylhäällä
+	- kädet vaakatasossa sivulla
+	- rystyset ylös
+
+"""
+
+name: Barbell Reverse Wrist Curls
+bpm: 0
+kcal: 0
+FOREX: 10
+FORFL: 3
+instruction: """
+- istuen/seisten
+- käsipainoilla
+- olkavarsi alas
+- kyynärvarsi vaakatasossa, tue johonkin
+- ylhäällä ranne käännetty ylös
+- alhaalla ranne käännetty alas
+- rystyset ylöspäin
+"""
+
+name: Barbell Wrist Curls
+bpm: 0
+kcal: 0
+FOREX: 3
+FORFL: 10
+instruction: """
+- istuen/seisten
+- käsipainoilla
+- olkavarsi alas
+- kyynärvarsi vaakatasossa, tue johonkin
+- ylhäällä ranne käännetty ylös
+- alhaalla ranne käännetty alas
+- rystyset alaspäin
+"""
+
+name: Barbell Reverse Hold
+bpm: 0
+kcal: 0
+FOREX: 10
+instruction: """
+- istuen/seisten
+- käsipainoilla
+- olkavarsi alas
+- kyynärvarsi vaakatasossa, tue johonkin
+- pidä rannetta paikoillaan
+- rystyset ylöspäin
+"""
+
+name: Barbell Hold
+bpm: 0
+kcal: 0
+FORFL: 10
+instruction: """
+- istuen/seisten
+- käsipainoilla
+- olkavarsi alas
+- kyynärvarsi vaakatasossa, tue johonkin
+- pidä rannetta paikoillaan
+- rystyset alaspäin
+"""
+
+name: Barbell Reverse Pinch
+bpm: 0
+kcal: 0
+FOREX: 10
+FORFL: 3
+instruction: """
+- istuen/seisten
+- käsipainoilla
+- kädet sivuille alas
+- pidä leveä tarttumaote painon leveästä päästä
+- pidä rannetta paikoillaan
+- rystyset ylöspäin
+"""
+
+name: Barbell Pinch
+bpm: 0
+kcal: 0
+FOREX: 3
+FORFL: 10
+instruction: """
+- istuen/seisten
+- käsipainoilla
+- kädet sivuille alas
+- pidä leveä tarttumaote painon leveästä päästä
+- pidä rannetta paikoillaan
+- rystyset alaspäin
+"""
+
+name: Standing Dumbbell Calf Raises
+bpm: 0
+kcal: 0
+GASTR: 10
+OBLIQ: 1
+SOLEU: 3
+instruction: """
+- seisten
+- seiso jollakin reunalla varpaillaan
+- kantapää reunan yli ilmassa
+- liikuta itseäsi nilkoilla ylös ja alas
+- pidä käsipainoja oman valinnan mukaan
+
+"""
+
+name: Single Leg Standing Dumbbell Calf Raises
+bpm: 0
+kcal: 0
+GASTR: 10
+SOLEU: 3
+instruction: """
+- seisten
+- yhdellä jalalla
+- seiso jollakin reunalla varpaillaan
+- kantapää reunan yli ilmassa
+- liikuta itseäsi nilkoilla ylös ja alas
+- pidä käsipainoja oman valinnan mukaan
+
+"""
+
+name: Butt Lift
+bpm: 0
+kcal: 0
+BIFEM: 3
+GLUTE: 10
+instruction: """
+- selällään
+- jalat koukistettuna
+- jalkapohja maata vasten
+- liikuta lantiota ylös ja alas
+- voit myös pitää lantiota ylhäällä jonkin aikaa
+
+"""
+
+name: Side Leg Raises 
+bpm: 0
+kcal: 0
+GLUTE: 10
+QUADR: 3
+instruction: """
+- maassa kyljellään
+- nosta jalkaa ylös ja alas
+"""
+
+name: In-place Side Lunge
+bpm: 0
+kcal: 0
+GLUTE: 10
+instruction: """
+- seisten
+- leveä haara-asento
+- kädet yhteen leuan kohdalle
+- koukista vuorotellen jalkoja
+- pidä toinen jalka suorana kokoajan
+
+"""
+
+name: Fire Hydrant
+bpm: 0
+kcal: 0
+GLUTE: 10
+instruction: """
+- kontallaan
+- nosta jalkoja vuorotellen sivuille
+- pidä polvi ja lantio 90° kulmassa kokoajan
+
+"""
+
+name: Dumbbell Sumo Squat
+bpm: 0
+kcal: 0
+GLUTE: 10
+QUADR: 3
+instruction: """
+- seisten
+- haara-asento
+- selkä suorana kokoajan
+- pidä painoa molemmin kävin alhaalla edessä
+- nosta ja laske painoa kyykistyen
+"""
+
+name: Kettlebell Front Squats
+bpm: 0
+kcal: 0
+GLUTE: 10
+SPINE: 4
+instruction: """
+- seisten
+- haara-asento
+- selkä suorana kokoajan
+- pidä painoa molemmin kävin rinnalla
+- nosta ja laske painoa kyykistyen
+"""
+
+name: Dumbbell Step Ups With Curls
+bpm: 0
+kcal: 0
+BICEP: 7
+GLUTE: 10
+instruction: """
+- seisten
+- käsipainoilla
+- askeltaen sivuttain
+- alkaa ja päättyy jalat yhdessä alhaalla
+- askeleella nouse portaalle
+	- nosta vastakkainen polvi koukkuun ja palaa
+- polven koukistuksella nosta käsipainoja
+	- olkavarsi alaspäin kokoajan
+	- kyynärvarsi alhaalta täysin ylös
+- vaihtele jalkaa
+"""
+
+name: Walking Straight Leg Kicks
+bpm: 0
+kcal: 0
+GLUTE: 10
+instruction: """
+- kävellen/seisten
+- kädet suoraan edessä vaakatasossa kokoajan
+	- tai läpsi jalkoja ja käytä ylhäällä välillä
+- nosta jalkoja vuorotellen
+- ylhäällä jalka vaakatasossa suoraan eteen
+- jalka suorana kokoajan
+
+"""
+
+name: Donkey Kicks
+bpm: 0
+kcal: 0
+GLUTE: 10
+SPINE: 5
+instruction: """
+- kontallaan
+- pidä polvi 90° kulmassa kokoajan
+- nostele jalkaa vaakatasoon
+- vaihtelee jalkaa silloin tällöin
+- voit pitää käsipainoa polvitaipeessa
+
+"""
+
+name: One Leg Butt Lift
+bpm: 0
+kcal: 0
+BIFEM: 3
+GLUTE: 10
+instruction: """
+- selällään
+- toinen jalka koukistettuna
+- toinen jalka suorana kokoajan ja lievästi ylös
+- jalkapohja maata vasten
+- liikuta lantiota ylös ja alas
+- voit myös pitää lantiota ylhäällä jonkin aikaa
+
+"""
+
+name: Dumbbell Hip Raise
+bpm: 0
+kcal: 0
+BIFEM: 3
+GLUTE: 10
+LOWRE: 3
+instruction: """
+- olkapäät tukevasti penkkiä vasten
+- takapuoli maassa
+- selkä vinosti penkkiä vasten
+- jalat koukussa
+- käsipaino lantiolla
+- nostele lantiota ylös ja alas
+- paino jaloilla ja olkapäillä penkillä
+
+"""
+
+name: Lateral Shuffle
+bpm: 0
+kcal: 0
+GLUTE: 10
+QUADR: 3
+instruction: """
+- seisten
+- hieman etukenossa
+- 2 leveää sivuaskelta vasemmalle ja oikealle
+- laukkasivuaskel
+- olkavarret alas, kyynärvarret ylös
+- käsipainoja voi käyttää
+"""
+
+name: Bench Reverse Flutter Kicks
+bpm: 0
+kcal: 0
+GLUTE: 10
+REABD: 3
+SPINE: 3
+instruction: """
+- punnerrusasennossa
+- penkki/tuki lantiolla
+- nosta jalkoja vuorotellen
+- jalka suorana kokoajan
+- ylhäällä lievästi yli vaakatason
+"""
+
+name: Teardrop
+bpm: 0
+kcal: 0
+INQUA: 10
+instruction: """
+- seisten
+- jalkaterät 90° kulmassa
+- kantapäät yhdessä
+- varpaillaan
+- kantapäät samalla käsipainolla
+- haarat levällään
+- olkavarsi vaakatasossa suoraan eteen
+- kyynärvarsi ylöspäin
+- kädet voi olla yhdessä
+- nosta itseäsi ylös ja alas
+"""
+
+name: Inner Quads Squat
+bpm: 0
+kcal: 0
+INQUA: 10
+instruction: """
+- seisoen
+- jalkaterät 90° kulmassa
+- kantapäät lähes yhdessä
+- jalkaterät viistossa
+- käsipainoa sopivasti
+- kyykkyyn ja ylös
+"""
+
+name: Medicine Ball Rotations
+bpm: 0
+kcal: 0
+INCOS: 10
+OBLIQ: 3
+instruction: """
+- seisten
+- haara-asento
+- kädet melko suorassa eteenpäin
+- pidä samaa painoa molemmilla käsillä
+- käännä ylävartaloa puolelta toiselle
+- noin 180° kääntyminen käsillä
+- käännä päätä vähemmän
+
+"""
+
+name: Jump Rope
+bpm: 0
+kcal: 0
+INCOS: 10
+LOWRE: 4
+instruction: """
+- seisten
+- hypi hyppynarulla
+- jos ei ole narua niin teeskentele
+- voit myös hyppiä vuorotellen eri jaloilla
+
+"""
+
+name: Roman Chair Oblique Twists
+bpm: 0
+kcal: 0
+INCOS: 10
+OBLIQ: 3
+instruction: """
+- maassa istuen
+- jalat suorana eteenpäin
+- pidä jalkoja jonkun painon (sängyn) alla
+- pidä noin 45° nojaus taakseppäin kokoajan
+- pidä kädet sivuilla ja pään päällä kuten punnertaessa
+- käännä ylävartaloa puolelta toiselle
+- noin 120° kääntyminen
+
+"""
+
+name: Squat Thrusts
+bpm: 0
+kcal: 0
+INCOS: 10
+LOWRE: 6
+instruction: """
+- koko kehon liike
+- tee liike puhtaasti ja hitaasti ennemmin kuin nopeasti ja väärin
+
+1. mahallaan punnerrusasennossa maha maata vasten
+2. hyppää kyykkyyn, kädet maassa edelleen
+3. nouse seisaalleen ja hyppää
+	- nosta kädet suoraan täysin ylöspäin
+	- hyppää koko keho täysin suorana
+2. kyykisty, kädet maahan
+4. hyppää punnerrusasentoon
+5. laskeudu maha vasten maata
+
+"""
+
+name: Sprint Run
+bpm: 0
+kcal: 0
+INCOS: 10
+LOWRE: 3
+instruction: """
+- koko kehon liike
+- 2 sivuttais laukka-askelta suuntaansa
+- laukkojen keskellä selkä suorana ylöspäin
+- laukkojen reunassa kosketa maata ulkopuolelta
+
+"""
+
+name: Single Arm Dumbbell Bent-over Row 
+bpm: 0
+kcal: 0
+BICEP: 3
+LATDO: 10
+REARD: 3
+TRAPE: 3
+instruction: """
+- kontallaan toinen puoli penkillä
+- käsipainolla
+- olkavarren liike suoraan alas/taakse
+- kyynärvarsi alaspäin kokoajan
+
+"""
+
+name: Bent-over Barbell Rows
+bpm: 0
+kcal: 0
+LATDO: 10
+TRAPE: 3
+instruction: """
+- seisten
+- etukumarassa
+- tangolla (tai käsipainoilla)
+- olkavarren liikesuoraan alas/taakse
+- kyynärvarsi alaspäin kokoajan
+- rystyset eteenpäin
+
+"""
+
+name: Dumbbell Pullovers
+bpm: 0
+kcal: 0
+LATDO: 10
+PECTO: 3
+instruction: """
+- vinosti istuen / selällään
+	- auringonottotuoli sopii
+- kädet menee pään yli ja reunan yli
+- olkavarret ylöspäin kokoajan
+- kyynärvarren liike
+- kyynärvarret kehonsuuntaisesti "ylöspäin"
+- koukista ja ojenna kyynärpäätä
+- rystyset sivuille
+"""
+
+name: Dumbbell Reverse Fly
+bpm: 0
+kcal: 0
+LATDO: 10
+REARD: 3
+instruction: """
+- istuen
+- 45° etukumarassa
+- jalat yhdessä
+- käsipainoilla
+- kädet lähes suorassa kokoajan, mutta ei täysin
+- alhaalla kädet alaspäin ja jalkojen etupuolella
+- ylhäällä kädet on suoraan vaakatasossa sivulla
+- rystyset sivuille
+"""
+
+name: Dumbbell Pull-over
+bpm: 0
+kcal: 0
+LATDO: 10
+PECTO: 3
+instruction: """
+- selkä penkillä, jalkapohjat maata vasten
+- sama paino molemmilla käsillä yhtäaikaa
+- ylhäällä kädet täysin suorassa ylöspäin
+- painon vienti pään taakse kädet suorana
+- alhaalla kädet koukussa max taakseppäin alas
+
+"""
+
+name: Decline Barbell Flyes
+bpm: 0
+kcal: 0
+LOWPR: 10
+instruction: """
+- selällään lievästi pää alaspäin
+- laita penkin toinen puoli korokkeelle
+- jalkapohjat maata vasten
+- käsipainoilla
+- ylhäällä kädet suorana ylös-/"eteen"-päin
+- alhaalla kädet lähes suorana sivuilla
+- rystyset sivuilla
+"""
+
+name: Decline Dumbbell Press
+bpm: 0
+kcal: 0
+ANDEL: 3
+LOWPR: 10
+instruction: """
+- selällään lievästi pää alaspäin
+- laita penkin toinen puoli korokkeelle
+- jalkapohjat maata vasten
+- käsipainoilla
+- kyynärvarsi ylös-/"eteen"päin kokoajan
+- ylhäällä kädet suorana ylös-/"eteen"-päin
+- alhaalla olkavarsi vaakatasossa 45° viistoon
+- rystyset kasvoihin päin
+"""
+
+name: Bench Knee Tucks
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+instruction: """
+- koko kehon liike
+- pakaroilla istuen ja tasapinotellen
+- vain pakarat koskee maata kokoajan
+- taakseppäin nojaten
+- ojenna ja koukista jalkoja
+
+"""
+
+name: Reverse Crunches
+bpm: 0
+kcal: 0
+LOWRE: 10
+instruction: """
+- selällään maassa
+- jalat koukussa kokoajan
+- tuo polvet otsalle hartiat maassa pitäen
+- edestakaisin
+- käytä välillä jalkapohjat maata vasten
+
+"""
+
+name: Flutter Kicks
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+instruction: """
+- selällään
+- pää niskan varassa, ei maata vasten
+- jalat ilmassa kokoajan
+- heiluttele vuorotellen eri jalkoja
+- jalat täysin suorassa kokoajan
+- noin 30cm jalkaterien liike ylös-alas
+
+"""
+
+name: Leg Raises
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+instruction: """
+- selällään
+- pidä käsillä kiinni jostain painavasta (sängystä)
+- nosta jalkoja suoraan ylös/"eteen"päin
+- pidä jalat max suorana kokoajan
+- yhtäaikaa molempia jalkoja
+
+"""
+
+name: Knee To Chest Crunches
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+instruction: """
+- selällään
+- jalat koukussa, jalkapohjat maata vasten
+- alhaalla kädet pään yli suorana "ylöspäin"
+- ylhäällä vain pakarat koskettaa maata
+- ylhäällä tasapainotellen kädet "alaspäin"
+- kädet suorana kokoajan
+- jalat koukussa kokoajan
+- vaihtele vatsaa rutistamisen ja suorassa pitämisen välillä
+
+"""
+
+name: Glute Bridge With Abduction
+bpm: 0
+kcal: 0
+LOWRE: 10
+SPINE: 3
+instruction: """
+- selällään maassa
+- jalka koukussa, jalkapohja maata vasten
+- pidä toista jalkaa suorana ylöspäin kokoajan
+- nosta lantio ylös toisella jalalla
+- edestakaisin
+
+"""
+
+name: Plank
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+REABD: 10
+instruction: """
+- melkein punnerrusasento
+- kyynärpäät maata vasten
+- kädet yhteen kasvojen eteen
+- pysy paikallaan max kauan keho täysin suorana
+- vain kyynärpäät ja varpaat koskee maata
+
+"""
+
+name: Inclined Plank
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+instruction: """
+- melkein punnerrusasento
+- kyynärpäät koroketta vasten
+- kädet yhteen kasvojen eteen
+- varpaat maassa
+- pysy paikallaan max kauan keho täysin suorana (kulmassa)
+- vain kyynärpäät ja varpaat koskee maata
+
+"""
+
+name: Single Leg Hip Extension
+bpm: 0
+kcal: 0
+LOWRE: 10
+instruction: """
+- selällään maassa
+- jalka koukussa, jalkapohja maata vasten
+- pidä toista jalkaa suorana vaakatasosta lievästi ylöspäin
+- nosta lantio ylös toisella jalalla
+- edestakaisin
+
+"""
+
+name: Rolling Side Plank
+bpm: 0
+kcal: 0
+LOWRE: 3
+OBLIQ: 10
+instruction: """
+- maassa kyljellään
+- toinen kyynärpää maata vasten
+- toinen jalkaterä maata vasten
+- kaikki muu kehosta ilmassa
+- keho suorassa kokoajan
+- toinen käsi täysin suorassa ylöspäin kokoajan
+"""
+
+name: L-sit Alternating Legs
+bpm: 0
+kcal: 0
+INCOS: 3
+LOWRE: 10
+instruction: """
+- maassa istuen jalat suorana
+- laita käsipainot maahan
+- nosta itsesi käsipainojen varaan 
+- vain kädet koskettaa maata
+- toinen jalka koukussa ja toinen suorassa kokoajan
+
+Helpompi versio:
+- molemmat jalat suorana kokoajan
+- toinen kantapää saa koskettaa maata
+
+"""
+
+name: Knee Drive
+bpm: 0
+kcal: 0
+LOWRE: 10
+instruction: """
+- kyynärpäät maata vasten korokkeella
+- toisen jalan varpaat koskee maata kokoajan
+- keho suorana kokoajan
+- toinen jalka liikkuu
+- alhaalla jalka on koukussa
+- ylhäällä jalka on max takana ylhäällä suorassa
+
+"""
+
+name: Diagonal Crunch With Medicine Ball
+bpm: 0
+kcal: 0
+LOWRE: 10
+OBLIQ: 3
+SPINE: 3
+instruction: """
+- maassa istuen
+- haarat levällään kokoajan
+- jalat suorana kokoajan
+- molemmat kädet pitää painoa kokoajan
+- kädet suorana kokoajan
+- ylhäällä selkä ylöspäin ja paino edessä maata vasten
+- alhaalla selkä maata vasten ja kädet pään yli maata vasten
+- ei suoraan keskellä, vaan vasemmalle/oikealle kallistuen
+- vuorotellen vasen/oikea
+
+"""
+
+name: Suitcase Crunch With Medicine Ball
+bpm: 0
+kcal: 0
+LOWRE: 10
+OBLIQ: 3
+SPINE: 3
+instruction: """
+- selällään maassa
+- molemmat kädet pitää painoa kokoajan
+- alhaalla keho on suorassa, kädet pään yli
+- ylhäällä jalat koukussa kasvoja vasten
+- ylhäällä vain alaselkä maata vasten
+- tasapainottele painoilla
+
+"""
+
+name: Rocky Solo With Medicine Ball
+bpm: 0
+kcal: 0
+LOWRE: 10
+OBLIQ: 3
+SPINE: 3
+instruction: """
+- pakaroilla istuen
+- vain pakarat koskettaa maata kokoajan
+- jalat lähes suorana eteenpäin kokoajan
+- pidä molemmilla käsillä samaa painoa kokoajan
+- kosketa painolla maata sivuilla molemmin puolin
+
+"""
+
+name: Lateral Dumbbell Raises
+bpm: 0
+kcal: 0
+MEDDE: 10
+TRAPE: 3
+instruction: """
+- seisten
+- käsipainoilla
+- kädet suorana kokoajan
+- alhaalla kädet alaspäin
+- ylhäällä kädet suoraan sivuilla vaakatasossa
+- rystyset sivuille päin
+
+"""
+
+name: Side Crunches
+bpm: 0
+kcal: 0
+OBLIQ: 10
+instruction: """
+- maassa kyljellään
+- jalat koukussa
+- toinen käsi maata vasten suorana eteenpäin
+- toinen käsi pitää kiinni pään takaa
+- nosta yhtäaikaa päätä, rintaa ja jalkoja
+- jännitys pitää olla hieman enemmän kehon etupuolella
+
+"""
+
+name: Dumbbell Side Bends
+bpm: 0
+kcal: 0
+OBLIQ: 10
+instruction: """
+- seisten
+- yksi käsipaino
+- toinen käsi pitää kiinni käsipainosta kokojan
+	- käsi on rennosti alaspäin kokoajan
+- toinen käsi lantiolla
+- nosta painoa kylkilihaksilla
+
+"""
+
+name: Side Jackknifes
+bpm: 0
+kcal: 0
+LOWRE: 3
+OBLIQ: 10
+instruction: """
+- maassa kyljellään
+- jalat suorassa kokoajan
+- toinen käsi maata vasten suorana eteenpäin
+- toinen käsi pitää kiinni pään takaa
+- nosta yhtäaikaa päätä, rintaa ja jalkoja
+- jännitys pitää olla hieman enemmän kehon etupuolella
+
+"""
+
+name: Side-ups
+bpm: 0
+kcal: 0
+OBLIQ: 10
+instruction: """
+- pakaroilla istuen
+- toinen käsi tukee maasta kokoajan
+- yläkeho on kääntynyt ja kallistunut tuen puolelle kokoajan
+- toinen käsi pitää kiinni takaraivosta
+- nosta ja laske jalkoja yhtäaikaa
+- jalat ei koske maata ollenkaan
+
+"""
+
+name: Windshield Wiper
+bpm: 0
+kcal: 0
+OBLIQ: 10
+instruction: """
+- maassa selällään
+- kädet on suorana sivuille tukena
+- jalat suorana kokoajan
+- jalat ei koske maata
+- ylhäällä jalat on suoraan ylöspäin
+- alhaalla jalat on sivulla lähes maata koskettaen
+- vaihtele puolta kokoajan
+
+"""
+
+name: High Side Plank
+bpm: 0
+kcal: 0
+OBLIQ: 10
+instruction: """
+- kyljellään maassa
+- keho suorassa kokoajan
+- vain toinen käsi ja jalkaterä koskee maata kokoajan
+- molemmat kädet on suorana sivuilla kokoajan
+
+"""
+
+name: Side-to-side Hops
+bpm: 0
+kcal: 0
+OUTQU: 10
+instruction: """
+- maassa hyppien
+- laita noin 30cm leveä este maahan
+- hyppää tasajalkaa sivuttain sen yli ja takaisin
+- jousta ja koukista jaloilla oikein
+- varo luistamista!!! avojaloin tai kengillä
+
+"""
+
+name: Dumbbell Bench Press
+bpm: 0
+kcal: 0
+PECTO: 10
+instruction: """
+- penkillä selällään
+- käsipainoilla
+- rystyset kasvoihin päin
+- ylhäällä kädet suorana ylöspäin
+- alhaalla olkavarsi 45° jalkoihin päin
+- alhaalla olkavarsi hieman vaakatason alle
+- selkä hieman kaarella, mutta takapuoli maassa
+
+Helppo versio:
+- maassa selällään
+
+"""
+
+name: Flat Bench Dumbbell Flyes
+bpm: 0
+kcal: 0
+DELTO: 3
+PECTO: 10
+instruction: """
+- penkillä selällään
+- käsipainoilla
+- kädet sivulle/ylös päin kokoajan
+- kädet lähes suorana kokoajan
+- ylhäällä kädet suorana eteenpäin
+- alhaalla olkavarsi vaakatason alapuolelle taakse
+
+"""
+
+name: Pushups
+bpm: 0
+kcal: 0
+DELTO: 4
+PECTO: 10
+instruction: """
+- perinteinen punnerrus
+
+"""
+
+name: Dumbbell Bench Press
+bpm: 0
+kcal: 0
+ANDEL: 3
+PECTO: 10
+instruction: """
+- penkillä selällään
+- käsipainoilla
+- kyynärvarsi ylöspäin kokoajan
+- ylhäällä kädet suorana eteenpäin
+- alhaalla olkavarsi vaakatason alapuolelle taakse
+- alhaalla olkavarsi 45° jalkoihin päin
+
+"""
+
+name: Pushups: Kneeling
+bpm: 0
+kcal: 0
+PECTO: 10
+TRICE: 3
+instruction: """
+- punnerrus polvet maassa
+"""
+
+name: Incline Pushups
+bpm: 0
+kcal: 0
+PECTO: 10
+TRICE: 3
+instruction: """
+- punnerrus vinosti koroketta vasten
+
+"""
+
+name: Squat
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+instruction: """
+- seisten
+- haara asento
+- selkä suorana ylöspäin kokoajan
+- kyykisty ja nouse ylös
+- kädet esim. niskan takana
+
+"""
+
+name: In & Out Squat Jump
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+instruction: """
+- seisten ja hyppien
+- selkä suorana ylöspäin kokoajan
+- kyykisty ja nouse haara-asennossa
+- noustessa haara-asennosta hyppää ja tuo jalat yhteen
+- tee toinen nopea hyppy jalat yhdessä takaisin haara-asentoon
+- kädet esim yhteen kasvojen eteen
+
+"""
+
+name: Bulgarian Split Squat
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+instruction: """
+- seisten
+- selkä suorana ylöspäin kokoajan
+- toinen jalka taakse korokkeelle ilman tukea kevyesti
+- kyykisty ja nouse toisealla jalalla
+
+"""
+
+name: Split Squat Jumps
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+instruction: """
+- hyppien
+- vuorotellen tuo toinen jalka eteen ja toinen taakse
+- kyykisty etujalalla ja vie takajalka suorana taakse
+- pidä kädet esim. kasvojen edessä vakautuksena
+
+"""
+
+name: Wall Sits
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+SPINE: 3
+instruction: """
+- nojaten seinää vasten
+- pidä polvi ja lantio 90° kulmassa
+- pidä asento paikoillaan
+- varo jalkojen luisumista
+
+"""
+
+name: Dumbbell Front Squat
+bpm: 0
+kcal: 0
+QUADR: 10
+instruction: """
+- seisten
+- haara-asento
+- selkä suorana kokoajan
+- pidä käsipainoja olkapäiden korkeudella edessä
+- kyykisty ja nouse
+
+"""
+
+name: Dumbbell Squat To Curl To Press
+bpm: 0
+kcal: 0
+BICEP: 3
+DELTO: 3
+QUADR: 10
+instruction: """
+- seisten
+- vie käsipainoja max alhaalta max ylös ja takaisin
+- selkä suorassa kokoajan
+- kyykisty alhaalla
+
+"""
+
+name: Dumbbell Reverse Lunge And Rotation
+bpm: 0
+kcal: 0
+QUADR: 10
+instruction: """
+- koko kehon liike
+- käsipainot käsissa rinnalla paikallaan kokoajan
+1. suorana seisten
+2. polvistu toisella jalalla
+3. käänny rinnalla 90° etummaisen jalan puolelle
+4. palaudu takaisin seisten ja tee sama toiselle puolelle
+
+"""
+
+name: Side Lunge Slide
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+SPINE: 3
+instruction: """
+- tanssiva liike
+- seiso kumarassa toisella jalalla
+- hieman etukenossa
+- tukijalka hieman koukussa
+- vie toinen jalka taakse ja saman puolen käsi eteen
+- toista
+- tasapainota käsillä
+
+"""
+
+name: Lunges
+bpm: 0
+kcal: 0
+GLUTE: 3
+QUADR: 10
+instruction: """
+- seisten
+- polvistu vuorotellen molemmille jaloille
+- selkä suorana kokoajan
+- käsipainoja voi käyttää
+- melkein koske maata polvella
+
+"""
+
+name: Leg Floor Work
+bpm: 0
+kcal: 0
+QUADR: 10
+instruction: """
+- hieman monimutkainen liike
+- maassa kontallaan
+1. vie jalka 45° alas ja 45° taakse
+2. vie jalka suoraan taakse vaakatasoon
+3. jatka liikettä polvea koukistaen ja vieden jalkaa "väärälle puolelle"
+
+- toista liikesarjaa
+- tuo jalkaa vähitelleen edemmäs, entä 45° taakse
+- parhaimmillaan vain hieman alaspäin ja suoraan sivulla alussa
+
+"""
+
+name: Rear Dumbbell Raises
+bpm: 0
+kcal: 0
+REARD: 10
+TRAPE: 3
+instruction: """
+- seisten
+- etukumarassa
+- käsipainoilla
+- kyynärvarret alaspäin kokoajan
+- alhaalla kädet suoraan alaspäin
+- ylhäällä olkavarsi sivulla vaakatason yli
+- rystyset sivuille
+"""
+
+name: Reverse Rear Dumbbell Raises
+bpm: 0
+kcal: 0
+REARD: 10
+TRAPE: 3
+instruction: """
+- istuen
+- käsipainoilla
+- etukumarassa
+- kädet lähes suorana kokoajan
+- rystyset eteen
+- alhaalla kädet alaspäin
+- ylhäällä kädet vaakatasossa
+
+"""
+
+name: Standing Reverse Dumbbell Fly
+bpm: 0
+kcal: 0
+LATDO: 3
+REARD: 10
+SPINE: 3
+instruction: """
+- seisten
+- käsipainoilla
+- jalat lähes yhdessä
+- etukumarassa
+- käsipainoilla
+- kädet lähes suorana kokoajan
+- alhaalla kädet suoraan alaspäin
+- ylhäällä olkavarsi sivulla vaakatason yli
+- rystyset sivuille
+"""
+
+name: Lying Bench Reverse Dumbbell Fly
+bpm: 0
+kcal: 0
+instruction: """
+- penkillä mahallaan
+- käsipainoilla
+- kädet lähes suorana kokoajan
+- alhaalla kädet alaspäin
+- ylhäällä kädet sivulla vaakatasossa
+
+"""
+
+name: Incline Rear Raise On Swiss Ball
+bpm: 0
+kcal: 0
+DELTO: 3
+REARD: 10
+instruction: """
+- kyljellään korokkeella (sänky)
+- nosta alemmalla kädellä rintaa vähän ylemmäs
+- tue maahan ylemmällä jalalla
+- yhdellä käsipainolla
+- pidä käsi suorana edessä kokoajan
+- liikuta kättä noin 90° ylös-alas
+- rystyset ylöspäin
+
+"""
+
+name: Crunches
+bpm: 0
+kcal: 0
+REABD: 10
+instruction: """
+- selällään
+- polvet koukussa
+- kädet korvien kohdalla
+- selkää nostetaan vain hieman maasta ylös
+- keskitytään vatsalihasten "rutistamiseen"
+- tämä EI ole istumaannousu
+"""
+
+name: Bicycle Crunches
+bpm: 0
+kcal: 0
+OBLIQ: 3
+REABD: 10
+instruction: """
+- selällään
+- nosta hartioita ylös maasta
+- pidä käsiä takaraivolla
+- tuo jalkoja vuorotellen eteen ja vie taakse
+- jalat ei koske maata
+
+"""
+
+name: Sit-ups
+bpm: 0
+kcal: 0
+LOWRE: 3
+REABD: 10
+instruction: """
+- perinteinen istumaannousu
+- selällään
+- jalat koukussa
+- kädet takaraivolla
+- nosta itsesi istumaan ja laske takaisin selälleen
+
+"""
+
+name: Bench Sit-up
+bpm: 0
+kcal: 0
+REABD: 9
+UPREC: 10
+instruction: """
+- selällään penkillä/sängyllä
+- jalkapohjat maata vasten
+- nosta itsesi istumaan ja laske takaisin
+
+"""
+
+name: Crunch Twists
+bpm: 0
+kcal: 0
+REABD: 10
+UPREC: 3
+instruction: """
+- selällään maassa
+- jalat koukussa ilmassa
+- kädet korvilla
+- nosta hartioita ja yläselkää ilmaan
+- nostaessa käännä rintaa eri puolille vuorotellen
+- EI istumaannousu
+- keskity vatsan rutistamiseen
+
+
+"""
+
+name: V Sit-up
+bpm: 0
+kcal: 0
+REABD: 10
+instruction: """
+- selällään maassa
+- alhaalla kädet suorana pään yli ja jalat suorina yhdessä
+- ylhäällä pakaroilla istuen, kädet suorana varpaita tavotellen
+- kädet ja jalat suorana kokoajan
+
+"""
+
+name: Knee-up Crunches
+bpm: 0
+kcal: 0
+LOWRE: 3
+REABD: 10
+instruction: """
+- selällään maassa
+- jalat koukussa ilmassa
+- polvet ja lantio 90° kulmassa
+- kädet korvilla
+- nosta hartioita ja rintaa
+- EI istumaannousu
+- keskity rutistamaan vatsalihaksia
+
+"""
+
+name: Mountain Climbers
+bpm: 0
+kcal: 0
+LOWRE: 3
+REABD: 10
+instruction: """
+- kontallaan maassa
+- tuo toinen jalka koukkuun eteen
+- vie toinen suoraksi taakse
+- vuorotellen, yhtäaikaa
+- vaatii hyppäyksen
+- nopeaa
+
+"""
+
+name: Weighted Crunch
+bpm: 0
+kcal: 0
+REABD: 10
+instruction: """
+- maassa selällään
+- jalat koukussa, jalkapohjat maata vasten
+- kädet suorana ylöspäin kokoajan
+- kädet pitää samasta painosta kiinni
+- nosta hartioita ja rintaa ylös maasta
+- EI istumaannousu
+- keskity rutistamaan vatsalihaksia
+
+"""
+
+name: Closed Leg Toe Touches
+bpm: 0
+kcal: 0
+REABD: 10
+UPREC: 3
+instruction: """
+- selällään maassa
+- jalat ja kädet suorina kokoajan
+- alhaalla jalat 45° kulmassa
+- ylhäällä jalat suoraan ylös
+- alhaalla kädet pään takana maata vasten
+- ylhäällä kädet koskettaa varpaita
+- käsissä voi olla paino tai esine
+
+"""
+
+name: Leg Lifts
+bpm: 0
+kcal: 0
+LOWRE: 3
+REABD: 10
+instruction: """
+- selällään maassa
+- jalat suorana kokoajan
+- nosta jalkaterät noin 30cm yläpuolelle maasta
+
+"""
+
+name: Ab Coaster
+bpm: 0
+kcal: 0
+OBLIQ: 3
+REABD: 10
+instruction: """
+- kontallaan maassa
+- vatsalihas-rullaa käyttäen
+- ylhäällä kädet suoraan alaspäin
+- vie rullaa eteenpäin max kauas
+- alhaalla maha koskettaa lähes maata
+- maha ei saa koskettaa maata
+- takaisin ylös täytyy päästä
+
+"""
+
+name: Seated Calf Raises
+bpm: 0
+kcal: 0
+GASTR: 3
+SOLEU: 10
+instruction: """
+- istuen tuolin reunalla
+- koroke varpaiden alle
+- käsipainot polvien päälle
+- nosta ja laske kantapäätä
+
+"""
+
+name: Single-leg Ankle Mobilization
+bpm: 0
+kcal: 0
+SOLEU: 10
+instruction: """
+- seisten
+- nojaa käsillä seinää vasten
+- pidä aktiivisen jalan varpaat korokkeella
+- tue toisella jalalla takaapäin
+- alussa nojaa eteenpäin
+- nilkka käyttäen, vie itseäsi taaksepäin seinästä
+
+"""
+
+name: Back Extension: Ground
+bpm: 0
+kcal: 0
+SPINE: 10
+instruction: """
+- maassa mahallaan
+- kädet ja jalat suorana kokoajan
+- nosta vuorotellen vastakkaisia käsiä ja jalkoja
+- rystyset sivuille (peukku ylös)
+
+"""
+
+name: Back Extension: Plank Hold With Lift
+bpm: 0
+kcal: 0
+GLUTE: 3
+SPINE: 10
+instruction: """
+- punnerrusasento
+- nosta vastakkaiset kädet ja jalat ilmaan vaakatasoon
+- vuorotellen
+- kädet ja keho suorana kokoajan
+
+"""
+
+name: Dumbbell Clean
+bpm: 0
+kcal: 0
+SPINE: 10
+THIGH: 3
+instruction: """
+- seisten
+- käsipainoilla
+1. etukenossa kädet alaspäin
+2. tuo selällä yläkroppa suoraan nopeasti
+3. samalla nosta hartioita ylöspäin
+4. samalla koukista käsiä ja tuo painoja olkapäiden päälle
+5. samalla koukistu vähäsen
+6. nosta jalat suoraksi ja samalla vauhdilla vie kädet suoraan ylös
+- pääpaino on silti selän käytöllä
+
+"""
+
+name: Plate Good Morning
+bpm: 0
+kcal: 0
+BIFEM: 3
+INCOS: 3
+SPINE: 10
+instruction: """
+- seisten
+- jalat suorassa kokoajan
+- pidä painavaa esinettä rinnalla vakaasti
+- mene max etukumaraan ja takaisin suoraksi
+- toista
+
+"""
+
+name: Dumbbell Plank Row
+bpm: 0
+kcal: 0
+DELTO: 3
+LATDO: 3
+PECTO: 3
+SPINE: 10
+instruction: """
+- punnerrusasento
+- käsipainoilla
+- nosta vuorotellen painoja ylös
+
+"""
+
+name: Dumbbell Snatch
+bpm: 0
+kcal: 0
+SPINE: 10
+THIGH: 3
+instruction: """
+- seisten
+- yhdellä kädellä ja käsipainolla
+- alussa kumarassa paino maassa
+- nosta selkää käyttäen paino vauhtiin
+- vie paino ja käsi suoraan ylös
+
+"""
+
+name: Swiss Ball Back Extension
+bpm: 0
+kcal: 0
+OBLIQ: 3
+SPINE: 10
+instruction: """
+- punnerrusasentoon lantiotuki
+- taittele patja penkille
+- pidä varpaat maata koskettaen
+- tue lantiota patjalla
+- koukista ja ojenna selkää
+- kädet sivuilla selän mukana
+"""
+
+name: Jumping Jacks
+bpm: 0
+kcal: 0
+GASTR: 3
+THIGH: 10
+instruction: """
+- hyppien
+1. haara-asento ja kädet suoraan ylös
+2. jalat yhdessä ja kädet alhaalla
+
+"""
+
+name: Step-ups
+bpm: 0
+kcal: 0
+THIGH: 10
+instruction: """
+- laita koroke seinää vasten ettei luista
+- astu korokkeelle, ja vie toinen jalka sinne kans
+- astu pois korokkeelta, ja vie toinen muukana
+- vaihtele puolta
+
+"""
+
+name: Jump Squats
+bpm: 0
+kcal: 0
+GLUTE: 3
+THIGH: 10
+instruction: """
+- seisten / hyppien
+1. haara-asento etukumarassa ja kädet yhdessä kasvojen edessä
+2. hyppää ja vie kädet ylös yhdessä pitäen
+
+"""
+
+name: Dumbbell Upright Rows
+bpm: 0
+kcal: 0
+DELTO: 3
+TRAPE: 10
+instruction: """
+- seisten
+- käsipainoilla
+- alhaalla kädet suorana edessä alaspäin
+- pidä käsipainojen liike vain pystysuuntaisena
+- tuo käsipainot ylös rinnan eteen
+- rystyset eteenpäin
+- pidä käsi painoa roikottavassa otteessa
+
+"""
+
+name: Dumbbell Shrugs
+bpm: 0
+kcal: 0
+DELTO: 3
+TRAPE: 10
+instruction: """
+- seisten / istuen
+- käsipainoilla
+- kädet pitää painoja rennosti roikottaen
+- olkapäillä nostetaan ja lasketaan painoja
+- vain olkapäät liikkuu
+
+"""
+
+name: Dumbbell Row
+bpm: 0
+kcal: 0
+REARD: 3
+TRAPE: 10
+instruction: """
+- seisten
+- etukumarassa
+- käsipainoilla
+- alhaalla kädet suorana alhaalla
+- ylhäällä olkavarsi vaakatasossa 45° takana
+
+"""
+
+name: Neck Extender
+bpm: 0
+kcal: 0
+TRAPE: 10
+instruction: """
+- mahallaan penkillä
+- pää reunan yli
+- nosta ja laske päätä
+
+"""
+
+name: Neck Flexor
+bpm: 0
+kcal: 0
+TRAPE: 10
+instruction: """
+- selällään penkillä
+- pää reunan yli
+- nosta ja laske päätä
+
+"""
+
+name: Sideways Neck Flexor
+bpm: 0
+kcal: 0
+TRAPE: 10
+instruction: """
+- kyljellään sängyllä
+- pää reunan yli
+- nosta ja laske päätä
+
+"""
+
+name: Dumbbell Incline Shoulder Raise
+bpm: 0
+kcal: 0
+TRAPE: 10
+instruction: """
+- kaltevassa penkissä istuen
+- kädet suoraan ylös kokoajan
+- käsipainoilla
+- nosta ja laske painoja olkapäitä käyttäen
+
+"""
+
+name: One-arm Dumbbell Kickbacks
+bpm: 0
+kcal: 0
+REARD: 3
+TRICE: 10
+instruction: """
+- kontallaan toinen puoli sängyllä
+- toinen jalka maassa tukena
+- olkavarsi kehonsuuntaisesti kokoajan
+- käsipainolla
+- ojenna ja koukista kyynärvartta
+
+"""
+
+name: One-arm Dumbbell Extensions
+bpm: 0
+kcal: 0
+TRICE: 10
+instruction: """
+- istuen
+- käsipainolla
+- olkavarsi ylöspäin kokoajan
+- ojenna ja koukista kyynärvartta
+- yritä pitää painoa silleen, ettei tuu rotaatiota
+
+"""
+
+name: Triceps Extensions
+bpm: 0
+kcal: 0
+TRICE: 10
+instruction: """
+- seisten
+- käsipainoilla
+- tue olkavarret penkin reunaan
+- pidä olkavarret  vaakatasossa kokoajan
+- liikuta kyynärvartta vaakatasoon ja pystytasoon
+- rystyset sivuille
+
+"""
+
+name: Lying Triceps Extensions
+bpm: 0
+kcal: 0
+TRICE: 10
+instruction: """
+- maassa selällään
+- käsipainoilla
+- olkavarret ylöspäin
+- liikuta kyynärvartta vaakatasoon ja pystytasoon
+- rystyset kasvoihin päin tai sivuille
+
+"""
+
+name: Dumbbell Triceps Press
+bpm: 0
+kcal: 0
+DELTO: 3
+TRICE: 10
+instruction: """
+- selällään penkillä
+- käsipainoilla
+- kädet sivuilla / ylhäällä
+- ylhäällä kädet suoraan ylös
+- alhaalla olkavarsi 45° alaspäin taakse
+- rystyset sivuille
+
+"""
+
+name: Dumbbell Kickbacks
+bpm: 0
+kcal: 0
+TRICE: 10
+instruction: """
+- seisten
+- syvässä etukumarassa
+- olkavarsi kehonsuuntaisesti kokoajan
+- käsipainolla
+- ojenna ja koukista kyynärvartta
+
+"""
+
+name: Hindu Pushup
+bpm: 0
+kcal: 0
+LOWPR: 3
+UPPEC: 10
+instruction: """
+- sukeltava punnerrus
+1. alussa takamus melko korkealla
+2. "sukella pää edellä alas"
+3. "nouse pintaan uudestaan"
+4. liike loppuu kun selkä on koukistettu kokonaan
+5. palaa takaisin alkuun suorinta reittiä
+
+
+"""
+

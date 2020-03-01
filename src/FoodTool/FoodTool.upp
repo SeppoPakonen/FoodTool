@@ -8,6 +8,7 @@ file
 	Readme.txt,
 	Muistio.txt,
 	Recipes.txt,
+	Exercises.txt charset "UTF-8",
 	Main readonly separator,
 	FoodTool.h,
 	FoodTool.cpp,

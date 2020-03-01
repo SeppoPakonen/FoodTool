@@ -14,7 +14,7 @@ struct ExercisePlayerCtrl : public ParentCtrl {
 	VectorMap<String, String> muscle_groups;
 	VectorMap<String, double> primary_weights;
 	
-	static const int min_seconds = 15;
+	static const int min_seconds = 30;
 	static const int timeout_seconds = 15;
 	static const int heartrate_pulses = 8;
 	static const int default_kcal_per_hour = 180;

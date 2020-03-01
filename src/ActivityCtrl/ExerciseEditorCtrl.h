@@ -13,6 +13,7 @@ struct ExerciseEditorCtrl : WithExerciseDetails<ParentCtrl> {
 	void SelectMuscleArea();
 	void ValueChanged();
 	void Add();
+	void DbgDumpExercises();
 };
 
 #endif

@@ -16,9 +16,36 @@ ExerciseEditorCtrl::ExerciseEditorCtrl() {
 	name <<= THISBACK(ValueChanged);
 	instructions <<= THISBACK(ValueChanged);
 	add <<= THISBACK(Add);
+	name.WhenEnter = THISBACK(DbgDumpExercises);
 	
 	GetMuscleGroups(muscle_groups);
 	trained.SetCount(muscle_groups.GetCount());
+}
+
+void ExerciseEditorCtrl::DbgDumpExercises() {
+	Profile& prof = GetProfile();
+	
+	FileOut fout(GetDataFile("Exercises.txt"));
+	
+	for(int i = 0; i < prof.exercises.GetCount(); i++) {
+		const ExerciseType& et = prof.exercises[i];
+		if (et.name == "Unnamed") {prof.exercises.Remove(i--); continue;}
+		fout << "name: " << ToUtf8(et.name.ToWString()) << "\n";
+		fout << "bpm: " << et.av_heartrate.GetMean() << "\n";
+		fout << "kcal: " << et.av_kcal.GetMean() << "\n";
+		for(int j = 0; j < et.muscle_areas.GetCount(); j++) {
+			int value = et.muscle_areas[j];
+			if (value) {
+				fout << et.muscle_areas.GetKey(j) << ": " << value << "\n";
+			}
+		}
+		fout << "instruction: \"\"\"\n" << ToUtf8(et.instructions.ToWString()) << "\n\"\"\"\n";
+		fout << "\n";
+	}
+	
+	fout.Close();
+	
+	Data();
 }
 
 void ExerciseEditorCtrl::Data() {
