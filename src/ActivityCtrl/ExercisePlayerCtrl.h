@@ -5,12 +5,20 @@ struct ExercisePlayerCtrl : public ParentCtrl {
 	WithExerciseSelector<ParentCtrl> selector;
 	WithExercisePlayer<ParentCtrl> player;
 	WithHeartrateMeter<ParentCtrl> heartrate;
-	int view = -1;
+	WithTimeout<ParentCtrl> timeout;
+	WithInterval<ParentCtrl> ival;
+	int active_exer_i = -1, active_exer_item = 0;
 	ActivityGroupItem current;
 	
 	VectorMap<String, String> primary_types;
 	VectorMap<String, String> muscle_groups;
 	VectorMap<String, double> primary_weights;
+	
+	static const int min_seconds = 15;
+	static const int timeout_seconds = 15;
+	static const int heartrate_pulses = 8;
+	static const int default_kcal_per_hour = 180;
+	static const int default_heartrate_per_hour = 120;
 	
 	typedef enum {
 		MODE_IDLE,
@@ -21,22 +29,16 @@ struct ExercisePlayerCtrl : public ParentCtrl {
 	} Mode;
 	
 	RunningFlag flag;
-	TimeStop timeout_timer, exercise_timer, heartrate_timer;
-	int timeout = 0, pulse_count = 0;
-	Mode mode = MODE_IDLE, push_mode = MODE_IDLE;
-	
-	enum {
-		SELECTOR,
-		PLAYER,
-		HEARTRATE
-	};
+	TimeStop timeout_timer, exercise_timer, heartrate_timer, interval_timer;
+	int cur_timeout_seconds = 0, pulse_count = 0;
+	Mode view_mode = MODE_IDLE, mode = MODE_IDLE, push_mode = MODE_IDLE;
 	
 	typedef ExercisePlayerCtrl CLASSNAME;
 	ExercisePlayerCtrl();
 	~ExercisePlayerCtrl() {Stop();}
 	void Data(bool force);
 	void SelectExercise();
-	void SetView(int i);
+	void SetView(Mode i);
 	void PlaySound();
 	String GetPrimaryType(const ActivityGroupItem& it);
 	String GetPrimaryType(String exer_name);
@@ -47,7 +49,18 @@ struct ExercisePlayerCtrl : public ParentCtrl {
 	void AddExercise();
 	void Pulse();
 	void ProcessExercise();
-	void PostSetView(int i) {PostCallback(THISBACK1(SetView, i));}
+	void PostSetView(Mode i) {PostCallback(THISBACK1(SetView, i));}
+	void SetMode(Mode m) {mode = m; PostSetView(m);}
+	void SetExercise(String title, String ins) {player.title.SetLabel(title); player.instructions.SetLabel(ins);}
+	void SetUpcomingExercise(String title, String ins) {ival.upcoming.SetLabel(title); ival.instructions.SetLabel(ins);}
+	void SetExerciseCountdown(int i) {player.seconds.SetLabel(Format(t_("%d seconds"), i));}
+	void SetIntervalCountdown(int i) {ival.seconds.SetLabel(Format(t_("%d seconds"), i));}
+	void SetTimeoutCountdown(int i) {timeout.seconds.SetLabel(Format(t_("%d seconds"), i));}
+	void SetHeartrate(int bpm) {heartrate.bpm.SetLabel(bpm > 0 ? IntStr(bpm) : "-");}
+	void DbgDumpExerciseWords();
 };
+
+String Translate(String s);
+String TranslateExercise(String s);
 
 #endif

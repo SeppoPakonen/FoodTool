@@ -377,6 +377,8 @@ struct ActivityItem : Moveable<ActivityItem> {
 		FOR_VER(3) {s % heartrate;}
 	}
 	String GetTypeString() const;
+	int GetSeconds() const {return end.Get() - begin.Get();}
+	String ToString() const {return GetTypeString() + ": " + what + " " + IntStr(GetSeconds()) + " seconds";}
 };
 
 struct ActivityGroupItem : Moveable<ActivityGroupItem> {

@@ -487,7 +487,6 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	
 	int day_len = sleep.time.Get() - wake.time.Get();
 	Time exercise_time = wake.time + day_len * 3 / 8;
-	Time muscletraining_time = wake.time + day_len * 4 / 8;
 	
 	// Cardio decreases muscle more than strength training during weight loss diet
 	if (conf.tgt_walking_dist > 0 && plan.mode != MODE_WEIGHTLOSS) {
@@ -505,10 +504,16 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	}
 	
 	if (plan.mode == MODE_WEIGHTLOSS || plan.mode == MODE_MUSCLEGAIN) {
-		auto& jogging = s.items.Add();
-		jogging.time = muscletraining_time;
-		jogging.type = ScheduleToday::MUSCLETRAINING;
-		jogging.msg = t_("Do muscle resistance exercises!");
+		int seconds_per_exer = conf.tgt_exercise_min * 60 / conf.tgt_exercise_count;
+		int between_exer_seconds = (sleep.time.Get() - wake.time.Get() - seconds_per_exer - 15*60) / (conf.tgt_exercise_count-1);
+		Time t = wake.time + 15*60;
+		for(int i = 0; i < conf.tgt_exercise_count; i++) {
+			auto& jogging = s.items.Add();
+			jogging.time = t;
+			jogging.type = ScheduleToday::MUSCLETRAINING;
+			jogging.msg = t_("Do muscle resistance exercises!");
+			t += between_exer_seconds;
+		}
 	}
 	
 	for(auto& it : s.items)

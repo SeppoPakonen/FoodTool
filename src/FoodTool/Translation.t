@@ -24,9 +24,6 @@ fiFI("P\303\244ivitt\303\244iset ravinto")
 T_("Food Instructions")
 fiFI("Ruokaohjeet")
 
-T_("Activity")
-fiFI("Aktiivisuus")
-
 T_("Graphs")
 fiFI("Kuvaajat")
 
@@ -69,6 +66,15 @@ fiFI("Ruokavarasto")
 T_("Prices")
 fiFI("Hinnat")
 
+T_("Exercise Editor")
+fiFI("Harjoitusten muokkaaja")
+
+T_("Exercise Player")
+fiFI("Harjoittelu")
+
+T_("Activity History")
+fiFI("Aktiivisuushistoria")
+
 T_("Configuration")
 fiFI("Asetukset")
 
@@ -84,17 +90,32 @@ fiFI("Tallenna profiili")
 T_("Replan")
 fiFI("Suunnittele uudelleen")
 
+
+// Obsolete
+
+T_("Activity")
+fiFI("Aktiivisuus")
+
+
+// PACKAGE 'FoodCtrl' FILE 'MotivationCtrl.cpp'
+
 T_("%d days until lowest fat-%")
 fiFI("%d p\303\244iv\303\244\303\244 kunnes alin rasvaprosentti")
 
 T_("%d days until maintenance")
 fiFI("%d p\303\244iv\303\244\303\244 kunnes yll\303\244pitoa")
 
+
+// PACKAGE 'FoodCtrl' FILE 'ConfigurationCtrl.cpp'
+
 T_("Add new")
 fiFI("Lis\303\244\303\244 uusi")
 
 T_("Added")
 fiFI("Lis\303\244tty")
+
+
+// PACKAGE 'FoodCtrl' FILE 'ExceptionsCtrl.cpp'
 
 T_("Begin")
 fiFI("Aloitus")
@@ -108,8 +129,14 @@ fiFI("Vajaus")
 T_("Reason")
 fiFI("Syy")
 
+
+// PACKAGE 'FoodCtrl' FILE 'NoteCtrl.cpp'
+
 T_("Title")
 fiFI("Otsikko")
+
+
+// PACKAGE 'FoodCtrl' FILE 'UsageCtrl.cpp'
 
 T_("End")
 fiFI("Lopetus")
@@ -119,6 +146,9 @@ fiFI("Minuuttia")
 
 T_("You have used this program for %d minutes.")
 fiFI("Olet k\303\244ytt\303\244nyt t\303\244t\303\244 ohjelmaa %d minuuttia.")
+
+
+// PACKAGE 'FoodCtrl' FILE 'GraphCtrl.cpp'
 
 T_("Type")
 fiFI("Tyyppi")
@@ -439,8 +469,14 @@ fiFI("Mitattu s\303\244\303\244ren ymp\303\244rysmitta")
 T_("Leg circumference")
 fiFI("S\303\244\303\244ren ymp\303\244rysmitta")
 
+
+// PACKAGE 'FoodCtrl' FILE 'MultipurposeGraph.cpp'
+
 T_("Waiting for data")
 fiFI("Odotetaan dataa")
+
+
+// PACKAGE 'FoodCtrl' FILE 'TodayScheduleCtrl.cpp'
 
 T_("Waking")
 fiFI("Her\303\244\303\244minen")
@@ -460,8 +496,14 @@ fiFI("Nukkuminen")
 T_("Training")
 fiFI("Harjoittelu")
 
+
+// PACKAGE 'FoodCtrl' FILE 'FoodCtrl1.lay'
+
 T_("Add")
 fiFI("Lis\303\244\303\244")
+
+
+// PACKAGE 'FoodCtrl' FILE 'DailyNutritionsCtrl.cpp'
 
 T_("Date")
 fiFI("P\303\244iv\303\244m\303\244\303\244r\303\244")
@@ -469,11 +511,17 @@ fiFI("P\303\244iv\303\244m\303\244\303\244r\303\244")
 T_("Variant")
 fiFI("Muunnelma")
 
+
+// PACKAGE 'FoodCtrl' FILE 'FoodInstructionCtrl.cpp'
+
 T_("Name")
 fiFI("Nimi")
 
 T_("Grams")
 fiFI("Grammaa")
+
+
+// PACKAGE 'FoodCtrl' FILE 'DailyNutritionsCtrl.cpp'
 
 T_("Ingredient")
 fiFI("Ainesosa")
@@ -526,6 +574,9 @@ fiFI("Lis\303\244ravinteet")
 T_("Food")
 fiFI("Ruoka")
 
+
+// PACKAGE 'FoodCtrl' FILE 'SupplementCtrl.cpp'
+
 T_("Nutrition")
 fiFI("Ravintoaine")
 
@@ -547,14 +598,23 @@ fiFI("Arvo /100g")
 T_("% of recommendation")
 fiFI("% suositellusta")
 
+
+// PACKAGE 'FoodCtrl' FILE 'FoodCtrl1.lay'
+
 T_("Preset")
 fiFI("Esiasetus")
+
+
+// PACKAGE 'FoodCtrl' FILE 'FoodWishCtrl.cpp'
 
 T_("Score (0-10)")
 fiFI("Piste (0-10)")
 
 T_("Average mass")
 fiFI("Keskiarvo massa")
+
+
+// PACKAGE 'FoodCtrl' FILE 'FoodLogCtrl.cpp'
 
 T_("Queue Time")
 fiFI("Jonon aika")
@@ -583,6 +643,9 @@ fiFI("Kauppa")
 T_("Portable List")
 fiFI("Mobiililista")
 
+
+// PACKAGE 'FoodCtrl' FILE 'PriceCtrl.cpp'
+
 T_("Food name")
 fiFI("Ruuan nimi")
 
@@ -602,7 +665,7 @@ T_("%d days")
 fiFI("%d p\303\244iv\303\244\303\244")
 
 
-// FoodTool1.lay
+// PACKAGE 'FoodCtrl' FILE 'FoodCtrl1.lay'
 
 T_("Who are you?")
 fiFI("Kuka sin\303\244 olet?")
@@ -650,8 +713,14 @@ fiFI("H\303\266lkk\303\244yst\303\244/p\303\244iv\303\244 (km):")
 T_("Walking/day (km):")
 fiFI("K\303\244vely\303\244/p\303\244iv\303\244 (km):")
 
+
+// Obsolete
+
 T_("Calorie burning by exercise (kcal):")
 fiFI("Kaloreita poltettu liikunnalla (kcal):")
+
+
+// PACKAGE 'FoodCtrl' FILE 'FoodCtrl1.lay'
 
 T_("Going to sleep time:")
 fiFI("Nukkumaanmenoaika:")
@@ -957,16 +1026,19 @@ T_("C")
 fiFI("R")
 
 
-// ScheduleCtrl.cpp
+// PACKAGE 'FoodCtrl' FILE 'ScheduleCtrl.cpp'
 
 T_("Groceries")
 fiFI("Ruokaostokset")
 
 
-// Food.h
+// PACKAGE 'FoodCtrl' FILE 'MealPresetCtrl.cpp'
 
 T_("Score")
 fiFI("Piste")
+
+
+// PACKAGE 'Food' FILE 'Plan.h'
 
 T_("Easiest")
 fiFI("Helpoin")
@@ -987,7 +1059,7 @@ T_("Invalid variant")
 fiFI("Virheellinen muunnelma")
 
 
-// FoodStorage.cpp
+// PACKAGE 'Food' FILE 'FoodStorage.cpp'
 
 T_("Kcals/day: ")
 fiFI("Kcal/p\303\244iv\303\244:")
@@ -1011,13 +1083,13 @@ T_("Food #%d: %s %d * %d grams\n\n")
 fiFI("Ruoka #%d: %s %d * %d grammaa\n\n")
 
 
-// FoodStorageCtrl.cpp
+// PACKAGE 'FoodCtrl' FILE 'FoodStorageCtrl.cpp'
 
 T_("Source")
 fiFI("L\303\244hde")
 
 
-// Profile.cpp
+// PACKAGE 'Food' FILE 'Profile.cpp'
 
 T_("Good morning. Have %d calories today!")
 fiFI("Hyv\303\244\303\244 huomenta. Saat %d kaloria t\303\244n\303\244\303\244n!")
@@ -1092,13 +1164,13 @@ T_("Invalid Source")
 fiFI("Virheellinen l\303\244hde")
 
 
-// ProfileCreator.cpp
+// PACKAGE 'FoodCtrl' FILE 'ProfileCreator.cpp'
 
 T_("FoodTool first start wizard")
 fiFI("Ruokaty\303\266kalun ensimm\303\244isen aloituksen velho")
 
 
-// DatabaseCtrl.cpp
+// PACKAGE 'FoodCtrl' FILE 'DatabaseCtrl.cpp'
 
 T_("All foods")
 fiFI("Kaikki ruuat")
@@ -1110,7 +1182,7 @@ T_("Long description")
 fiFI("Pitk\303\244 kuvaus")
 
 
-// WeightCtrl.cpp
+// PACKAGE 'FoodCtrl' FILE 'WeightCtrl.cpp'
 
 T_("Worst")
 fiFI("Surkein")
@@ -1143,7 +1215,7 @@ T_("Source #%d")
 fiFI("L\303\244hde %d.")
 
 
-// MealPresetCtrl.cpp
+// PACKAGE 'FoodCtrl' FILE 'MealPresetCtrl.cpp'
 
 T_("Taste")
 fiFI("Maku")
@@ -1158,7 +1230,7 @@ T_("Unnamed")
 fiFI("Nimet\303\266n")
 
 
-// Util.cpp
+// PACKAGE 'Food' FILE 'HairSampleDeficit.cpp'
 
 T_("Chromium")
 fiFI("Kromi")
@@ -1196,6 +1268,9 @@ fiFI("Rubidium")
 T_("Zirconium")
 fiFI("Zirkonium")
 
+
+// PACKAGE 'FoodCtrl' FILE 'HairSampleDeficitCtrl.cpp'
+
 T_("Your mineral levels")
 fiFI("Sinun mineraalitasot")
 
@@ -1213,3 +1288,365 @@ fiFI("84")
 
 T_("97.5th")
 fiFI("97,5")
+
+
+// PACKAGE 'FoodCtrl' FILE 'FoodCtrl1.lay'
+
+T_("Strength exercise calories (kcal):")
+fiFI("Voimaharjoittelun kalorit (kcal):")
+
+T_("Strength exercises in a day (count):")
+fiFI("Voimaharjoitteluja p\303\244iv\303\244ss\303\244 (kertoja):")
+
+T_("Strength exercises in a day (min):")
+fiFI("Voimaharjoittelua p\303\244iv\303\244ss\303\244 (min):")
+
+T_("User defined:")
+fiFI("K\303\244ytt\303\244j\303\244n m\303\244\303\244ritt\303\244m\303\244:")
+
+
+// PACKAGE 'ActivityCtrl' FILE 'Layouts.lay'
+
+T_("Video:")
+fiFI("Video:")
+
+T_("Import latest file")
+fiFI("Tuo viimeisin tiedosto")
+
+T_("Exercises:")
+fiFI("Harjoitukset:")
+
+T_("Total calories:")
+fiFI("Kaloreita yhteens\303\244:")
+
+T_("Average heartrate:")
+fiFI("Keskiarvosyke:")
+
+T_("Duration:")
+fiFI("Kesto:")
+
+T_("Start")
+fiFI("Aloita")
+
+T_("Exercise Name")
+fiFI("Harjoituksen nimi")
+
+T_("- Something\n- Something\n- Something\n- Something\n- Something\n- Something\n"
+     "- Something\n- Something\n- Something\n")
+fiFI("- Jotakin\n- Jotakin\n- Jotakin\n- Jotakin\n- Jotakin\n- Jotakin\n- Jotakin\n"
+     "- Jotakin\n")
+
+T_("128 seconds")
+fiFI("128 sekuntia")
+
+T_("TIMEOUT")
+fiFI("AIKALIS\303\204")
+
+T_("STOP")
+fiFI("PYS\303\204YT\303\204")
+
+T_("152")
+fiFI("152")
+
+T_("Pulse")
+fiFI("Pulssi")
+
+T_("Timeout")
+fiFI("Aikalis\303\244")
+
+T_("Interval")
+fiFI("Tauko")
+
+
+// PACKAGE 'ActivityCtrl' FILE 'ActivityHistoryCtrl.cpp'
+
+T_("Length")
+fiFI("Pituus")
+
+T_("What")
+fiFI("Mit\303\244")
+
+T_("Kcal")
+fiFI("Kcal")
+
+T_("Heartrate (BPM)")
+fiFI("Syke (BPM)")
+
+
+// PACKAGE 'ActivityCtrl' FILE 'ExercisePlayerCtrl.h'
+
+T_("%d seconds")
+fiFI("%d sekuntia")
+
+
+// PACKAGE 'ActivityCtrl' FILE 'ExercisePlayerCtrl.cpp'
+
+T_("ERROR")
+fiFI("VIRHE")
+
+T_("Front")
+fiFI("Etupuoli")
+
+T_("Dumbbell")
+fiFI("K\303\244sipaino")
+
+T_("Raises")
+fiFI("Nostoja")
+
+T_("30")
+fiFI("30")
+
+T_("Degree")
+fiFI("Astetta")
+
+T_("Seated")
+fiFI("Istuen")
+
+T_("Alternating")
+fiFI("Vaihtuen")
+
+T_("Scaption")
+fiFI("Lapaluu Nosto")
+
+T_("Kneeling")
+fiFI("Polvillaan")
+
+T_("Prone")
+fiFI("Vatsallaan")
+
+T_("On")
+fiFI("-")
+
+T_("Swiss")
+fiFI("Sveitsil\303\244inen")
+
+T_("Ball")
+fiFI("Pallo")
+
+T_("Standing")
+fiFI("Seisten")
+
+T_("Alternate")
+fiFI("Vaihtuen")
+
+T_("Curls")
+fiFI("Pumppaus")
+
+T_("Hammer")
+fiFI("Moukari")
+
+T_("Twisting")
+fiFI("K\303\244\303\244ntyv\303\244")
+
+T_("Concentration")
+fiFI("Keskittyv\303\244")
+
+T_("Incline")
+fiFI("Vino")
+
+T_("Single")
+fiFI("Yksitt\303\244is")
+
+T_("Leg")
+fiFI("Jalka")
+
+T_("Stiff-legged")
+fiFI("Suorajalkainen")
+
+T_("Deadlifts")
+fiFI("Maastaveto")
+
+T_("Romanian")
+fiFI("Romanialainen")
+
+T_("Reverse")
+fiFI("K\303\244\303\244nteinen")
+
+T_("Shoulder")
+fiFI("Olkap\303\244\303\244")
+
+T_("Press")
+fiFI("Pr\303\244ssi")
+
+T_("Plate")
+fiFI("Levy")
+
+T_("Pickup")
+fiFI("Poiminta")
+
+T_("Overhead")
+fiFI("Yl\303\244puolinen")
+
+T_("Lift")
+fiFI("Nosto")
+
+T_("Arnold")
+fiFI("Arnold")
+
+T_("Cross")
+fiFI("Ristiin")
+
+T_("Punch")
+fiFI("Isku")
+
+T_("Pec")
+fiFI("Rintalihas")
+
+T_("Deck")
+fiFI("Kone")
+
+T_("Flyes")
+fiFI("Vipunostoja")
+
+T_("Abduction")
+fiFI("Poisvienti")
+
+T_("Lateral")
+fiFI("Sivuttainen")
+
+T_("Raise")
+fiFI("Nosto")
+
+T_("And")
+fiFI("Ja")
+
+T_("Rear")
+fiFI("Taka")
+
+T_("Barbell")
+fiFI("Tanko")
+
+T_("Wrist")
+fiFI("Ranne")
+
+T_("Hold")
+fiFI("Ote")
+
+T_("Pinch")
+fiFI("Nipistys")
+
+
+// PACKAGE 'Food' FILE 'Profile.cpp'
+
+T_("Unknown")
+fiFI("Tuntematon")
+
+T_("Exercise")
+fiFI("Harjoitus")
+
+T_("Invalid")
+fiFI("Virheellinen")
+
+
+// PACKAGE 'Common' FILE 'Util.cpp'
+
+T_("%d years")
+fiFI("%d vuotta")
+
+T_("%d months")
+fiFI("%d kuukautta")
+
+T_("%d hours")
+fiFI("%d tuntia")
+
+T_("%d minutes")
+fiFI("%d minuuttia")
+
+
+// PACKAGE 'ActivityCtrl' FILE 'ExercisePlayerCtrl.cpp'
+
+T_("Anterior Deltoids")
+fiFI("Etummainen kolmip\303\244inen hartialihas")
+
+T_("Biceps")
+fiFI("Hauislihas")
+
+T_("Biceps Femoris")
+fiFI("Kaksip\303\244inen reisilihas")
+
+T_("Brachialis")
+fiFI("Olkalihas")
+
+T_("Deltoids")
+fiFI("Kolmip\303\244inen hartialihas")
+
+T_("Forearm Extensors")
+fiFI("Kyyn\303\244rvarren ojentajat")
+
+T_("Forearm Flexors")
+fiFI("Kyyn\303\244rvarren koukistajat")
+
+T_("Gastrocnemius")
+fiFI("Kaksoiskantalihas")
+
+T_("Gluteus Maximus")
+fiFI("Pakaralihas")
+
+T_("Inner Quadriceps")
+fiFI("Sisempi nelip\303\244inen reisilihas")
+
+T_("Intercostals")
+fiFI("Kylkiv\303\244lilihas")
+
+T_("Latissimus Dorsi")
+fiFI("Leve\303\244 selk\303\244lihas")
+
+T_("Lower Pectorals")
+fiFI("Alempi rintalihas")
+
+T_("Lower Rectus Abdominis")
+fiFI("Alempi vatsalihas")
+
+T_("Medial Deltoids")
+fiFI("Keskimm\303\244inen kolmip\303\244inen hartialihas")
+
+T_("Obliques")
+fiFI("Vino vatsalihas")
+
+T_("Outer Quadriceps")
+fiFI("Ulompi nelip\303\244inen reisilihas")
+
+T_("Pectorals")
+fiFI("Rintalihas")
+
+T_("Quadriceps")
+fiFI("Nelip\303\244inen reisilihas")
+
+T_("Rear Deltoids")
+fiFI("Taaempi kolmip\303\244inen hartialihas")
+
+T_("Rectus Abdominis")
+fiFI("Vatsalihas")
+
+T_("Soleus")
+fiFI("Leve\303\244 kantalihas")
+
+T_("Spinal Erectors")
+fiFI("Sel\303\244n ojentajalihas")
+
+T_("Thighs")
+fiFI("Nelip\303\244inen reisilihas")
+
+T_("Trapezius")
+fiFI("Ep\303\244k\303\244slihas")
+
+T_("Triceps")
+fiFI("Kolmip\303\244inen olkalihas")
+
+T_("Upper Pectorals")
+fiFI("Ylempi rintalihas")
+
+T_("Upper Rectus Abdominis")
+fiFI("Ylempi vatsalihas")
+
+T_("Arm")
+fiFI("K\303\244si")
+
+T_("Back")
+fiFI("Selk\303\244")
+
+
+// PACKAGE 'ActivityCtrl' FILE 'ActivityHistoryCtrl.cpp'
+
+T_("Duration")
+fiFI("Kesto")

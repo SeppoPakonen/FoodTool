@@ -16,7 +16,7 @@ ActivityHistoryCtrl::ActivityHistoryCtrl() {
 	
 	items.AddIndex();
 	items.AddColumn(t_("Time"));
-	items.AddColumn(t_("Length"));
+	items.AddColumn(t_("Duration"));
 	items.AddColumn(t_("Type"));
 	items.AddColumn(t_("What"));
 	items.AddColumn(t_("Kcal"));
@@ -57,13 +57,13 @@ void ActivityHistoryCtrl::SelectGroup() {
 	
 	for(int i = 0; i < gr.items.GetCount(); i++) {
 		const ActivityItem& it = gr.items[i];
-		list.Set(i, 0, i);
-		list.Set(i, 1, it.begin);
-		list.Set(i, 2, GetTimeDurationString(it.begin, it.end));
-		list.Set(i, 3, it.GetTypeString());
-		list.Set(i, 4, it.what);
-		list.Set(i, 5, it.kcal);
-		list.Set(i, 6, it.heartrate);
+		items.Set(i, 0, i);
+		items.Set(i, 1, it.begin);
+		items.Set(i, 2, GetTimeDurationString(it.begin, it.end));
+		items.Set(i, 3, it.GetTypeString());
+		items.Set(i, 4, it.what);
+		items.Set(i, 5, it.kcal);
+		items.Set(i, 6, it.heartrate);
 	}
 	items.SetCount(gr.items.GetCount());
 }

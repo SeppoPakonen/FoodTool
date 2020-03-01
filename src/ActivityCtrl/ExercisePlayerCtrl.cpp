@@ -4,12 +4,16 @@ ExercisePlayerCtrl::ExercisePlayerCtrl() {
 	CtrlLayout(selector);
 	CtrlLayout(player);
 	CtrlLayout(heartrate);
+	CtrlLayout(timeout);
+	CtrlLayout(ival);
 	
 	Add(selector.SizePos());
 	Add(player.SizePos());
 	Add(heartrate.SizePos());
+	Add(timeout.SizePos());
+	Add(ival.SizePos());
 	
-	SetView(SELECTOR);
+	SetView(MODE_IDLE);
 	
 	
 	selector.list.AddIndex();
@@ -37,9 +41,17 @@ ExercisePlayerCtrl::ExercisePlayerCtrl() {
 	
 	heartrate.pulse <<= THISBACK(Pulse);
 	
+	timeout.timeout <<= THISBACK(Timeout);
+	timeout.stop <<= THISBACK(Stop);
+	
+	ival.timeout <<= THISBACK(Timeout);
+	ival.stop <<= THISBACK(Stop);
+	
 	GetMuscleGroups(muscle_groups);
 	GetPrimaryTypes(primary_types);
 	GetPrimaryTypeWeights(primary_weights);
+	
+	DbgDumpExerciseWords();
 }
 
 void ExercisePlayerCtrl::Data(bool forced) {
@@ -53,8 +65,9 @@ void ExercisePlayerCtrl::Data(bool forced) {
 	if (prof.planned_exercises.GetCount() != selector.list.GetCount() || forced) {
 		for(int i = 0; i < prof.planned_exercises.GetCount(); i++) {
 			const ActivityGroupItem& it = prof.planned_exercises[i];
+			LOG(Format("%d : %X", i, (int64)&it));
 			list.Set(i, 0, i);
-			list.Set(i, 1, GetPrimaryType(it));
+			list.Set(i, 1, Translate(GetPrimaryType(it)));
 			list.Set(i, 2, it.main.kcal);
 			list.Set(i, 3, it.main.heartrate);
 		}
@@ -75,8 +88,10 @@ void ExercisePlayerCtrl::SelectExercise() {
 	int cursor = list.GetCursor();
 	int pe_i = list.Get(cursor, 0);
 	const ActivityGroupItem& it = prof.planned_exercises[pe_i];
+	LOG(Format("Selected %d : %X", pe_i, (int64)&it));
+	DUMPC(it.items);
 	
-	selector.primarytype.SetData(GetPrimaryType(it));
+	selector.primarytype.SetData(Translate(GetPrimaryType(it)));
 	selector.kcal = it.main.kcal;
 	selector.heartrate = it.main.heartrate;
 	selector.duration.SetData(GetTimeDurationString(it.main.begin, it.main.end));
@@ -94,18 +109,18 @@ void ExercisePlayerCtrl::SelectExercise() {
 		const ExerciseType& et = prof.exercises[exer_i];
 		
 		selector.items.Set(row, 0, i);
-		selector.items.Set(row, 1, GetPrimaryType(ai.what));
+		selector.items.Set(row, 1, Translate(GetPrimaryType(ai.what)));
 		
 		VectorMap<String, int> primary_trained;
 		for(int i = 0; i < et.muscle_areas.GetCount(); i++) {
 			String key = et.muscle_areas.GetKey(i);
 			int value = et.muscle_areas[i];
-			primary_trained.Add(muscle_groups.Get(key, t_("ERROR")), value);
+			primary_trained.Add(muscle_groups.Get(key, "ERROR"), value);
 		}
 		SortByValue(primary_trained, StdGreater<int>());
-		selector.items.Set(row, 2, !primary_trained.IsEmpty() ? primary_trained.GetKey(0) : "");
+		selector.items.Set(row, 2, !primary_trained.IsEmpty() ? Translate(primary_trained.GetKey(0)) : "");
 		
-		selector.items.Set(row, 3, et.name);
+		selector.items.Set(row, 3, TranslateExercise(et.name));
 		selector.items.Set(row, 4, ai.kcal);
 		selector.items.Set(row, 5, ai.heartrate);
 		selector.items.Set(row, 6, GetTimeDurationString(ai.begin, ai.end));
@@ -115,23 +130,33 @@ void ExercisePlayerCtrl::SelectExercise() {
 	
 }
 
-void ExercisePlayerCtrl::SetView(int i) {
+void ExercisePlayerCtrl::SetView(Mode i) {
 	selector.Hide();
 	player.Hide();
 	heartrate.Hide();
+	timeout.Hide();
+	ival.Hide();
 	
 	switch (i) {
-		case SELECTOR:
+		case MODE_IDLE:
 			selector.Show();
 			selector.list.SetFocus();
 			break;
-		case PLAYER:
+		case MODE_EXERCISE:
 			player.Show();
 			player.timeout.SetFocus();
 			break;
-		case HEARTRATE:
+		case MODE_HEARTRATE:
 			heartrate.Show();
 			heartrate.pulse.SetFocus();
+			break;
+		case MODE_TIMEOUT:
+			timeout.Show();
+			timeout.timeout.SetFocus();
+			break;
+		case MODE_INTERVAL:
+			ival.Show();
+			ival.timeout.SetFocus();
 			break;
 	}
 }
@@ -155,7 +180,7 @@ String ExercisePlayerCtrl::GetPrimaryType(const ActivityGroupItem& it) {
 				int train = et.muscle_areas[i];
 				if (train) {
 					double kcal = (double)train / train_sum * ai.kcal;
-					String ptype = primary_types.Get(key, t_("ERROR"));
+					String ptype = primary_types.Get(key, ("ERROR"));
 					type_len.GetAdd(ptype, 0) += kcal;
 				}
 			}
@@ -163,7 +188,9 @@ String ExercisePlayerCtrl::GetPrimaryType(const ActivityGroupItem& it) {
 	}
 	SortByValue(type_len, StdGreater<double>());
 	if (type_len.IsEmpty())
-		return t_("ERROR");
+		return ("ERROR");
+	//LOG("\nGetPrimaryType Group");
+	//DUMPM(type_len);
 	return type_len.GetKey(0);
 }
 
@@ -172,7 +199,7 @@ String ExercisePlayerCtrl::GetPrimaryType(String exer_name) {
 	VectorMap<String, double> type_len;
 	int exer_i = prof.FindExercise(exer_name);
 	if (exer_i < 0)
-		return t_("ERROR");
+		return ("ERROR");
 	const ExerciseType& et = prof.exercises[exer_i];
 	int train_sum = 0;
 	for(int i = 0; i < et.muscle_areas.GetCount(); i++) train_sum += et.muscle_areas[i];
@@ -181,13 +208,15 @@ String ExercisePlayerCtrl::GetPrimaryType(String exer_name) {
 		int train = et.muscle_areas[i];
 		if (train) {
 			double kcal = (double)train / train_sum;
-			String ptype = primary_types.Get(key, t_("ERROR"));
+			String ptype = primary_types.Get(key, "ERROR");
 			type_len.GetAdd(ptype, 0) += kcal;
 		}
 	}
 	SortByValue(type_len, StdGreater<double>());
 	if (type_len.IsEmpty())
-		return t_("ERROR");
+		return ("ERROR");
+	//LOG("\nGetPrimaryType Exercise " << exer_name);
+	//DUMPM(type_len);
 	return type_len.GetKey(0);
 }
 
@@ -230,7 +259,7 @@ void ExercisePlayerCtrl::Reset() {
 	for(const ActivityGroupItem& gr : prof.activity) {
 		for(const ActivityItem& ai : gr.items) {
 			if (ai.type == ACT_EXERCISE) {
-				int s = ai.end.Get() - ai.begin.Get();
+				int s = ai.GetSeconds();
 				exercise_seconds.GetAdd(ai.what, 0) += s;
 				if (s > max_seconds)
 					max_seconds = s;
@@ -243,8 +272,6 @@ void ExercisePlayerCtrl::Reset() {
 		for(int i = 0; i < prof.exercises.GetCount(); i++)
 			exercises_mul[i] = 1.0 - (double)exercise_seconds.Get(prof.exercises[i].name, 0) / max_seconds;
 	}
-	
-	const int min_seconds = 15;
 	
 	Optimizer opt;
 	opt.MinMax(0, 10*60);
@@ -265,7 +292,7 @@ void ExercisePlayerCtrl::Reset() {
 			const ExerciseType& et = prof.exercises[i];
 			double av_kcal = et.av_kcal.GetMean();
 			if (!av_kcal)
-				av_kcal = 180;
+				av_kcal = default_kcal_per_hour;
 			
 			int seconds = trial[i];
 			double exer_mul = exercises_mul[i];
@@ -352,6 +379,7 @@ void ExercisePlayerCtrl::Reset() {
 	int ts_i = 0;
 	int per_exercise = timeslots.GetCount() / conf.tgt_exercise_count;
 	int mod_exercise = timeslots.GetCount() % conf.tgt_exercise_count;
+	VectorMap<String, String> exer_ptypes;
 	for(int i = 0; i < conf.tgt_exercise_count; i++) {
 		ActivityGroupItem& gr = prof.planned_exercises.Add();
 		int per_this_exercise = per_exercise + (i < mod_exercise ? 1 : 0);
@@ -363,38 +391,79 @@ void ExercisePlayerCtrl::Reset() {
 		for(int j = 0; j < per_this_exercise; j++) {
 			const TimeSlot& ts = timeslots[ts_i++];
 			exer_seconds.GetAdd(ts.exercise, 0) += ts.seconds;
+			if (exer_ptypes.Find(ts.exercise) < 0)
+				exer_ptypes.Add(ts.exercise, GetPrimaryType(ts.exercise));
 		}
 		
-		Time t = gr.main.begin;
-		OnlineAverage1 total_av_heartrate;
+		SortByValue(exer_seconds, StdLess<int>());
 		
+		String prev_ptype;
+		for(int j = exer_seconds.GetCount()-1; j >= 0; j--) {
+			String exer = exer_seconds.GetKey(j);
+			int sec = exer_seconds[j];
+			String ptype = exer_ptypes.Get(exer);
+			if (prev_ptype == ptype) {
+				bool found = false;
+				for(int k = j-1; k >= 0; k--) {
+					String repl_exer = exer_seconds.GetKey(k);
+					String repl_ptype = exer_ptypes.Get(repl_exer);
+					if (repl_ptype != prev_ptype) {
+						int repl_sec = exer_seconds[k];
+						
+						// Swap
+						exer_seconds.Remove(j);
+						exer_seconds.Remove(k);
+						exer_seconds.Insert(k, exer, sec);
+						exer_seconds.Insert(j, repl_exer, repl_sec);
+						
+						prev_ptype = repl_ptype;
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					prev_ptype = ptype;
+			}
+			else
+				prev_ptype = ptype;
+		}
+		
+		
+		Time t = gr.main.begin;
+		
+		// Add initial interval to prepare for the exercise
+		ActivityItem& ival = gr.items.Add();
+		ival.type = ACT_INTERVAL;
+		ival.begin = t;
+		t += min_seconds;
+		ival.end = t;
+		ival.msg = "";
+		ival.kcal = 0;
+		ival.heartrate = 70;
+		ival.real_values = false;
+		
+		OnlineAverage1 total_av_heartrate;
 		double total_kcal = 0;
-		bool total_real_values = true;
 		while (exer_seconds.GetCount()) {
-			for(int j = 0; j < exer_seconds.GetCount(); j++) {
+			for(int j = exer_seconds.GetCount()-1; j >= 0; j--) {
 				String exercise = exer_seconds.GetKey(j);
 				int& es = exer_seconds[j];
 				int seconds = min(6 * min_seconds, es);
 				es -= seconds;
 				if (!es)
-					exer_seconds.Remove(j--);
+					exer_seconds.Remove(j);
 				
 				const ExerciseType& et = prof.exercises[prof.FindExercise(exercise)];
 				
-				bool real_values = true;
 				double av_kcal = et.av_kcal.GetMean();
-				if (!av_kcal) {
-					av_kcal = 180;
-					real_values = false;
-				}
+				if (!av_kcal)
+					av_kcal = default_kcal_per_hour;
 				
 				double av_heartrate = et.av_heartrate.GetMean();
-				if (!av_heartrate) {
-					av_heartrate = 120;
-					real_values = false;
-				}
+				if (!av_heartrate)
+					av_heartrate = default_heartrate_per_hour;
 				
-				ActivityItem& it = gr.items.Add();
+				ActivityItem& it = gr.items.Insert(1);
 				it.type = ACT_EXERCISE;
 				it.begin = t;
 				t += seconds;
@@ -403,10 +472,10 @@ void ExercisePlayerCtrl::Reset() {
 				it.msg = "";
 				it.kcal = (double)av_kcal / 3600 * seconds;
 				it.heartrate = av_heartrate;
-				it.real_values = real_values;
+				it.real_values = false;
 				total_kcal += it.kcal;
 				
-				ActivityItem& ival = gr.items.Add();
+				ActivityItem& ival = gr.items.Insert(2);
 				ival.type = ACT_INTERVAL;
 				ival.begin = t;
 				t += min_seconds;
@@ -414,23 +483,34 @@ void ExercisePlayerCtrl::Reset() {
 				ival.msg = "";
 				ival.kcal = 0.5 * (double)av_kcal / 3600 * seconds; // pulse is still quite high
 				ival.heartrate = 0.9 * av_heartrate;
-				ival.real_values = real_values;
+				ival.real_values = false;
 				total_kcal += ival.kcal; // ???
 				
 				total_av_heartrate.Add(av_heartrate);
-				if (!real_values)
-					total_real_values = false;
 			}
 		}
 		
+		t = gr.main.begin;
+		for(int i = 0; i < gr.items.GetCount(); i++) {
+			ActivityItem& ai = gr.items[i];
+			int s = ai.GetSeconds();
+			ai.begin = t;
+			t += s;
+			ai.end = t;
+		}
 		gr.main.end = t;
-		gr.main.what = "";
+		gr.main.what = Translate(GetPrimaryType(gr));
 		gr.main.msg = "";
 		gr.main.kcal = total_kcal;
 		gr.main.heartrate = total_av_heartrate.GetMean();
-		gr.main.real_values = total_real_values;
+		gr.main.real_values = false;
+		
+		
+		// Dbg
+		//gr.items.SetCount(min(3, gr.items.GetCount()));
 	}
 	ASSERT(ts_i == timeslots.GetCount());
+	
 	
 	Data(true);
 }
@@ -438,24 +518,29 @@ void ExercisePlayerCtrl::Reset() {
 void ExercisePlayerCtrl::Start() {
 	Stop();
 	
+	if (!selector.list.IsCursor())
+		return;
+	
+	active_exer_i = selector.list.Get(selector.list.GetCursor(), 0);
+	active_exer_item = 0;
+	
 	flag.Start(1);
 	current.items.Clear();
 	current.main.type = ACT_EXERCISE;
 	current.main.begin = GetSysTime();
 	
-	SetView(PLAYER);
 	Thread::Start(THISBACK(ProcessExercise));
 }
 
 void ExercisePlayerCtrl::Timeout() {
 	if (mode != MODE_TIMEOUT) {
 		push_mode = mode;
-		mode = MODE_TIMEOUT;
-		timeout = 15;
+		cur_timeout_seconds = timeout_seconds;
 		timeout_timer.Reset();
+		SetMode(MODE_TIMEOUT);
 	}
 	else {
-		timeout += 15;
+		cur_timeout_seconds += timeout_seconds;
 	}
 }
 
@@ -465,12 +550,13 @@ void ExercisePlayerCtrl::Stop() {
 	flag.Stop();
 	
 	if (current.items.GetCount()) {
-		Profile& prof = GetProfile();
+		current.items.Remove(current.items.GetCount()-1);
 		AddExercise();
 	}
 }
 
 void ExercisePlayerCtrl::AddExercise() {
+	if (current.items.IsEmpty()) return;
 	current.main.end = GetSysTime();
 	current.main.what = "";
 	current.main.msg = "";
@@ -486,9 +572,14 @@ void ExercisePlayerCtrl::AddExercise() {
 	current.main.heartrate = av.GetMean();
 	
 	Profile& prof = GetProfile();
+	
+	if (prof.planned_exercises[active_exer_i].items.GetCount() == current.items.GetCount())
+		prof.planned_exercises.Remove(active_exer_i);
+	
 	Swap(prof.activity.Add(), current);
 	prof.StoreThis();
-
+	
+	PostCallback(THISBACK1(Data, true));
 }
 
 void ExercisePlayerCtrl::Pulse() {
@@ -499,53 +590,323 @@ void ExercisePlayerCtrl::Pulse() {
 	}
 	pulse_count++;
 	
-	if (pulse_count >= 8) {
-		const Profile& prof = GetProfile();
-		const Configuration& conf = prof.confs.Top();
-		
-		Date today = GetSysTime();
-		const DailyPlan* plan = NULL, *it, *end;
-		it = prof.planned_daily.Begin();
-		end = prof.planned_daily.End();
-		while (it != end) {
-			if (it->date == today) {
-				plan = it;
-				break;
-			}
-		}
-		if (!plan) return;
-		
+	if (pulse_count <= 1)
+		PostCallback(THISBACK1(SetHeartrate, 0));
+	else {
 		double seconds = heartrate_timer.Elapsed() * 0.001;
 		double pulse_duration = seconds / (pulse_count - 1);
 		double bpm = 60.0 / pulse_duration;
+		PostCallback(THISBACK1(SetHeartrate, (int)(bpm + 0.5)));
 		
-		int c = current.items.GetCount();
-		ASSERT(c >= 2);
-		ActivityItem& prev_exer = current.items[c-2];
-		ActivityItem& cur_ival = current.items[c-1];
-		
-		prev_exer.heartrate = bpm;
-		prev_exer.kcal = GetHeartrateCalories(prof.is_male, plan->weight, conf.age, bpm, prev_exer.end.Get() - prev_exer.begin.Get());
-		prev_exer.real_values = true;
-		
-		cur_ival.heartrate = bpm;
-		cur_ival.kcal = GetHeartrateCalories(prof.is_male, plan->weight, conf.age, bpm, cur_ival.end.Get() - cur_ival.begin.Get());
-		cur_ival.real_values = true;
-		
-		mode = MODE_INTERVAL;
-		pulse_count = 0;
+		if (pulse_count >= heartrate_pulses) {
+			Profile& prof = GetProfile();
+			const Configuration& conf = prof.confs.Top();
+			
+			Date today = GetSysTime();
+			const DailyPlan* plan = NULL, *it, *end;
+			it = prof.planned_daily.Begin();
+			end = prof.planned_daily.End();
+			while (it != end) {
+				if (it->date == today) {
+					plan = it;
+					break;
+				}
+				it++;
+			}
+			if (!plan) return;
+			
+			
+			int c = current.items.GetCount();
+			
+			if (c >= 2 && current.items[c-2].type == ACT_EXERCISE) {
+				ActivityItem& prev_exer = current.items[c-2];
+				int prev_exer_seconds = prev_exer.GetSeconds();
+				prev_exer.heartrate = bpm;
+				prev_exer.kcal = GetHeartrateCalories(prof.is_male, plan->weight, conf.age, bpm, prev_exer_seconds);
+				prev_exer.real_values = true;
+				
+				double hour_kcal = prev_exer.kcal * 60*60 / prev_exer_seconds;
+				ExerciseType& et = prof.exercises[prof.FindExercise(prev_exer.what)];
+				et.av_heartrate.Add(bpm);
+				et.av_kcal.Add(hour_kcal);
+			}
+			
+			if (c >= 1 && current.items[c-1].type == ACT_INTERVAL) {
+				ActivityItem& cur_ival = current.items[c-1];
+				int ival_seconds = cur_ival.GetSeconds();
+				cur_ival.heartrate = bpm;
+				cur_ival.kcal = GetHeartrateCalories(prof.is_male, plan->weight, conf.age, bpm, ival_seconds);
+				cur_ival.real_values = true;
+			}
+			
+			pulse_count = 0;
+			SetMode(MODE_INTERVAL);
+		}
 	}
 }
 
 void ExercisePlayerCtrl::ProcessExercise() {
-	/*mode = MODE_IDLE;
+	Profile& prof = GetProfile();
+	ActivityGroupItem& plan = prof.planned_exercises[active_exer_i];
+	mode = MODE_IDLE; // no gui change
+	bool success = false;
+	cur_timeout_seconds = 0;
 	
+	while (flag.IsRunning()) {
 		
-		ActivityItem& ai = current.items.Add();
-		ai.begin = now;
-		ai.kcal = 0;
-		ai.heartrate = 0;
-		ai.real_values = false;
-		etc.
-	*/	
+		if (active_exer_item >= plan.items.GetCount()) {
+			success = true;
+			break;
+		}
+		
+		if (mode == MODE_IDLE) {
+			ActivityItem& it = plan.items[active_exer_item];
+			if (it.type == ACT_EXERCISE)
+				SetMode(MODE_EXERCISE);
+			else if (it.type == ACT_INTERVAL)
+				SetMode(MODE_INTERVAL);
+			else
+				break;
+		}
+		else if (mode == MODE_EXERCISE) {
+			ActivityItem& plan_it = plan.items[active_exer_item];
+			if (plan_it.type != ACT_EXERCISE)
+				break;
+			
+			int seconds = plan_it.GetSeconds() + cur_timeout_seconds;
+			int left = max<int>(0, seconds - exercise_timer.Elapsed() / 1000);
+			PostCallback(THISBACK1(SetExerciseCountdown, left));
+			
+			if (active_exer_item >= current.items.GetCount()) {
+				ASSERT(active_exer_item == current.items.GetCount());
+				ActivityItem& it = current.items.Add();
+				it.type = plan_it.type;
+				it.begin = GetSysTime();
+				it.what = plan_it.what;
+				it.msg = "";
+				it.end = it.begin + plan_it.GetSeconds();
+				it.heartrate = plan_it.heartrate;
+				it.kcal = plan_it.kcal;
+				it.real_values = false;
+				exercise_timer.Reset();
+				PlaySound();
+				
+				const ExerciseType& et = prof.exercises[prof.FindExercise(plan_it.what)];
+				PostCallback(THISBACK2(SetExercise, TranslateExercise(et.name), et.instructions));
+			}
+			else {
+				ActivityItem& it = current.items[active_exer_item];
+				ASSERT(it.type == ACT_EXERCISE);
+				
+				if (left <= 0) {
+					cur_timeout_seconds = 0;
+					it.end = GetSysTime();
+					active_exer_item++;
+					mode = MODE_IDLE; // no gui change
+					continue;
+				}
+			}
+		}
+		else if (mode == MODE_INTERVAL) {
+			ActivityItem& plan_it = plan.items[active_exer_item];
+			if (plan_it.type != ACT_INTERVAL)
+				break;
+			
+			int seconds = plan_it.GetSeconds() + cur_timeout_seconds;
+			int left = max<int>(0, seconds - interval_timer.Elapsed() / 1000);
+			PostCallback(THISBACK1(SetIntervalCountdown, left));
+			
+			if (active_exer_item >= current.items.GetCount()) {
+				ASSERT(active_exer_item == current.items.GetCount());
+				ActivityItem& it = current.items.Add();
+				it.type = plan_it.type;
+				it.begin = GetSysTime();
+				it.what = "";
+				it.msg = "";
+				it.end = it.begin + plan_it.GetSeconds();
+				it.heartrate = plan_it.heartrate;
+				it.kcal = plan_it.kcal;
+				it.real_values = false;
+				interval_timer.Reset();
+				PlaySound();
+				
+				int upcoming_i = -1;
+				if (active_exer_item + 1 < plan.items.GetCount()) {
+					const ActivityItem& upcoming_it = plan.items[active_exer_item + 1];
+					upcoming_i = prof.FindExercise(upcoming_it.what);
+					if (upcoming_i >= 0) {
+						const ExerciseType& et = prof.exercises[upcoming_i];
+						PostCallback(THISBACK2(SetUpcomingExercise, TranslateExercise(et.name), et.instructions));
+					}
+				}
+				if (upcoming_i < 0)
+					PostCallback(THISBACK2(SetUpcomingExercise, "", ""));
+				
+				int exer_i = prof.FindExercise(it.what);
+				if (exer_i >= 0) {
+					const ExerciseType& et = prof.exercises[exer_i];
+					if (et.av_heartrate.count < 6) {
+						heartrate_timer.Reset();
+						PostCallback(THISBACK1(SetHeartrate, 0));
+						SetMode(MODE_HEARTRATE);
+						continue;
+					}
+				}
+			}
+			else {
+				ActivityItem& it = current.items[active_exer_item];
+				ASSERT(it.type == ACT_INTERVAL);
+				
+				if (left <= 0) {
+					cur_timeout_seconds = 0;
+					it.end = GetSysTime();
+					active_exer_item++;
+					mode = MODE_IDLE; // no gui change
+					continue;
+				}
+			}
+		}
+		else if (mode == MODE_HEARTRATE) {
+			if (heartrate_timer.Elapsed() / 1000 > 60) {
+				interval_timer.Reset();
+				pulse_count = 0;
+				SetMode(MODE_INTERVAL);
+			}
+		}
+		else if (mode == MODE_TIMEOUT) {
+			int left = max<int>(0, cur_timeout_seconds - timeout_timer.Elapsed() / 1000);
+			PostCallback(THISBACK1(SetTimeoutCountdown, left));
+			
+			if (left <= 0) {
+				PlaySound();
+				SetMode(push_mode);
+				continue;
+			}
+		}
+		
+		Sleep(100);
+	}
+	SetMode(MODE_IDLE);
+	
+	if (success)
+		AddExercise();
+	
+	flag.IncreaseStopped();
+}
+
+void ExercisePlayerCtrl::DbgDumpExerciseWords() {
+	const Profile& prof = GetProfile();
+	Index<String> idx;
+	for (const ExerciseType& et : prof.exercises) {
+		Vector<String> v = Split(et.name, " ");
+		for(String s : v)
+			idx.FindAdd(s);
+	}
+	for(int i = 0; i < idx.GetCount(); i++) {
+		LOG("t_(\"" << idx[i] << "\");");
+	}
+}
+
+void DummyExerTrans() {
+	t_("Anterior Deltoids");
+	t_("Biceps");
+	t_("Biceps Femoris");
+	t_("Brachialis");
+	t_("Deltoids");
+	t_("Forearm Extensors");
+	t_("Forearm Flexors");
+	t_("Gastrocnemius");
+	t_("Gluteus Maximus");
+	t_("Inner Quadriceps");
+	t_("Intercostals");
+	t_("Latissimus Dorsi");
+	t_("Lower Pectorals");
+	t_("Lower Rectus Abdominis");
+	t_("Medial Deltoids");
+	t_("Obliques");
+	t_("Outer Quadriceps");
+	t_("Pectorals");
+	t_("Quadriceps");
+	t_("Rear Deltoids");
+	t_("Rectus Abdominis");
+	t_("Soleus");
+	t_("Spinal Erectors");
+	t_("Thighs");
+	t_("Trapezius");
+	t_("Triceps");
+	t_("Upper Pectorals");
+	t_("Upper Rectus Abdominis");
+	
+	t_("Shoulder");
+	t_("Arm");
+	t_("Leg");
+	t_("Front");
+	t_("Back");
+	
+	t_("Front");
+	t_("Dumbbell");
+	t_("Raises");
+	t_("30");
+	t_("Degree");
+	t_("Seated");
+	t_("Alternating");
+	t_("Scaption");
+	t_("Kneeling");
+	t_("Prone");
+	t_("On");
+	t_("Swiss");
+	t_("Ball");
+	t_("Standing");
+	t_("Alternate");
+	t_("Curls");
+	t_("Hammer");
+	t_("Twisting");
+	t_("Concentration");
+	t_("Incline");
+	t_("Single");
+	t_("Leg");
+	t_("Stiff-legged");
+	t_("Deadlifts");
+	t_("Romanian");
+	t_("Reverse");
+	t_("Shoulder");
+	t_("Press");
+	t_("Plate");
+	t_("Pickup");
+	t_("Overhead");
+	t_("Lift");
+	t_("Arnold");
+	t_("Cross");
+	t_("Punch");
+	t_("Pec");
+	t_("Deck");
+	t_("Flyes");
+	t_("Abduction");
+	t_("Lateral");
+	t_("Raise");
+	t_("And");
+	t_("Rear");
+	t_("Barbell");
+	t_("Wrist");
+	t_("Hold");
+	t_("Pinch");
+	t_("Unnamed");
+}
+
+// Translation uses "const char*" match, so keep permanent pointer during entire process
+// lifecycle
+String Translate(String s) {
+	static ArrayMap<String, String> constant;
+	String& c = constant.GetAdd(s, s);
+	return t_GetLngString(c);
+}
+
+String TranslateExercise(String s) {
+	Vector<String> v = Split(s, " ");
+	String o;
+	for(int i = 0; i < v.GetCount(); i++) {
+		if (i) o << " ";
+		o << Translate(v[i]);
+	}
+	return o;
 }
