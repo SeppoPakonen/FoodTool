@@ -17,8 +17,8 @@ struct ExercisePlayerCtrl : public ParentCtrl {
 	static const int min_seconds = 30;
 	static const int timeout_seconds = 15;
 	static const int heartrate_pulses = 8;
-	static const int default_kcal_per_hour = 180;
-	static const int default_heartrate_per_hour = 120;
+	static const int default_kcal_per_hour = 964;
+	static const int default_heartrate_per_hour = 160;
 	
 	typedef enum {
 		MODE_IDLE,

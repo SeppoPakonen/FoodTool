@@ -235,6 +235,7 @@ void ExercisePlayerCtrl::Reset() {
 	for(int i = 0; i < primary_types.GetCount(); i++)
 		primary_muscles.GetAdd(primary_types[i]).Add(primary_types.GetKey(i));
 	
+	
 	Vector<double> tgt_muscle_kcals;
 	tgt_muscle_kcals.SetCount(muscle_groups.GetCount(), 0);
 	for(int i = 0; i < primary_muscles.GetCount(); i++) {
@@ -275,20 +276,25 @@ void ExercisePlayerCtrl::Reset() {
 			exercises_mul[i] = 1.0 - (double)(exercise_seconds.Get(prof.exercises[i].name, 0) - min_seconds) / (double)(max_seconds - min_seconds);
 	}
 	
+	
 	Optimizer opt;
-	opt.MinMax(0, 10*60);
+	opt.MinMax(-10*60, 10*60);
 	opt.Init(prof.exercises.GetCount(), 100);
 	
 	Vector<double> muscle_kcals;
 	muscle_kcals.SetCount(muscle_groups.GetCount());
 	
+	int min_exer_and_ival = min_seconds*2;
 	Vector<double> best_exercises;
-	double best_mul = 0, best_score = -DBL_MAX;
+	double best_mul = 0;
+	double best_score = -DBL_MAX;
 	while(!opt.IsEnd()) {
 		opt.Start();
 		const Vector<double>& trial = opt.GetTrialSolution();
 		for(auto& d : muscle_kcals) d = 0;
 		
+		int active_exer_count = 0;
+		double total_seconds = 0;
 		double total_kcal = 0;
 		for(int i = 0; i < prof.exercises.GetCount(); i++) {
 			const ExerciseType& et = prof.exercises[i];
@@ -299,11 +305,10 @@ void ExercisePlayerCtrl::Reset() {
 			int seconds = trial[i];
 			double exer_mul = exercises_mul[i];
 			seconds *= exer_mul;
-			if (seconds < min_seconds)
+			if (seconds < min_exer_and_ival *7)
 				continue;
 			
 			double kcal = av_kcal / 3600 * seconds;
-			total_kcal += kcal;
 			
 			int training_sum = 0;
 			for(int j = 0; j < et.muscle_areas.GetCount(); j++)
@@ -319,9 +324,16 @@ void ExercisePlayerCtrl::Reset() {
 					muscle_kcals[group_i] += (double)train / training_sum * kcal;
 				}
 			}
+			
+			total_kcal += kcal;
+			total_seconds += seconds;
+			active_exer_count++;
 		}
 		
-		double mul = conf.tgt_exercise_kcal / total_kcal;
+		double av_kcal = total_kcal / total_seconds;
+		int ival_seconds = active_exer_count * min_seconds;
+		double ival_kcal = ival_seconds * av_kcal;
+		double mul = max(0.000001, (conf.tgt_exercise_kcal - ival_kcal) / total_kcal);
 		for(auto& d : muscle_kcals) d *= mul;
 		
 		double score = 0;
@@ -351,16 +363,17 @@ void ExercisePlayerCtrl::Reset() {
 	for(int i = 0; i < best_exercises.GetCount(); i++) {
 		int seconds = best_exercises[i];
 		double exer_mul = exercises_mul[i];
-		seconds *= exer_mul * best_mul;
-		if (seconds < min_seconds)
+		seconds *= exer_mul;
+		seconds *= best_mul;
+		if (seconds < min_exer_and_ival)
 			continue;
 		
 		while (true) {
 			TimeSlot& ts = timeslots.Add();
 			ts.exercise = prof.exercises[i].name;
-			if (seconds >= min_seconds * 2) {
-				ts.seconds = min_seconds;
-				seconds -= min_seconds;
+			if (seconds >= min_exer_and_ival * 2) {
+				ts.seconds = min_exer_and_ival;
+				seconds -= min_exer_and_ival;
 			}
 			else {
 				ts.seconds = seconds;
@@ -450,7 +463,15 @@ void ExercisePlayerCtrl::Reset() {
 			for(int j = exer_seconds.GetCount()-1; j >= 0; j--) {
 				String exercise = exer_seconds.GetKey(j);
 				int& es = exer_seconds[j];
-				int seconds = min(6 * min_seconds, es);
+				int seconds;
+				if (es >= min_exer_and_ival * 3)
+					seconds = min_exer_and_ival * 1.5;
+				else if (es >= min_exer_and_ival * 2)
+					seconds = min_exer_and_ival;
+				else if (es >= min_exer_and_ival * 1.5)
+					seconds = min_exer_and_ival * 0.75;
+				else
+					seconds = es;
 				es -= seconds;
 				if (!es)
 					exer_seconds.Remove(j);
@@ -465,14 +486,17 @@ void ExercisePlayerCtrl::Reset() {
 				if (!av_heartrate)
 					av_heartrate = default_heartrate_per_hour;
 				
+				int exer_seconds = seconds - min_seconds;
+				int ival_seconds = min_seconds;
+				
 				ActivityItem& it = gr.items.Insert(1);
 				it.type = ACT_EXERCISE;
 				it.begin = t;
-				t += seconds;
+				t += exer_seconds;
 				it.end = t;
 				it.what = exercise;
 				it.msg = "";
-				it.kcal = (double)av_kcal / 3600 * seconds;
+				it.kcal = (double)av_kcal / 3600 * exer_seconds;
 				it.heartrate = av_heartrate;
 				it.real_values = false;
 				total_kcal += it.kcal;
@@ -480,11 +504,11 @@ void ExercisePlayerCtrl::Reset() {
 				ActivityItem& ival = gr.items.Insert(2);
 				ival.type = ACT_INTERVAL;
 				ival.begin = t;
-				t += min_seconds;
+				t += ival_seconds;
 				ival.end = t;
 				ival.msg = "";
-				ival.kcal = 0.5 * (double)av_kcal / 3600 * seconds; // pulse is still quite high
-				ival.heartrate = 0.9 * av_heartrate;
+				ival.kcal = (double)av_kcal / 3600 * ival_seconds;
+				ival.heartrate = av_heartrate;
 				ival.real_values = false;
 				total_kcal += ival.kcal; // ???
 				
@@ -492,14 +516,22 @@ void ExercisePlayerCtrl::Reset() {
 			}
 		}
 		
-		t = gr.main.begin;
-		for(int i = 0; i < gr.items.GetCount(); i++) {
-			ActivityItem& ai = gr.items[i];
-			int s = ai.GetSeconds();
-			ai.begin = t;
-			t += s;
-			ai.end = t;
+		double tgt_per_exer = conf.tgt_exercise_kcal / conf.tgt_exercise_count;
+		while (total_kcal > tgt_per_exer && gr.items.GetCount() >= 3) {
+			gr.items.Remove(1, 2);
+			
+			total_kcal = 0;
+			t = gr.main.begin;
+			for(int i = 0; i < gr.items.GetCount(); i++) {
+				ActivityItem& ai = gr.items[i];
+				int s = ai.GetSeconds();
+				ai.begin = t;
+				t += s;
+				ai.end = t;
+				total_kcal += ai.kcal;
+			}
 		}
+		
 		gr.main.end = t;
 		gr.main.what = Translate(GetPrimaryType(gr));
 		gr.main.msg = "";
@@ -552,7 +584,15 @@ void ExercisePlayerCtrl::Stop() {
 	flag.Stop();
 	
 	if (current.items.GetCount()) {
-		current.items.Remove(current.items.GetCount()-1);
+		int c = current.items.GetCount();
+		if (c >= 3) {
+			const ActivityItem& ai0 = current.items[c-1];
+			const ActivityItem& ai1 = current.items[c-2];
+			if (ai0.type == ACT_EXERCISE)
+				current.items.Remove(c-1);
+			else if (ai0.type == ACT_INTERVAL && ai1.type == ACT_EXERCISE && ai0.real_values == false)
+				current.items.Remove(c-2, 2);
+		}
 		AddExercise();
 	}
 }

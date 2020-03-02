@@ -1,6 +1,6 @@
 name: Front Dumbbell Raises
-bpm: 0
-kcal: 0
+bpm: 162.85381930981
+kcal: 1038.89217881299
 ANDEL: 10
 instruction: """
 - nosta käsipainoja
@@ -11,8 +11,8 @@ instruction: """
 """
 
 name: 30 Degree Dumbbell Raises
-bpm: 0
-kcal: 0
+bpm: 182.847191989552
+kcal: 1219.77868202019
 ANDEL: 10
 DELTO: 3
 instruction: """
@@ -55,8 +55,8 @@ instruction: """
 """
 
 name: Standing Alternate Dumbbell Curls
-bpm: 0
-kcal: 0
+bpm: 139.257294429708
+kcal: 825.40679334182
 BICEP: 10
 BRACH: 3
 FORFL: 3
@@ -72,8 +72,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Curls
-bpm: 0
-kcal: 0
+bpm: 140.70351758794
+kcal: 838.491241580753
 BICEP: 10
 BRACH: 3
 instruction: """
@@ -101,8 +101,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Curls Twisting
-bpm: 0
-kcal: 0
+bpm: 168
+kcal: 1085.45133843212
 BICEP: 10
 instruction: """
  - seisten
@@ -142,8 +142,8 @@ instruction: """
 """
 
 name: Standing Hammer Curls
-bpm: 0
-kcal: 0
+bpm: 147.679324894515
+kcal: 901.6036244161
 BICEP: 10
 DELTO: 3
 instruction: """
@@ -157,8 +157,8 @@ instruction: """
 """
 
 name: Single Leg Standing Dumbbell Curls
-bpm: 0
-kcal: 0
+bpm: 162.916989914663
+kcal: 1039.46370368777
 BICEP: 10
 BRACH: 3
 instruction: """
@@ -201,8 +201,8 @@ instruction: """
 """
 
 name: Romanian Dumbbell Deadlifts
-bpm: 0
-kcal: 0
+bpm: 153.564899451554
+kcal: 954.852319273213
 BIFEM: 10
 SPINE: 3
 instruction: """
@@ -231,8 +231,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Reverse Curls Alternating
-bpm: 0
-kcal: 0
+bpm: 180.412371134021
+kcal: 1197.75007096253
 BICEP: 3
 BRACH: 10
 FORFL: 3
@@ -247,8 +247,8 @@ instruction: """
 """
 
 name: Seated Dumbbell Shoulder Press
-bpm: 0
-kcal: 0
+bpm: 160.919540229885
+kcal: 1021.39213094218
 DELTO: 10
 TRAPE: 3
 TRICE: 3
@@ -263,8 +263,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Shoulder Press
-bpm: 0
-kcal: 0
+bpm: 150.214592274678
+kcal: 924.541007639977
 DELTO: 10
 TRAPE: 3
 TRICE: 3
@@ -294,8 +294,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Front Press
-bpm: 0
-kcal: 0
+bpm: 172.272354388843
+kcal: 1124.10470913845
 DELTO: 10
 TRICE: 3
 instruction: """
@@ -324,8 +324,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Front Press Alternating
-bpm: 0
-kcal: 0
+bpm: 174.563591022444
+kcal: 1144.83426734311
 DELTO: 10
 TRICE: 3
 instruction: """
@@ -392,8 +392,8 @@ instruction: """
 """
 
 name: Reverse Pec Deck Flyes
-bpm: 0
-kcal: 0
+bpm: 137.840498851329
+kcal: 812.588585926915
 DELTO: 10
 SPINE: 3
 instruction: """
@@ -423,8 +423,8 @@ instruction: """
 """
 
 name: Seated Dumbbell Abduction
-bpm: 0
-kcal: 0
+bpm: 125.037213456386
+kcal: 696.753125759567
 DELTO: 10
 LOWRE: 3
 instruction: """
@@ -439,8 +439,8 @@ instruction: """
 """
 
 name: Lateral Raise And Rear Lateral Raise
-bpm: 0
-kcal: 0
+bpm: 160.919540229885
+kcal: 1021.39213094218
 DELTO: 10
 MEDDE: 3
 REARD: 3
@@ -458,8 +458,8 @@ instruction: """
 """
 
 name: Barbell Reverse Wrist Curls
-bpm: 0
-kcal: 0
+bpm: 116.343490304709
+kcal: 618.098203153552
 FOREX: 10
 FORFL: 3
 instruction: """
@@ -473,8 +473,8 @@ instruction: """
 """
 
 name: Barbell Wrist Curls
-bpm: 0
-kcal: 0
+bpm: 66.0481207737066
+kcal: 163.059742774352
 FOREX: 3
 FORFL: 10
 instruction: """
@@ -488,8 +488,8 @@ instruction: """
 """
 
 name: Barbell Reverse Hold
-bpm: 0
-kcal: 0
+bpm: 139.257294429708
+kcal: 825.40679334182
 FOREX: 10
 instruction: """
 - istuen/seisten
@@ -528,8 +528,8 @@ instruction: """
 """
 
 name: Barbell Pinch
-bpm: 0
-kcal: 0
+bpm: 93.0026572187777
+kcal: 406.926143967402
 FOREX: 3
 FORFL: 10
 instruction: """
@@ -542,8 +542,8 @@ instruction: """
 """
 
 name: Standing Dumbbell Calf Raises
-bpm: 0
-kcal: 0
+bpm: 156.308150353554
+kcal: 979.671396626061
 GASTR: 10
 OBLIQ: 1
 SOLEU: 3
@@ -557,8 +557,8 @@ instruction: """
 """
 
 name: Single Leg Standing Dumbbell Calf Raises
-bpm: 0
-kcal: 0
+bpm: 118.409923879335
+kcal: 636.793895441762
 GASTR: 10
 SOLEU: 3
 instruction: """
@@ -572,8 +572,8 @@ instruction: """
 """
 
 name: Butt Lift
-bpm: 0
-kcal: 0
+bpm: 146.086956521739
+kcal: 887.196953196442
 BIFEM: 3
 GLUTE: 10
 instruction: """
@@ -586,8 +586,8 @@ instruction: """
 """
 
 name: Side Leg Raises 
-bpm: 0
-kcal: 0
+bpm: 161.974546856922
+kcal: 1030.93711680735
 GLUTE: 10
 QUADR: 3
 instruction: """
@@ -664,8 +664,8 @@ instruction: """
 """
 
 name: Walking Straight Leg Kicks
-bpm: 0
-kcal: 0
+bpm: 156.25
+kcal: 979.145291586998
 GLUTE: 10
 instruction: """
 - kävellen/seisten
@@ -678,8 +678,8 @@ instruction: """
 """
 
 name: Donkey Kicks
-bpm: 0
-kcal: 0
+bpm: 103.780578206079
+kcal: 504.437477871152
 GLUTE: 10
 SPINE: 5
 instruction: """
@@ -707,8 +707,8 @@ instruction: """
 """
 
 name: Dumbbell Hip Raise
-bpm: 0
-kcal: 0
+bpm: 157.185628742515
+kcal: 987.610227155631
 BIFEM: 3
 GLUTE: 10
 LOWRE: 3
@@ -752,8 +752,8 @@ instruction: """
 """
 
 name: Teardrop
-bpm: 0
-kcal: 0
+bpm: 178.041543026706
+kcal: 1176.30042297632
 INQUA: 10
 instruction: """
 - seisten
@@ -847,8 +847,8 @@ instruction: """
 """
 
 name: Sprint Run
-bpm: 0
-kcal: 0
+bpm: 197.647058823529
+kcal: 1353.67785963334
 INCOS: 10
 LOWRE: 3
 instruction: """
@@ -860,8 +860,8 @@ instruction: """
 """
 
 name: Single Arm Dumbbell Bent-over Row 
-bpm: 0
-kcal: 0
+bpm: 165.942315290399
+kcal: 1066.83479995286
 BICEP: 3
 LATDO: 10
 REARD: 3
@@ -906,8 +906,8 @@ instruction: """
 """
 
 name: Dumbbell Reverse Fly
-bpm: 0
-kcal: 0
+bpm: 170.441545804789
+kcal: 1107.5407922788
 LATDO: 10
 REARD: 3
 instruction: """
@@ -922,8 +922,8 @@ instruction: """
 """
 
 name: Dumbbell Pull-over
-bpm: 0
-kcal: 0
+bpm: 133.037694013304
+kcal: 769.136058599331
 LATDO: 10
 PECTO: 3
 instruction: """
@@ -966,8 +966,8 @@ instruction: """
 """
 
 name: Bench Knee Tucks
-bpm: 0
-kcal: 0
+bpm: 158.132530120482
+kcal: 996.177149899791
 INCOS: 3
 LOWRE: 10
 instruction: """
@@ -993,8 +993,8 @@ instruction: """
 """
 
 name: Flutter Kicks
-bpm: 0
-kcal: 0
+bpm: 143.737166324435
+kcal: 865.937641980204
 INCOS: 3
 LOWRE: 10
 instruction: """
@@ -1022,8 +1022,8 @@ instruction: """
 """
 
 name: Knee To Chest Crunches
-bpm: 0
-kcal: 0
+bpm: 166.998011928429
+kcal: 1076.38602857045
 INCOS: 3
 LOWRE: 10
 instruction: """
@@ -1083,8 +1083,8 @@ instruction: """
 """
 
 name: Single Leg Hip Extension
-bpm: 0
-kcal: 0
+bpm: 164.89988221437
+kcal: 1057.40357106662
 LOWRE: 10
 instruction: """
 - selällään maassa
@@ -1110,8 +1110,8 @@ instruction: """
 """
 
 name: L-sit Alternating Legs
-bpm: 0
-kcal: 0
+bpm: 157.185628742515
+kcal: 987.610227155631
 INCOS: 3
 LOWRE: 10
 instruction: """
@@ -1142,8 +1142,8 @@ instruction: """
 """
 
 name: Diagonal Crunch With Medicine Ball
-bpm: 0
-kcal: 0
+bpm: 151.024811218986
+kcal: 931.871320239841
 LOWRE: 10
 OBLIQ: 3
 SPINE: 3
@@ -1207,8 +1207,8 @@ instruction: """
 """
 
 name: Side Crunches
-bpm: 0
-kcal: 0
+bpm: 186.666666666667
+kcal: 1254.33470363289
 OBLIQ: 10
 instruction: """
 - maassa kyljellään
@@ -1235,8 +1235,8 @@ instruction: """
 """
 
 name: Side Jackknifes
-bpm: 0
-kcal: 0
+bpm: 159.030670200682
+kcal: 1004.30291342653
 LOWRE: 3
 OBLIQ: 10
 instruction: """
@@ -1250,8 +1250,8 @@ instruction: """
 """
 
 name: Side-ups
-bpm: 0
-kcal: 0
+bpm: 160.919540229885
+kcal: 1021.39213094218
 OBLIQ: 10
 instruction: """
 - pakaroilla istuen
@@ -1279,8 +1279,8 @@ instruction: """
 """
 
 name: High Side Plank
-bpm: 0
-kcal: 0
+bpm: 176.842105263158
+kcal: 1165.44872194827
 OBLIQ: 10
 instruction: """
 - kyljellään maassa
@@ -1291,8 +1291,8 @@ instruction: """
 """
 
 name: Side-to-side Hops
-bpm: 0
-kcal: 0
+bpm: 171.218915613534
+kcal: 1114.5739081345
 OUTQU: 10
 instruction: """
 - maassa hyppien
@@ -1304,8 +1304,8 @@ instruction: """
 """
 
 name: Dumbbell Bench Press
-bpm: 0
-kcal: 0
+bpm: 159.030670200682
+kcal: 1004.30291342653
 PECTO: 10
 instruction: """
 - penkillä selällään
@@ -1322,8 +1322,8 @@ Helppo versio:
 """
 
 name: Flat Bench Dumbbell Flyes
-bpm: 0
-kcal: 0
+bpm: 140
+kcal: 832.126290630975
 DELTO: 3
 PECTO: 10
 instruction: """
@@ -1337,8 +1337,8 @@ instruction: """
 """
 
 name: Pushups
-bpm: 0
-kcal: 0
+bpm: 138.568129330254
+kcal: 819.171693993173
 DELTO: 4
 PECTO: 10
 instruction: """
@@ -1371,8 +1371,8 @@ instruction: """
 """
 
 name: Incline Pushups
-bpm: 0
-kcal: 0
+bpm: 144.478844169247
+kcal: 872.647841104843
 PECTO: 10
 TRICE: 3
 instruction: """
@@ -1381,8 +1381,8 @@ instruction: """
 """
 
 name: Squat
-bpm: 0
-kcal: 0
+bpm: 172.343044727124
+kcal: 1124.74426747145
 GLUTE: 3
 QUADR: 10
 instruction: """
@@ -1410,8 +1410,8 @@ instruction: """
 """
 
 name: Bulgarian Split Squat
-bpm: 0
-kcal: 0
+bpm: 165.942315290399
+kcal: 1066.83479995286
 GLUTE: 3
 QUADR: 10
 instruction: """
@@ -1450,8 +1450,8 @@ instruction: """
 """
 
 name: Dumbbell Front Squat
-bpm: 0
-kcal: 0
+bpm: 171.149144254279
+kcal: 1113.94266410169
 QUADR: 10
 instruction: """
 - seisten
@@ -1491,8 +1491,8 @@ instruction: """
 """
 
 name: Side Lunge Slide
-bpm: 0
-kcal: 0
+bpm: 147.679324894515
+kcal: 901.6036244161
 GLUTE: 3
 QUADR: 10
 SPINE: 3
@@ -1590,6 +1590,9 @@ instruction: """
 name: Lying Bench Reverse Dumbbell Fly
 bpm: 0
 kcal: 0
+LATDO: 3
+REARD: 10
+SPINE: 3
 instruction: """
 - penkillä mahallaan
 - käsipainoilla
@@ -1600,8 +1603,8 @@ instruction: """
 """
 
 name: Incline Rear Raise On Swiss Ball
-bpm: 0
-kcal: 0
+bpm: 168
+kcal: 1085.45133843212
 DELTO: 3
 REARD: 10
 instruction: """
@@ -1669,8 +1672,8 @@ instruction: """
 """
 
 name: Crunch Twists
-bpm: 0
-kcal: 0
+bpm: 153.621068032187
+kcal: 955.36049457228
 REABD: 10
 UPREC: 3
 instruction: """
@@ -1729,8 +1732,8 @@ instruction: """
 """
 
 name: Weighted Crunch
-bpm: 0
-kcal: 0
+bpm: 171.218915613534
+kcal: 1114.5739081345
 REABD: 10
 instruction: """
 - maassa selällään
@@ -1744,8 +1747,8 @@ instruction: """
 """
 
 name: Closed Leg Toe Touches
-bpm: 0
-kcal: 0
+bpm: 173.482032218092
+kcal: 1135.04905534982
 REABD: 10
 UPREC: 3
 instruction: """
@@ -1760,8 +1763,8 @@ instruction: """
 """
 
 name: Leg Lifts
-bpm: 0
-kcal: 0
+bpm: 160
+kcal: 1013.07275334608
 LOWRE: 3
 REABD: 10
 instruction: """
@@ -1772,8 +1775,8 @@ instruction: """
 """
 
 name: Ab Coaster
-bpm: 0
-kcal: 0
+bpm: 142.22824246529
+kcal: 852.285920239262
 OBLIQ: 3
 REABD: 10
 instruction: """
@@ -1788,8 +1791,8 @@ instruction: """
 """
 
 name: Seated Calf Raises
-bpm: 0
-kcal: 0
+bpm: 140
+kcal: 832.126290630975
 GASTR: 3
 SOLEU: 10
 instruction: """
@@ -1801,8 +1804,8 @@ instruction: """
 """
 
 name: Single-leg Ankle Mobilization
-bpm: 0
-kcal: 0
+bpm: 165.942315290399
+kcal: 1066.83479995286
 SOLEU: 10
 instruction: """
 - seisten
@@ -1840,8 +1843,8 @@ instruction: """
 """
 
 name: Dumbbell Clean
-bpm: 0
-kcal: 0
+bpm: 186.666666666667
+kcal: 1254.33470363289
 SPINE: 10
 THIGH: 3
 instruction: """
@@ -1858,8 +1861,8 @@ instruction: """
 """
 
 name: Plate Good Morning
-bpm: 0
-kcal: 0
+bpm: 144.528561596696
+kcal: 873.09765073646
 BIFEM: 3
 INCOS: 3
 SPINE: 10
@@ -1873,8 +1876,8 @@ instruction: """
 """
 
 name: Dumbbell Plank Row
-bpm: 0
-kcal: 0
+bpm: 179.257362355954
+kcal: 1187.30033332272
 DELTO: 3
 LATDO: 3
 PECTO: 3
@@ -1915,8 +1918,8 @@ instruction: """
 """
 
 name: Jumping Jacks
-bpm: 0
-kcal: 0
+bpm: 148.462354188759
+kcal: 908.687943465892
 GASTR: 3
 THIGH: 10
 instruction: """
@@ -1927,8 +1930,8 @@ instruction: """
 """
 
 name: Step-ups
-bpm: 0
-kcal: 0
+bpm: 187.919463087248
+kcal: 1265.66915767321
 THIGH: 10
 instruction: """
 - laita koroke seinää vasten ettei luista
@@ -1939,8 +1942,8 @@ instruction: """
 """
 
 name: Jump Squats
-bpm: 0
-kcal: 0
+bpm: 169.082125603865
+kcal: 1095.24167844376
 GLUTE: 3
 THIGH: 10
 instruction: """
@@ -1981,8 +1984,8 @@ instruction: """
 """
 
 name: Dumbbell Row
-bpm: 0
-kcal: 0
+bpm: 124.444444444444
+kcal: 691.390152963671
 REARD: 3
 TRAPE: 10
 instruction: """
@@ -1995,8 +1998,8 @@ instruction: """
 """
 
 name: Neck Extender
-bpm: 0
-kcal: 0
+bpm: 120
+kcal: 651.17982791587
 TRAPE: 10
 instruction: """
 - mahallaan penkillä
@@ -2017,8 +2020,8 @@ instruction: """
 """
 
 name: Sideways Neck Flexor
-bpm: 0
-kcal: 0
+bpm: 161.912104857363
+kcal: 1030.37218386009
 TRAPE: 10
 instruction: """
 - kyljellään sängyllä
@@ -2028,8 +2031,8 @@ instruction: """
 """
 
 name: Dumbbell Incline Shoulder Raise
-bpm: 0
-kcal: 0
+bpm: 166.931637519873
+kcal: 1075.7855178483
 TRAPE: 10
 instruction: """
 - kaltevassa penkissä istuen
@@ -2040,8 +2043,8 @@ instruction: """
 """
 
 name: One-arm Dumbbell Kickbacks
-bpm: 0
-kcal: 0
+bpm: 153.621068032187
+kcal: 955.360494572279
 REARD: 3
 TRICE: 10
 instruction: """
@@ -2054,8 +2057,8 @@ instruction: """
 """
 
 name: One-arm Dumbbell Extensions
-bpm: 0
-kcal: 0
+bpm: 132.408575031526
+kcal: 763.444215880349
 TRICE: 10
 instruction: """
 - istuen
@@ -2094,8 +2097,8 @@ instruction: """
 """
 
 name: Dumbbell Triceps Press
-bpm: 0
-kcal: 0
+bpm: 144.478844169247
+kcal: 872.647841104843
 DELTO: 3
 TRICE: 10
 instruction: """
@@ -2109,8 +2112,8 @@ instruction: """
 """
 
 name: Dumbbell Kickbacks
-bpm: 0
-kcal: 0
+bpm: 68.5714285714286
+kcal: 185.888923791314
 TRICE: 10
 instruction: """
 - seisten
@@ -2122,8 +2125,8 @@ instruction: """
 """
 
 name: Hindu Pushup
-bpm: 0
-kcal: 0
+bpm: 156.25
+kcal: 979.145291586998
 LOWPR: 3
 UPPEC: 10
 instruction: """
