@@ -24,11 +24,11 @@ MotivationCtrl::MotivationCtrl() {
 	quotes.Add("Don't try to do something repeatedly. Plan to do it once, without possibility of fail, but only with a possibility delaying the success.");
 	quotes.Add("If you don't do what's best for your body, others will suffer too in the long term.");
 	quotes.Add("The only \"bad\" food is the unethically made one. What people means with \"bad\" is too high/low density, too nutritionally weak or too unpleasantly tasting food.");
-	quotes.Add("Instead of indulging in 'comfort food' with high energy density, indulge in 'comfort food' with low energy density. With a little bit of salt, vinegar, oil and spices even cabbage and cucumber tastes good.");
+	quotes.Add("Instead of indulging in 'comfort food' with high energy density, indulge in 'comfort food' with low energy density.");
 	quotes.Add("The human body is very judgemental about unhealthy habits, people just have unconsciously trained their brain to ignore it.");
 	quotes.Add("You should eat high energy density foods with very high awareness of the energy. You probably gain weight if you don't.");
 	quotes.Add("A medicine can't replace healthy food nor otherwise. Do your research about both before ingesting.");
-	quotes.Add("To ensure happiness: write your thoughts about everything hourly and read them later to spot mistake in your thought. Nothing can ensure health in your life, but using this app helps.");
+	quotes.Add("To ensure happiness: write your thoughts about everything hourly and read them later to spot mistake in your thought.");
 	quotes.Add("New meal, same old life.");
 	quotes.Add("You are a better person, when you have a lot of low energy density food in your plate.");
 	quotes.Add("The high energy density food will always reward your brain the most, but you can choose to have lower expectations about the reward.");

@@ -255,25 +255,25 @@ void ExercisePlayerCtrl::Reset() {
 	}
 	
 	
-	int max_seconds = 0, min_seconds = INT_MAX;
+	int high_seconds = 0, low_seconds = INT_MAX;
 	VectorMap<String, int> exercise_seconds;
 	for(const ActivityGroupItem& gr : prof.activity) {
 		for(const ActivityItem& ai : gr.items) {
 			if (ai.type == ACT_EXERCISE) {
 				int s = ai.GetSeconds();
 				exercise_seconds.GetAdd(ai.what, 0) += s;
-				if (s > max_seconds)
-					max_seconds = s;
-				if (s < min_seconds)
-					min_seconds = s;
+				if (s > high_seconds)
+					high_seconds = s;
+				if (s < low_seconds)
+					low_seconds = s;
 			}
 		}
 	}
 	Vector<double> exercises_mul;
 	exercises_mul.SetCount(prof.exercises.GetCount(), 1);
-	if (max_seconds > min_seconds) {
+	if (high_seconds > low_seconds) {
 		for(int i = 0; i < prof.exercises.GetCount(); i++)
-			exercises_mul[i] = 1.0 - (double)(exercise_seconds.Get(prof.exercises[i].name, 0) - min_seconds) / (double)(max_seconds - min_seconds);
+			exercises_mul[i] = 1.0 - (double)(exercise_seconds.Get(prof.exercises[i].name, 0) - low_seconds) / (double)(high_seconds - low_seconds);
 	}
 	
 	
@@ -468,8 +468,8 @@ void ExercisePlayerCtrl::Reset() {
 					seconds = min_exer_and_ival * 1.5;
 				else if (es >= min_exer_and_ival * 2)
 					seconds = min_exer_and_ival;
-				else if (es >= min_exer_and_ival * 1.5)
-					seconds = min_exer_and_ival * 0.75;
+				//else if (es >= min_exer_and_ival * 1.5)
+				//	seconds = min_exer_and_ival * 0.75;
 				else
 					seconds = es;
 				es -= seconds;
@@ -488,6 +488,8 @@ void ExercisePlayerCtrl::Reset() {
 				
 				int exer_seconds = seconds - min_seconds;
 				int ival_seconds = min_seconds;
+				ASSERT(exer_seconds >= min_seconds);
+				ASSERT(ival_seconds >= min_seconds);
 				
 				ActivityItem& it = gr.items.Insert(1);
 				it.type = ACT_EXERCISE;
