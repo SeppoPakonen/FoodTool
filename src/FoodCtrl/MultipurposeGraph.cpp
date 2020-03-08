@@ -348,6 +348,38 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 			FillVector(v);
 		}
 		else if (src == src_i++) {
+			#define MEAS_STEP_CHANGE(var) \
+				v[0] = 0.0;\
+				for(int i = 1; i < prof.weights.GetCount(); i++) \
+					v[i] = prof.weights[i].var / prof.weights[i-1].var * 100 - 100; \
+				double diff = (prof.weights.Top().var - prof.weights[0].var) / (prof.weights.GetCount()-1); \
+				for(int i = prof.weights.GetCount(); i < v.GetCount(); i++) \
+					v[i] = v[i-1] + diff;
+			if (l == 0) {
+				MEAS_STEP_CHANGE(GetFatKg());
+			}
+			else if (l == 1) {
+				MEAS_STEP_CHANGE(GetMuscleKg());
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			#define MEAS_TOTAL_CHANGE(var) \
+				v[0] = 0.0;\
+				for(int i = 1; i < prof.weights.GetCount(); i++) \
+					v[i] = prof.weights[i].var / prof.weights[0].var * 100 - 100; \
+				double diff = (prof.weights.Top().var - prof.weights[0].var) / (prof.weights.GetCount()-1); \
+				for(int i = prof.weights.GetCount(); i < v.GetCount(); i++) \
+					v[i] = v[i-1] + diff;
+			if (l == 0) {
+				MEAS_TOTAL_CHANGE(GetFatKg());
+			}
+			else if (l == 1) {
+				MEAS_TOTAL_CHANGE(GetMuscleKg());
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
 			if (l == 0) {
 				MEAS(fat);
 			}
@@ -382,6 +414,24 @@ const Vector<double>& MultipurposeGraph::GetValue(int src, int l) {
 				double diff = (v[count-1] - v[0]) / (count-1); \
 				for(int i = count; i < v.GetCount(); i++) \
 					v[i] = v[i-1] + diff;
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
+				MEAS_STEP_CHANGE(fat);
+			}
+			else if (l == 1) {
+				MEAS_STEP_CHANGE(muscle);
+			}
+			FillVector(v);
+		}
+		else if (src == src_i++) {
+			if (l == 0) {
+				MEAS_TOTAL_CHANGE(fat);
+			}
+			else if (l == 1) {
+				MEAS_TOTAL_CHANGE(muscle);
 			}
 			FillVector(v);
 		}

@@ -187,6 +187,18 @@ GraphCtrl::GraphCtrl() {
 	graph.Add()
 		.Add(t_("Internals (kg)"), 2, Color(120, 0, 0));
 	
+	list.Add(t_("Measured fat & muscle (kg) step change (\%)"));
+	graph.Add()
+		.Add(t_("Fat (\%)"), 2, Color(198, 127, 0))
+		.Add(t_("Muscle (\%)"), 2, Color(198, 42, 0))
+		;
+	
+	list.Add(t_("Measured fat & muscle (kg) total change (\%)"));
+	graph.Add()
+		.Add(t_("Fat (\%)"), 2, Color(198, 127, 0))
+		.Add(t_("Muscle (\%)"), 2, Color(198, 42, 0))
+		;
+	
 	list.Add(t_("Measured fat (\%)"));
 	graph.Add()
 		.Add(t_("Fat (\%)"), 2, Color(81, 48, 0));
@@ -206,6 +218,18 @@ GraphCtrl::GraphCtrl() {
 	list.Add(t_("Relative liquid (\%)"));
 	graph.Add().Vert(100)
 		.Add(t_("Liquid (\%)"), 2, Color(0, 176, 137));
+	
+	list.Add(t_("Measured fat & muscle (\%) step change (\%)"));
+	graph.Add()
+		.Add(t_("Fat (\%)"), 2, Color(198, 127, 0))
+		.Add(t_("Muscle (\%)"), 2, Color(198, 42, 0))
+		;
+	
+	list.Add(t_("Measured fat & muscle (\%) total change (\%)"));
+	graph.Add()
+		.Add(t_("Fat (\%)"), 2, Color(198, 127, 0))
+		.Add(t_("Muscle (\%)"), 2, Color(198, 42, 0))
+		;
 	
 	list.Add(t_("Measured BMI"));
 	graph.Add()

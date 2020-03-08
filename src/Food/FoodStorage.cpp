@@ -193,14 +193,16 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 	
 	// Do supplements first with low calories
 	if (remaining.nutr[KCAL] <= 1000) {
-		double supplement_kcal = min<double>(800.0, remaining.nutr[KCAL]);
+		/*double supplement_kcal = min<double>(100.0, remaining.nutr[KCAL]);
 		MakeSupplements(plan, day, supplement_kcal, remaining);
 		
 		if (remaining.nutr[KCAL] >= 50)
-			MakeMenu(plan, day, remaining.nutr[KCAL], remaining);
+			MakeMenu(plan, day, remaining.nutr[KCAL], remaining);*/
+		MakeMenu(plan, day, remaining.nutr[KCAL] - 50, remaining);
+		MakeSupplements(plan, day, remaining.nutr[KCAL], remaining);
 	}
 	else {
-		MakeMenu(plan, day, remaining.nutr[KCAL] - 800, remaining);
+		MakeMenu(plan, day, remaining.nutr[KCAL] - 400, remaining);
 		MakeSupplements(plan, day, remaining.nutr[KCAL], remaining);
 	}
 	
@@ -369,8 +371,8 @@ void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double ta
 				filled_nutrients.Add(nutr_no);
 				
 				bool limit = true;
-				if (recom.group == AMINOACID)
-					limit = false;
+				//if (recom.group == AMINOACID)
+				//	limit = false;
 				limit_nutrition.Add(limit);
 				if (limit)
 					limit_count++;
@@ -430,8 +432,8 @@ void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double ta
 			double target = remaining.nutr[PROT];
 			if (target > 0) {
 				double value = opt_nutr_sum.nutr[PROT];
-				double rel = min(1.0, value / target);
-				protein_score = rel;
+				double rel = max(1.0, value / target) - 1;
+				protein_score = -rel;
 			}
 		}
 		
@@ -648,12 +650,18 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 		if (variant_type == VARIANT_WEIGHTLOSS)
 			mass_score = min(0.0, var.mass_factor - 3.0);
 		
+		double prot_score = 0;
 		double target_score = 0;
 		for(const NutritionRecommendation& r : db.nutr_recom) {
 			double value = ing.nutr[r.nutr_no] * mul;
-			double target = r.GetValue(weight);
-			if (target > 0.0)
+			double target = target_sum.nutr[r.nutr_no];// r.GetValue(weight);
+			if (target > 0.0) {
 				target_score += min(1.0, value / target);
+				if (r.nutr_no == PROT)
+					prot_score = -(max(1.0, value / target) - 1.0);
+			}
+			else if (r.nutr_no == PROT)
+				prot_score = -(max(1.0, value / 1) - 1.0);
 		}
 		target_score /= db.nutr_recom.GetCount();
 		
@@ -663,6 +671,7 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 			 10 * existing_usage_factor +
 			 10 * mass_score +
 			 10 * target_score +
+			 10 * prot_score +
 			mp.wished_factor +
 			super_match
 			 ;

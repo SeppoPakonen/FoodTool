@@ -30,6 +30,7 @@ Profile::Profile() {
 	
 	tmp_usage_start = GetSysTime();
 	
+	RefreshAllVariants();
 	//CookedToRaw();
 	SetMealPresetFoodsUsed();
 	
@@ -232,32 +233,39 @@ bool Profile::UpdatePlan() {
 		
 		// Set protein levels, generic mode and food variant
 		double maintain_protein = s.weight * (maintenance_protein_factor * 0.1);
-		double min_protein;
+		int protein_day_ival = 2;
 		if (s.IsTooHighFatPercentage()) {
 			d.mode = MODE_WEIGHTLOSS;
 			d.variant_type = VARIANT_WEIGHTLOSS;
-			min_protein = s.weight * (muscle_gain_protein_factor * 0.1);
+			protein_day_ival = 5;
 			maintenance_day_count = 0;
 		}
-		else if (s.IsTooLowWeight()) {
+		/*else if (s.IsTooLowWeight()) {
 			d.mode = MODE_MUSCLEGAIN;
 			d.variant_type = VARIANT_MUSCLEGAIN;
-			min_protein = s.weight * (muscle_gain_protein_factor * 0.1);
 			maintenance_day_count = 0;
 		}
 		else if (s.IsLowWeight()) {
 			d.mode = MODE_MAINTAIN;
 			d.variant_type = VARIANT_MAINTENANCE;
-			min_protein = s.weight * (muscle_gain_protein_factor * 0.1);
 			maintenance_day_count++;
-		}
+		}*/
 		else {
 			d.mode = MODE_MAINTAIN;
 			d.variant_type = VARIANT_FATTYACIDS;
-			min_protein = maintain_protein;
 			maintenance_day_count++;
 		}
 		
+		double min_protein, max_protein;
+		if (!protein_day_ival || count % protein_day_ival == 0) {
+			min_protein = maintain_protein;
+			max_protein = maintain_protein * 2;
+		}
+		else {
+			min_protein = s.weight * (fasting_protein_factor * 0.1);
+			max_protein = min_protein * 1.7;
+		}
+
 		
 		// Set calories and macros
 		double min_fat = 10.0 / 2000.0 * d.maintain_calories;
@@ -395,7 +403,7 @@ bool Profile::UpdatePlan() {
 		double fat_grams = max(min_fat, fat_cals / 9.0);
 		d.food.grams = s.weight / 100.0 * 2000.0;
 		d.food.nutr[KCAL] = d.allowed_calories;
-		d.food.nutr[PROT] = max(min_protein, prot_cals / 4.4); // based on protein powder nutrients
+		d.food.nutr[PROT] = max(min_protein, min(max_protein, prot_cals / 4.4)); // based on protein powder nutrients
 		d.food.nutr[FAT] = fat_grams; // based on coconut oil nutrients
 		d.food.nutr[CARB] = carb_cals / 10.0;
 		ASSERT(db.nutr_recom.GetCount());
@@ -552,8 +560,14 @@ void Profile::CookedToRaw() {
 		if (has_changes)
 			mp.MakeVariants();
 	}
-	
-	
+}
+
+void Profile::RefreshAllVariants() {
+	for(int i = 0; i < presets.GetCount(); i++) {
+		MealPreset& mp = presets[i];
+		mp.MakeVariants();
+	}
+	StoreThis();
 }
 
 int Profile::FindMealPreset(String key) const {
@@ -863,6 +877,8 @@ PlanState::PlanState(bool is_male, Configuration& conf, WeightLossStat& wl) : is
 	worst_fat_perc = wl.fat * 0.01;
 	worst_lean_perc = wl.muscle * 0.01;
 	
+	tgt_weight = wl.weight - (wl.weight * worst_fat_perc) + (wl.weight * tgt_fat_perc);
+	
 	Set(conf);
 	Set(wl);
 	
@@ -870,8 +886,9 @@ PlanState::PlanState(bool is_male, Configuration& conf, WeightLossStat& wl) : is
 }
 
 bool PlanState::IsReadyForMaintenance() const {
-	return	tgt_fat_perc + 0.01 > fat_perc &&
-			tgt_weight - 1.0 < weight;
+	/*return	tgt_fat_perc + 0.01 > fat_perc &&
+			tgt_weight - 1.0 < weight;*/
+	return	tgt_fat_perc + 0.01 > fat_perc;
 }
 
 double PlanState::GetProgress() const {
@@ -879,15 +896,17 @@ double PlanState::GetProgress() const {
 	double fat_perc_prog = 1.0 - fabs(fat_perc - tgt_fat_perc) / fabs(worst_fat_perc - tgt_fat_perc);
 	//double lean_perc_prog = 1.0 - fabs(lean_perc - tgt_lean_perc) / fabs(worst_lean_perc - tgt_lean_perc);
 	//double prog = (weight_prog + fat_perc_prog + lean_perc_prog) / 3.0;
-	double prog = (weight_prog + fat_perc_prog) / 2.0;
-	return prog;
+	
+	//double prog = (weight_prog + fat_perc_prog) / 2.0;
+	//return prog;
+	
+	return fat_perc_prog;
 }
 
 void PlanState::Set(Configuration& conf) {
 	exercise_kcal = conf.tgt_exercise_kcal;
 	walking_dist = conf.walking_dist + conf.tgt_walking_dist;
 	jogging_dist = conf.tgt_jogging_dist;
-	tgt_weight = GetTargetWeight(conf.height);
 }
 
 void PlanState::Set(WeightLossStat& wl) {

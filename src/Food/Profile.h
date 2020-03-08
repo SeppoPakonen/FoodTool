@@ -95,6 +95,8 @@ struct WeightLossStat : Moveable<WeightLossStat> {
 	double GetLiquidKg() const {return weight * liquid * 0.01;}
 	double GetInternalPerc() const {return 100 - fat - muscle;}
 	double GetInternalKg() const {return weight * (100 - fat - muscle) * 0.01;}
+	double GetFatKg() const {return weight * fat * 0.01;}
+	double GetMuscleKg() const {return weight * muscle * 0.01;}
 };
 
 struct Configuration : Moveable<Configuration> {
@@ -437,6 +439,7 @@ struct Profile {
 	RunningFlag flag;
 	static const int maintenance_protein_factor = 8; // 0.8g per weight kg
 	static const int muscle_gain_protein_factor = 10;
+	static const int fasting_protein_factor = 1;
 	
 	
 	typedef Profile CLASSNAME;
@@ -492,6 +495,7 @@ struct Profile {
 	bool IsRunning() {return flag.running || flag.workers_running > 0;}
 	void VLCD_Preset();
 	void CookedToRaw();
+	void RefreshAllVariants();
 	int FindMealPreset(String key) const;
 	int FindExercise(String key) const;
 	DailyPlan* GetTodayPlan();

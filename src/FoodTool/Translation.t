@@ -1652,7 +1652,7 @@ T_("Duration")
 fiFI("Kesto")
 
 
-// ExercisePlayerCtrl.cpp
+// PACKAGE 'ActivityCtrl' FILE 'ExercisePlayerCtrl.cpp'
 
 T_("Calf")
 fiFI("Pohje")
@@ -2022,3 +2022,18 @@ fiFI("Hindu")
 
 T_("Pushup")
 fiFI("Punnerrus")
+
+
+// GraphCtrl.cpp
+
+T_("Measured fat & muscle (kg) step change (%)")
+fiFI("Mitattu rasva ja lihas (kg) askelmuutos (%)")
+
+T_("Measured fat & muscle (kg) total change (%)")
+fiFI("Mitattu rasva ja lihas (kg) kokonaismuutos (%)")
+
+T_("Measured fat & muscle (%) step change (%)")
+fiFI("Mitattu rasva ja lihas (%) askelmuutos (%)")
+
+T_("Measured fat & muscle (%) total change (%)")
+fiFI("Mitattu rasva ja lihas (%) kokonaismuutos (%)")
