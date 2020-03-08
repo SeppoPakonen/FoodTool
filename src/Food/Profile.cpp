@@ -231,25 +231,24 @@ bool Profile::UpdatePlan() {
 		
 		
 		// Set protein levels, generic mode and food variant
-		double maintain_protein = s.weight * 0.8;
+		double maintain_protein = s.weight * (maintenance_protein_factor * 0.1);
 		double min_protein;
 		if (s.IsTooHighFatPercentage()) {
 			d.mode = MODE_WEIGHTLOSS;
 			d.variant_type = VARIANT_WEIGHTLOSS;
-			maintain_protein = s.weight * 1.0; // tends to be needed more than 0.8 while fasting
-			min_protein = s.weight * 1.4;
+			min_protein = s.weight * (muscle_gain_protein_factor * 0.1);
 			maintenance_day_count = 0;
 		}
 		else if (s.IsTooLowWeight()) {
 			d.mode = MODE_MUSCLEGAIN;
 			d.variant_type = VARIANT_MUSCLEGAIN;
-			min_protein = s.weight * 1.4;
+			min_protein = s.weight * (muscle_gain_protein_factor * 0.1);
 			maintenance_day_count = 0;
 		}
 		else if (s.IsLowWeight()) {
 			d.mode = MODE_MAINTAIN;
 			d.variant_type = VARIANT_MAINTENANCE;
-			min_protein = s.weight * 1.0;
+			min_protein = s.weight * (muscle_gain_protein_factor * 0.1);
 			maintenance_day_count++;
 		}
 		else {

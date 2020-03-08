@@ -435,6 +435,8 @@ struct Profile {
 	
 	Time tmp_usage_start;
 	RunningFlag flag;
+	static const int maintenance_protein_factor = 8; // 0.8g per weight kg
+	static const int muscle_gain_protein_factor = 10;
 	
 	
 	typedef Profile CLASSNAME;
