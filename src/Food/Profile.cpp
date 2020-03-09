@@ -30,7 +30,7 @@ Profile::Profile() {
 	
 	tmp_usage_start = GetSysTime();
 	
-	RefreshAllVariants();
+	//RefreshAllVariants();
 	//CookedToRaw();
 	SetMealPresetFoodsUsed();
 	
@@ -352,6 +352,32 @@ bool Profile::UpdatePlan() {
 		
 		d.burned_calories = -d.allowed_calories + d.maintain_calories + d.walking_burned_calories + d.jogging_burned_calories + d.strength_burned_calories;
 		
+		#if 1
+		// By experience, I have lost fat and muscle in 2:1 ratio at worst...
+		double burned_protein_cals = 0;
+		double burned_fat_cals = 0;
+		if (d.burned_calories > 0) {
+			double ratio = 0.07;
+			burned_protein_cals = d.burned_calories * ratio;
+			burned_fat_cals = d.burned_calories * (1.0 - ratio);
+		}
+		double burned_protein_grams = burned_protein_cals / 4.4;
+		double burned_fat_grams = burned_fat_cals / 9.0;
+		
+		double max_protein_gain = s.max_lean_gain * 0.26;
+		double protein_gram_diff = (prot_cals / 4.4) - maintain_protein;
+		double gained_protein_grams = max(0.0, min(max_protein_gain, +protein_gram_diff));
+		double gained_lean_kgs  = gained_protein_grams / 26.0 * 0.1; // prot 26g/100g --> kgs
+		double burned_lean_kgs  = burned_protein_grams / 26.0 * 0.1; // prot 26g/100g --> kgs
+		double released_lean_cals = burned_protein_grams / 26.0 * 250.0; // from beef... lol
+		double released_protein_cals = max(0.0, (protein_gram_diff - max_protein_gain) / 4.4);
+		
+		double fat_cals_diff = -d.burned_calories + released_lean_cals + released_protein_cals;
+		double gained_fat_cals = max(0.0, +fat_cals_diff);
+		double burned_fat_kgs = burned_fat_cals / s.cals_in_kg_fat;
+		double gained_fat_kgs = gained_fat_cals / s.cals_in_kg_fat;
+		
+		#else
 		double max_protein_gain = s.max_lean_gain * 0.26;
 		double protein_gram_diff = (prot_cals / 4.4) - maintain_protein;
 		double gained_protein_grams = max(0.0, min(max_protein_gain, +protein_gram_diff));
@@ -367,7 +393,7 @@ bool Profile::UpdatePlan() {
 		double gained_fat_cals = max(0.0, +fat_cals_diff);
 		double burned_fat_kgs = burned_fat_cals / s.cals_in_kg_fat;
 		double gained_fat_kgs = gained_fat_cals / s.cals_in_kg_fat;
-		
+		#endif
 		
 		if (!s.IsHighFatPercentage() && burned_fat_cals > 0.0) {
 			double new_allowed_calories = d.allowed_calories + burned_fat_cals;

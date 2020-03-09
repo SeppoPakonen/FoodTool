@@ -665,6 +665,9 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 		}
 		target_score /= db.nutr_recom.GetCount();
 		
+		if (mp.wished_factor) {
+			int i = mp.wished_factor;
+		}
 		double score =
 			 10 * local_usage_factor +
 			      var.score +
@@ -672,7 +675,7 @@ int FindBestMeal(double weight, double kcal, int variant_type, const FoodQuantit
 			 10 * mass_score +
 			 10 * target_score +
 			 10 * prot_score +
-			mp.wished_factor +
+			 10 * mp.wished_factor +
 			super_match
 			 ;
 		preset_scores.Add(i, score);

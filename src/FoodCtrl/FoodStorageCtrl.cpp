@@ -76,8 +76,8 @@ void FoodStorageCtrl::SelectSnap() {
 		int grams = snap.foods[i];
 		EditIntNotNull& edit = edits[i];
 		food_list.Set(i, 0, db.food_descriptions[db_no].long_desc);
-		food_list.SetCtrl(i, 1, edit);
 		food_list.Set(i, 1, grams);
+		food_list.SetCtrl(i, 1, edit);
 		edit <<= THISBACK(SnapChanged);
 	}
 	food_list.SetCursor(snap.foods.GetCount());
