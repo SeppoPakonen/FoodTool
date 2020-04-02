@@ -3,6 +3,10 @@
 
 GUI_APP_MAIN
 {
+	//MemoryBreakpoint(90657);
+	//PlayCameraShutter();
+	//PlayAlert();
+	
 	for(int i = 0; i < 1000; i++) Random(1000);
 	
 	SetLanguage(GetSystemLNG());

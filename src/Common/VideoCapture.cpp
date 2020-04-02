@@ -1,9 +1,22 @@
 #include "Common.h"
 
+#ifdef flagLINUX
+	#define OPENCV_BYPASS
+#endif
+
 
 VideoCapture::VideoCapture() {
 	id = -1;
 	target_sz = Size(0,0);
+	
+	/*String dir = ConfigFile("Captured");
+	RealizeDirectory(dir);
+	SetExportDirectory(dir);*/
+}
+
+void VideoCapture::Clear() {
+	cap.release();
+	buffer.release();
 }
 
 VideoCapture& VideoCapture::SetExportDirectory(String path) {
@@ -14,17 +27,27 @@ VideoCapture& VideoCapture::SetExportDirectory(String path) {
 
 void VideoCapture::SetSize(Size sz) {
 	if (id == -1) return;
+	#ifdef OPENCV_BYPASS
+	
+	#else
 	if (cap.isOpened())
 		cap.release();
-	cap.set(cv::CAP_PROP_FRAME_WIDTH,	sz.cx);
-	cap.set(cv::CAP_PROP_FRAME_HEIGHT,	sz.cy);
+	//cap.set(cv::CAP_PROP_FRAME_WIDTH,	sz.cx);
+	//cap.set(cv::CAP_PROP_FRAME_HEIGHT,	sz.cy);
 	cap.open(id);
 	cap.set(cv::CAP_PROP_FRAME_WIDTH,	sz.cx);
 	cap.set(cv::CAP_PROP_FRAME_HEIGHT,	sz.cy);
+	//cap.set(cv::CAP_PROP_FPS,			25);
+	//cap.set(cv::CAP_PROP_CONVERT_RGB,	true);
+	//cap.set(CV_CAP_PROP_FOURCC,			CV_FOURCC('M', 'J', 'P', 'G') );
+	#endif
 	target_sz = sz;
 }
 
 int VideoCapture::GetCount() {
+	#ifdef OPENCV_BYPASS
+	return 1;
+	#else
 	int max_tested = 10;
 	for (int i = 0; i < max_tested; i++){
 		cv::VideoCapture temp_camera(i);
@@ -34,9 +57,16 @@ int VideoCapture::GetCount() {
 			return i;
 	}
 	return max_tested;
+	#endif
 }
 
 void VideoCapture::Process(int ms) {
+	#ifdef OPENCV_BYPASS
+	String cmd = "fswebcam -r 1280x960 --jpeg 95 -D 1 tmp.jpg";
+	String out;
+	Sys(cmd, out);
+	#else
+	buffer.release();
 	cap.read(buffer);
 	if (buffer.rows == 0)
 		return;
@@ -52,12 +82,18 @@ void VideoCapture::Process(int ms) {
 	}
 	
 	frame_counter++;
+	#endif
 }
 
 Image VideoCapture::GetImage(Rect area) const {
+	#ifdef OPENCV_BYPASS
+	return StreamRaster::LoadFileAny("tmp.jpg");
+	#else
 	Size sz(buffer.cols, buffer.rows);
 	if (sz.cx == 0 || sz.cy == 0)
 		return Image();
+	int ch = buffer.channels();
+	ASSERT(ch == 3);
 	
 	ImageBuffer ib(sz);
 	RGBA* it = ib.Begin();
@@ -69,37 +105,7 @@ Image VideoCapture::GetImage(Rect area) const {
 		it->a = 255;
 		it++;
 	}
-	/*for(int y = 0; y < sz.cy; y++) {
-		for(int x = 0; x < sz.cx; x++) {
-			cv::Vec3b color = buffer.at<cv::Vec3b>(cv::Point(x, y));
-			it->r = color[2];
-			it->g = color[1];
-			it->b = color[0];
-			it->a = 255;
-			it++;
-		}
-	}*/
-	
 	return ib;
-	
-	/*Rect src = RectC(0, 0, buffer.cols, buffer.rows);
-	if (!src.Contains(area))
-		return Image();
-	
-	Size sz = area.GetSize();
-	ImageBuffer ib(sz);
-	RGBA* it = ib.Begin();
-	for(int y = 0; y < sz.cy; y++) {
-		for(int x = 0; x < sz.cx; x++) {
-			cv::Vec3b color = buffer.at<cv::Vec3b>(cv::Point(area.left + x, area.top + y));
-			it->r = color[2];
-			it->g = color[1];
-			it->b = color[0];
-			it->a = 255;
-			it++;
-		}
-	}
-	
-	return ib;*/
+	#endif
 }
 

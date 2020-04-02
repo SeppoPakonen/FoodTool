@@ -271,10 +271,10 @@ void ExercisePlayerCtrl::Reset() {
 	}
 	Vector<double> exercises_mul;
 	exercises_mul.SetCount(prof.exercises.GetCount(), 1);
-	if (high_seconds > low_seconds) {
+	/*if (high_seconds > low_seconds) {
 		for(int i = 0; i < prof.exercises.GetCount(); i++)
 			exercises_mul[i] = 1.0 - (double)(exercise_seconds.Get(prof.exercises[i].name, 0) - low_seconds) / (double)(high_seconds - low_seconds);
-	}
+	}*/
 	
 	
 	Optimizer opt;
@@ -786,16 +786,16 @@ void ExercisePlayerCtrl::ProcessExercise() {
 				if (upcoming_i < 0)
 					PostCallback(THISBACK2(SetUpcomingExercise, "", ""));
 				
-				//int exer_i = prof.FindExercise(plan_it.what);
-				//if (exer_i >= 0) {
-				//	const ExerciseType& et = prof.exercises[exer_i];
-				//	if (et.av_heartrate.count < 6) {
-				heartrate_timer.Reset();
-				PostCallback(THISBACK1(SetHeartrate, 0));
-				SetMode(MODE_HEARTRATE);
-				continue;
-				//	}
-				//}
+				int exer_i = prof.FindExercise(plan_it.what);
+				if (exer_i >= 0) {
+					const ExerciseType& et = prof.exercises[exer_i];
+					if (et.av_heartrate.count < 3) {
+						heartrate_timer.Reset();
+						PostCallback(THISBACK1(SetHeartrate, 0));
+						SetMode(MODE_HEARTRATE);
+						continue;
+					}
+				}
 			}
 			else {
 				ActivityItem& it = current.items[active_exer_item];
@@ -1071,7 +1071,14 @@ void DummyExerTrans() {
 String Translate(String s) {
 	static ArrayMap<String, String> constant;
 	String& c = constant.GetAdd(s, s);
-	return t_GetLngString(c);
+	String o = t_GetLngString(c);
+	#ifdef flagLINUX
+	o.Replace("ä", "a");
+	o.Replace("ö", "o");
+	o.Replace("Ä", "A");
+	o.Replace("Ö", "O");
+	#endif
+	return o;
 }
 
 String TranslateExercise(String s) {

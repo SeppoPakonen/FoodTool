@@ -12,6 +12,9 @@ class VideoCapture {
 	
 public:
 	VideoCapture();
+	~VideoCapture() {Clear();}
+	
+	void Clear();
 	
 	static int GetCount();
 	bool Open(int i) {id = i; cap.open(i); return cap.isOpened();}

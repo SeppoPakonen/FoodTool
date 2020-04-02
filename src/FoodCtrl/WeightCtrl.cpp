@@ -60,7 +60,7 @@ void WeightCtrl::UpdateCameraList() {
 	for(int i = 0; i < last_camera_count; i++)
 		edit.cameras.Add(Format(t_("Source #%d"), i));
 	
-	if (edit.cameras.GetCount())
+	if (edit.cameras.GetCount() && last_camera_i >= 0)
 		edit.cameras.SetIndex(last_camera_i);
 }
 
@@ -250,7 +250,7 @@ void WeightCtrl::CaptureImages() {
 
 void WeightCtrl::OpenCamera(int i) {
 	cap_lock.Enter();
-	cap.OpenSize(i, Size(1920,1080));
+	cap.OpenSize(i, Size(1280,960));
 	cap_lock.Leave();
 	last_camera_i = i;
 	StoreThis();

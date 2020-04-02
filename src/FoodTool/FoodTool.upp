@@ -17,5 +17,6 @@ file
 	Images.iml;
 
 mainconfig
-	"" = "GUI";
+	"" = "GUI",
+	"" = "GUI USEMALLOC";
 
