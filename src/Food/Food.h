@@ -2,6 +2,10 @@
 #define _Food_Food_h
 
 #include <Common/Common.h>
+using namespace SDK;
+
+
+
 
 #include "Database.h"
 

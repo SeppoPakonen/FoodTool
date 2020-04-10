@@ -353,7 +353,7 @@ PortableListCtrl::PortableListCtrl() {
 }
 
 void PortableListCtrl::Paint(Draw& d) {
-	Size sz(GetSize());
+	USize sz(GetSize());
 	
 	d.DrawRect(sz, White());
 	if (!log) return;

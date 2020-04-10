@@ -71,7 +71,7 @@ void Profile::ProcessUpdate(bool replan) {
 	WhenUpdateReady();
 	
 	flag.SetNotRunning();
-	flag.IncreaseStopped();
+	flag.DecreaseRunning();
 }
 
 void Profile::AddWeightStat(int kgs) {

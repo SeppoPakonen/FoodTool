@@ -277,7 +277,7 @@ void ExercisePlayerCtrl::Reset() {
 	}*/
 	
 	
-	Optimizer opt;
+	GeneticOptimizer opt;
 	opt.MinMax(-10*60, 10*60);
 	opt.Init(prof.exercises.GetCount(), 100);
 	
@@ -457,7 +457,7 @@ void ExercisePlayerCtrl::Reset() {
 		ival.heartrate = 70;
 		ival.real_values = false;
 		
-		OnlineAverage1 total_av_heartrate;
+		OnlineAverage total_av_heartrate;
 		double total_kcal = 0;
 		while (exer_seconds.GetCount()) {
 			for(int j = exer_seconds.GetCount()-1; j >= 0; j--) {
@@ -606,7 +606,7 @@ void ExercisePlayerCtrl::AddExercise() {
 	current.main.msg = "";
 	current.main.kcal = 0;
 	current.main.real_values = true;
-	OnlineAverage1 av;
+	OnlineAverage av;
 	for(const ActivityItem& ai : current.items) {
 		current.main.kcal += ai.kcal;
 		av.Add(ai.heartrate);
@@ -835,7 +835,7 @@ void ExercisePlayerCtrl::ProcessExercise() {
 	if (success)
 		AddExercise();
 	
-	flag.IncreaseStopped();
+	flag.DecreaseRunning();
 }
 
 void ExercisePlayerCtrl::DbgDumpExerciseWords() {

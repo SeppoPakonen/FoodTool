@@ -552,7 +552,7 @@ void Database::VLCD_Preset() {
 		.AddNutrition(24, 1390, 0)
 		.AddNutrition(22, 263, 0)
 		.AddNutrition(30, 34, 0);
-	AddFood("OTHER", "Rainbow Omega 3+ ADE kalaöljy-vitamiinikapseli, 100 kapselia 94 g", "", "", "", "", "", 0, "", 0, 0, 0, 0)
+	AddFood("OTHER", "Rainbow Omega 3+ ADE kalaÃ¶ljy-vitamiinikapseli, 100 kapselia 94 g", "", "", "", "", "", 0, "", 0, 0, 0, 0)
 		.AddNutrition(1, 67, 0)
 		.AddNutrition(90, 10.6000003814697, 0)
 		.AddNutrition(2, 10, 0)
@@ -928,7 +928,7 @@ void Database::GetBestMacroFoods() {
 		else if (ing.nutr[FAT] >= 80)
 			high_fat_foods.Add(i);
 		else {
-			OnlineAverage1 vit_av;
+			OnlineAverage vit_av;
 			for(const NutritionRecommendation& r: nutr_recom) {
 				double value = ing.nutr[r.nutr_no];
 				double target = r.GetValue(70);

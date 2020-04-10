@@ -1,6 +1,6 @@
 #include "FoodTool.h"
 
-#define IMAGECLASS Images
+#define IMAGECLASS FoodToolImages
 #define IMAGEFILE <FoodTool/Images.iml>
 #include <Draw/iml_source.h>
 
@@ -13,7 +13,7 @@
 FoodTool::FoodTool()
 {
 	Title(t_("FoodTool"));
-	Icon(Images::icon);
+	Icon(FoodToolImages::icon_big);
 	Sizeable().MaximizeBox().MinimizeBox();
 	Maximize();
 	

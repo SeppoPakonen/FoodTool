@@ -1,2 +1,0 @@
-BINARY(camera_shutter, "camera-shutter.wav" BZ2)
-BINARY(alert, "alert.wav" BZ2)

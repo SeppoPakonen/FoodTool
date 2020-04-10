@@ -1,15 +1,16 @@
 #ifndef _Activity_Body_h_
 #define _Activity_Body_h_
 
+void GetMuscleGroups(VectorMap<String, String>& idx);
+void GetPrimaryTypes(VectorMap<String, String>& idx);
+void GetPrimaryTypeWeights(VectorMap<String, double>& idx);
+
+#if 0
 
 #define BSTRUCT_CONST(x) \
 	String GetName() const override {return #x;}
 #define MUSCLE_MODEL_MULT 43.7954542070352
 
-
-void GetMuscleGroups(VectorMap<String, String>& idx);
-void GetPrimaryTypes(VectorMap<String, String>& idx);
-void GetPrimaryTypeWeights(VectorMap<String, double>& idx);
 
 class BioObject {
 	BioObject* parent = NULL;
@@ -832,4 +833,5 @@ struct Body : public BioObject {
 };
 
 
+#endif
 #endif

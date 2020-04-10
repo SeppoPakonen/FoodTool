@@ -261,7 +261,7 @@ void MealPreset::MakeVariants() {
 			default: Panic("Invalid variant code");
 		}
 		
-		Optimizer opt;
+		GeneticOptimizer opt;
 		opt.Min().SetCount(var.ingredients.GetCount());
 		opt.Max().SetCount(var.ingredients.GetCount());
 		for(int i = 0; i < var.ingredients.GetCount(); i++) {

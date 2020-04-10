@@ -248,7 +248,7 @@ void FoodStorage::PlanDay(int i, const Vector<DailyPlan>& planned_daily) {
 		Ingredient nutri_ing;
 		nutri_ing.Reset();
 		const FoodDescription& fd = db.food_descriptions[nutrilet_i];
-		OnlineAverage1 av;
+		OnlineAverage av;
 		for(const NutritionInfo& ni : fd.nutr) {
 			double a = day.total_sum.nutr[ni.nutr_no];
 			double b = ni.nutr_value;
@@ -347,7 +347,7 @@ void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double ta
 	int limit_count = 0;
 	Vector<bool> limit_nutrition;
 	Index<int> filled_nutrients;
-	VectorMap<int, OnlineAverage1> supplement_foods;
+	VectorMap<int, OnlineAverage> supplement_foods;
 	for(int i = 0; i < prof.supplements.GetCount(); i++) {
 		const auto& s = prof.supplements[i];
 		if ((plan.variant_type == VARIANT_WEIGHTLOSS && s.is_weightloss) ||
@@ -390,7 +390,7 @@ void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double ta
 		}
 	}
 	
-	Optimizer opt;
+	GeneticOptimizer opt;
 	opt.Min().SetCount(supplement_foods.GetCount());
 	opt.Max().SetCount(supplement_foods.GetCount());
 	for(int i = 0; i < supplement_foods.GetCount(); i++) {

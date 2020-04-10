@@ -250,7 +250,7 @@ void WeightCtrl::CaptureImages() {
 
 void WeightCtrl::OpenCamera(int i) {
 	cap_lock.Enter();
-	cap.OpenSize(i, Size(1280,960));
+	cap.Open4_3_960p(i);
 	cap_lock.Leave();
 	last_camera_i = i;
 	StoreThis();
@@ -263,12 +263,12 @@ void WeightCtrl::CloseCamera() {
 }
 
 void SetScaledImageCtrl(ImageCtrl& ic, Image i) {
-	Size sz = ic.GetSize();
+	USize sz = ic.GetSize();
 	if (i.IsEmpty()) {
 		ic.SetImage(Image());
 		return;
 	}
-	Size img_sz = i.GetSize();
+	USize img_sz = i.GetSize();
 	double hratio = (double)sz.cx / img_sz.cx;
 	double vratio = (double)sz.cy / img_sz.cy;
 	double ratio = min(hratio, vratio);
@@ -290,8 +290,8 @@ void WeightCtrl::ProcessCapture(bool preview, int cam) {
 	
 	if (preview) {
 		cap_lock.Enter();
-		cap.Process(100);
-		Image img = cap.GetImage(Size(1920,1080));
+		cap.Process();
+		Image img = cap.GetImage();
 		
 		live_lock.Enter();
 		last_cap = img;
@@ -306,8 +306,8 @@ void WeightCtrl::ProcessCapture(bool preview, int cam) {
 		while (running) {
 			
 			cap_lock.Enter();
-			cap.Process(100);
-			Image img = cap.GetImage(Size(1920,1080));
+			cap.Process();
+			Image img = cap.GetImage();
 			
 			live_lock.Enter();
 			last_cap = img;

@@ -97,7 +97,7 @@ struct MealIngredient : Moveable<MealIngredient> {
 };
 
 struct MealDebugger {
-	VectorMap<int, OnlineAverage1> nutr_fabs_av;
+	VectorMap<int, OnlineAverage> nutr_fabs_av;
 	bool do_debug = false;
 };
 

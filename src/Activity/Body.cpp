@@ -1,5 +1,6 @@
 #include "Activity.h"
 
+#if 0
 
 
 
@@ -200,7 +201,7 @@ String GetBioObjectTreeString(BioObject& s, int indent) {
 
 
 
-
+#endif
 
 
 
@@ -310,3 +311,4 @@ void GetPrimaryTypes(VectorMap<String, String>& idx) {
 	idx.Add("UPPEC", "");
 	idx.Add("UPREC", "");*/
 }
+

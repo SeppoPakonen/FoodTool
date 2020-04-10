@@ -5,6 +5,8 @@
 
 #include "Body.h"
 
+#if 0
+
 struct Activity {
 	Body body;
 	
@@ -23,4 +25,5 @@ struct Activity {
 };
 
 
+#endif
 #endif

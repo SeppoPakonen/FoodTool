@@ -325,7 +325,7 @@ struct PlanState {
 	double fat_perc;
 	double lean_perc;
 	
-	OnlineAverage1 lean_fat_loss_ratio_av;
+	OnlineAverage lean_fat_loss_ratio_av;
 	double calorie_deficit_sum = 0.0;
 	double max_calorie_deficit = 0.0;
 	
@@ -396,7 +396,7 @@ struct ActivityGroupItem : Moveable<ActivityGroupItem> {
 struct ExerciseType : Moveable<ExerciseType> {
 	Time added;
 	String name, instructions, primary_trained;
-	OnlineAverage1 av_kcal, av_heartrate;
+	OnlineAverage av_kcal, av_heartrate;
 	VectorMap<String, byte> muscle_areas, muscles;
 	
 	void Serialize(Stream& s) {

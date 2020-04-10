@@ -1,8 +1,12 @@
 #ifndef _FoodCtrl_FoodCtrl_h
 #define _FoodCtrl_FoodCtrl_h
 
-#include <Food/Food.h>
 #include <CommonCtrl/CommonCtrl.h>
+using namespace SDK;
+
+typedef Upp::Size Size;
+
+#include <Food/Food.h>
 
 #include "ScheduleCtrl.h"
 #include "HairSampleDeficitCtrl.h"

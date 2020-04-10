@@ -1,6 +1,7 @@
 #include "Activity.h"
 
-#define MUSCLE_MODEL_MULT 43.7954542070352
+#if 0
+
 
 
 Activity::Activity() {
@@ -8,3 +9,4 @@ Activity::Activity() {
 	LOG("");
 }
 
+#endif

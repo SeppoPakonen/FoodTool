@@ -130,7 +130,7 @@ HairSampleDeficitEdit::HairSampleDeficitEdit() {
 }
 
 void HairSampleDeficitEdit::LeftDown(Point p, dword keyflags) {
-	Size sz(GetSize());
+	USize sz(GetSize());
 	
 	int rows = 1 + HSAMP_COUNT;
 	double ystep = (double)sz.cy / rows;
@@ -152,7 +152,7 @@ void HairSampleDeficitEdit::LeftDown(Point p, dword keyflags) {
 }
 
 void HairSampleDeficitEdit::Paint(Draw& d) {
-	Size sz(GetSize());
+	USize sz(GetSize());
 	d.DrawRect(sz, White());
 	
 	int rows = 1 + HSAMP_COUNT;
@@ -189,11 +189,11 @@ void HairSampleDeficitEdit::Paint(Draw& d) {
 	
 	Font fnt = SansSerif(ystep * 0.80);
 	d.DrawText(5, 0, t_("Your mineral levels"), fnt, Black());
-	DrawTextCentered(d, x25, 0, t_("2.5th"), fnt, Black());
-	DrawTextCentered(d, x160, 0, t_("16th"), fnt, Black());
-	DrawTextCentered(d, x500, 0, t_("50th"), fnt, Black());
-	DrawTextCentered(d, x840, 0, t_("84th"), fnt, Black());
-	DrawTextCentered(d, x975, 0, t_("97.5th"), fnt, Black());
+	DrawTextCentered(d, Point(x25,  0), t_("2.5th"), fnt, Black());
+	DrawTextCentered(d, Point(x160, 0), t_("16th"), fnt, Black());
+	DrawTextCentered(d, Point(x500, 0), t_("50th"), fnt, Black());
+	DrawTextCentered(d, Point(x840, 0), t_("84th"), fnt, Black());
+	DrawTextCentered(d, Point(x975, 0), t_("97.5th"), fnt, Black());
 	
 	for(int i = 1; i < rows; i++) {
 		int y = i * ystep;
@@ -219,12 +219,12 @@ void HairSampleDeficitEdit::Paint(Draw& d) {
 		if (f < 0.5) {
 			int barx = valuex + f * valuew;
 			int barw = x500 - barx;
-			d.DrawRect(RectC(barx, bary, barw, barh), Black());
+			d.DrawRect(Upp::RectC(barx, bary, barw, barh), Black());
 		}
 		else {
 			int barx = x500;
 			int barw = valuex + f * valuew - x500;
-			d.DrawRect(RectC(barx, bary, barw, barh), Black());
+			d.DrawRect(Upp::RectC(barx, bary, barw, barh), Black());
 		}
 	}
 }

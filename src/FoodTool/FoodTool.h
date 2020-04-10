@@ -3,7 +3,7 @@
 
 #include <ActivityCtrl/ActivityCtrl.h>
 
-#define IMAGECLASS Images
+#define IMAGECLASS FoodToolImages
 #define IMAGEFILE <FoodTool/Images.iml>
 #include <Draw/iml_header.h>
 
@@ -57,6 +57,5 @@ public:
 	void PostData() {PostCallback(THISBACK(Data));}
 };
 
-void FillVector(Vector<double>& v);
 
 #endif
