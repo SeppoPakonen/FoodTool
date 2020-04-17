@@ -390,7 +390,9 @@ void ExercisePlayerCtrl::Reset() {
 	Time wake(today.year, today.month, today.day, conf.waking_hour, conf.waking_minute, 0);
 	Time sleep(today.year, today.month, today.day, conf.sleeping_hour, conf.sleeping_minute, 0);
 	int seconds_per_exer = conf.tgt_exercise_min * 60 / conf.tgt_exercise_count;
-	int between_exer_seconds = (sleep.Get() - wake.Get() - seconds_per_exer) / (conf.tgt_exercise_count-1);
+	int between_exer_seconds = 0;
+	if (conf.tgt_exercise_count > 1)
+		between_exer_seconds = (sleep.Get() - wake.Get() - seconds_per_exer) / (conf.tgt_exercise_count-1);
 	int ts_i = 0;
 	int per_exercise = timeslots.GetCount() / conf.tgt_exercise_count;
 	int mod_exercise = timeslots.GetCount() % conf.tgt_exercise_count;

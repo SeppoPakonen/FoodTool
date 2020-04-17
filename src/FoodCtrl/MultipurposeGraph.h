@@ -6,7 +6,7 @@ struct MultipurposeGraph : public Ctrl {
 	enum {
 		FOOD_BEGIN = 4,
 		MEASURES_BEGIN = 14,
-		GRAPH_COUNT = 34,
+		GRAPH_COUNT = 37,
 	};
 	
 	struct Line : Moveable<Line> {

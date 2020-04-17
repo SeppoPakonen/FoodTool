@@ -440,6 +440,7 @@ struct Profile {
 	static const int maintenance_protein_factor = 8; // 0.8g per weight kg
 	static const int muscle_gain_protein_factor = 10;
 	static const int fasting_protein_factor = 1;
+	static const int easy_day_calories = 1500;
 	
 	
 	typedef Profile CLASSNAME;

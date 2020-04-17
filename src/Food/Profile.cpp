@@ -287,10 +287,10 @@ bool Profile::UpdatePlan() {
 			
 			
 			d.is_easy_day = false;
-			if (easy_day_counter == conf->easy_day_interval-1 && d.allowed_calories < 1500.0) {
+			if (easy_day_counter == conf->easy_day_interval-1 && d.allowed_calories < easy_day_calories) {
 				d.is_easy_day = true;
-				double mul = (1500.0 - prot_cals) / (carb_cals + fat_cals);
-				d.allowed_calories = 1500.0;
+				double mul = ((double)easy_day_calories - prot_cals) / (carb_cals + fat_cals);
+				d.allowed_calories = easy_day_calories;
 				fat_cals *= mul;
 				carb_cals *= mul;
 			}
@@ -538,7 +538,9 @@ void Profile::MakeTodaySchedule(ScheduleToday& s) {
 	
 	if (plan.mode == MODE_WEIGHTLOSS || plan.mode == MODE_MUSCLEGAIN) {
 		int seconds_per_exer = conf.tgt_exercise_min * 60 / conf.tgt_exercise_count;
-		int between_exer_seconds = (sleep.time.Get() - wake.time.Get() - seconds_per_exer - 15*60) / (conf.tgt_exercise_count-1);
+		int between_exer_seconds = 0;
+		if (conf.tgt_exercise_count > 1)
+			between_exer_seconds = (sleep.time.Get() - wake.time.Get() - seconds_per_exer - 15*60) / (conf.tgt_exercise_count-1);
 		Time t = wake.time + 15*60;
 		for(int i = 0; i < conf.tgt_exercise_count; i++) {
 			auto& jogging = s.items.Add();
