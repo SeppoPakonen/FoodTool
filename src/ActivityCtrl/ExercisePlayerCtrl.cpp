@@ -277,7 +277,7 @@ void ExercisePlayerCtrl::Reset() {
 	}*/
 	
 	
-	GeneticOptimizer opt;
+	Optimizer opt;
 	opt.MinMax(-10*60, 10*60);
 	opt.Init(prof.exercises.GetCount(), 100);
 	

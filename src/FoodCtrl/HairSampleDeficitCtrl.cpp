@@ -130,7 +130,7 @@ HairSampleDeficitEdit::HairSampleDeficitEdit() {
 }
 
 void HairSampleDeficitEdit::LeftDown(Point p, dword keyflags) {
-	USize sz(GetSize());
+	Size sz(GetSize());
 	
 	int rows = 1 + HSAMP_COUNT;
 	double ystep = (double)sz.cy / rows;
@@ -152,7 +152,7 @@ void HairSampleDeficitEdit::LeftDown(Point p, dword keyflags) {
 }
 
 void HairSampleDeficitEdit::Paint(Draw& d) {
-	USize sz(GetSize());
+	Size sz(GetSize());
 	d.DrawRect(sz, White());
 	
 	int rows = 1 + HSAMP_COUNT;

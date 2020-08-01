@@ -2,7 +2,7 @@
 #define _FoodCtrl_FoodCtrl_h
 
 #include <CommonCtrl/CommonCtrl.h>
-using namespace SDK;
+USING_SDK_NAMESPACE
 
 typedef Upp::Size Size;
 

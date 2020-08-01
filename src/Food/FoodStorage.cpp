@@ -390,7 +390,7 @@ void FoodStorage::MakeSupplements(const DailyPlan& plan, FoodDay& day, double ta
 		}
 	}
 	
-	GeneticOptimizer opt;
+	Optimizer opt;
 	opt.Min().SetCount(supplement_foods.GetCount());
 	opt.Max().SetCount(supplement_foods.GetCount());
 	for(int i = 0; i < supplement_foods.GetCount(); i++) {

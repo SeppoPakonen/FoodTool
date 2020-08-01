@@ -263,12 +263,12 @@ void WeightCtrl::CloseCamera() {
 }
 
 void SetScaledImageCtrl(ImageCtrl& ic, Image i) {
-	USize sz = ic.GetSize();
+	Size sz = ic.GetSize();
 	if (i.IsEmpty()) {
 		ic.SetImage(Image());
 		return;
 	}
-	USize img_sz = i.GetSize();
+	Size img_sz = i.GetSize();
 	double hratio = (double)sz.cx / img_sz.cx;
 	double vratio = (double)sz.cy / img_sz.cy;
 	double ratio = min(hratio, vratio);

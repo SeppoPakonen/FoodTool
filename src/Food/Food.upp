@@ -1,8 +1,5 @@
 description "\377B128,0,0";
 
-uses
-	Common;
-
 file
 	Food.h,
 	Food.cpp,

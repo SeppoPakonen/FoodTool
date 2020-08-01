@@ -53,7 +53,7 @@ void TodayScheduleCtrl::Paint(Draw& d) {
 		prof_version = prof.version;
 	}
 	
-	USize sz(GetSize());
+	Size sz(GetSize());
 	d.DrawRect(sz, White());
 	
 	if (sched.items.IsEmpty())
@@ -103,7 +103,7 @@ void TodayScheduleCtrl::Paint(Draw& d) {
 		txt << Format("%d:%02d ", (int)it.time.hour, (int)it.time.minute)
 			<< typestr << ": " << it.msg;
 			
-		DrawGradientVert(d, URectC(0, y, sz.cx, h), top, btm);
+		DrawGradientVert(d, RectC(0, y, sz.cx, h), top, btm);
 		d.DrawText(5+2, y+2, txt, fnt, White());
 		d.DrawText(5, y, txt, fnt, Black());
 	}

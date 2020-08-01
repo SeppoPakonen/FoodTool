@@ -2,8 +2,8 @@
 #define _FoodTool_ScheduleCtrl_h_
 
 
-void DrawGradientVert(Draw& d, URect r, Color top_clr, Color btm_clr);
-USize GetTextSizeWithNewlines(String txt, Font fnt);
+void DrawGradientVert(Draw& d, Rect r, Color top_clr, Color btm_clr);
+Size GetTextSizeWithNewlines(String txt, Font fnt);
 void DrawTextWithNewlines(Draw& d, int x, int y, String txt, Font fnt, Color c);
 
 struct ScheduleCtrl : public Ctrl {

@@ -1,6 +1,6 @@
 #include "FoodCtrl.h"
 
-void DrawGradientVert(Draw& d, URect r, Color top_clr, Color btm_clr) {
+void DrawGradientVert(Draw& d, Rect r, Color top_clr, Color btm_clr) {
 	double menu_blend_step = 255.0 / (r.GetHeight()-1);
 	for(int y = r.top, i = 0; y < r.bottom; y++, i++) {
 		d.DrawLine(r.left, y, r.right, y, 1, Blend(top_clr, btm_clr, i * menu_blend_step));
@@ -21,7 +21,7 @@ ScheduleCtrl::ScheduleCtrl() {
 }
 
 void ScheduleCtrl::Paint(Draw& d) {
-	USize sz(GetSize());
+	Size sz(GetSize());
 	int gw = 500;
 	int per_screen = sz.cx / gw + (sz.cx % gw ? 1 : 0);
 	
@@ -61,8 +61,8 @@ void ScheduleCtrl::Paint(Draw& d) {
 		
 		for(int txt_h = 15; txt_h >= 6; txt_h--) {
 			Font txt_fnt = SansSerif(txt_h);
-			USize menu_sz = GetTextSizeWithNewlines(day.menu, txt_fnt);
-			USize prep_sz = GetTextSizeWithNewlines(day.preparation, txt_fnt);
+			Size menu_sz = GetTextSizeWithNewlines(day.menu, txt_fnt);
+			Size prep_sz = GetTextSizeWithNewlines(day.preparation, txt_fnt);
 			int xpad = 4;
 			int txtsum_h = menu_sz.cy + prep_sz.cy;
 			
@@ -84,7 +84,7 @@ void ScheduleCtrl::Paint(Draw& d) {
 			
 			if (menu_sz.cy > menu_h || prep_sz.cy > prep_h) continue;
 			
-			DrawGradientVert(d, URectC(x, y, gw, date_h), GrayColor(256-128), GrayColor(256-32));
+			DrawGradientVert(d, RectC(x, y, gw, date_h), GrayColor(256-128), GrayColor(256-32));
 			Font date_fnt = SansSerif(date_h*0.8);
 			String date_str = Format("%d.%d. %Day", (int)day.date.day, (int)day.date.month, DayOfWeek(day.date));
 			d.DrawText(x+2, y+2, date_str, date_fnt, Black());
@@ -92,21 +92,21 @@ void ScheduleCtrl::Paint(Draw& d) {
 			y += date_h;
 			
 			if (day.date < today)
-				DrawGradientVert(d, URectC(x, y, gw, menu_h), GrayColor(256-32), GrayColor(256-64));
+				DrawGradientVert(d, RectC(x, y, gw, menu_h), GrayColor(256-32), GrayColor(256-64));
 			else
-				DrawGradientVert(d, URectC(x, y, gw, menu_h), menu_clr_top, menu_clr_btm);
+				DrawGradientVert(d, RectC(x, y, gw, menu_h), menu_clr_top, menu_clr_btm);
 			DrawTextWithNewlines(d, x+xpad+1, y+1, day.menu, txt_fnt, White());
 			DrawTextWithNewlines(d, x+xpad, y, day.menu, txt_fnt, Black());
 			y += menu_h;
 			
-			DrawGradientVert(d, URectC(x, y, gw, prep_h), prep_clr_top, prep_clr_btm);
+			DrawGradientVert(d, RectC(x, y, gw, prep_h), prep_clr_top, prep_clr_btm);
 			DrawTextWithNewlines(d, x+xpad+1, y+1, day.preparation, txt_fnt, White());
 			DrawTextWithNewlines(d, x+xpad, y, day.preparation, txt_fnt, Black());
 			y += prep_h;
 			
 			if (day.is_shopping) {
 				Font fnt = SansSerif(shop_h * 0.8);
-				DrawGradientVert(d, URectC(x, y, gw, shop_h), shop_clr_top, shop_clr_btm);
+				DrawGradientVert(d, RectC(x, y, gw, shop_h), shop_clr_top, shop_clr_btm);
 				d.DrawText(x+xpad+2, y+2, t_("Groceries"), fnt, Black());
 				d.DrawText(x+xpad, y, t_("Groceries"), fnt, White());
 				y += shop_h;
@@ -114,7 +114,7 @@ void ScheduleCtrl::Paint(Draw& d) {
 			
 			const Database& db = DB();
 			
-			DrawGradientVert(d, URectC(x, y, gw, nutr_h), nutr_clr_top, nutr_clr_btm);
+			DrawGradientVert(d, RectC(x, y, gw, nutr_h), nutr_clr_top, nutr_clr_btm);
 			double min = -1;
 			double max = +1;
 			double range = max - min;
@@ -172,16 +172,16 @@ void ScheduleCtrl::Paint(Draw& d) {
 	
 }
 
-USize GetTextSizeWithNewlines(String txt, Font fnt) {
-	if (txt.IsEmpty()) return USize(0,0);
+Size GetTextSizeWithNewlines(String txt, Font fnt) {
+	if (txt.IsEmpty()) return Size(0,0);
 	Vector<String> lines = Split(txt, "\n", false);
-	USize sz(0,0);
+	Size sz(0,0);
 	for(int i = 0; i < lines.GetCount(); i++) {
 		String line = lines[i];
 		if (line.IsEmpty())
 			sz.cy += fnt.GetHeight();
 		else {
-			USize l = GetTextSize(line, fnt);
+			Size l = GetTextSize(line, fnt);
 			sz.cy += max(fnt.GetHeight(), l.cy);
 			sz.cx = max(sz.cx, l.cx);
 		}
@@ -199,7 +199,7 @@ void DrawTextWithNewlines(Draw& d, int x, int y, String txt, Font fnt, Color c) 
 			y += fnt.GetHeight();
 		else {
 			d.DrawText(x, y + yoff, line, fnt, c);
-			USize l = GetTextSize(line, fnt);
+			Size l = GetTextSize(line, fnt);
 			yoff += max(fnt.GetHeight(), l.cy);
 		}
 	}

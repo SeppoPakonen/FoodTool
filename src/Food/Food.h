@@ -2,7 +2,7 @@
 #define _Food_Food_h
 
 #include <Common/Common.h>
-using namespace SDK;
+USING_SDK_NAMESPACE
 
 
 

@@ -1,0 +1,33 @@
+description "\377B128,0,0";
+
+uses
+	Core,
+	plugin/bz2,
+	Draw;
+
+library(WIN32 & DEBUG) opencv_world412d;
+
+library(WIN32 & !DEBUG) opencv_world412;
+
+library(LINUX) "opencv_core opencv_video opencv_videoio opencv_imgcodecs";
+
+file
+	Common.h,
+	Common.cpp,
+	data.brc,
+	Math.h,
+	Math.cpp,
+	Time.h,
+	Time.cpp,
+	Optimizer.h,
+	StepOptimizer.h,
+	VideoCapture.h,
+	VideoCapture.cpp,
+	Sound.h,
+	Sound.cpp,
+	Util.h,
+	Util.cpp;
+
+mainconfig
+	"" = "";
+

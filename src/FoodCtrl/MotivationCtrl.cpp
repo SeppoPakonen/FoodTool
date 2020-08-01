@@ -170,17 +170,17 @@ void MotivationCtrl::Paint(Draw& d) {
 		img = StreamRaster::LoadStringAny(image_jpg);
 	}
 	
-	USize sz(GetSize());
+	Size sz(GetSize());
 	d.DrawRect(sz, Black());
 	
-	USize img_sz = img.GetSize();
+	Size img_sz = img.GetSize();
 	int img_x = (sz.cx - img_sz.cx) / 2;
 	int img_y = (sz.cy - img_sz.cy) / 2;
 	d.DrawImage(img_x, img_y, img);
 	
 	Font fnt = SansSerif(25);
 	String quote = quotes[quote_i];
-	USize txt_sz = GetTextSize(quote, fnt);
+	Size txt_sz = GetTextSize(quote, fnt);
 	int txt_y = img_y + img_sz.cy + 15;
 	int txt_x = (sz.cx - txt_sz.cx) / 2;
 	d.DrawText(txt_x, txt_y, quote, fnt, White());
@@ -216,7 +216,7 @@ void MotivationCtrl::Paint(Draw& d) {
 				fnt = SansSerif(10);
 				remaining << "...";
 			}
-			USize txt2_sz = GetTextSize(remaining, fnt);
+			Size txt2_sz = GetTextSize(remaining, fnt);
 			int txt2_y = txt_y + txt_sz.cy + 15 + ydiff;
 			int txt2_x = (sz.cx - txt2_sz.cx) / 2;
 			d.DrawText(txt2_x, txt2_y, remaining, fnt, White());
@@ -235,7 +235,7 @@ void MotivationCtrl::Paint(Draw& d) {
 				fnt = SansSerif(10);
 				remaining << "...";
 			}
-			USize txt2_sz = GetTextSize(remaining, fnt);
+			Size txt2_sz = GetTextSize(remaining, fnt);
 			int txt2_y = txt_y + txt_sz.cy + 15 + ydiff;
 			int txt2_x = (sz.cx - txt2_sz.cx) / 2;
 			d.DrawText(txt2_x, txt2_y, remaining, fnt, White());

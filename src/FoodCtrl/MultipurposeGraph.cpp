@@ -548,7 +548,7 @@ void MultipurposeGraph::Paint(Draw& d) {
 	for(auto& a : tmp)
 		a.SetCount(0);
 	
-	USize sz(GetSize());
+	Size sz(GetSize());
 	d.DrawRect(sz, White());
 	
 	int vert = GetVertLine(src);
@@ -602,7 +602,7 @@ void MultipurposeGraph::Paint(Draw& d) {
 				d.DrawPolyline(polyline, GetLineWidth(src, l), clr);
 				
 				String txt = GetLineTitle(src, l) + " - min " + Format("%2n", line_min) + " - max " + Format("%2n", line_max);
-				USize str_sz = GetTextSize(txt, fnt);
+				Size str_sz = GetTextSize(txt, fnt);
 				d.DrawRect(xoff, text_y, str_sz.cx, str_sz.cy, White());
 				d.DrawText(xoff, text_y, txt, fnt.Bold(), Blend(clr, Black()));
 				text_y += 10;
@@ -622,7 +622,7 @@ void MultipurposeGraph::Paint(Draw& d) {
 	}
 	else {
 		String txt = t_("Waiting for data");
-		USize txt_sz = GetTextSize(txt, fnt);
+		Size txt_sz = GetTextSize(txt, fnt);
 		d.DrawText((sz.cx - txt_sz.cx) / 2, (sz.cy - txt_sz.cy) / 2, txt, fnt);
 	}
 }
