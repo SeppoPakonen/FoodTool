@@ -1,0 +1,1 @@
+BINARY_MASK(smileys, "Smileys/*.png" BZ2)
